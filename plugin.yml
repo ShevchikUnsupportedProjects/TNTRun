@@ -1,0 +1,18 @@
+name: TNTRun
+main: tntrun.TNTRun
+softdepend: [WorldEdit, Vault]
+version: 3.4
+author: _Shevchik_
+commands:
+  tntrunsetup:
+    description: TNTRun arena setup commands
+    aliases: trsetup
+    usage: Command is invalid
+  tntrun:
+    description: TNTRun game commands
+    aliases: tr
+    usage: Use /tr help to show all commands available in plugin
+  tntrunconsole:
+    description: TNTRun console commands
+    aliases: trconsole
+    usage: Command is invalid
