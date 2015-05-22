@@ -1,13 +1,13 @@
 name: TNTRun
 main: tntrun.TNTRun
 softdepend: [WorldEdit, Vault]
-version: 3.4
+version: 3.6
 author: _Shevchik_
 commands:
   tntrunsetup:
     description: TNTRun arena setup commands
     aliases: trsetup
-    usage: Command is invalid
+    usage: Command is invalid, use /tr cmds for view all commands
   tntrun:
     description: TNTRun game commands
     aliases: tr

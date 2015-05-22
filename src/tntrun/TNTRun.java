@@ -18,8 +18,10 @@
 package tntrun;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import tntrun.arena.Arena;
@@ -86,6 +88,16 @@ public class TNTRun extends JavaPlugin {
 			},
 			20
 		);
+		
+	     try {
+	    	 Bukkit.getLogger().info("[Metrics - TNTRun] Starting...");
+	         Metrics metrics = new Metrics(this);
+	         metrics.start();
+	         Bukkit.getLogger().info("[Metrics - TNTRun] Started!");
+	     } catch (IOException e) {
+	    	 e.printStackTrace();
+	        Bukkit.getLogger().info("[Metrics - TNTRun] Error, can't start metrics, please report this! http://www.spigotmc.org/resources/tntrun.7320/");
+	     }
 	}
 
 	@Override
