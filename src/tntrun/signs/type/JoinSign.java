@@ -18,7 +18,6 @@
 package tntrun.signs.type;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -41,7 +40,7 @@ public class JoinSign implements SignType {
 	public void handleCreation(SignChangeEvent e) {
 		final Arena arena = plugin.amanager.getArenaByName(e.getLine(2));
 		if (arena != null) {
-			e.setLine(0, ChatColor.BLUE + "[TNTRun]");
+			e.setLine(0, "§7[§6TNTRun§7]");
 			e.getPlayer().sendMessage("Sign succesfully created");
 			plugin.signEditor.addSign(e.getBlock(), arena.getArenaName());
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,

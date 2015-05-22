@@ -50,7 +50,7 @@ public class SignHandler implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onTNTRunSignCreate(SignChangeEvent e) {
 		Player player = e.getPlayer();
-		if (e.getLine(0).equalsIgnoreCase("[TNTRun]") || e.getLine(0).equalsIgnoreCase(ChatColor.BLUE+"[TNTRun]")) {
+		if (e.getLine(0).equalsIgnoreCase("[TNTRun]") || e.getLine(0).equalsIgnoreCase("§7[§6TNTRun§7]")) {
 			if (!player.hasPermission("tntrun.setup")) {
 				Messages.sendMessage(player, Messages.nopermission);
 				e.setCancelled(true);
@@ -73,7 +73,7 @@ public class SignHandler implements Listener {
 			return;
 		}
 		Sign sign = (Sign) e.getClickedBlock().getState();
-		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[TNTRun]")) {
+		if (sign.getLine(0).equalsIgnoreCase("§7[§6TNTRun§7]")) {
 			String line = sign.getLine(1).toLowerCase();
 			if (signs.containsKey(line)) {
 				signs.get(line).handleClick(e);
@@ -88,7 +88,7 @@ public class SignHandler implements Listener {
 		}
 		Player player = e.getPlayer();
 		Sign sign = (Sign) e.getBlock().getState();
-		if (sign.getLine(0).equalsIgnoreCase(ChatColor.BLUE + "[TNTRun]")) {
+		if (sign.getLine(0).equalsIgnoreCase("§7[§6TNTRun§7]")) {
 			if (!player.hasPermission("tntrun.setup")) {
 				Messages.sendMessage(player, Messages.nopermission);
 				e.setCancelled(true);

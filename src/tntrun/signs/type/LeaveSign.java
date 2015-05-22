@@ -36,7 +36,7 @@ public class LeaveSign implements SignType {
 
 	@Override
 	public void handleCreation(SignChangeEvent e) {
-		e.setLine(0, ChatColor.BLUE + "[TNTRun]");
+		e.setLine(0, "§7[§6TNTRun§7]");
 		e.getPlayer().sendMessage("Sign succesfully created");
 	}
 

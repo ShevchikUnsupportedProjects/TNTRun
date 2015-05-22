@@ -30,34 +30,34 @@ import tntrun.TNTRun;
 
 public class Messages {
 
-	public static String nopermission = "&4You don't have permission to do this";
+	public static String nopermission = "§7[§6TNTRun§7] &cYou don't have permission to do this";
 
-	public static String teleporttolobby = "&6Teleported to lobby";
+	public static String teleporttolobby = "§7[§6TNTRun§7] Teleported to lobby";
 
-	public static String availablearenas = "&6Available arenas:&r ";
-	public static String arenawolrdna = "&6Arena world is not loaded";
-	public static String arenadisabled = "&6Arena is disabled";
-	public static String arenarunning = "&6Arena already running";
-	public static String arenaregenerating = "&6Arena is regenerating";
-	public static String arenavehicle = "&6You can't join the game while sitting inside vehicle";
-	public static String arenadisabling = "&6Arena is disabling";
+	public static String availablearenas = "§7[§6TNTRun§7] Available arenas:&r ";
+	public static String arenawolrdna = "§7[§6TNTRun§7] Arena world is not loaded";
+	public static String arenadisabled = "§7[§6TNTRun§7] Arena is disabled";
+	public static String arenarunning = "§7[§6TNTRun§7] Arena already running";
+	public static String arenaregenerating = "§7[§6TNTRun§7] Arena is regenerating";
+	public static String arenavehicle = "§7[§6TNTRun§7] You can't join the game while sitting inside vehicle";
+	public static String arenadisabling = "§7[§6TNTRun§7] &6Arena is disabling";
 
-	public static String playerscountinarena = "&6Current number of players in arena: {COUNT}";
-	public static String limitreached = "&6Slot limit reached.";
-	public static String playerjoinedtoplayer = "&6You joined the arena";
-	public static String playerjoinedtoothers = "&6Player {PLAYER} joined the arena";
-	public static String playerlefttoplayer = "&6You left the arena";
-	public static String playerlefttoothers = "&6Player {PLAYER} left the game";
-	public static String playervotedforstart = "&6You voted for game start";
-	public static String playeralreadyvotedforstart = "&6You already voted";
-	public static String arenastarted = "&6Arena started. Time limit is {TIMELIMIT} seconds";
-	public static String arenacountdown = "&6Arena starts in {COUNTDOWN} seconds";
-	public static String arenatimeout = "&6Time is out.";
-	public static String playerwontoplayer = "&6You won the game";
-	public static String playerlosttoplayer = "&6You lost the game";
-	public static String playerlosttoothers = "&6Player {PLAYER} lost the game";
-	public static String playerwonbroadcast = "&9[TNTRun] &a{PLAYER}&r won the game on arena &c{ARENA}";
-	public static String playerrewardmessage = "&6You have been rewarded: {REWARD}";
+	public static String playerscountinarena = "§7[§6TNTRun§7] &6Current number of players in arena: {COUNT} players";
+	public static String limitreached = "§7[§6TNTRun§7] Arena is full.";
+	public static String playerjoinedtoplayer = "§7[§6TNTRun§7] You joined the arena";
+	public static String playerjoinedtoothers = "§7[§6TNTRun§7] Player §6{PLAYER} §7joined the arena";
+	public static String playerlefttoplayer = "§7[§6TNTRun§7] You left the arena";
+	public static String playerlefttoothers = "§7[§6TNTRun§7] Player §6{PLAYER} §7left the game";
+	public static String playervotedforstart = "§7[§6TNTRun§7] You voted for game start";
+	public static String playeralreadyvotedforstart = "§7[§6TNTRun§7] You already voted";
+	public static String arenastarted = "§7[§6TNTRun§7] Arena started. Time limit is {TIMELIMIT} seconds";
+	public static String arenacountdown = "§7[§6TNTRun§7] Arena starts in {COUNTDOWN} seconds";
+	public static String arenatimeout = "§7[§6TNTRun§7] Time is out. Ending game";
+	public static String playerwontoplayer = "§7[§6TNTRun§7] You won the game!";
+	public static String playerlosttoplayer = "§7[§6TNTRun§7] You lost the game";
+	public static String playerlosttoothers = "§7[§6TNTRun§7] Player §6{PLAYER} §7lost the game";
+	public static String playerwonbroadcast = "§7[§6TNTRun§7] &6{PLAYER}&7 won the game on arena &c{ARENA}";
+	public static String playerrewardmessage = "§7[§6TNTRun§7] You have been rewarded: §6{REWARD}";
 
 	public static void sendMessage(Player player, String message) {
 		if (!message.equals("")) {

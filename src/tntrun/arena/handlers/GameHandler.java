@@ -99,15 +99,13 @@ public class GameHandler {
 							Messages.sendMessage(player, message);
 							player.playSound(player.getLocation(), Sound.CLICK, 1, 5);
 						}
-					}else
-					// sending bars
-					{
-						for (Player player : arena.getPlayersManager().getPlayers()) {
-							Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
-							player.setLevel(count);
-						}
-						count--;
 					}
+					// sending bars
+						for (Player player : arena.getPlayersManager().getPlayers()) {
+							player.setLevel(count);
+							Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
+					    }
+					count--;
 				}
 			},
 			0, 20
@@ -132,6 +130,7 @@ public class GameHandler {
 		message = message.replace("{TIMELIMIT}", String.valueOf(arena.getStructureManager().getTimeLimit()));
 		for (Player player : arena.getPlayersManager().getPlayers()) {
 			Messages.sendMessage(player, message);
+			player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		Kits kits = arena.getStructureManager().getKits();
@@ -162,6 +161,8 @@ public class GameHandler {
 					}
 					// handle players
 					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
+						// Xp level
+						player.setLevel(timelimit/20);
 						// update bar
 						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
 						// handle player

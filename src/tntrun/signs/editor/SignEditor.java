@@ -121,7 +121,7 @@ public class SignEditor {
 			} else if (arena.getStatusManager().isArenaRunning()) {
 				text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "In Game";
 			} else if (arena.getStatusManager().isArenaRegenerating()) {
-				text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Regenerating";
+				text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Regen...";
 			} else if (players == maxPlayers) {
 				text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + Integer.toString(players) + "/" + Integer.toString(maxPlayers);
 			} else {
