@@ -17,7 +17,6 @@
 
 package tntrun.signs.type;
 
-import org.bukkit.ChatColor;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;

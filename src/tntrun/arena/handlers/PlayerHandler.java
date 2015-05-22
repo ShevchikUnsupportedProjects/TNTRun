@@ -84,6 +84,7 @@ public class PlayerHandler {
 		plugin.pdata.storePlayerGameMode(player);
 		player.setFlying(false);
 		player.setAllowFlight(false);
+		plugin.pdata.storePlayerLevel(player);
 		plugin.pdata.storePlayerInventory(player);
 		plugin.pdata.storePlayerArmor(player);
 		plugin.pdata.storePlayerPotionEffects(player);
@@ -144,14 +145,12 @@ public class PlayerHandler {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
 			Messages.sendMessage(oplayer, msgtoarenaplayers);
 		}
-		//add to spectators
+		// add to spectators
 		arena.getPlayersManager().addSpectator(player);
 	}
 
 	// remove player from arena
 	public void leavePlayer(Player player, String msgtoplayer, String msgtoarenaplayers) {
-		//Set level for player to zero
-		player.setLevel(0);
 		// reset spectators
 		boolean spectator = arena.getPlayersManager().isSpectator(player.getName());
 		if (spectator) {
@@ -208,6 +207,7 @@ public class PlayerHandler {
 		plugin.pdata.restorePlayerPotionEffects(player);
 		plugin.pdata.restorePlayerArmor(player);
 		plugin.pdata.restorePlayerInventory(player);
+		plugin.pdata.restorePlayerLevel(player);
 		// reward player before restoring gamemode if player is winner
 		if (winner) {
 			arena.getStructureManager().getRewards().rewardPlayer(player);

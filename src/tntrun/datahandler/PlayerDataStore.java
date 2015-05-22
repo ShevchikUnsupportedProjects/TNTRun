@@ -35,6 +35,7 @@ public class PlayerDataStore {
 	private HashMap<String, Location> plloc = new HashMap<String, Location>();
 	private HashMap<String, Integer> plhunger = new HashMap<String, Integer>();
 	private HashMap<String, GameMode> plgamemode = new HashMap<String, GameMode>();
+	private HashMap<String, Integer> pllevel = new HashMap<String, Integer>();
 
 	public void storePlayerInventory(Player player) {
 		PlayerInventory pinv = player.getInventory();
@@ -70,24 +71,25 @@ public class PlayerDataStore {
 		player.setGameMode(GameMode.SURVIVAL);
 	}
 
+	public void storePlayerLevel(Player player) {
+		pllevel.put(player.getName(), player.getLevel());
+		player.setLevel(0);
+	}
+
 	public void restorePlayerInventory(Player player) {
-		player.getInventory().setContents(plinv.get(player.getName()));
-		plinv.remove(player.getName());
+		player.getInventory().setContents(plinv.remove(player.getName()));
 	}
 
 	public void restorePlayerArmor(Player player) {
-		player.getInventory().setArmorContents(plarmor.get(player.getName()));
-		plarmor.remove(player.getName());
+		player.getInventory().setArmorContents(plarmor.remove(player.getName()));
 	}
 
 	public void restorePlayerPotionEffects(Player player) {
-		player.addPotionEffects(pleffects.get(player.getName()));
-		pleffects.remove(player.getName());
+		player.addPotionEffects(pleffects.remove(player.getName()));
 	}
 
 	public void restorePlayerLocation(Player player) {
-		player.teleport(plloc.get(player.getName()));
-		plloc.remove(player.getName());
+		player.teleport(plloc.remove(player.getName()));
 	}
 
 	public void clearPlayerLocation(Player player) {
@@ -95,13 +97,15 @@ public class PlayerDataStore {
 	}
 
 	public void restorePlayerHunger(Player player) {
-		player.setFoodLevel(plhunger.get(player.getName()));
-		plhunger.remove(player.getName());
+		player.setFoodLevel(plhunger.remove(player.getName()));
 	}
 
 	public void restorePlayerGameMode(Player player) {
-		player.setGameMode(plgamemode.get(player.getName()));
-		plgamemode.remove(player.getName());
+		player.setGameMode(plgamemode.remove(player.getName()));
+	}
+
+	public void restorePlayerLevel(Player player) {
+		player.setLevel(pllevel.remove(player.getName()));
 	}
 
 }
