@@ -23,6 +23,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
@@ -85,6 +89,7 @@ public class GameHandler {
 					if (arena.getPlayersManager().getCount() < arena.getStructureManager().getMinPlayers()) {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getCount(), 0, arena.getPlayersManager().getCount() * 100 / arena.getStructureManager().getMinPlayers());
+							createWaitingScoreBoard();
 						}
 						stopArenaCountdown();
 					} else
@@ -100,6 +105,8 @@ public class GameHandler {
 							player.playSound(player.getLocation(), Sound.CLICK, 1, 5);
 						}
 					}
+					// scoreboard
+					createWaitingScoreBoard();
 					// sending bars
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							player.setLevel(count);
@@ -121,6 +128,7 @@ public class GameHandler {
 	// main arena handler
 	private int timelimit;
 	private int arenahandler;
+	private int playingtask;
 
 	Random rnd = new Random();
 
@@ -140,6 +148,8 @@ public class GameHandler {
 				kits.giveKit(kitnames[rnd.nextInt(kitnames.length)], player);
 			}
 		}
+		// create scoreboard
+		createPlayingScoreBoard();
 		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
 		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(
 			plugin,
@@ -186,6 +196,7 @@ public class GameHandler {
 		}
 		arena.getStatusManager().setRunning(false);
 		Bukkit.getScheduler().cancelTask(arenahandler);
+		Bukkit.getScheduler().cancelTask(playingtask);
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		if (arena.getStatusManager().isArenaEnabled()) {
 			startArenaRegen();
@@ -222,6 +233,76 @@ public class GameHandler {
 		message = message.replace("{PLAYER}", player.getName());
 		message = message.replace("{ARENA}", arena.getArenaName());
 		Messages.broadcastMessage(message);
+	}
+	private Scoreboard wsb;
+	private Scoreboard psb;
+	
+	public void createWaitingScoreBoard(){
+		for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
+			wsb = Bukkit.getScoreboardManager().getNewScoreboard();
+			
+			Objective o = wsb.registerNewObjective("TNTRun", "waiting");
+			o.setDisplaySlot(DisplaySlot.SIDEBAR);
+			o.setDisplayName("§7[§6TNTRun§7]");
+			
+			Score s5 = o.getScore("§6Players");
+			s5.setScore(5);
+			
+			Score s4 = o.getScore("§c"+arena.getPlayersManager().getAllParticipantsCopy().size());
+			s4.setScore(4);
+			
+			Score s3 = o.getScore(" ");
+			s3.setScore(3);
+			
+			Score s2 = o.getScore("§6Starting in");
+			s2.setScore(2);
+			
+			Score s1 = o.getScore("§c" + count);
+			s1.setScore(1);
+			
+			p.setScoreboard(wsb);
+		}
+	}
+	
+	
+	public void createPlayingScoreBoard(){
+		playingtask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+			public void run(){
+				for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
+					psb = Bukkit.getScoreboardManager().getNewScoreboard();
+					
+					Objective o = psb.registerNewObjective("TNTRun", "playing");
+					o.setDisplaySlot(DisplaySlot.SIDEBAR);
+					o.setDisplayName("§7[§6TNTRun§7]");
+					
+					Score s8 = o.getScore("§6Players");
+					s8.setScore(8);
+					
+					Score s7 = o.getScore("§c"+arena.getPlayersManager().getPlayers().size());
+					s7.setScore(7);
+					
+					Score s6 = o.getScore(" ");
+					s6.setScore(6);
+					
+					Score s5 = o.getScore("§6Spectators");
+					s5.setScore(5);
+					
+					Score s4 = o.getScore("§c"+arena.getPlayersManager().getSpectators().size());
+					s4.setScore(4);
+					
+					Score s3 = o.getScore(" ");
+					s3.setScore(3);
+					
+					Score s2 = o.getScore("§6Ending in");
+					s2.setScore(2);
+					
+					Score s1 = o.getScore("§c" + timelimit/20);
+					s1.setScore(1);
+					
+					p.setScoreboard(psb);
+				}
+			}
+		}, 0, 20);
 	}
 
 	private void startArenaRegen() {
