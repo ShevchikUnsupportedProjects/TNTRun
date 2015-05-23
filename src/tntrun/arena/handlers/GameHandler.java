@@ -105,6 +105,11 @@ public class GameHandler {
 							player.playSound(player.getLocation(), Sound.CLICK, 1, 5);
 						}
 					}
+					if(count==5){
+						for (Player player : arena.getPlayersManager().getPlayers()) {
+							player.teleport(arena.getStructureManager().getSpawnPoint());
+						}
+					}
 					// scoreboard
 					createWaitingScoreBoard();
 					// sending bars

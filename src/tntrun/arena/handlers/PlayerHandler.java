@@ -20,8 +20,13 @@ package tntrun.arena.handlers;
 import java.util.HashSet;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -216,11 +221,6 @@ public class PlayerHandler {
 		plugin.pdata.restorePlayerArmor(player);
 		plugin.pdata.restorePlayerInventory(player);
 		plugin.pdata.restorePlayerLevel(player);
-		// reward player before restoring gamemode if player is winner
-		if (winner) {
-			arena.getStructureManager().getRewards().rewardPlayer(player);
-		}
-		plugin.pdata.restorePlayerGameMode(player);
 		// restore location ot teleport to lobby
 		if (arena.getStructureManager().getTeleportDestination() == TeleportDestination.LOBBY && plugin.globallobby.isLobbyLocationWorldAvailable()) {
 			player.teleport(plugin.globallobby.getLobbyLocation());
@@ -228,6 +228,22 @@ public class PlayerHandler {
 		} else {
 			plugin.pdata.restorePlayerLocation(player);
 		}
+		// reward player before restoring gamemode if player is winner
+		if (winner) {
+			arena.getStructureManager().getRewards().rewardPlayer(player);
+			// spawn firework
+			Firework f = player.getWorld().spawn(player.getLocation(), Firework.class);
+			FireworkMeta fm = f.getFireworkMeta();
+			fm.addEffect(FireworkEffect.builder()
+					.withColor(Color.GREEN).withColor(Color.RED)
+					.withColor(Color.PURPLE)
+					.with(Type.BALL_LARGE)
+					.withFlicker()
+					.build());
+			fm.setPower(1);
+			f.setFireworkMeta(fm);
+		}
+		plugin.pdata.restorePlayerGameMode(player);
 		// update inventory
 		player.updateInventory();
 	}
