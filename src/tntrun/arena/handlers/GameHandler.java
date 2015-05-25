@@ -36,8 +36,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.Kits;
-import tntrun.bars.Bars;
 import tntrun.messages.Messages;
+import tntrun.utils.Bars;
 
 public class GameHandler {
 

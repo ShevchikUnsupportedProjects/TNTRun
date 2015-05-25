@@ -33,8 +33,8 @@ import org.bukkit.potion.PotionEffectType;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.TeleportDestination;
-import tntrun.bars.Bars;
 import tntrun.messages.Messages;
+import tntrun.utils.Bars;
 
 public class PlayerHandler {
 

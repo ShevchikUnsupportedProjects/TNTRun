@@ -20,8 +20,8 @@ package tntrun.commands.setup.reload;
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
-import tntrun.bars.Bars;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.utils.Bars;
 
 public class ReloadBars implements CommandHandlerInterface {
 

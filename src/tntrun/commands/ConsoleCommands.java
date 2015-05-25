@@ -25,8 +25,8 @@ import org.bukkit.command.RemoteConsoleCommandSender;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.bars.Bars;
 import tntrun.messages.Messages;
+import tntrun.utils.Bars;
 
 public class ConsoleCommands implements CommandExecutor {
 
