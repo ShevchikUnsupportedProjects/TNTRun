@@ -48,7 +48,7 @@ public class PlayerSelection {
 		return null;
 	}
 
-	@SuppressWarnings("deprecation")
+	/*@SuppressWarnings("deprecation")
 	public void setSelectionPoint1(Player player) {
 		ownlocations.putPlayerLoc1(player.getName(), player.getTargetBlock(null, 30).getLocation());
 	}
@@ -56,7 +56,7 @@ public class PlayerSelection {
 	@SuppressWarnings("deprecation")
 	public void setSelectionPoint2(Player player) {
 		ownlocations.putPlayerLoc2(player.getName(), player.getTargetBlock(null, 30).getLocation());
-	}
+	}*/
 
 	public void clearSelectionPoints(Player player) {
 		ownlocations.clearPoints(player.getName());

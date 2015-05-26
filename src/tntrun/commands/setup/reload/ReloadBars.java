@@ -20,8 +20,8 @@ package tntrun.commands.setup.reload;
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
-import tntrun.commands.setup.CommandHandlerInterface;
 import tntrun.utils.Bars;
+import tntrun.commands.setup.CommandHandlerInterface;
 
 public class ReloadBars implements CommandHandlerInterface {
 
@@ -33,7 +33,7 @@ public class ReloadBars implements CommandHandlerInterface {
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
 		Bars.loadBars(plugin);
-		player.sendMessage("bars reloaded");
+		player.sendMessage("Bars reloaded");
 		return true;
 	}
 

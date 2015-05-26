@@ -33,8 +33,8 @@ import org.bukkit.potion.PotionEffectType;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.TeleportDestination;
-import tntrun.messages.Messages;
 import tntrun.utils.Bars;
+import tntrun.messages.Messages;
 
 public class PlayerHandler {
 
@@ -68,7 +68,7 @@ public class PlayerHandler {
 			Messages.sendMessage(player, Messages.arenavehicle);
 			return false;
 		}
-		if (arena.getPlayersManager().getCount() == arena.getStructureManager().getMaxPlayers()) {
+		if (arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMaxPlayers()) {
 			Messages.sendMessage(player, Messages.limitreached);
 			return false;
 		}
@@ -109,7 +109,7 @@ public class PlayerHandler {
 		arena.getPlayersManager().add(player);
 		// send message about arena player count
 		String message = Messages.playerscountinarena;
-		message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getCount()));
+		message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
 		Messages.sendMessage(player, message);
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
@@ -118,11 +118,11 @@ public class PlayerHandler {
 		// modify bars
 		if (!arena.getStatusManager().isArenaStarting()) {
 			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
-				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getCount(), 0, arena.getPlayersManager().getCount() * 100 / arena.getStructureManager().getMinPlayers());
+				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
 			}
 		}
 		// check for game start
-		if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getCount() == arena.getStructureManager().getMinPlayers()) {
+		if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMinPlayers()) {
 			arena.getGameHandler().runArenaCountdown();
 		}
 	}
@@ -187,7 +187,7 @@ public class PlayerHandler {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
 			Messages.sendMessage(oplayer, msgtoarenaplayers);
 			if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
-				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getCount(), 0, arena.getPlayersManager().getCount() * 100 / arena.getStructureManager().getMinPlayers());
+				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
 			}
 		}
 	}
@@ -254,7 +254,7 @@ public class PlayerHandler {
 	public boolean vote(Player player) {
 		if (!votes.contains(player.getName())) {
 			votes.add(player.getName());
-			if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getCount() > 1 && votes.size() >= arena.getPlayersManager().getCount() * arena.getStructureManager().getVotePercent()) {
+			if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() > 1 && votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getStructureManager().getVotePercent()) {
 				arena.getGameHandler().runArenaCountdown();
 			}
 			return true;

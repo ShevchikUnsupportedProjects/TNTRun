@@ -33,7 +33,7 @@ public class PlayersManager {
 		return players.containsKey(name) || spectators.containsKey(name);
 	}
 
-	public int getCount() {
+	public int getPlayersCount() {
 		return players.size();
 	}
 

@@ -17,27 +17,22 @@
 
 package tntrun.arena.handlers;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.FireworkEffect.Type;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.Kits;
-import tntrun.messages.Messages;
 import tntrun.utils.Bars;
+import tntrun.messages.Messages;
 
 public class GameHandler {
 
@@ -49,6 +44,8 @@ public class GameHandler {
 		this.arena = arena;
 		count = arena.getStructureManager().getCountdown();
 	}
+
+	private Scoreboard scoreboard = buildScoreboard();
 
 	// arena leave handler
 	private int leavetaskid;
@@ -91,9 +88,9 @@ public class GameHandler {
 				@Override
 				public void run() {
 					// check if countdown should be stopped for some various reasons
-					if (arena.getPlayersManager().getCount() < arena.getStructureManager().getMinPlayers()) {
+					if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers()) {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
-							Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getCount(), 0, arena.getPlayersManager().getCount() * 100 / arena.getStructureManager().getMinPlayers());
+							Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
 							createWaitingScoreBoard();
 						}
 						stopArenaCountdown();
@@ -102,7 +99,7 @@ public class GameHandler {
 					if (count == 0) {
 						stopArenaCountdown();
 						startArena();
-					}else if(count<11){
+					} else if (count < 11) {
 						String message = Messages.arenacountdown;
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
 						for (Player player : arena.getPlayersManager().getPlayers()) {
@@ -110,7 +107,7 @@ public class GameHandler {
 							player.playSound(player.getLocation(), Sound.CLICK, 1, 5);
 						}
 					}
-					if(count==5){
+					if(count == 5) {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							player.teleport(arena.getStructureManager().getSpawnPoint());
 						}
@@ -118,10 +115,10 @@ public class GameHandler {
 					// scoreboard
 					createWaitingScoreBoard();
 					// sending bars
-						for (Player player : arena.getPlayersManager().getPlayers()) {
-							player.setLevel(count);
-							Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
-					    }
+					for (Player player : arena.getPlayersManager().getPlayers()) {
+						player.setLevel(count);
+						Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
+				    }
 					count--;
 				}
 			},
@@ -158,7 +155,7 @@ public class GameHandler {
 				kits.giveKit(kitnames[rnd.nextInt(kitnames.length)], player);
 			}
 		}
-		// create scoreboard
+		resetScoreboard();
 		createPlayingScoreBoard();
 		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
 		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(
@@ -167,7 +164,7 @@ public class GameHandler {
 				@Override
 				public void run() {
 					// stop arena if player count is 0
-					if (arena.getPlayersManager().getCount() == 0) {
+					if (arena.getPlayersManager().getPlayersCount() == 0) {
 						// stop arena
 						stopArena();
 						return;
@@ -184,13 +181,13 @@ public class GameHandler {
 						// Xp level
 						player.setLevel(timelimit/20);
 						// update bar
-						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
+						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
 						// handle player
 						handlePlayer(player);
 					}
 					// update bars for spectators too
 					for (Player player : arena.getPlayersManager().getSpectators()) {
-						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
+						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
 					}
 					// decrease timelimit
 					timelimit--;
@@ -199,46 +196,9 @@ public class GameHandler {
 			0, 1
 		);
 	}
-	
-	public void startEnding(final Player player){
-		broadcastWin(player);
-		for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
-			p.playSound(p.getLocation(), Sound.EXPLODE, 1, 1);
-			p.setAllowFlight(true);
-			p.setFlying(true);
-			p.teleport(arena.getStructureManager().getSpawnPoint());
-		}
-		
-		Bukkit.getScheduler().cancelTask(arenahandler);
-		Bukkit.getScheduler().cancelTask(playingtask);
-		
-		final int endtask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
-			@Override
-			public void run() {
-				Firework f = player.getWorld().spawn(player.getLocation(), Firework.class);
-				FireworkMeta fm = f.getFireworkMeta();
-				fm.addEffect(FireworkEffect.builder()
-						.withColor(Color.GREEN).withColor(Color.RED)
-						.withColor(Color.PURPLE)
-						.with(Type.BALL_LARGE)
-						.withFlicker()
-						.build());
-				fm.setPower(1);
-				f.setFireworkMeta(fm);
-			}
-			
-		}, 0, 10);
-		
-		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-			public void run(){
-				Bukkit.getScheduler().cancelTask(endtask);
-				arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
-				stopArena();
-			}
-		}, 140);
-	}
 
 	public void stopArena() {
+		resetScoreboard();
 		for (Player player : arena.getPlayersManager().getAllParticipantsCopy()) {
 			arena.getPlayerHandler().leavePlayer(player, "", "");
 		}
@@ -258,9 +218,10 @@ public class GameHandler {
 		// remove block under player feet
 		arena.getStructureManager().getGameZone().destroyBlock(plufloc, arena);
 		// check for win
-		if (arena.getPlayersManager().getCount() == 1) {
+		if (arena.getPlayersManager().getPlayersCount() == 1) {
 			// last player won
-			startEnding(player);
+			arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
+			broadcastWin(player);
 			return;
 		}
 		// check for lose
@@ -281,73 +242,49 @@ public class GameHandler {
 		message = message.replace("{ARENA}", arena.getArenaName());
 		Messages.broadcastMessage(message);
 	}
-	private Scoreboard wsb;
-	private Scoreboard psb;
-	
-	public void createWaitingScoreBoard(){
-		for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
-			wsb = Bukkit.getScoreboardManager().getNewScoreboard();
-			
-			Objective o = wsb.registerNewObjective("TNTRun", "waiting");
-			o.setDisplaySlot(DisplaySlot.SIDEBAR);
-			o.setDisplayName("§7[§6TNTRun§7]");
-			
-			Score s5 = o.getScore("§6Players");
-			s5.setScore(5);
-			
-			Score s4 = o.getScore("§c"+arena.getPlayersManager().getAllParticipantsCopy().size());
-			s4.setScore(4);
-			
-			Score s3 = o.getScore(" ");
-			s3.setScore(3);
-			
-			Score s2 = o.getScore("§6Starting in");
-			s2.setScore(2);
-			
-			Score s1 = o.getScore("§c" + count);
-			s1.setScore(1);
-			
-			p.setScoreboard(wsb);
-		}
+
+	static Scoreboard buildScoreboard() {
+		Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+
+		Objective o = scoreboard.registerNewObjective("TNTRun", "waiting");
+		o.setDisplaySlot(DisplaySlot.SIDEBAR);
+		o.setDisplayName("§7[§6TNTRun§7]");
+
+		return scoreboard;
 	}
 	
-	
-	public void createPlayingScoreBoard(){
-		playingtask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
-			public void run(){
-				for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
-					psb = Bukkit.getScoreboardManager().getNewScoreboard();
-					
-					Objective o = psb.registerNewObjective("TNTRun", "playing");
-					o.setDisplaySlot(DisplaySlot.SIDEBAR);
-					o.setDisplayName("§7[§6TNTRun§7]");
-					
-					Score s8 = o.getScore("§6Players");
-					s8.setScore(8);
-					
-					Score s7 = o.getScore("§c"+arena.getPlayersManager().getPlayers().size());
-					s7.setScore(7);
-					
-					Score s6 = o.getScore(" ");
-					s6.setScore(6);
-					
-					Score s5 = o.getScore("§6Spectators");
-					s5.setScore(5);
-					
-					Score s4 = o.getScore("§c"+arena.getPlayersManager().getSpectators().size());
-					s4.setScore(4);
-					
-					Score s3 = o.getScore(" ");
-					s3.setScore(3);
-					
-					Score s2 = o.getScore("§6Ending in");
-					s2.setScore(2);
-					
-					Score s1 = o.getScore("§c" + timelimit/20);
-					s1.setScore(1);
-					
-					p.setScoreboard(psb);
-				}
+	public void createWaitingScoreBoard() {
+		resetScoreboard();
+		Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
+		o.getScore("§6Players").setScore(5);
+		o.getScore("§c"+arena.getPlayersManager().getPlayersCount() + "§1").setScore(4);
+		o.getScore(" ").setScore(3);
+		o.getScore("§6Starting in").setScore(2);
+		o.getScore("§c" + count + "§2").setScore(1);
+		for (Player p : arena.getPlayersManager().getPlayers()) {
+			p.setScoreboard(scoreboard);
+		}
+	}
+
+	public void resetScoreboard() {
+		for (String entry : new ArrayList<String>(scoreboard.getEntries())) {
+			scoreboard.resetScores(entry);
+		}
+	}
+
+	public void createPlayingScoreBoard() {
+		playingtask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+			public void run() {
+				resetScoreboard();
+				Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
+				o.getScore("§6Players").setScore(8);
+				o.getScore("§c"+arena.getPlayersManager().getPlayersCount() + "§1").setScore(7);
+				o.getScore("§1 ").setScore(6);
+				o.getScore("§6Spectators").setScore(5);
+				o.getScore("§c"+arena.getPlayersManager().getSpectators().size() + "§2").setScore(4);
+				o.getScore("§2 ").setScore(3);
+				o.getScore("§6Ending in").setScore(2);
+				o.getScore("§c" + timelimit/20 + "§3").setScore(1);
 			}
 		}, 0, 20);
 	}
