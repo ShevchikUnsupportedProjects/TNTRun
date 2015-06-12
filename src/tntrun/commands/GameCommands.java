@@ -37,7 +37,7 @@ public class GameCommands implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!(sender instanceof Player)) {
-			sender.sendMessage("A player is expected");
+			sender.sendMessage("A player is expected!");
 			return true;
 		}
 		Player player = (Player) sender;
@@ -45,12 +45,13 @@ public class GameCommands implements CommandExecutor {
 		// help command
 		if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
 			sender.sendMessage("§a============§7[§6TNTRun§7]§a============");
-			sender.sendMessage("§a/tr lobby §f- §cteleport to lobby");
-			sender.sendMessage("§a/tr list §f- §clist all arenas");
-			sender.sendMessage("§a/tr join {arena} §f- §cjoin arena");
-			sender.sendMessage("§a/tr leave §f- §cleave current arena");
-			sender.sendMessage("§a/tr vote §f- §cvote for current arena start");
+			sender.sendMessage("§a/tr lobby §f- §cTeleport to lobby");
+			sender.sendMessage("§a/tr list §f- §cList all arenas");
+			sender.sendMessage("§a/tr join {arena} §f- §cJoin arena");
+			sender.sendMessage("§a/tr leave §f- §cLeave current arena");
+			sender.sendMessage("§a/tr vote §f- §cVote for current arena");
 			sender.sendMessage("§a/tr cmds §f- §cView all commands");
+			sender.sendMessage("§a/tr info §f- §cPlugin info");
 			return true;
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("lobby")) {
 			if (plugin.globallobby.isLobbyLocationSet()) {
@@ -97,6 +98,14 @@ public class GameCommands implements CommandExecutor {
 				sender.sendMessage("Arena does not exist");
 				return true;
 			}
+		}
+		// tntrun info
+		else if (args.length == 1 && args[0].equalsIgnoreCase("info")) {
+			sender.sendMessage("§a============§7[§6TNTRun§7]§a============");
+			sender.sendMessage("§cVersion of plugin> §6" + plugin.getDescription().getVersion());
+			sender.sendMessage("§cWebsite> §6http://www.spigotmc.org/resources/tntrun.7320/");
+			sender.sendMessage("§cAuthors> §6Shevchikden | tade159SK (The_TadeSK)");
+			sender.sendMessage("§a============§7[§6TNTRun§7]§a============");
 		}
 		// leave arena
 		else if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {

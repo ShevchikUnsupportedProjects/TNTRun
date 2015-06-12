@@ -1,7 +1,7 @@
 name: TNTRun
 main: tntrun.TNTRun
 softdepend: [WorldEdit, Vault]
-version: 3.9
+version: 4.0
 author: _Shevchik_
 commands:
   tntrunsetup:
@@ -11,8 +11,8 @@ commands:
   tntrun:
     description: TNTRun game commands
     aliases: tr
-    usage: Use /tr help to show all commands available in plugin
+    usage: Please use /tr help for more info
   tntrunconsole:
     description: TNTRun console commands
     aliases: trconsole
-    usage: Command is invalid
+    usage: Command is invalid, please use /tr cmds

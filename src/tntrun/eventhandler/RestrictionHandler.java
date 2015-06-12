@@ -31,6 +31,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.messages.Messages;
 
 public class RestrictionHandler implements Listener {
 
@@ -59,6 +60,7 @@ public class RestrictionHandler implements Listener {
 		}
 		// now check command
 		if (!allowedcommands.contains(e.getMessage().toLowerCase())) {
+			Messages.sendMessage(player, Messages.nopermission);
 			e.setCancelled(true);
 		}
 	}
