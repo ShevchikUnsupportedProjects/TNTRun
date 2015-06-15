@@ -35,16 +35,16 @@ public class EnableArena implements CommandHandlerInterface {
 		Arena arena = plugin.amanager.getArenaByName(args[0]);
 		if (arena != null) {
 			if (arena.getStatusManager().isArenaEnabled()) {
-				player.sendMessage("Arena already enabled.");
+				player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c already enabled");
 			} else {
 				if (arena.getStatusManager().enableArena()) {
-					player.sendMessage("Arena enabled");
+					player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c enabled");
 				} else {
-					player.sendMessage("Arena is not configured. Reason: " + arena.getStructureManager().isArenaConfigured());
+					player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c is't configured. Reason: " + arena.getStructureManager().isArenaConfigured());
 				}
 			}
 		} else {
-			player.sendMessage("Arena does not exist");
+			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
 		}
 		return true;
 	}

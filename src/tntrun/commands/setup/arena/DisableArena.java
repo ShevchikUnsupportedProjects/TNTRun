@@ -36,12 +36,12 @@ public class DisableArena implements CommandHandlerInterface {
 		if (arena != null) {
 			if (arena.getStatusManager().isArenaEnabled()) {
 				arena.getStatusManager().disableArena();
-				player.sendMessage("Arena disabled");
+				player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 disabled");
 			} else {
-				player.sendMessage("Arena already disabled");
+				player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c already disabled");
 			}
 		} else {
-			player.sendMessage("Arena does not exist");
+			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
 		}
 		return true;
 	}

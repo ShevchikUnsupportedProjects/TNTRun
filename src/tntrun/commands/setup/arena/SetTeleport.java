@@ -36,7 +36,7 @@ public class SetTeleport implements CommandHandlerInterface {
 		Arena arena = plugin.amanager.getArenaByName(args[0]);
 		if (arena != null) {
 			if (arena.getStatusManager().isArenaEnabled()) {
-				player.sendMessage("Disable arena first");
+				player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
 				return true;
 			}
 			if (args[1].equals("previous")) {
@@ -45,12 +45,12 @@ public class SetTeleport implements CommandHandlerInterface {
 				if (plugin.globallobby.isLobbyLocationSet()) {
 					arena.getStructureManager().setTeleportDestination(TeleportDestination.LOBBY);
 				} else {
-					player.sendMessage("Global lobby is not set");
+					player.sendMessage("§7[§6TNTRun§7] §cGlobal lobby isn't set §6/trsetup setlobby");
 				}
 			}
-			player.sendMessage("Teleport destination set");
+			player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 TeleportDestination set to §6" + args[1].toUpperCase());
 		} else {
-			player.sendMessage("Arena does not exist");
+			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
 		}
 		return true;
 	}

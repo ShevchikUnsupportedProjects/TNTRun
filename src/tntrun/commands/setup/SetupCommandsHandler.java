@@ -118,7 +118,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 			CommandHandlerInterface commandh = commandHandlers.get(args[0]);
 			//check args length
 			if (args.length - 1 < commandh.getMinArgsLength()) {
-				Messages.sendMessage(player, ChatColor.RED+"Not enough args");
+				Messages.sendMessage(player,"§7[§6TNTRun§7] §cERROR: Please use /tr cmds to view all commands for game");
 				return false;
 			}
 			//execute command

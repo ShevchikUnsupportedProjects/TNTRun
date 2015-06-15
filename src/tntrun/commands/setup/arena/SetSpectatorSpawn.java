@@ -18,16 +18,16 @@ public class SetSpectatorSpawn implements CommandHandlerInterface {
 		Arena arena = plugin.amanager.getArenaByName(args[0]);
 		if (arena != null) {
 			if (arena.getStatusManager().isArenaEnabled()) {
-				player.sendMessage("Disable arena first");
+				player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
 				return true;
 			}
 			if (arena.getStructureManager().setSpectatorsSpawn(player.getLocation())) {
-				player.sendMessage("Spectator spawn set");
+				player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 SpectatorSpawn set to §6" + player.getLocation());
 			} else {
-				player.sendMessage("Spectator spawn should be in arena bounds");
+				player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c SpectatorSpawn must be in arena bounds");
 			}
 		} else {
-			player.sendMessage("Arena does not exist");
+			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
 		}
 		return true;
 	}

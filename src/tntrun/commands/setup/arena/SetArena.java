@@ -39,18 +39,18 @@ public class SetArena implements CommandHandlerInterface {
 		Arena arena = plugin.amanager.getArenaByName(args[0]);
 		if (arena != null) {
 			if (arena.getStatusManager().isArenaEnabled()) {
-				player.sendMessage("Disable arena first");
+				player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
 				return true;
 			}
 			PlayerCuboidSelection sel = selection.getPlayerSelection(player);
 			if (sel != null) {
 				arena.getStructureManager().setArenaPoints(sel.getMinimumLocation(), sel.getMaximumLocation());
-				player.sendMessage("Arena bounds set");
+				player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 set");
 			} else {
-				player.sendMessage("Locations are wrong or not defined");
+				player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c locations are wrong, use WorldEdit to make locations");
 			}
 		} else {
-			player.sendMessage("Arena does not exist");
+			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
 		}
 		return true;
 	}

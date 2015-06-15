@@ -35,16 +35,16 @@ public class SetSpawn implements CommandHandlerInterface {
 		Arena arena = plugin.amanager.getArenaByName(args[0]);
 		if (arena != null) {
 			if (arena.getStatusManager().isArenaEnabled()) {
-				player.sendMessage("Disable arena first");
+				player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
 				return true;
 			}
 			if (arena.getStructureManager().setSpawnPoint(player.getLocation())) {
-				player.sendMessage("Spawnpoint set");
+				player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 SpawnPoint set to §6" + player.getLocation());
 			} else {
-				player.sendMessage("Spawnpoint should be in arena bounds");
+				player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c SpawnPoint must be in arena bounds");
 			}
 		} else {
-			player.sendMessage("Arena does not exist");
+			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
 		}
 		return true;
 	}

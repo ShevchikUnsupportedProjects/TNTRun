@@ -21,9 +21,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -220,8 +225,7 @@ public class GameHandler {
 		// check for win
 		if (arena.getPlayersManager().getPlayersCount() == 1) {
 			// last player won
-			arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
-			broadcastWin(player);
+			startEnding(player);
 			return;
 		}
 		// check for lose
@@ -311,5 +315,43 @@ public class GameHandler {
 			delay
 		);
 	}
+	
+		public void startEnding(final Player player){
+				broadcastWin(player);
+				for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
+					p.playSound(p.getLocation(), Sound.EXPLODE, 1, 1);
+					p.setAllowFlight(true);
+					p.setFlying(true);
+					p.teleport(arena.getStructureManager().getSpawnPoint());
+				}
+				
+				Bukkit.getScheduler().cancelTask(arenahandler);
+				Bukkit.getScheduler().cancelTask(playingtask);
+				
+				final int endtask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+					@Override
+					public void run() {
+						Firework f = player.getWorld().spawn(arena.getStructureManager().getSpawnPoint(), Firework.class);
+						FireworkMeta fm = f.getFireworkMeta();
+						fm.addEffect(FireworkEffect.builder()
+								.withColor(Color.GREEN).withColor(Color.RED)
+								.withColor(Color.PURPLE)
+								.with(Type.BALL_LARGE)
+								.withFlicker()
+								.build());
+						fm.setPower(1);
+						f.setFireworkMeta(fm);
+					}
+					
+				}, 0, 10);
+				
+				Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+					public void run(){
+						Bukkit.getScheduler().cancelTask(endtask);
+						arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
+						stopArena();
+					}
+				}, 140);
+			}
 
 }

@@ -35,13 +35,13 @@ public class SetCountdown implements CommandHandlerInterface {
 		Arena arena = plugin.amanager.getArenaByName(args[0]);
 		if (arena != null) {
 			if (arena.getStatusManager().isArenaEnabled()) {
-				player.sendMessage("Disable arena first");
+				player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
 				return true;
 			}
 			arena.getStructureManager().setCountdown(Integer.parseInt(args[1]));
-			player.sendMessage("Countdown set to " + Integer.parseInt(args[1]));
+			player.sendMessage("§7[§6TNTRun§7] §7CountDown for arena §6" +arena + "§7 set to: §6"+ Integer.parseInt(args[1]) + "§7 seconds");
 		} else {
-			player.sendMessage("Arena does not exist");
+			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
 		}
 		return true;
 	}

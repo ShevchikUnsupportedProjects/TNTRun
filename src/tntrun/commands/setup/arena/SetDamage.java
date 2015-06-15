@@ -19,7 +19,7 @@ public class SetDamage implements CommandHandlerInterface {
 		Arena arena = plugin.amanager.getArenaByName(args[0]);
 		if (arena != null) {
 			if (arena.getStatusManager().isArenaEnabled()) {
-				player.sendMessage("Disable arena first");
+				player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
 				return true;
 			}
 			if (args[1].equals("yes")) {
@@ -29,9 +29,9 @@ public class SetDamage implements CommandHandlerInterface {
 			} else if (args[1].equals("zero")) {
 				arena.getStructureManager().setDamageEnabled(DamageEnabled.ZERO);
 			}
-			player.sendMessage("Damage enabled set");
+			player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 set damage to: §6" + args[1]);
 		} else {
-			player.sendMessage("Arena does not exist");
+			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
 		}
 		return true;
 	}
