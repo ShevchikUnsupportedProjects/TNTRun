@@ -17,16 +17,20 @@
 
 package tntrun.arena.handlers;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
+import org.bukkit.Sound;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -97,7 +101,7 @@ public class PlayerHandler {
 		// update inventory
 		player.updateInventory();
 		// add mining fatigue effect so player won't even attempt to break blocks
-		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, Integer.MAX_VALUE, 5));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, Integer.MAX_VALUE, 9));
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// send message to other players
@@ -107,6 +111,18 @@ public class PlayerHandler {
 		}
 		// set player on arena data
 		arena.getPlayersManager().add(player);
+		// start cooldown and add leave item
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+			public void run(){
+				String[] lore = {"§7Right click to ", "§7leave arena "};
+				ItemStack item = new ItemStack(Material.BED);
+				ItemMeta im = item.getItemMeta();
+				im.setDisplayName("§6§lLeave arena");
+				im.setLore(Arrays.asList(lore));
+				item.setItemMeta(im);
+				player.getInventory().setItem(0, item);
+			}
+		}, 5L);
 		// send message about arena player count
 		String message = Messages.playerscountinarena;
 		message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
@@ -119,6 +135,8 @@ public class PlayerHandler {
 		if (!arena.getStatusManager().isArenaStarting()) {
 			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
 				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
+				// play sound
+				oplayer.playSound(oplayer.getLocation(), Sound.NOTE_PLING, 1, 1);
 			}
 		}
 		// check for game start
@@ -128,7 +146,7 @@ public class PlayerHandler {
 	}
 
 	// move to spectators
-	public void spectatePlayer(Player player, String msgtoplayer, String msgtoarenaplayers) {
+	public void spectatePlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
 		// remove form players
 		arena.getPlayersManager().remove(player);
 		// remove scoreboard
@@ -156,6 +174,18 @@ public class PlayerHandler {
 		}
 		// add to spectators
 		arena.getPlayersManager().addSpectator(player);
+		// start cooldown and add leave item
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+			public void run(){
+				String[] lore = {"§7Right click to ", "§7leave arena "};
+				ItemStack item = new ItemStack(Material.BED);
+				ItemMeta im = item.getItemMeta();
+				im.setDisplayName("§6§lLeave arena");
+				im.setLore(Arrays.asList(lore));
+				item.setItemMeta(im);
+				player.getInventory().setItem(0, item);
+			}
+		}, 5L);
 	}
 
 	// remove player from arena
@@ -182,6 +212,8 @@ public class PlayerHandler {
 		Messages.sendMessage(player, msgtoplayer);
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
+		// create scoreboard
+		arena.getGameHandler().createWaitingScoreBoard();
 		// send message to other players and update bars
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());

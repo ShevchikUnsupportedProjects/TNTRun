@@ -20,6 +20,7 @@ package tntrun.eventhandler;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,6 +29,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
@@ -42,7 +44,7 @@ public class RestrictionHandler implements Listener {
 	}
 
 	private HashSet<String> allowedcommands = new HashSet<String>(
-		Arrays.asList("/tntrun leave", "/tntrun vote", "/tr leave", "/tr vote")
+		Arrays.asList("/tntrun leave", "/tntrun vote", "/tr leave", "/tr vote", "/tr help", "/tr info")
 	);
 
 	// player should not be able to issue any commands besides /tr leave and /tr vote while in arena
@@ -99,6 +101,24 @@ public class RestrictionHandler implements Listener {
 			return;
 		}
 		e.setCancelled(true);
+	}
+	
+	//check interact
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPlayerInteract(PlayerInteractEvent e) {
+		Player player = e.getPlayer();
+		Arena arena = plugin.amanager.getPlayerArena(player.getName());
+		// check item
+		if(e.getItem().getType() == Material.BED){
+			// ignore if player is not in arena
+			if (arena == null) {
+				return;
+			}
+			// leave arena
+			arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+			//cancel place
+			e.setCancelled(true);
+		}
 	}
 
 }
