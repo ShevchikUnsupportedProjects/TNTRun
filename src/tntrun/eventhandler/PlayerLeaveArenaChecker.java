@@ -46,6 +46,10 @@ public class PlayerLeaveArenaChecker implements Listener {
 			return;
 		}
 		arena.getPlayerHandler().leavePlayer(player, "", Messages.playerlefttoothers);
+		
+		if (arena.getPlayersManager().getPlayersCount() == 0) {
+			arena.getGameHandler().stopArena();
+		}
 	}
 
 	// remove player from arena if he died (/kill command sux)

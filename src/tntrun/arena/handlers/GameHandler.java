@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
@@ -317,12 +318,21 @@ public class GameHandler {
 	}
 	
 		public void startEnding(final Player player){
+			for(Player all : Bukkit.getOnlinePlayers()){
+				all.playSound(all.getLocation(), Sound.ENDERDRAGON_DEATH, 1, 20F);
+				for(int i = 0; i<20;i++){
+					all.sendMessage(" ");
+				}
+				all.sendMessage("§6"+ChatColor.MAGIC + "----------------------------------------------------------");
 				broadcastWin(player);
+				all.sendMessage("§6"+ChatColor.MAGIC + "----------------------------------------------------------");
+			}
 				for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
 					p.playSound(p.getLocation(), Sound.EXPLODE, 1, 1);
 					p.setAllowFlight(true);
 					p.setFlying(true);
 					p.teleport(arena.getStructureManager().getSpawnPoint());
+					p.getInventory().clear();
 				}
 				
 				Bukkit.getScheduler().cancelTask(arenahandler);
@@ -343,7 +353,7 @@ public class GameHandler {
 						f.setFireworkMeta(fm);
 					}
 					
-				}, 0, 10);
+				}, 0, 20);
 				
 				Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
 					public void run(){
@@ -351,7 +361,7 @@ public class GameHandler {
 						arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
 						stopArena();
 					}
-				}, 140);
+				}, 160);
 			}
 
 }

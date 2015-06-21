@@ -41,7 +41,10 @@ public class GameCommands implements CommandExecutor {
 			return true;
 		}
 		Player player = (Player) sender;
-		// handle commands
+		if (args.length < 1){
+			sender.sendMessage("§7============[§6TNTRun§7]§7============");
+			sender.sendMessage("§7[§6TNTRun§7] §6Please use §7/tr help");
+		}
 		// help command
 		if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");

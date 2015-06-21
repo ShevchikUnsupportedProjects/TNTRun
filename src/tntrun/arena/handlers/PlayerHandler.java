@@ -120,7 +120,7 @@ public class PlayerHandler {
 				im.setDisplayName("§6§lLeave arena");
 				im.setLore(Arrays.asList(lore));
 				item.setItemMeta(im);
-				player.getInventory().setItem(0, item);
+				player.getInventory().setItem(8, item);
 			}
 		}, 5L);
 		// send message about arena player count
@@ -278,6 +278,13 @@ public class PlayerHandler {
 		plugin.pdata.restorePlayerGameMode(player);
 		// update inventory
 		player.updateInventory();
+		// remove fly
+		player.setAllowFlight(false);
+		player.setFlying(false);
+		// check is in arena 0 players
+		if (arena.getPlayersManager().getPlayersCount() == 0) {
+			arena.getGameHandler().stopArena();
+		}
 	}
 
 	// vote for game start

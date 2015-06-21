@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -108,17 +109,24 @@ public class RestrictionHandler implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
-		// check item
-		if(e.getItem().getType() == Material.BED){
-			// ignore if player is not in arena
-			if (arena == null) {
-				return;
+		
+		try{
+			// check item
+			if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
+				if(e.getItem().getType() == Material.BED){
+					// ignore if player is not in arena
+					if (arena == null) {
+						return;
+					}
+					//cancel place
+					e.setCancelled(true);
+					// leave arena
+					arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+				}
 			}
-			// leave arena
-			arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
-			//cancel place
-			e.setCancelled(true);
-		}
+	    }catch (NullPointerException ex){	
+	    	
+	    }
 	}
 
 }
