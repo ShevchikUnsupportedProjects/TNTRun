@@ -28,6 +28,7 @@ public class PlayersManager {
 
 	private HashMap<String, Player> players = new HashMap<String, Player>();
 	private HashMap<String, Player> spectators = new HashMap<String, Player>();
+	private HashMap<String, Player> lostPlayers = new HashMap<String, Player>();
 
 	public boolean isInArena(String name) {
 		return players.containsKey(name) || spectators.containsKey(name);
@@ -63,6 +64,10 @@ public class PlayersManager {
 	public boolean isSpectator(String name) {
 		return spectators.containsKey(name);
 	}
+	
+	public boolean isLostPlayer(String name) {
+		return lostPlayers.containsKey(name);
+	}
 
 	public void addSpectator(Player player) {
 		spectators.put(player.getName(), player);
@@ -71,13 +76,27 @@ public class PlayersManager {
 	public void removeSpecator(String name) {
 		spectators.remove(name);
 	}
+	
+	public void addLostPlayer(Player player) {
+		lostPlayers.put(player.getName(), player);
+	}
+
+	public void removeLostPlayer(Player p) {
+		lostPlayers.remove(p);
+	}
 
 	public Collection<Player> getSpectators() {
 		return Collections.unmodifiableCollection(spectators.values());
 	}
+	public Collection<Player> getLostPlayers() {
+		return Collections.unmodifiableCollection(lostPlayers.values());
+	}
 
 	public HashSet<Player> getSpectatorsCopy() {
 		return new HashSet<Player>(spectators.values());
+	}
+	public HashSet<Player> getLostPlayersCopy() {
+		return new HashSet<Player>(lostPlayers.values());
 	}
 
 }

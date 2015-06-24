@@ -208,6 +208,9 @@ public class GameHandler {
 		for (Player player : arena.getPlayersManager().getAllParticipantsCopy()) {
 			arena.getPlayerHandler().leavePlayer(player, "", "");
 		}
+		for(Player p : arena.getPlayersManager().getLostPlayersCopy()){
+			arena.getPlayersManager().removeLostPlayer(p);
+		}
 		arena.getStatusManager().setRunning(false);
 		Bukkit.getScheduler().cancelTask(arenahandler);
 		Bukkit.getScheduler().cancelTask(playingtask);
@@ -239,13 +242,6 @@ public class GameHandler {
 			}
 			return;
 		}
-	}
-
-	private void broadcastWin(Player player) {
-		String message = Messages.playerwonbroadcast;
-		message = message.replace("{PLAYER}", player.getName());
-		message = message.replace("{ARENA}", arena.getArenaName());
-		Messages.broadcastMessage(message);
 	}
 
 	static Scoreboard buildScoreboard() {
@@ -285,8 +281,8 @@ public class GameHandler {
 				o.getScore("§6Players").setScore(8);
 				o.getScore("§c"+arena.getPlayersManager().getPlayersCount() + "§1").setScore(7);
 				o.getScore("§1 ").setScore(6);
-				o.getScore("§6Spectators").setScore(5);
-				o.getScore("§c"+arena.getPlayersManager().getSpectators().size() + "§2").setScore(4);
+				o.getScore("§6Lost players").setScore(5);
+				o.getScore("§c"+arena.getPlayersManager().getLostPlayers().size() + "§2").setScore(4);
 				o.getScore("§2 ").setScore(3);
 				o.getScore("§6Ending in").setScore(2);
 				o.getScore("§c" + timelimit/20 + "§3").setScore(1);
@@ -320,12 +316,21 @@ public class GameHandler {
 		public void startEnding(final Player player){
 			for(Player all : Bukkit.getOnlinePlayers()){
 				all.playSound(all.getLocation(), Sound.ENDERDRAGON_DEATH, 1, 20F);
-				for(int i = 0; i<20;i++){
+				all.playSound(arena.getStructureManager().getSpawnPoint(), Sound.ENDERDRAGON_DEATH, 1, 20F);
+				all.sendMessage("§6"+ChatColor.MAGIC + "----------------------------------------------------------");
+				all.sendMessage("§6§lTNTRun plugin by The_TadeSK ");
+				all.sendMessage("§6"+ChatColor.MAGIC + "----------------------------------------------------------");
+				for(int i = 0; i<15;i++){
 					all.sendMessage(" ");
+					if(i == 14){
+						String message = Messages.playerwonbroadcast;
+						message = message.replace("{PLAYER}", player.getName());
+						message = message.replace("{ARENA}", arena.getArenaName());
+						all.sendMessage("§6"+ChatColor.MAGIC + "----------------------------------------------------------");
+						all.sendMessage(message.replace("&", "§"));
+						all.sendMessage("§6"+ChatColor.MAGIC + "----------------------------------------------------------");
+					}
 				}
-				all.sendMessage("§6"+ChatColor.MAGIC + "----------------------------------------------------------");
-				broadcastWin(player);
-				all.sendMessage("§6"+ChatColor.MAGIC + "----------------------------------------------------------");
 			}
 				for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
 					p.playSound(p.getLocation(), Sound.EXPLODE, 1, 1);

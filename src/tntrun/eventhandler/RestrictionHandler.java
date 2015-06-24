@@ -105,7 +105,7 @@ public class RestrictionHandler implements Listener {
 	}
 	
 	//check interact
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
@@ -113,16 +113,16 @@ public class RestrictionHandler implements Listener {
 		try{
 			// check item
 			if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
-				if(e.getItem().getType() == Material.BED){
-					// ignore if player is not in arena
-					if (arena == null) {
+		        if(e.getMaterial() == Material.BED){
+					if (arena != null) {
+						e.setCancelled(true);
+						arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 						return;
+					} else {
+						e.setCancelled(false);
+						return ;
 					}
-					//cancel place
-					e.setCancelled(true);
-					// leave arena
-					arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
-				}
+		        }
 			}
 	    }catch (NullPointerException ex){	
 	    	

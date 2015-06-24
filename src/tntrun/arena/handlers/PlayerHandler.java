@@ -100,8 +100,6 @@ public class PlayerHandler {
 		plugin.pdata.storePlayerHunger(player);
 		// update inventory
 		player.updateInventory();
-		// add mining fatigue effect so player won't even attempt to break blocks
-		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, Integer.MAX_VALUE, 9));
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// send message to other players
@@ -183,7 +181,7 @@ public class PlayerHandler {
 				im.setDisplayName("§6§lLeave arena");
 				im.setLore(Arrays.asList(lore));
 				item.setItemMeta(im);
-				player.getInventory().setItem(0, item);
+				player.getInventory().setItem(8, item);
 			}
 		}, 5L);
 	}
@@ -208,6 +206,8 @@ public class PlayerHandler {
 		if (spectator) {
 			return;
 		}
+		//Add player to lost players
+		arena.getPlayersManager().addLostPlayer(player);
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// modify signs

@@ -1,8 +1,8 @@
 name: TNTRun
 main: tntrun.TNTRun
 softdepend: [WorldEdit, Vault]
-version: 4.3
-author: _Shevchik_
+version: 4.4
+author: [_Shevchik_, The_TadeSK]
 commands:
   tntrunsetup:
     description: TNTRun arena setup commands
