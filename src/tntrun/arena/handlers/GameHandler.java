@@ -44,6 +44,7 @@ public class GameHandler {
 
 	private TNTRun plugin;
 	private Arena arena;
+	public int lostPlayers = 0;
 
 	public GameHandler(TNTRun plugin, Arena arena) {
 		this.plugin = plugin;
@@ -208,9 +209,7 @@ public class GameHandler {
 		for (Player player : arena.getPlayersManager().getAllParticipantsCopy()) {
 			arena.getPlayerHandler().leavePlayer(player, "", "");
 		}
-		for(Player p : arena.getPlayersManager().getLostPlayersCopy()){
-			arena.getPlayersManager().removeLostPlayer(p);
-		}
+		lostPlayers = 0;
 		arena.getStatusManager().setRunning(false);
 		Bukkit.getScheduler().cancelTask(arenahandler);
 		Bukkit.getScheduler().cancelTask(playingtask);
@@ -282,7 +281,7 @@ public class GameHandler {
 				o.getScore("§c"+arena.getPlayersManager().getPlayersCount() + "§1").setScore(7);
 				o.getScore("§1 ").setScore(6);
 				o.getScore("§6Lost players").setScore(5);
-				o.getScore("§c"+arena.getPlayersManager().getLostPlayers().size() + "§2").setScore(4);
+				o.getScore("§c"+lostPlayers + "§2").setScore(4);
 				o.getScore("§2 ").setScore(3);
 				o.getScore("§6Ending in").setScore(2);
 				o.getScore("§c" + timelimit/20 + "§3").setScore(1);

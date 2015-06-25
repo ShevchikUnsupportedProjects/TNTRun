@@ -147,6 +147,8 @@ public class PlayerHandler {
 	public void spectatePlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
 		// remove form players
 		arena.getPlayersManager().remove(player);
+		// add to lostPlayers
+		arena.getGameHandler().lostPlayers++;
 		// remove scoreboard
 		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 		// teleport to spectators spawn
@@ -198,6 +200,11 @@ public class PlayerHandler {
 			player.setAllowFlight(false);
 			player.setFlying(false);
 		}
+		// check if arena is running
+		if(arena.getStatusManager().isArenaRunning()){
+			// add to lostPlayers
+			arena.getGameHandler().lostPlayers++;
+		}
 		// remove scoreboard
 		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 		// remove player from arena and restore his state
@@ -206,8 +213,6 @@ public class PlayerHandler {
 		if (spectator) {
 			return;
 		}
-		//Add player to lost players
-		arena.getPlayersManager().addLostPlayer(player);
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// modify signs
