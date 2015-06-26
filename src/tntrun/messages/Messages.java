@@ -19,6 +19,9 @@ package tntrun.messages;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -30,34 +33,34 @@ import tntrun.TNTRun;
 
 public class Messages {
 
-	public static String nopermission = "§7[§6TNTRun§7] &cYou don't have permission to do this";
+	public static String nopermission = "&7[&6TNTRun&7] &cYou don't have permission to do this";
 
-	public static String teleporttolobby = "§7[§6TNTRun§7] Teleported to lobby";
+	public static String teleporttolobby = "&7[&6TNTRun&7] Teleported to lobby";
 
-	public static String availablearenas = "§7[§6TNTRun§7] Available arenas:&r ";
-	public static String arenawolrdna = "§7[§6TNTRun§7] Arena world is not loaded";
-	public static String arenadisabled = "§7[§6TNTRun§7] Arena is disabled";
-	public static String arenarunning = "§7[§6TNTRun§7] Arena already running";
-	public static String arenaregenerating = "§7[§6TNTRun§7] Arena is regenerating";
-	public static String arenavehicle = "§7[§6TNTRun§7] You can't join the game while sitting inside vehicle";
-	public static String arenadisabling = "§7[§6TNTRun§7] &6Arena is disabling";
+	public static String availablearenas = "&7[&6TNTRun&7] Available arenas:&r ";
+	public static String arenawolrdna = "&7[&6TNTRun&7] Arena world is not loaded";
+	public static String arenadisabled = "&7[&6TNTRun&7] Arena is disabled";
+	public static String arenarunning = "&7[&6TNTRun&7] Arena already running";
+	public static String arenaregenerating = "&7[&6TNTRun&7] Arena is regenerating";
+	public static String arenavehicle = "&7[&6TNTRun&7] You can't join the game while sitting inside vehicle";
+	public static String arenadisabling = "&7[&6TNTRun&7] &6Arena is disabling";
 
-	public static String playerscountinarena = "§7[§6TNTRun§7] &6Current number of players in arena: {COUNT} players";
-	public static String limitreached = "§7[§6TNTRun§7] Arena is full.";
-	public static String playerjoinedtoplayer = "§7[§6TNTRun§7] You joined the arena";
-	public static String playerjoinedtoothers = "§7[§6TNTRun§7] Player §6{PLAYER} §7joined the arena";
-	public static String playerlefttoplayer = "§7[§6TNTRun§7] You left the arena";
-	public static String playerlefttoothers = "§7[§6TNTRun§7] Player §6{PLAYER} §7left the game";
-	public static String playervotedforstart = "§7[§6TNTRun§7] You voted for game start";
-	public static String playeralreadyvotedforstart = "§7[§6TNTRun§7] You already voted";
-	public static String arenastarted = "§7[§6TNTRun§7] Arena started. Time limit is {TIMELIMIT} seconds";
-	public static String arenacountdown = "§7[§6TNTRun§7] Arena starts in {COUNTDOWN} seconds";
-	public static String arenatimeout = "§7[§6TNTRun§7] Time is out. Ending game";
-	public static String playerwontoplayer = "§7[§6TNTRun§7] You won the game!";
-	public static String playerlosttoplayer = "§7[§6TNTRun§7] You lost the game";
-	public static String playerlosttoothers = "§7[§6TNTRun§7] Player §6{PLAYER} §7lost the game";
-	public static String playerwonbroadcast = "§7[§6TNTRun§7] &6{PLAYER}&7 won the game on arena &c{ARENA}";
-	public static String playerrewardmessage = "§7[§6TNTRun§7] You have been rewarded: §6{REWARD}";
+	public static String playerscountinarena = "&7[&6TNTRun&7] &6Current number of players in arena: {COUNT} players";
+	public static String limitreached = "&7[&6TNTRun&7] Arena is full.";
+	public static String playerjoinedtoplayer = "&7[&6TNTRun&7] You joined the arena";
+	public static String playerjoinedtoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7joined the arena";
+	public static String playerlefttoplayer = "&7[&6TNTRun&7] You left the arena";
+	public static String playerlefttoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7left the game";
+	public static String playervotedforstart = "&7[&6TNTRun&7] You voted for game start";
+	public static String playeralreadyvotedforstart = "&7[&6TNTRun&7] You already voted";
+	public static String arenastarted = "&7[&6TNTRun&7] Arena started. Time limit is {TIMELIMIT} seconds";
+	public static String arenacountdown = "&7[&6TNTRun&7] Arena starts in {COUNTDOWN} seconds";
+	public static String arenatimeout = "&7[&6TNTRun&7] Time is out. Ending game";
+	public static String playerwontoplayer = "&7[&6TNTRun&7] You won the game!";
+	public static String playerlosttoplayer = "&7[&6TNTRun&7] You lost the game";
+	public static String playerlosttoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7lost the game";
+	public static String playerwonbroadcast = "&7[&6TNTRun&7] &6{PLAYER}&7 won the game on arena &c{ARENA}";
+	public static String playerrewardmessage = "&7[&6TNTRun&7] You have been rewarded: &6{REWARD}";
 
 	public static void sendMessage(Player player, String message) {
 		if (!message.equals("")) {
@@ -104,6 +107,7 @@ public class Messages {
 
 	private static void saveMessages(File messageconfig) {
 		FileConfiguration config = new YamlConfiguration();
+		
 		config.set("nopermission", nopermission);
 		config.set("teleporttolobby", teleporttolobby);
 		config.set("availablearenas", availablearenas);

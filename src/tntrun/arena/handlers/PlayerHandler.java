@@ -17,18 +17,24 @@
 
 package tntrun.arena.handlers;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -98,6 +104,8 @@ public class PlayerHandler {
 		plugin.pdata.storePlayerArmor(player);
 		plugin.pdata.storePlayerPotionEffects(player);
 		plugin.pdata.storePlayerHunger(player);
+		// add book
+		addBook(player);
 		// update inventory
 		player.updateInventory();
 		// send message to player
@@ -304,6 +312,20 @@ public class PlayerHandler {
 			return true;
 		}
 		return false;
+	}
+	
+	public void addBook(Player p){
+		ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
+	     
+	     BookMeta meta = (BookMeta) book.getItemMeta();
+	     meta.setTitle("§6§lTNTRun info");
+	     meta.setAuthor("TNTRun");
+	     meta.addPage("§6§lTNTRun MiniGame\n \n§cYou must run, blocks under you will destroy\n§cand when you fall to the void or water, you lost the game\n \n \n \n§6§lBook addon by MrBrunoExtreme");
+	    
+	     book.setItemMeta(meta);
+	    
+	     p.getInventory().addItem(book);
+	    
 	}
 
 }
