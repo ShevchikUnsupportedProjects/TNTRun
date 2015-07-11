@@ -54,6 +54,7 @@ import tntrun.commands.setup.arena.SetVotePercent;
 import tntrun.commands.setup.lobby.DeleteLobby;
 import tntrun.commands.setup.lobby.SetLobby;
 import tntrun.commands.setup.reload.ReloadBars;
+import tntrun.commands.setup.reload.ReloadConfig;
 import tntrun.commands.setup.reload.ReloadMSG;
 import tntrun.commands.setup.selection.Clear;
 import tntrun.commands.setup.selection.SetP1;
@@ -75,6 +76,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("deletelobby", new DeleteLobby(plugin));
 		commandHandlers.put("reloadmsg", new ReloadMSG(plugin));
 		commandHandlers.put("reloadbars", new ReloadBars(plugin));
+		commandHandlers.put("reloadconfig", new ReloadConfig(plugin));
 		commandHandlers.put("create", new CreateArena(plugin));
 		commandHandlers.put("delete", new DeleteArena(plugin));
 		commandHandlers.put("setarena", new SetArena(plugin, plselection));
