@@ -36,11 +36,14 @@ public class Bars {
 	public static String starting = "&6Arena starts in:&r {SECONDS} seconds";
 	public static String playing = "&6Time left:&r {SECONDS} &6Players in game count:&r {COUNT}";
 
-	public static void setBar(Player player, String message, int count, int seconds, float percent) {
+	public static void setBar(Player player, String message, int count, int seconds, float percent, TNTRun plugin) {
 		try {
 			message = message.replace("{COUNT}", String.valueOf(count));
 			message = message.replace("{SECONDS}", String.valueOf(seconds));
 			message = FormattingCodesParser.parseFormattingCodes(message);
+			if(plugin.getConfig().getBoolean("special.UseBarApi") == false){
+				return;
+			}
 			if (Bukkit.getPluginManager().getPlugin("BarAPI") != null) {
 				if (!message.equals("")) {
 					BarAPI.setMessage(player, message, percent);

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
@@ -97,7 +96,7 @@ public class GameHandler {
 					// check if countdown should be stopped for some various reasons
 					if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers()) {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
-							Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers());
+							Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers(), plugin);
 							createWaitingScoreBoard();
 						}
 						stopArenaCountdown();
@@ -124,7 +123,7 @@ public class GameHandler {
 					// sending bars
 					for (Player player : arena.getPlayersManager().getPlayers()) {
 						player.setLevel(count);
-						Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
+						Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown(), plugin);
 				    }
 					count--;
 				}
@@ -188,13 +187,13 @@ public class GameHandler {
 						// Xp level
 						player.setLevel(timelimit/20);
 						// update bar
-						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
+						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit(), plugin);
 						// handle player
 						handlePlayer(player);
 					}
 					// update bars for spectators too
 					for (Player player : arena.getPlayersManager().getSpectators()) {
-						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit());
+						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit(), plugin);
 					}
 					// decrease timelimit
 					timelimit--;
@@ -314,20 +313,14 @@ public class GameHandler {
 	
 		public void startEnding(final Player player){
 			for(Player all : Bukkit.getOnlinePlayers()){
-				all.playSound(all.getLocation(), Sound.ENDERDRAGON_DEATH, 1, 20F);
 				all.playSound(arena.getStructureManager().getSpawnPoint(), Sound.ENDERDRAGON_DEATH, 1, 20F);
-				all.sendMessage("§6"+ChatColor.MAGIC + "----------------------------------------------------------");
-				all.sendMessage("§6§lTNTRun plugin by The_TadeSK ");
-				all.sendMessage("§6"+ChatColor.MAGIC + "----------------------------------------------------------");
-				for(int i = 0; i<15;i++){
+				for(int i = 0; i<3;i++){
 					all.sendMessage(" ");
-					if(i == 14){
+					if(i == 2){
 						String message = Messages.playerwonbroadcast;
 						message = message.replace("{PLAYER}", player.getName());
 						message = message.replace("{ARENA}", arena.getArenaName());
-						all.sendMessage("§6"+ChatColor.MAGIC + "----------------------------------------------------------");
 						all.sendMessage(message.replace("&", "§"));
-						all.sendMessage("§6"+ChatColor.MAGIC + "----------------------------------------------------------");
 					}
 				}
 			}

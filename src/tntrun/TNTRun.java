@@ -64,6 +64,10 @@ public class TNTRun extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
 		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
+	    // config
+	    saveDefaultConfig();
+	    getConfig().options().copyDefaults(true);
+	    saveConfig();
 		// load arenas
 		final File arenasfolder = new File(getDataFolder() + File.separator + "arenas");
 		arenasfolder.mkdirs();

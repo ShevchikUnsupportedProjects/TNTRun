@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -59,6 +60,9 @@ public class GameZone {
 						public void run() {
 							if (arena.getStatusManager().isArenaRunning()) {
 								blockstodestroy.remove(fblock);
+								if(arena.plugin.getConfig().getBoolean("special.FancyBlockBreak") == true){
+									fblock.getWorld().playEffect(fblock.getLocation(), Effect.STEP_SOUND, fblock.getTypeId());
+								}
 								removeGLBlocks(fblock);
 							}
 						}
