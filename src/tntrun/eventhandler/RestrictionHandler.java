@@ -117,10 +117,6 @@ public class RestrictionHandler implements Listener {
 					if (arena != null) {
 						e.setCancelled(true);
 						arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
-						return;
-					} else {
-						e.setCancelled(false);
-						return ;
 					}
 		        }
 			}
