@@ -108,7 +108,9 @@ public class PlayerHandler {
 		// update inventory
 		player.updateInventory();
 		// send message to player
-		Messages.sendMessage(player, msgtoplayer);		
+		Messages.sendMessage(player, msgtoplayer);	
+		// set player on arena data
+		arena.getPlayersManager().add(player);
 		// send message to other players
 		for (Player oplayer : arena.getPlayersManager().getPlayers()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
@@ -116,8 +118,6 @@ public class PlayerHandler {
 			// send title for players
 			TitleMsg.sendFullTitle(oplayer, TitleMsg.join.replace("{PLAYER}", player.getName()), TitleMsg.subjoin.replace("{PLAYER}", player.getName()), 10, 20, 20, plugin);
 		}
-		// set player on arena data
-		arena.getPlayersManager().add(player);
 		// start cooldown and add leave item
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
 			public void run(){
