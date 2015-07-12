@@ -37,6 +37,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.Kits;
 import tntrun.utils.Bars;
+import tntrun.utils.TitleMsg;
 import tntrun.messages.Messages;
 
 public class GameHandler {
@@ -111,11 +112,13 @@ public class GameHandler {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							Messages.sendMessage(player, message);
 							player.playSound(player.getLocation(), Sound.CLICK, 1, 5);
+							TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
 						}
 					}
 					if(count == 5) {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							player.teleport(arena.getStructureManager().getSpawnPoint());
+							player.playSound(player.getLocation(), Sound.CLICK, 1, 5);
 						}
 					}
 					// scoreboard
@@ -152,6 +155,7 @@ public class GameHandler {
 		for (Player player : arena.getPlayersManager().getPlayers()) {
 			Messages.sendMessage(player, message);
 			player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+			TitleMsg.sendFullTitle(player, TitleMsg.start, TitleMsg.substart, 20, 20, 20, plugin);
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		Kits kits = arena.getStructureManager().getKits();
@@ -314,9 +318,10 @@ public class GameHandler {
 		public void startEnding(final Player player){
 			for(Player all : Bukkit.getOnlinePlayers()){
 				all.playSound(arena.getStructureManager().getSpawnPoint(), Sound.ENDERDRAGON_DEATH, 1, 20F);
+				TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
 				for(int i = 0; i<3;i++){
 					all.sendMessage(" ");
-					if(i == 2){
+					if(i == 1){
 						String message = Messages.playerwonbroadcast;
 						message = message.replace("{PLAYER}", player.getName());
 						message = message.replace("{ARENA}", arena.getArenaName());

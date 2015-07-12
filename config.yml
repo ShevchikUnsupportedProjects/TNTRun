@@ -1,3 +1,4 @@
 special:
    FancyBlockBreak: true
    UseBarApi: true
+   UseTitle: true

@@ -44,6 +44,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.TeleportDestination;
 import tntrun.utils.Bars;
+import tntrun.utils.TitleMsg;
 import tntrun.messages.Messages;
 
 public class PlayerHandler {
@@ -107,11 +108,13 @@ public class PlayerHandler {
 		// update inventory
 		player.updateInventory();
 		// send message to player
-		Messages.sendMessage(player, msgtoplayer);
+		Messages.sendMessage(player, msgtoplayer);		
 		// send message to other players
 		for (Player oplayer : arena.getPlayersManager().getPlayers()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
 			Messages.sendMessage(oplayer, msgtoarenaplayers);
+			// send title for players
+			TitleMsg.sendFullTitle(oplayer, TitleMsg.join.replace("{PLAYER}", player.getName()), TitleMsg.subjoin.replace("{PLAYER}", player.getName()), 10, 20, 20, plugin);
 		}
 		// set player on arena data
 		arena.getPlayersManager().add(player);

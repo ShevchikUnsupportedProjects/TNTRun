@@ -140,6 +140,7 @@ public class GameCommands implements CommandExecutor {
 			sender.sendMessage("§7/trsetup setteleport {arena} {previous/lobby} §f- §cSet teleport when you lose or win in arena");
 			sender.sendMessage("§7/trsetup setdamage {arena} {on/off/zero} §f- §cSet a pvp for arena");
 			sender.sendMessage("§7/trsetup reloadbars §f- §cReload Bar messages");
+			sender.sendMessage("§7/trsetup reloadtitles §f- §cReload Title messages");
 			sender.sendMessage("§7/trsetup reloadmsg §f- §cReload arena messages");
 			sender.sendMessage("§7/trsetup reloadconfig §f- §cReload config file");
 			sender.sendMessage("§7/trsetup enable {arena} §f- §cEnable Arena");

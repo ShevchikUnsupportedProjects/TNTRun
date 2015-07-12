@@ -26,6 +26,7 @@ import tntrun.messages.Messages;
 public class ReloadMSG implements CommandHandlerInterface {
 
 	private TNTRun plugin;
+	
 	public ReloadMSG(TNTRun plugin) {
 		this.plugin = plugin;
 	}

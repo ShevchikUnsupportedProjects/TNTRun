@@ -26,6 +26,7 @@ import tntrun.commands.setup.CommandHandlerInterface;
 public class ReloadBars implements CommandHandlerInterface {
 
 	private TNTRun plugin;
+	
 	public ReloadBars(TNTRun plugin) {
 		this.plugin = plugin;
 	}
