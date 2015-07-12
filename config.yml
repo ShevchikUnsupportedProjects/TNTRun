@@ -1,4 +1,4 @@
-#Titles onlz works for spigot/craftbukkit 1.8 or higher
+#Titles only works for spigot/craftbukkit 1.8 or higher + protocol hack working
 special:
    FancyBlockBreak: true
    UseBarApi: true

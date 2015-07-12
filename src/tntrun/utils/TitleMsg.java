@@ -3,6 +3,7 @@ package tntrun.utils;
 import java.io.File;
 import java.io.IOException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -20,11 +21,17 @@ public class TitleMsg {
 	public static String start = "&7[&6TNTRun&7]";
 	public static String substart = "&7The Game has started";
 
-	public static void sendFullTitle(Player player, String title, String subtitle, int fadeInTime, int stayTime, int fadeOutTime, TNTRun plugin) {
+	public static void sendFullTitle(Player player, String title, String subtitle, int fadeInTime, int stayTime, int fadeOutTime, TNTRun plugin) throws IOException {
 		if(plugin.getConfig().getBoolean("special.UseTitle") == false){
 			return;
 		}
-		Title t = new Title(title.replace("&", "§"), subtitle.replace("&", "§"), fadeInTime, stayTime, fadeOutTime);
+		if(getVersion().equals("v1_7_R4.")){
+			Title_1_7_R4 t = new Title_1_7_R4(title.replace("&", "§"), subtitle.replace("&", "§"), fadeInTime, stayTime, fadeOutTime);
+			t.setTimingsToTicks();
+			t.send(player);
+			return;
+		}
+		Title t = new Title(title.replace("&", "§"), subtitle.replace("&", "§"), fadeInTime, stayTime, fadeOutTime, plugin);
 		t.setTimingsToTicks();
 		t.send(player);
 	}
@@ -58,5 +65,11 @@ public class TitleMsg {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private static String getVersion() {
+		String name = Bukkit.getServer().getClass().getPackage().getName();
+		String version = name.substring(name.lastIndexOf('.') + 1) + ".";
+		return version;
 	}
 }

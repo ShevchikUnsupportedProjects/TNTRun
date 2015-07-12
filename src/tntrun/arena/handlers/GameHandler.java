@@ -17,6 +17,7 @@
 
 package tntrun.arena.handlers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -112,7 +113,12 @@ public class GameHandler {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							Messages.sendMessage(player, message);
 							player.playSound(player.getLocation(), Sound.CLICK, 1, 5);
-							TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
+							try {
+								TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					}
 					if(count == 5) {
@@ -155,7 +161,12 @@ public class GameHandler {
 		for (Player player : arena.getPlayersManager().getPlayers()) {
 			Messages.sendMessage(player, message);
 			player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
-			TitleMsg.sendFullTitle(player, TitleMsg.start, TitleMsg.substart, 20, 20, 20, plugin);
+			try {
+				TitleMsg.sendFullTitle(player, TitleMsg.start, TitleMsg.substart, 20, 20, 20, plugin);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		Kits kits = arena.getStructureManager().getKits();
@@ -318,7 +329,12 @@ public class GameHandler {
 		public void startEnding(final Player player){
 			for(Player all : Bukkit.getOnlinePlayers()){
 				all.playSound(arena.getStructureManager().getSpawnPoint(), Sound.ENDERDRAGON_DEATH, 1, 20F);
-				TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
+				try {
+					TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				for(int i = 0; i<3;i++){
 					all.sendMessage(" ");
 					if(i == 1){
