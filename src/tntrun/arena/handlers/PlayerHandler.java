@@ -134,6 +134,9 @@ public class PlayerHandler {
 				im.setLore(Arrays.asList(lore));
 				item.setItemMeta(im);
 				player.getInventory().setItem(8, item);
+				
+				addInfo(player, 0);
+				addVoteDiamond(player, 1);
 			}
 		}, 5L);
 		// send message about arena player count
@@ -199,6 +202,8 @@ public class PlayerHandler {
 				im.setLore(Arrays.asList(lore));
 				item.setItemMeta(im);
 				player.getInventory().setItem(8, item);
+				
+				addInfo(player, 0);
 			}
 		}, 5L);
 	}
@@ -319,6 +324,27 @@ public class PlayerHandler {
 			return true;
 		}
 		return false;
+	}
+	
+	public void addInfo(Player p, int slot){
+		ItemStack item = new ItemStack(Material.EMERALD, 1);
+	     
+	     ItemMeta meta = item.getItemMeta();
+	     meta.setDisplayName("§6§lTNTRun info");
+	     item.setItemMeta(meta);
+	    
+	     p.getInventory().setItem(slot, item);;
+	    
+	}
+	
+	public void addVoteDiamond(Player p, int slot){
+		ItemStack item = new ItemStack(Material.DIAMOND, 1);
+	     
+	     ItemMeta meta = item.getItemMeta();
+	     meta.setDisplayName("§6§lTVote");
+	     item.setItemMeta(meta);
+	    
+	     p.getInventory().setItem(slot, item);;
 	}
 
 }

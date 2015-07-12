@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -109,20 +110,38 @@ public class RestrictionHandler implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
+		// check item
+		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
+	        if(e.getMaterial() == Material.BED){
+				if (arena != null) {
+					e.setCancelled(true);
+					arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+				}
+	        }
+		}
 		
-		try{
-			// check item
-			if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
-		        if(e.getMaterial() == Material.BED){
-					if (arena != null) {
-						e.setCancelled(true);
-						arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
-					}
-		        }
-			}
-	    }catch (NullPointerException ex){	
-	    	
-	    }
+        if(e.getMaterial() == Material.EMERALD){
+        	if (arena != null) {
+      	   	     for(String list : plugin.getConfig().getStringList("info.list")){
+       		    	 player.sendMessage(list.replace("&", "§"));
+       		     }
+       	   	     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
+        	}
+        }
+        
+        if(e.getMaterial() == Material.DIAMOND){
+        	if (arena != null) {
+        		if(arena.getStatusManager().isArenaStarting()){
+        			player.sendMessage(Messages.arenastarting.replace("&", "§"));
+        			return;
+        		}
+      	   	     if(arena.getPlayerHandler().vote(player)){
+      	   	     player.sendMessage(Messages.playervotedforstart.replace("&", "§"));
+       	   	     }else{
+       	   	   player.sendMessage(Messages.playeralreadyvotedforstart.replace("&", "§"));
+       	   	     }
+       	   	     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
+        	}
+        }
 	}
-
 }

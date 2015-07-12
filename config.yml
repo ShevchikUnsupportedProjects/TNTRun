@@ -3,3 +3,8 @@ special:
    FancyBlockBreak: true
    UseBarApi: true
    UseTitle: true
+info:
+   list:
+   - '&6&lThe TNTRun plugin by The_TadeSK'
+   - '&6 '
+   - '&6&lNow try and play'

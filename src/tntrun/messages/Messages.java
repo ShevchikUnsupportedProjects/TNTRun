@@ -44,7 +44,8 @@ public class Messages {
 	public static String arenaregenerating = "&7[&6TNTRun&7] Arena is regenerating";
 	public static String arenavehicle = "&7[&6TNTRun&7] You can't join the game while sitting inside vehicle";
 	public static String arenadisabling = "&7[&6TNTRun&7] &6Arena is disabling";
-
+	public static String arenastarting = "&7[&6TNTRun&7] &6Arena already starting";
+	
 	public static String playerscountinarena = "&7[&6TNTRun&7] &6Current number of players in arena: {COUNT} players";
 	public static String limitreached = "&7[&6TNTRun&7] Arena is full.";
 	public static String playerjoinedtoplayer = "&7[&6TNTRun&7] You joined the arena";
@@ -86,6 +87,7 @@ public class Messages {
 		arenaregenerating = config.getString("arenaregenerating", arenaregenerating);
 		arenavehicle = config.getString("arenavehicle", arenavehicle);
 		arenadisabling = config.getString("arenadisabling", arenadisabling);
+		arenastarting = config.getString("arenastarting ", arenastarting);
 		playerscountinarena = config.getString("playerscountinarena", playerscountinarena);
 		limitreached = config.getString("limitreached", limitreached);
 		playerjoinedtoplayer = config.getString("playerjoinedtoplayer", playerjoinedtoplayer);
@@ -117,6 +119,7 @@ public class Messages {
 		config.set("arenaregenerating", arenaregenerating);
 		config.set("arenavehicle", arenavehicle);
 		config.set("arenadisabling", arenadisabling);
+		config.set("arenastarting", arenastarting);
 		config.set("playerscountinarena", playerscountinarena);
 		config.set("limitreached", limitreached);
 		config.set("playerjoinedtoplayer", playerjoinedtoplayer);
