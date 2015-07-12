@@ -330,7 +330,7 @@ public class PlayerHandler {
 		ItemStack item = new ItemStack(Material.EMERALD, 1);
 	     
 	     ItemMeta meta = item.getItemMeta();
-	     meta.setDisplayName("§6§lTNTRun info");
+	     meta.setDisplayName("§6§lInfo");
 	     item.setItemMeta(meta);
 	    
 	     p.getInventory().setItem(slot, item);;
@@ -341,7 +341,7 @@ public class PlayerHandler {
 		ItemStack item = new ItemStack(Material.DIAMOND, 1);
 	     
 	     ItemMeta meta = item.getItemMeta();
-	     meta.setDisplayName("§6§lTVote");
+	     meta.setDisplayName("§6§lVote");
 	     item.setItemMeta(meta);
 	    
 	     p.getInventory().setItem(slot, item);;
