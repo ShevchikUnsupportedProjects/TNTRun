@@ -375,9 +375,13 @@ public class GameHandler {
 				
 				Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
 					public void run(){
+						try{
 						Bukkit.getScheduler().cancelTask(endtask);
 						arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
 						stopArena();
+						}catch (NullPointerException ex){
+							
+						}
 					}
 				}, 160);
 			}
