@@ -238,7 +238,9 @@ public class PlayerHandler {
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// create scoreboard
-		arena.getGameHandler().createWaitingScoreBoard();
+		if(!arena.getStatusManager().isArenaRunning()){
+			arena.getGameHandler().createWaitingScoreBoard();
+		}
 		// send message to other players and update bars
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
@@ -278,6 +280,8 @@ public class PlayerHandler {
 		plugin.pdata.restorePlayerArmor(player);
 		plugin.pdata.restorePlayerInventory(player);
 		plugin.pdata.restorePlayerLevel(player);
+		// add player damage resistance
+		player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, 80, true), true);
 		// restore location ot teleport to lobby
 		if (arena.getStructureManager().getTeleportDestination() == TeleportDestination.LOBBY && plugin.globallobby.isLobbyLocationWorldAvailable()) {
 			player.teleport(plugin.globallobby.getLobbyLocation());
