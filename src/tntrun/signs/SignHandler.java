@@ -72,9 +72,11 @@ public class SignHandler implements Listener {
 			return;
 		}
 		Sign sign = (Sign) e.getClickedBlock().getState();
+		if (sign.getLine(0).equalsIgnoreCase("§7[§6TNTRun§7]")) {
 			String line = sign.getLine(1).toLowerCase();
 			if (signs.containsKey(line)) {
 				signs.get(line).handleClick(e);
+			}
 		}
 	}
 
