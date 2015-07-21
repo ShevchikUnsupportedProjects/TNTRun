@@ -32,9 +32,12 @@ public class SetP2 implements CommandHandlerInterface {
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
+		player.sendMessage("§7[§6TNTRun§7] §cThis system is disabled, use worldedit to create arena");
+		/*
 		selection.setSelectionPoint2(player);
 		
 		player.sendMessage("§7[§6TNTRun§7] §7Point §62 §7has been set to §6X: §7" + Math.round(player.getLocation().getX()) + " §6Y: §7" + Math.round(player.getLocation().getY()) + " §6Z: §7" + Math.round(player.getLocation().getZ()));
+		*/
 		return true;
 	}
 
