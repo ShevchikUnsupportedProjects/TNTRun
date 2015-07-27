@@ -8,3 +8,6 @@ info:
    - '&6&lThe TNTRun plugin by The_TadeSK'
    - '&6 '
    - '&6&lNow try and play'
+shop:
+   name: '&6&lTNTRun &f&lSHOP'
+   size: 27

@@ -137,6 +137,7 @@ public class PlayerHandler {
 				
 				addInfo(player, 0);
 				addVoteDiamond(player, 1);
+				addShop(player, 2);
 			}
 		}, 5L);
 		// send message about arena player count
@@ -346,6 +347,16 @@ public class PlayerHandler {
 	     
 	     ItemMeta meta = item.getItemMeta();
 	     meta.setDisplayName("§6§lVote");
+	     item.setItemMeta(meta);
+	    
+	     p.getInventory().setItem(slot, item);;
+	}
+	
+	public void addShop(Player p, int slot){
+		ItemStack item = new ItemStack(Material.NETHER_STAR, 1);
+	     
+	     ItemMeta meta = item.getItemMeta();
+	     meta.setDisplayName("§6§lShop");
 	     item.setItemMeta(meta);
 	    
 	     p.getInventory().setItem(slot, item);;

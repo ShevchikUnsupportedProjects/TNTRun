@@ -24,11 +24,13 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -38,6 +40,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.Kits;
 import tntrun.utils.Bars;
+import tntrun.utils.Shop;
 import tntrun.utils.TitleMsg;
 import tntrun.messages.Messages;
 
@@ -116,7 +119,6 @@ public class GameHandler {
 							try {
 								TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}
@@ -153,7 +155,6 @@ public class GameHandler {
 	private int playingtask;
 
 	Random rnd = new Random();
-
 	public void startArena() {
 		arena.getStatusManager().setRunning(true);
 		String message = Messages.arenastarted;
@@ -161,10 +162,25 @@ public class GameHandler {
 		for (Player player : arena.getPlayersManager().getPlayers()) {
 			Messages.sendMessage(player, message);
 			player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+			player.getInventory().remove(Material.DIAMOND);
+			player.getInventory().remove(Material.EMERALD);
+			player.getInventory().remove(Material.NETHER_STAR);
+			
+            if (Shop.pitems.containsKey(player)) {
+            	ArrayList<ItemStack> items = Shop.pitems.get(player);
+                Shop.pitems.remove(player);
+                Shop.bought.remove(player);
+ 
+                if(items != null){
+                    for (ItemStack item : items) {
+                        player.getInventory().addItem(item);
+                    }	
+                }
+                player.updateInventory();
+            }
 			try {
 				TitleMsg.sendFullTitle(player, TitleMsg.start, TitleMsg.substart, 20, 20, 20, plugin);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -257,13 +273,13 @@ public class GameHandler {
 		}
 	}
 
-	static Scoreboard buildScoreboard() {
+	public Scoreboard buildScoreboard() {
+		
 		Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
 		Objective o = scoreboard.registerNewObjective("TNTRun", "waiting");
 		o.setDisplaySlot(DisplaySlot.SIDEBAR);
-		o.setDisplayName("§7[§6TNTRun§7]");
-
+		o.setDisplayName("§6§lTNTRUN");
 		return scoreboard;
 	}
 	
@@ -332,7 +348,6 @@ public class GameHandler {
 				try {
 					TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				for(int i = 0; i<3;i++){

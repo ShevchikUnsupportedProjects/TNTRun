@@ -26,6 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import tntrun.arena.Arena;
 import tntrun.utils.Bars;
+import tntrun.utils.Shop;
 import tntrun.utils.TitleMsg;
 import tntrun.commands.ConsoleCommands;
 import tntrun.commands.GameCommands;
@@ -66,6 +67,7 @@ public class TNTRun extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
 		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
+		getServer().getPluginManager().registerEvents(new Shop(this), this);
 	    // config
 	    saveDefaultConfig();
 	    getConfig().options().copyDefaults(true);

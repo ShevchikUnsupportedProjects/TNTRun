@@ -19,9 +19,6 @@ package tntrun.messages;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -62,6 +59,10 @@ public class Messages {
 	public static String playerlosttoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7lost the game";
 	public static String playerwonbroadcast = "&7[&6TNTRun&7] &6{PLAYER}&7 won the game on arena &c{ARENA}";
 	public static String playerrewardmessage = "&7[&6TNTRun&7] You have been rewarded: &6{REWARD}";
+	public static String playerboughtitem = "&7[&6TNTRun&7] You have bought item &6{ITEM} &7for &6{MONEY} &7coins";
+	public static String playerboughtwait = "&7[&6TNTRun&7] You will get your items when game starts";
+	public static String notenoughtmoney = "&7[&6TNTRun&7] &cYou need {MONEY} coins to buy this item";
+	public static String alreadyboughtitem = "&7[&6TNTRun&7] &cYou already bought item";
 
 	public static void sendMessage(Player player, String message) {
 		if (!message.equals("")) {
@@ -104,6 +105,10 @@ public class Messages {
 		playerlosttoothers = config.getString("playerlosttoothers", playerlosttoothers);
 		playerwonbroadcast = config.getString("playerwonbroadcast", playerwonbroadcast);
 		playerrewardmessage = config.getString("playerrewardmessage", playerrewardmessage);
+		playerboughtitem = config.getString("playerboughtitem", playerboughtitem);
+		playerboughtwait = config.getString("playerboughtwait", playerboughtwait);
+		notenoughtmoney = config.getString("notenoughtmoney", notenoughtmoney);
+		alreadyboughtitem = config.getString("alreadyboughtitem", alreadyboughtitem);
 		saveMessages(messageconfig);
 	}
 
@@ -136,6 +141,10 @@ public class Messages {
 		config.set("playerlosttoothers", playerlosttoothers);
 		config.set("playerwonbroadcast", playerwonbroadcast);
 		config.set("playerrewardmessage", playerrewardmessage);
+		config.set("playerboughtitem", playerboughtitem);
+		config.set("playerboughtwait", playerboughtwait);
+		config.set("notenoughtmoney", notenoughtmoney);
+		config.set("alreadyboughtitem", alreadyboughtitem);
 		try {
 			config.save(messageconfig);
 		} catch (IOException e) {

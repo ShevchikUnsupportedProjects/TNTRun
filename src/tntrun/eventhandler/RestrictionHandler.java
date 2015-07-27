@@ -20,6 +20,7 @@ package tntrun.eventhandler;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -32,10 +33,12 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
+import tntrun.utils.Shop;
 
 public class RestrictionHandler implements Listener {
 
@@ -118,6 +121,13 @@ public class RestrictionHandler implements Listener {
 					arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 				}
 	        }
+		}
+		if(e.getMaterial() == Material.NETHER_STAR){
+			if (arena != null) {
+				Inventory inv = Bukkit.createInventory(null, Shop.invsize, Shop.invname);
+				Shop.setItems(inv);
+				player.openInventory(inv);
+			}
 		}
 		
         if(e.getMaterial() == Material.EMERALD){
