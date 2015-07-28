@@ -28,6 +28,7 @@ import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -394,6 +395,15 @@ public class GameHandler {
 						Bukkit.getScheduler().cancelTask(endtask);
 						arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
 						stopArena();
+						
+						final ConsoleCommandSender console = Bukkit.getConsoleSender();
+						
+						if(plugin.getConfig().getStringList("commandsonwin") == null){
+							return;
+						}
+						for(String commands : plugin.getConfig().getStringList("commandsonwin")){
+							Bukkit.dispatchCommand(console, commands.replace("{PLAYER}", player.getName()));
+						}
 						}catch (NullPointerException ex){
 							
 						}

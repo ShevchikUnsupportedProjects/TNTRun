@@ -11,3 +11,6 @@ info:
 shop:
    name: '&6&lTNTRun &f&lSHOP'
    size: 27
+commandsonwin:
+- say {PLAYER} won tntrun
+- say Congratulations...

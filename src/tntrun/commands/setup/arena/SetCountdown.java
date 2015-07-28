@@ -39,7 +39,7 @@ public class SetCountdown implements CommandHandlerInterface {
 				return true;
 			}
 			arena.getStructureManager().setCountdown(Integer.parseInt(args[1]));
-			player.sendMessage("§7[§6TNTRun§7] §7CountDown for arena §6" +arena + "§7 set to: §6"+ Integer.parseInt(args[1]) + "§7 seconds");
+			player.sendMessage("§7[§6TNTRun§7] §7CountDown for arena §6" +arena.getArenaName() + "§7 set to: §6"+ Integer.parseInt(args[1]) + "§7 seconds");
 		} else {
 			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
 		}
