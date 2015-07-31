@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -33,6 +34,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.Inventory;
 
 import tntrun.TNTRun;
@@ -113,45 +115,94 @@ public class RestrictionHandler implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
+		
+		String[] ids1 = plugin.getConfig().getString("items.shop.ID").split(":");
+		String[] ids2 = plugin.getConfig().getString("items.vote.ID").split(":");
+		String[] ids3 = plugin.getConfig().getString("items.info.ID").split(":");
+		String[] ids4 = plugin.getConfig().getString("items.leave.ID").split(":");
+		
 		// check item
 		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
-	        if(e.getMaterial() == Material.BED){
-				if (arena != null) {
-					e.setCancelled(true);
-					arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
-				}
+	        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids4[0]))){
+	        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids4[1])){
+					if (arena != null) {
+						e.setCancelled(true);
+						arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+					}
+	        	}
 	        }
 		}
-		if(e.getMaterial() == Material.NETHER_STAR){
-			if (arena != null) {
-				Inventory inv = Bukkit.createInventory(null, Shop.invsize, Shop.invname);
-				Shop.setItems(inv);
-				player.openInventory(inv);
-			}
+        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids1[0]))){
+        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids1[1])){
+    			if (arena != null) {
+    				Inventory inv = Bukkit.createInventory(null, Shop.invsize, Shop.invname);
+    				Shop.setItems(inv);
+    				player.openInventory(inv);
+    			}
+        	}
 		}
 		
-        if(e.getMaterial() == Material.EMERALD){
-        	if (arena != null) {
-      	   	     for(String list : plugin.getConfig().getStringList("info.list")){
-       		    	 player.sendMessage(list.replace("&", "§"));
-       		     }
-       	   	     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
+        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids3[0]))){
+        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids3[1])){
+            	if (arena != null) {
+         	   	     for(String list : plugin.getConfig().getStringList("info.list")){
+          		    	 player.sendMessage(list.replace("&", "§"));
+          		     }
+          	   	     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
+           	    }
         	}
         }
         
-        if(e.getMaterial() == Material.DIAMOND){
-        	if (arena != null) {
-        		if(arena.getStatusManager().isArenaStarting()){
-        			player.sendMessage(Messages.arenastarting.replace("&", "§"));
-        			return;
-        		}
-      	   	     if(arena.getPlayerHandler().vote(player)){
-      	   	     player.sendMessage(Messages.playervotedforstart.replace("&", "§"));
-       	   	     }else{
-       	   	   player.sendMessage(Messages.playeralreadyvotedforstart.replace("&", "§"));
-       	   	     }
-       	   	     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
+        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids2[0]))){
+        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids2[1])){
+            	if (arena != null) {
+            		if(arena.getStatusManager().isArenaStarting()){
+            			player.sendMessage(Messages.arenastarting.replace("&", "§"));
+            			return;
+            		}
+          	   	     if(arena.getPlayerHandler().vote(player)){
+          	   	     player.sendMessage(Messages.playervotedforstart.replace("&", "§"));
+           	   	     }else{
+           	   	   player.sendMessage(Messages.playeralreadyvotedforstart.replace("&", "§"));
+           	   	     }
+           	   	     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
+            	}
         	}
         }
+	}
+	
+	@EventHandler
+	public void onFly(PlayerToggleFlightEvent e) {
+		Player p = e.getPlayer();
+		Arena arena = plugin.amanager.getPlayerArena(p.getName());
+		
+		if (p.getGameMode() != GameMode.CREATIVE) {
+			if(arena != null){
+				if(!arena.getStatusManager().isArenaRunning()){
+					e.setCancelled(true);
+					return;
+				}
+				if(plugin.getConfig().get("doublejumps." + p.getName()) == null || plugin.getConfig().getInt("doublejumps." + p.getName()) == 0){
+					e.setCancelled(true);
+					p.setAllowFlight(false);
+					plugin.getConfig().set("doublejumps." + p.getName(), null);
+					plugin.saveConfig();
+					return;
+				}else{
+					plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) - 1);
+				}
+			      e.setCancelled(true);
+			      p.setFlying(false);
+			      p.setVelocity(p.getLocation().getDirection().multiply(1.5D).setY(0.7D));
+			      p.getLocation().getWorld().playSound(p.getLocation(), Sound.WITHER_SHOOT, 1F, -10.0F);
+			      plugin.saveConfig();
+			}else{
+				if(p.hasPermission("tntrun.fly.everywhere")){
+					e.setCancelled(false);
+				}else{
+					e.setCancelled(true);
+				}
+			}
+		}
 	}
 }

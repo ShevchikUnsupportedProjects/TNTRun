@@ -42,7 +42,6 @@ public class Shop implements Listener{
 	
 	private void giveItem(int slot, Player player, String title) {
 		int kit = itemSlot.get(slot);
-		bought.add(player);
 		ArrayList<ItemStack> item = new ArrayList<ItemStack>();
 		FileConfiguration cfg = ShopFiles.getShopConfiguration();
 		for(String items : cfg.getConfigurationSection(kit + ".items").getKeys(false)) {
@@ -54,8 +53,11 @@ public class Shop implements Listener{
 				List<String> lore = cfg.getStringList(kit + ".items." + items + ".lore");
 				List<String> enchantments = cfg.getStringList(kit + ".items." + items + ".enchantments");
 				
+				if(!bought.contains(player)){
+					bought.add(player);
+				}
+				
 				item.add(getItem(ID, subID, amount, displayname, lore, enchantments));
-				Bukkit.getConsoleSender().sendMessage("item " + item.toString());
 				
 				player.updateInventory();
 				player.closeInventory();
@@ -64,7 +66,6 @@ public class Shop implements Listener{
 			}
 		}
 		pitems.put(player, item);
-		Bukkit.getConsoleSender().sendMessage("pitems" + pitems.toString());
 	}
 
 	  private ItemStack getItem(int ID, int subID, int amount, String displayname, List<String> lore, List<String> enchantments){
@@ -116,6 +117,16 @@ public class Shop implements Listener{
 	        		  p.playSound(p.getLocation(), Sound.WITHER_HURT, 1, (float) 0.001);
 	        		  return;
 	        	  }
+		          if(cfg.getInt(kit + ".ID") == 288){
+						if(pl.getConfig().get("doublejumps." + p.getName()) == null){
+							pl.getConfig().set("doublejumps." + p.getName(), 1);
+						}else{
+							pl.getConfig().set("doublejumps." + p.getName(), pl.getConfig().getInt("doublejumps." + p.getName()) + 1);
+						}
+						pl.saveConfig();
+						p.sendMessage(Messages.playerboughtitem.replace("&", "§").replace("{ITEM}", title).replace("{MONEY}", cost + ""));
+						return;
+		          }
 	            giveItem(e.getSlot(), p, current.getItemMeta().getDisplayName());  
 	          } else {
 	            p.closeInventory();

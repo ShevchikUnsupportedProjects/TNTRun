@@ -14,3 +14,19 @@ shop:
 commandsonwin:
 - say {PLAYER} won tntrun
 - say Congratulations...
+items:
+   vote:
+      use: true
+      ID: '264:0'
+      name: '&cVOTE'
+   info:
+      use: true
+      ID: '388:0'
+      name: '&cINFO'
+   shop:
+      use: true
+      ID: '399:0'
+      name: '&cSHOP'
+   leave:
+      ID: '355:0'
+      name: '&cLEAVE'

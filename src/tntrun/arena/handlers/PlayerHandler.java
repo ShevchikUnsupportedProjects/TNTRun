@@ -17,25 +17,18 @@
 
 package tntrun.arena.handlers;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -127,17 +120,23 @@ public class PlayerHandler {
 		// start cooldown and add leave item
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
 			public void run(){
-				String[] lore = {"§7Right click to ", "§7leave arena "};
-				ItemStack item = new ItemStack(Material.BED);
+				String[] ids = plugin.getConfig().getString("items.leave.ID").split(":");
+				ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
 				ItemMeta im = item.getItemMeta();
-				im.setDisplayName("§6§lLeave arena");
-				im.setLore(Arrays.asList(lore));
+				im.setDisplayName(plugin.getConfig().getString("items.leave.name").replace("&", "§"));
 				item.setItemMeta(im);
+				
 				player.getInventory().setItem(8, item);
 				
-				addInfo(player, 0);
-				addVoteDiamond(player, 1);
-				addShop(player, 2);
+				if(plugin.getConfig().getBoolean("items.vote.use")){
+					addVoteDiamond(player, 0);
+				}
+				if(plugin.getConfig().getBoolean("items.shop.use")){
+					addShop(player, 2);
+				}
+				if(plugin.getConfig().getBoolean("items.info.use")){
+					addInfo(player, 1);
+				}
 			}
 		}, 5L);
 		// send message about arena player count
@@ -196,15 +195,18 @@ public class PlayerHandler {
 		// start cooldown and add leave item
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
 			public void run(){
-				String[] lore = {"§7Right click to ", "§7leave arena "};
-				ItemStack item = new ItemStack(Material.BED);
+				String[] ids = plugin.getConfig().getString("items.leave.ID").split(":");
+				@SuppressWarnings("deprecation")
+				ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
 				ItemMeta im = item.getItemMeta();
-				im.setDisplayName("§6§lLeave arena");
-				im.setLore(Arrays.asList(lore));
+				im.setDisplayName(plugin.getConfig().getString("items.leave.name").replace("&", "§"));
 				item.setItemMeta(im);
+				
 				player.getInventory().setItem(8, item);
 				
-				addInfo(player, 0);
+				if(plugin.getConfig().getBoolean("items.info.use")){
+					addInfo(player, 0);
+				}
 			}
 		}, 5L);
 	}
@@ -262,8 +264,7 @@ public class PlayerHandler {
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 	}
-
-	@SuppressWarnings("deprecation")
+	
 	private void removePlayerFromArenaAndRestoreState(Player player, boolean winner) {
 		// remove vote
 		votes.remove(player.getName());
@@ -332,10 +333,12 @@ public class PlayerHandler {
 	}
 	
 	public void addInfo(Player p, int slot){
-		ItemStack item = new ItemStack(Material.EMERALD, 1);
+		String[] ids = plugin.getConfig().getString("items.info.ID").split(":");
+		@SuppressWarnings("deprecation")
+		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
 	     
 	     ItemMeta meta = item.getItemMeta();
-	     meta.setDisplayName("§6§lInfo");
+	     meta.setDisplayName(plugin.getConfig().getString("items.info.name").replace("&", "§"));
 	     item.setItemMeta(meta);
 	    
 	     p.getInventory().setItem(slot, item);;
@@ -343,20 +346,24 @@ public class PlayerHandler {
 	}
 	
 	public void addVoteDiamond(Player p, int slot){
-		ItemStack item = new ItemStack(Material.DIAMOND, 1);
+		String[] ids = plugin.getConfig().getString("items.vote.ID").split(":");
+		@SuppressWarnings("deprecation")
+		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
 	     
 	     ItemMeta meta = item.getItemMeta();
-	     meta.setDisplayName("§6§lVote");
+	     meta.setDisplayName(plugin.getConfig().getString("items.vote.name").replace("&", "§"));
 	     item.setItemMeta(meta);
 	    
 	     p.getInventory().setItem(slot, item);;
 	}
 	
 	public void addShop(Player p, int slot){
-		ItemStack item = new ItemStack(Material.NETHER_STAR, 1);
+		String[] ids = plugin.getConfig().getString("items.shop.ID").split(":");
+		@SuppressWarnings("deprecation")
+		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
 	     
 	     ItemMeta meta = item.getItemMeta();
-	     meta.setDisplayName("§6§lShop");
+	     meta.setDisplayName(plugin.getConfig().getString("items.shop.name").replace("&", "§"));
 	     item.setItemMeta(meta);
 	    
 	     p.getInventory().setItem(slot, item);;

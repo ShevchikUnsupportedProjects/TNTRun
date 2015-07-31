@@ -24,7 +24,6 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -156,16 +155,22 @@ public class GameHandler {
 	private int playingtask;
 
 	Random rnd = new Random();
+	@SuppressWarnings("deprecation")
 	public void startArena() {
 		arena.getStatusManager().setRunning(true);
 		String message = Messages.arenastarted;
 		message = message.replace("{TIMELIMIT}", String.valueOf(arena.getStructureManager().getTimeLimit()));
 		for (Player player : arena.getPlayersManager().getPlayers()) {
+			player.setAllowFlight(true);
 			Messages.sendMessage(player, message);
 			player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
-			player.getInventory().remove(Material.DIAMOND);
-			player.getInventory().remove(Material.EMERALD);
-			player.getInventory().remove(Material.NETHER_STAR);
+			String[] ids1 = plugin.getConfig().getString("items.shop.ID").split(":");
+			String[] ids2 = plugin.getConfig().getString("items.vote.ID").split(":");
+			String[] ids3 = plugin.getConfig().getString("items.info.ID").split(":");
+			
+			player.getInventory().remove(Integer.parseInt(ids1[0]));
+			player.getInventory().remove(Integer.parseInt(ids2[0]));
+			player.getInventory().remove(Integer.parseInt(ids3[0]));
 			
             if (Shop.pitems.containsKey(player)) {
             	ArrayList<ItemStack> items = Shop.pitems.get(player);
