@@ -63,6 +63,7 @@ public class Messages {
 	public static String playerboughtwait = "&7[&6TNTRun&7] You will get your items when game starts";
 	public static String notenoughtmoney = "&7[&6TNTRun&7] &cYou need {MONEY} coins to buy this item";
 	public static String alreadyboughtitem = "&7[&6TNTRun&7] &cYou already bought item";
+	public static String getdoublejumpsaction = "&7&lYour double jumps: &6&l{DB}";
 
 	public static void sendMessage(Player player, String message) {
 		if (!message.equals("")) {
@@ -109,6 +110,7 @@ public class Messages {
 		playerboughtwait = config.getString("playerboughtwait", playerboughtwait);
 		notenoughtmoney = config.getString("notenoughtmoney", notenoughtmoney);
 		alreadyboughtitem = config.getString("alreadyboughtitem", alreadyboughtitem);
+		getdoublejumpsaction = config.getString("getdoublejumpsaction", getdoublejumpsaction);
 		saveMessages(messageconfig);
 	}
 
@@ -145,6 +147,7 @@ public class Messages {
 		config.set("playerboughtwait", playerboughtwait);
 		config.set("notenoughtmoney", notenoughtmoney);
 		config.set("alreadyboughtitem", alreadyboughtitem);
+		config.set("getdoublejumpsaction", getdoublejumpsaction);
 		try {
 			config.save(messageconfig);
 		} catch (IOException e) {

@@ -101,6 +101,10 @@ public class PlayerHandler {
 		plugin.pdata.storePlayerHunger(player);
 		// update inventory
 		player.updateInventory();
+		//set full countdown
+		if(!arena.getStatusManager().isArenaStarting()){
+			arena.getGameHandler().count = arena.getStructureManager().getCountdown();
+		}
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);	
 		// set player on arena data

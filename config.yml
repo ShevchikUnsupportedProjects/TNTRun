@@ -3,6 +3,7 @@ special:
    FancyBlockBreak: true
    UseBarApi: true
    UseTitle: true
+   UseScoreboard: true
 info:
    list:
    - '&6&lThe TNTRun plugin by The_TadeSK'
@@ -30,3 +31,21 @@ items:
    leave:
       ID: '355:0'
       name: '&cLEAVE'
+scoreboard:
+   waiting:
+   - '&fWelcome to TNTRun'
+   - '&a '
+   - '&fArena: &6&l{ARENA}'
+   - '&b '
+   - '&fPlayers: &a&l{PS}&7&l/&c&l{MPS}'
+   - '&c '
+   - '&fStarting in: &6&l{COUNT}'
+   playing:
+   - '&fPlaying TNTRun'
+   - '&fon arena: &6&l{ARENA}'
+   - '&b '
+   - '&fPlayers: &a&l{PS}&7&l/&c&l{MPS}'
+   - '&c '
+   - '&fLost Players: &a&l{LOST}'
+   - '&2 '
+   - '&fEnd in: &c&l{LIMIT}'
