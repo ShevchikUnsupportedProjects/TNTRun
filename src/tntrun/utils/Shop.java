@@ -130,7 +130,8 @@ public class Shop implements Listener{
 	            giveItem(e.getSlot(), p, current.getItemMeta().getDisplayName());  
 	          } else {
 	            p.closeInventory();
-	            
+	            p.sendMessage(Messages.nopermission.replace("&", "§"));
+	            p.playSound(p.getLocation(), Sound.WITHER_HURT, 1, (float) 0.001);
 	          }
 	        }
 	      }
