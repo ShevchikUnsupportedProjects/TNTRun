@@ -17,6 +17,7 @@
 
 package tntrun.eventhandler;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -113,7 +114,7 @@ public class RestrictionHandler implements Listener {
 	//check interact
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
-		Player player = e.getPlayer();
+		final Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
 		
 		String[] ids1 = plugin.getConfig().getString("items.shop.ID").split(":");
@@ -125,6 +126,7 @@ public class RestrictionHandler implements Listener {
 		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
 	        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids4[0]))){
 	        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids4[1])){
+	        		player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
 					if (arena != null) {
 						e.setCancelled(true);
 						arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
@@ -135,6 +137,7 @@ public class RestrictionHandler implements Listener {
         if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids1[0]))){
         	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids1[1])){
     			if (arena != null) {
+    				player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
     				Inventory inv = Bukkit.createInventory(null, Shop.invsize, Shop.invname);
     				Shop.setItems(inv);
     				player.openInventory(inv);
@@ -145,10 +148,20 @@ public class RestrictionHandler implements Listener {
         if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids3[0]))){
         	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids3[1])){
             	if (arena != null) {
+       				if(u.contains(player)){
+    					player.playSound(player.getLocation(), Sound.WITHER_HURT, 1, (float) 0.001);
+    					return;
+    				}
+       				u.add(player);
+  			      Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+			    	  public void run(){
+			    		  u.remove(player);
+			    	  }
+			      }, 40);
+            		player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
          	   	     for(String list : plugin.getConfig().getStringList("info.list")){
           		    	 player.sendMessage(list.replace("&", "§"));
           		     }
-          	   	     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
            	    }
         	}
         }
@@ -156,6 +169,17 @@ public class RestrictionHandler implements Listener {
         if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids2[0]))){
         	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids2[1])){
             	if (arena != null) {
+    				if(u.contains(player)){
+    					player.playSound(player.getLocation(), Sound.WITHER_HURT, 1, (float) 0.001);
+    					return;
+    				}
+            		player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
+            		u.add(player);
+  			      Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+			    	  public void run(){
+			    		  u.remove(player);
+			    	  }
+			      }, 40);
             		if(arena.getStatusManager().isArenaStarting()){
             			player.sendMessage(Messages.arenastarting.replace("&", "§"));
             			return;
@@ -165,20 +189,30 @@ public class RestrictionHandler implements Listener {
            	   	     }else{
            	   	   player.sendMessage(Messages.playeralreadyvotedforstart.replace("&", "§"));
            	   	     }
-           	   	     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
             	}
         	}
         }
 	}
 	
+	public ArrayList<Player> u = new ArrayList<Player>();
+	
 	@EventHandler
 	public void onFly(PlayerToggleFlightEvent e) {
-		Player p = e.getPlayer();
+		final Player p = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(p.getName());
 		
 		if (p.getGameMode() != GameMode.CREATIVE) {
 			if(arena != null){
+				if(arena.getPlayersManager().isSpectator(p.getName())){
+					e.setCancelled(false);
+					p.setFlying(true);
+					return;
+				}
 				if(!arena.getStatusManager().isArenaRunning()){
+					e.setCancelled(true);
+					return;
+				}
+				if(u.contains(p)){
 					e.setCancelled(true);
 					return;
 				}
@@ -194,8 +228,16 @@ public class RestrictionHandler implements Listener {
 			      e.setCancelled(true);
 			      p.setFlying(false);
 			      p.setVelocity(p.getLocation().getDirection().multiply(1.5D).setY(0.7D));
-			      p.getLocation().getWorld().playSound(p.getLocation(), Sound.WITHER_SHOOT, 1F, -10.0F);
+			      p.getLocation().getWorld().playSound(p.getLocation(), Sound.WITHER_SHOOT, 10F, -10.0F);
 			      plugin.saveConfig();
+			      u.add(p);
+			      
+			      Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+			    	  public void run(){
+			    		  u.remove(p);
+			    		  p.setAllowFlight(true);
+			    	  }
+			      }, 20);
 			}else{
 				if(p.hasPermission("tntrun.fly.everywhere")){
 					e.setCancelled(false);

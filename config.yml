@@ -31,6 +31,9 @@ items:
    leave:
       ID: '355:0'
       name: '&cLEAVE'
+shop:
+   doublejump:
+      maxdoublejumps: 50
 scoreboard:
    waiting:
    - '&fWelcome to TNTRun'

@@ -60,7 +60,7 @@ public class GameZone {
 						public void run() {
 							if (arena.getStatusManager().isArenaRunning()) {
 								blockstodestroy.remove(fblock);
-								if(arena.plugin.getConfig().getBoolean("special.FancyBlockBreak") == true){
+								if(arena.plugin.getConfig().getBoolean("special.FancyBlockBreak")){
 									fblock.getWorld().playEffect(fblock.getLocation(), Effect.STEP_SOUND, fblock.getTypeId());
 								}
 								removeGLBlocks(fblock);

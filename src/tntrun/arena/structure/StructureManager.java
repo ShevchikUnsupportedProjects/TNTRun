@@ -44,9 +44,9 @@ public class StructureManager {
 	private Vector spectatorspawn = null;
 	private Vector spawnpoint = null;
 	private int minPlayers = 2;
-	private int maxPlayers = 6;
+	private int maxPlayers = 15;
 	private double votesPercent = 0.75;
-	private int timelimit = 180;
+	private int timelimit = 300;
 	private int countdown = 10;
 	private Kits kits = new Kits();
 	private Rewards rewards = new Rewards();

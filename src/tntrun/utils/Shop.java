@@ -108,6 +108,14 @@ public class Shop implements Listener{
 	        	  String title = current.getItemMeta().getDisplayName();
 	        	  int cost = cfg.getInt(kit + ".cost");
 	        	  
+	        	  if(cfg.getInt(kit + ".ID") == 288){
+						if((pl.getConfig().getInt("shop.doublejump.maxdoublejumps") <= pl.getConfig().getInt("doublejumps." + p.getName()))){
+				        	  p.sendMessage(Messages.alreadyboughtitem.replace("&", "§"));
+				        	  p.playSound(p.getLocation(), Sound.WITHER_HURT, 1, (float) 0.001);
+				        	  return;
+						}
+	        	  }
+	        	  
 	        	  if(hasMoney(cost, p)) {
 	        		  p.sendMessage(Messages.playerboughtitem.replace("&", "§").replace("{ITEM}", title).replace("{MONEY}", cost + ""));
 	        		  p.sendMessage(Messages.playerboughtwait.replace("&", "§"));

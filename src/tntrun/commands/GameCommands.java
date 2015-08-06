@@ -43,18 +43,18 @@ public class GameCommands implements CommandExecutor {
 		Player player = (Player) sender;
 		if (args.length < 1){
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");
-			sender.sendMessage("§7[§6TNTRun§7] §6Please use §7/tr help");
+			sender.sendMessage("§7[§6TNTRun§7] §6Please use §6/tr help");
 		}
 		// help command
 		if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");
-			sender.sendMessage("§7/tr lobby §f- §cTeleport to lobby");
-			sender.sendMessage("§7/tr list §f- §cList all arenas");
-			sender.sendMessage("§7/tr join {arena} §f- §cJoin arena");
-			sender.sendMessage("§7/tr leave §f- §cLeave current arena");
-			sender.sendMessage("§7/tr vote §f- §cVote for current arena");
-			sender.sendMessage("§7/tr cmds §f- §cView all commands");
-			sender.sendMessage("§7/tr info §f- §cPlugin info");
+			sender.sendMessage("§6/tr lobby §f- §cTeleport to lobby");
+			sender.sendMessage("§6/tr list §f- §cList all arenas");
+			sender.sendMessage("§6/tr join {arena} §f- §cJoin arena");
+			sender.sendMessage("§6/tr leave §f- §cLeave current arena");
+			sender.sendMessage("§6/tr vote §f- §cVote for current arena");
+			sender.sendMessage("§6/tr cmds §f- §cView all commands");
+			sender.sendMessage("§6/tr info §f- §cPlugin info");
 			return true;
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("lobby")) {
 			if (plugin.globallobby.isLobbyLocationSet()) {
@@ -103,7 +103,7 @@ public class GameCommands implements CommandExecutor {
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");
 			sender.sendMessage("§cVersion of plugin> §6" + plugin.getDescription().getVersion());
 			sender.sendMessage("§cWebsite> §6http://www.spigotmc.org/resources/tntrun.7320/");
-			sender.sendMessage("§cAuthors> §6Shevchikden | tade159SK (The_TadeSK)");
+			sender.sendMessage("§cAuthors> §6Shevchikden | The_TadeSK (tade159SK)");
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");
 		}
 		// leave arena
@@ -120,32 +120,32 @@ public class GameCommands implements CommandExecutor {
 		// all commands
 		else if (args.length == 1 && args[0].equalsIgnoreCase("cmds")) {
 			sender.sendMessage("§7============[§6TNTRun§7]============");
-			sender.sendMessage("§7/trsetup setlobby §f- §cSet lobby on your location");
-			sender.sendMessage("§7/trsetup create {arena} §f- §cCreate new Arena");
-			sender.sendMessage("§7/trsetup setarena {arena} §f- §cSet bounds for arena");
-			sender.sendMessage("§7/trsetup setloselevel {arena} §f- §cSet looselevel bounds for arena");
-			sender.sendMessage("§7/trsetup setspawn {arena} §f- §cSet spawn for players on your location");
-			sender.sendMessage("§7/trsetup setspectate {arena} §f- §cSet spectators spawn");
-			sender.sendMessage("§7/trsetup finish {arena} §f- §cFinish arena and save it to config file");
+			sender.sendMessage("§6/trsetup setlobby §f- §cSet lobby on your location");
+			sender.sendMessage("§6/trsetup create {arena} §f- §cCreate new Arena");
+			sender.sendMessage("§6/trsetup setarena {arena} §f- §cSet bounds for arena");
+			sender.sendMessage("§6/trsetup setloselevel {arena} §f- §cSet looselevel bounds for arena");
+			sender.sendMessage("§6/trsetup setspawn {arena} §f- §cSet spawn for players on your location");
+			sender.sendMessage("§6/trsetup setspectate {arena} §f- §cSet spectators spawn");
+			sender.sendMessage("§6/trsetup finish {arena} §f- §cFinish arena and save it to config file");
 			sender.sendMessage("§7============[§6Other commands§7]============");
-			sender.sendMessage("§7/trsetup delspectate {arena} §f- §cDelete spectators spawn");
-			sender.sendMessage("§7/trsetup setgameleveldestroydelay {arena} {ticks} §f- §cSet a delay of removing blocks when player stepped on it");
-			sender.sendMessage("§7/trsetup setmaxplayers {arena} {players} §f- §cSet a max players for arena");
-			sender.sendMessage("§7/trsetup setminplayers {arena} {players} §f- §cSet a min players for arena");
-			sender.sendMessage("§7/trsetup setvotepercent {arena} {0<votepercent<1} §f- §cSet a vote percent for arena  (Default: 0.75)");
-			sender.sendMessage("§7/trsetup settimelimit {arena} {seconds} §f- §cSet a limit for arena");
-			sender.sendMessage("§7/trsetup setcountdown {arena} {seconds} §f- §cSet a countdown for arena");
-			sender.sendMessage("§7/trsetup setitemsrewards {arena} §f- §cSet a everithing to reward (Item)");
-			sender.sendMessage("§7/trsetup setmoneyrewards {arena} {money} §f- §cSet a money reward for winning player");
-			sender.sendMessage("§7/trsetup setteleport {arena} {previous/lobby} §f- §cSet teleport when you lose or win in arena");
-			sender.sendMessage("§7/trsetup setdamage {arena} {on/off/zero} §f- §cSet a pvp for arena");
-			sender.sendMessage("§7/trsetup reloadbars §f- §cReload Bar messages");
-			sender.sendMessage("§7/trsetup reloadtitles §f- §cReload Title messages");
-			sender.sendMessage("§7/trsetup reloadmsg §f- §cReload arena messages");
-			sender.sendMessage("§7/trsetup reloadconfig §f- §cReload config file");
-			sender.sendMessage("§7/trsetup enable {arena} §f- §cEnable Arena");
-			sender.sendMessage("§7/trsetup disable {arena} §f- §cDisable Arena");
-			sender.sendMessage("§7/trsetup delete {arena} §f- §cDelete Arena");
+			sender.sendMessage("§6/trsetup delspectate {arena} §f- §cDelete spectators spawn");
+			sender.sendMessage("§6/trsetup setgameleveldestroydelay {arena} {ticks} §f- §cSet a delay of removing blocks when player stepped on it");
+			sender.sendMessage("§6/trsetup setmaxplayers {arena} {players} §f- §cSet a max players for arena");
+			sender.sendMessage("§6/trsetup setminplayers {arena} {players} §f- §cSet a min players for arena");
+			sender.sendMessage("§6/trsetup setvotepercent {arena} {0<votepercent<1} §f- §cSet a vote percent for arena  (Default: 0.75)");
+			sender.sendMessage("§6/trsetup settimelimit {arena} {seconds} §f- §cSet a limit for arena");
+			sender.sendMessage("§6/trsetup setcountdown {arena} {seconds} §f- §cSet a countdown for arena");
+			sender.sendMessage("§6/trsetup setitemsrewards {arena} §f- §cSet a everithing to reward (Item)");
+			sender.sendMessage("§6/trsetup setmoneyrewards {arena} {money} §f- §cSet a money reward for winning player");
+			sender.sendMessage("§6/trsetup setteleport {arena} {previous/lobby} §f- §cSet teleport when you lose or win in arena");
+			sender.sendMessage("§6/trsetup setdamage {arena} {on/off/zero} §f- §cSet a pvp for arena");
+			sender.sendMessage("§6/trsetup reloadbars §f- §cReload Bar messages");
+			sender.sendMessage("§6/trsetup reloadtitles §f- §cReload Title messages");
+			sender.sendMessage("§6/trsetup reloadmsg §f- §cReload arena messages");
+			sender.sendMessage("§6/trsetup reloadconfig §f- §cReload config file");
+			sender.sendMessage("§6/trsetup enable {arena} §f- §cEnable Arena");
+			sender.sendMessage("§6/trsetup disable {arena} §f- §cDisable Arena");
+			sender.sendMessage("§6/trsetup delete {arena} §f- §cDelete Arena");
 		}
 		// vote
 		else if (args.length == 1 && args[0].equalsIgnoreCase("vote")) {

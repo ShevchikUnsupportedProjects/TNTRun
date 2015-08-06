@@ -402,15 +402,10 @@ public class GameHandler {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				for(int i = 0; i<3;i++){
-					all.sendMessage(" ");
-					if(i == 1){
-						String message = Messages.playerwonbroadcast;
-						message = message.replace("{PLAYER}", player.getName());
-						message = message.replace("{ARENA}", arena.getArenaName());
-						all.sendMessage(message.replace("&", "§"));
-					}
-				}
+				String message = Messages.playerwonbroadcast;
+				message = message.replace("{PLAYER}", player.getName());
+				message = message.replace("{ARENA}", arena.getArenaName());
+				all.sendMessage(message.replace("&", "§"));
 			}
 				for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
 					p.playSound(p.getLocation(), Sound.EXPLODE, 1, 1);
