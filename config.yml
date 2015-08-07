@@ -12,6 +12,8 @@ info:
 shop:
    name: '&6&lTNTRun &f&lSHOP'
    size: 27
+   doublejump:
+      maxdoublejumps: 50
 commandsonwin:
 - say {PLAYER} won tntrun
 - say Congratulations...
@@ -31,9 +33,6 @@ items:
    leave:
       ID: '355:0'
       name: '&cLEAVE'
-shop:
-   doublejump:
-      maxdoublejumps: 50
 scoreboard:
    waiting:
    - '&fWelcome to TNTRun'
