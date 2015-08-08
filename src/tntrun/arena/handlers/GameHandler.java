@@ -140,7 +140,7 @@ public class GameHandler {
 					} else if (count % 10 == 0) {
 						String message = Messages.arenacountdown;
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
-				          for (Player all : Bukkit.getOnlinePlayers()) {
+				          for (Player all : arena.getPlayersManager().getPlayers()) {
 				        	  Messages.sendMessage(all, message);
 								all.playSound(all.getLocation(), Sound.CLICK, 1, 5);
 								try {
