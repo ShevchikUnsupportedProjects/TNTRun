@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
+import tntrun.utils.Stats;
 
 public class GameCommands implements CommandExecutor {
 
@@ -55,6 +56,7 @@ public class GameCommands implements CommandExecutor {
 			sender.sendMessage("§6/tr vote §f- §cVote for current arena");
 			sender.sendMessage("§6/tr cmds §f- §cView all commands");
 			sender.sendMessage("§6/tr info §f- §cPlugin info");
+			sender.sendMessage("§c§lNEW! §6/tr stats §f- §cStats");
 			return true;
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("lobby")) {
 			if (plugin.globallobby.isLobbyLocationSet()) {
@@ -105,6 +107,17 @@ public class GameCommands implements CommandExecutor {
 			sender.sendMessage("§cWebsite> §6http://www.spigotmc.org/resources/tntrun.7320/");
 			sender.sendMessage("§cAuthors> §6Shevchikden | The_TadeSK (tade159SK)");
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");
+		}
+		// leave arena
+		else if (args.length == 1 && args[0].equalsIgnoreCase("stats")) {
+			player.sendMessage("§7============[§6TNTRun§7]§7============");
+			if(!plugin.usestats){
+				player.sendMessage("§cStats are disabled");
+				return true;
+			}
+			player.sendMessage("§7Played games: §6" + Stats.getPlayedGames(player));
+			player.sendMessage("§7Wins: §6" + Stats.getWins(player));
+			player.sendMessage("§7Looses: §6" + Stats.getLooses(player));
 		}
 		// leave arena
 		else if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {

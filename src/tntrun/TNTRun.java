@@ -27,6 +27,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import tntrun.arena.Arena;
 import tntrun.utils.Bars;
 import tntrun.utils.Shop;
+import tntrun.utils.Stats;
 import tntrun.utils.TitleMsg;
 import tntrun.commands.ConsoleCommands;
 import tntrun.commands.GameCommands;
@@ -49,6 +50,8 @@ public class TNTRun extends JavaPlugin {
 	public ArenasManager amanager;
 	public GlobalLobby globallobby;
 	public SignEditor signEditor;
+	public boolean file = false;
+	public boolean usestats = false;
 
 	@Override
 	public void onEnable() {
@@ -98,18 +101,37 @@ public class TNTRun extends JavaPlugin {
 		);
 		
 	     try {
-	    	 Bukkit.getLogger().info("[Metrics - TNTRun] Starting...");
+	    	 Bukkit.getLogger().info("[TNTRun] Starting Metrics...");
 	         Metrics metrics = new Metrics(this);
 	         metrics.start();
-	         Bukkit.getLogger().info("[Metrics - TNTRun] Started!");
+	         Bukkit.getLogger().info("[TNTRun] Metrics started!");
 	     } catch (IOException e) {
 	    	 e.printStackTrace();
-	        Bukkit.getLogger().info("[Metrics - TNTRun] Error, can't start metrics, please report this! http://www.spigotmc.org/resources/tntrun.7320/");
+	        Bukkit.getLogger().info("[TNTRun] Error, can't start metrics, please report this! http://www.spigotmc.org/resources/tntrun.7320/");
 	     }
+	     
+	     if(this.getConfig().getString("database").equals("file")){
+	    	 file = true;
+	    	 usestats = true;
+	     }else if(this.getConfig().getString("database").equals("sql")){
+	    	 this.connectToMySQL();
+	    	 usestats = true;
+	    	 file = false;
+	     }else{
+	    	 Bukkit.getLogger().info("[TNTRun] This database is not supported, supported database: sql, file");
+	    	 usestats = false;
+	    	 file = false;
+	    	 Bukkit.getLogger().info("[TNTRun] Disabling stats...");
+	     }
+	     new Stats(this);
 	}
 
 	@Override
 	public void onDisable() {
+		//Close mysql connection
+		if(!file){
+			mysql.close();
+		}
 		// save arenas
 		for (Arena arena : amanager.getArenas()) {
 			arena.getStatusManager().disableArena();
@@ -129,6 +151,25 @@ public class TNTRun extends JavaPlugin {
 
 	public void logSevere(String message) {
 		log.severe(message);
+	}
+	
+	public MySQL mysql;
+	
+	public void connectToMySQL(){
+		Bukkit.getLogger().info("[TNTRun] Connecting to MySQL database...");
+		String host = this.getConfig().getString("MySQL.host");
+        Integer port = this.getConfig().getInt("MySQL.port");
+        String name = this.getConfig().getString("MySQL.name");
+        String user = this.getConfig().getString("MySQL.user");
+        String pass = this.getConfig().getString("MySQL.pass");
+        mysql = new MySQL(host, port, name, user, pass, this);
+
+        mysql.query("CREATE TABLE IF NOT EXISTS `tntrun` ( `username` varchar(16) NOT NULL, "
+                + "`looses` int(16) NOT NULL, `wins` int(16) NOT NULL, "
+                + "`played` int(16) NOT NULL, "
+                + "UNIQUE KEY `username` (`username`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+        
+        Bukkit.getLogger().info("[TNTRun] Connected to MySQL database!");
 	}
 
 }

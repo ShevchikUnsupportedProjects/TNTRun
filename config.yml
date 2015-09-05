@@ -30,6 +30,10 @@ items:
       use: true
       ID: '399:0'
       name: '&cSHOP'
+   stats:
+      use: true
+      ID: '331:0'
+      name: '&cSTATS'
    leave:
       ID: '355:0'
       name: '&cLEAVE'
@@ -51,3 +55,10 @@ scoreboard:
    - '&fLost Players: &a&l{LOST}'
    - '&2 '
    - '&fEnd in: &c&l{LIMIT}'
+database: file
+MySQL:
+   host: host
+   port: 12345
+   name: tntrun
+   user: root
+   pass: password

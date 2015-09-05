@@ -25,6 +25,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,6 +37,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.Inventory;
 
@@ -42,6 +45,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 import tntrun.utils.Shop;
+import tntrun.utils.Stats;
 
 public class RestrictionHandler implements Listener {
 
@@ -52,7 +56,7 @@ public class RestrictionHandler implements Listener {
 	}
 
 	private HashSet<String> allowedcommands = new HashSet<String>(
-		Arrays.asList("/tntrun leave", "/tntrun vote", "/tr leave", "/tr vote", "/tr help", "/tr info")
+		Arrays.asList("/tntrun leave", "/tntrun vote", "/tr leave", "/tr vote", "/tr help", "/tr info", "/tr stats", "/tntrun stats", "/tr", "/tntrun")
 	);
 
 	// player should not be able to issue any commands besides /tr leave and /tr vote while in arena
@@ -121,6 +125,7 @@ public class RestrictionHandler implements Listener {
 		String[] ids2 = plugin.getConfig().getString("items.vote.ID").split(":");
 		String[] ids3 = plugin.getConfig().getString("items.info.ID").split(":");
 		String[] ids4 = plugin.getConfig().getString("items.leave.ID").split(":");
+		String[] ids5 = plugin.getConfig().getString("items.stats.ID").split(":");
 		
 		// check item
 		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
@@ -192,6 +197,25 @@ public class RestrictionHandler implements Listener {
             	}
         	}
         }
+        
+        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids5[0]))){
+        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids5[1])){
+            	if (arena != null) {
+       				if(u.contains(player)){
+    					player.playSound(player.getLocation(), Sound.WITHER_HURT, 1, (float) 0.001);
+    					return;
+    				}
+       				u.add(player);
+  			      Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+			    	  public void run(){
+			    		  u.remove(player);
+			    	  }
+			      }, 40);
+            		player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
+         	   	    player.chat("/tr stats");
+           	    }
+        	}
+        }
 	}
 	
 	public ArrayList<Player> u = new ArrayList<Player>();
@@ -246,5 +270,23 @@ public class RestrictionHandler implements Listener {
 				}
 			}
 		}
+	}
+	
+	@EventHandler
+	public void onJoin(PlayerJoinEvent e){
+		Player p = e.getPlayer();
+		
+		if(!plugin.usestats){
+			return;
+		}
+		
+		if(plugin.file){
+			return;
+		}
+		
+        plugin.mysql.query("INSERT IGNORE INTO `tntrun` (`username`, `played`, "
+                + "`wins`, `looses`) VALUES " 
+        		+ "('" + p.getName()
+                + "', '0', '0', '0');");
 	}
 }

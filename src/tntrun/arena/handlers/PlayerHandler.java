@@ -38,6 +38,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.TeleportDestination;
 import tntrun.utils.Bars;
+import tntrun.utils.Stats;
 import tntrun.utils.TitleMsg;
 import tntrun.messages.Messages;
 
@@ -117,7 +118,6 @@ public class PlayerHandler {
 			try {
 				TitleMsg.sendFullTitle(oplayer, TitleMsg.join.replace("{PLAYER}", player.getName()), TitleMsg.subjoin.replace("{PLAYER}", player.getName()), 10, 20, 20, plugin);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -140,6 +140,9 @@ public class PlayerHandler {
 				}
 				if(plugin.getConfig().getBoolean("items.info.use")){
 					addInfo(player, 1);
+				}
+				if(plugin.getConfig().getBoolean("items.stats.use")){
+					addStats(player, 3);
 				}
 			}
 		}, 5L);
@@ -211,6 +214,9 @@ public class PlayerHandler {
 				if(plugin.getConfig().getBoolean("items.info.use")){
 					addInfo(player, 0);
 				}
+				if(plugin.getConfig().getBoolean("items.stats.use")){
+					addInfo(player, 0);
+				}
 			}
 		}, 5L);
 	}
@@ -231,6 +237,7 @@ public class PlayerHandler {
 		if(arena.getStatusManager().isArenaRunning()){
 			// add to lostPlayers
 			arena.getGameHandler().lostPlayers++;
+			Stats.addLoses(player, 1);
 		}
 		// remove scoreboard
 		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
@@ -345,7 +352,7 @@ public class PlayerHandler {
 	     meta.setDisplayName(plugin.getConfig().getString("items.info.name").replace("&", "§"));
 	     item.setItemMeta(meta);
 	    
-	     p.getInventory().setItem(slot, item);;
+	     p.getInventory().addItem(item);
 	    
 	}
 	
@@ -358,7 +365,7 @@ public class PlayerHandler {
 	     meta.setDisplayName(plugin.getConfig().getString("items.vote.name").replace("&", "§"));
 	     item.setItemMeta(meta);
 	    
-	     p.getInventory().setItem(slot, item);;
+	     p.getInventory().addItem(item);
 	}
 	
 	public void addShop(Player p, int slot){
@@ -370,7 +377,19 @@ public class PlayerHandler {
 	     meta.setDisplayName(plugin.getConfig().getString("items.shop.name").replace("&", "§"));
 	     item.setItemMeta(meta);
 	    
-	     p.getInventory().setItem(slot, item);;
+	     p.getInventory().addItem(item);
+	}
+	
+	public void addStats(Player p, int slot){
+		String[] ids = plugin.getConfig().getString("items.stats.ID").split(":");
+		@SuppressWarnings("deprecation")
+		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
+	     
+	     ItemMeta meta = item.getItemMeta();
+	     meta.setDisplayName(plugin.getConfig().getString("items.stats.name").replace("&", "§"));
+	     item.setItemMeta(meta);
+	    
+	     p.getInventory().addItem(item);
 	}
 
 }

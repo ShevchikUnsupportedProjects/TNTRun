@@ -42,6 +42,7 @@ import tntrun.arena.structure.Kits;
 import tntrun.utils.ActionBar;
 import tntrun.utils.Bars;
 import tntrun.utils.Shop;
+import tntrun.utils.Stats;
 import tntrun.utils.TitleMsg;
 import tntrun.messages.Messages;
 
@@ -188,16 +189,20 @@ public class GameHandler {
 		String message = Messages.arenastarted;
 		message = message.replace("{TIMELIMIT}", String.valueOf(arena.getStructureManager().getTimeLimit()));
 		for (Player player : arena.getPlayersManager().getPlayers()) {
+			player.closeInventory();
+			Stats.addPlayedGames(player, 1);
 			player.setAllowFlight(true);
 			Messages.sendMessage(player, message);
 			player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
 			String[] ids1 = plugin.getConfig().getString("items.shop.ID").split(":");
 			String[] ids2 = plugin.getConfig().getString("items.vote.ID").split(":");
 			String[] ids3 = plugin.getConfig().getString("items.info.ID").split(":");
+			String[] ids4 = plugin.getConfig().getString("items.stats.ID").split(":");
 			
 			player.getInventory().remove(Integer.parseInt(ids1[0]));
 			player.getInventory().remove(Integer.parseInt(ids2[0]));
 			player.getInventory().remove(Integer.parseInt(ids3[0]));
+			player.getInventory().remove(Integer.parseInt(ids4[0]));
 			
             if (Shop.pitems.containsKey(player)) {
             	ArrayList<ItemStack> items = Shop.pitems.get(player);
@@ -322,6 +327,7 @@ public class GameHandler {
 		}
 		resetScoreboard();
 		Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
+		try{
 		int size = plugin.getConfig().getStringList("scoreboard.waiting").size();
 		for(String s : plugin.getConfig().getStringList("scoreboard.waiting")){
 			s = s.replace("&", "§");
@@ -335,6 +341,9 @@ public class GameHandler {
 		for (Player p : arena.getPlayersManager().getPlayers()) {
 			p.setScoreboard(scoreboard);
 		}
+		}catch (NullPointerException ex){
+			
+		}
 	}
 
 	public void resetScoreboard() {
@@ -345,7 +354,7 @@ public class GameHandler {
 
 	public void createPlayingScoreBoard() {
 		if(!plugin.getConfig().getBoolean("special.UseScoreboard")){
-			return;
+			return;	
 		}
 		playingtask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
@@ -395,6 +404,7 @@ public class GameHandler {
 	}
 	
 		public void startEnding(final Player player){
+			Stats.addWins(player, 1);
 			for(Player all : Bukkit.getOnlinePlayers()){
 				all.playSound(arena.getStructureManager().getSpawnPoint(), Sound.ENDERDRAGON_DEATH, 1, 20F);
 				try {
