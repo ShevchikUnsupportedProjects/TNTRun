@@ -167,13 +167,19 @@ public class Stats {
 				}
 			}
 		}
-		return getStat("looses", player);
+		return getStat("played", player);
 	}
 	
     private static int getStat(String statname, Player player) {
         try {
             int stat = 0;
-            ResultSet rs = pl.mysql.query("SELECT * FROM `tntrun` WHERE `username`='" + player.getName() + "'").getResultSet();
+            ResultSet rs;
+            
+            if(Bukkit.getOnlineMode()){
+            	rs = pl.mysql.query("SELECT * FROM `stats` WHERE `username`='" + player.getUniqueId().toString() + "'").getResultSet();
+            }else{
+            	rs = pl.mysql.query("SELECT * FROM `stats` WHERE `username`='" + player.getName() + "'").getResultSet();
+            }
             
             while (rs.next()) {
                	stat = rs.getInt(statname);
@@ -191,8 +197,13 @@ public class Stats {
         	return;
         }
         
-        pl.mysql.query("UPDATE `tntrun` SET `" + statname
-                + "`='" + value + "' WHERE `username`='" + p.getName() + "';");
+        if(Bukkit.getOnlineMode()){
+            pl.mysql.query("UPDATE `stats` SET `" + statname
+                    + "`='" + value + "' WHERE `username`='" + p.getUniqueId().toString() + "';");
+        }else{
+            pl.mysql.query("UPDATE `stats` SET `" + statname
+                    + "`='" + value + "' WHERE `username`='" + p.getName() + "';");
+        }
     }
 	
 }

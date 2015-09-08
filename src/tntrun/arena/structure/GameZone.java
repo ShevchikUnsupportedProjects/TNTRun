@@ -38,9 +38,9 @@ public class GameZone {
 
 	private HashSet<Block> blockstodestroy = new HashSet<Block>();
 
-	private final int SCAN_DEPTH = 1;
+	private final int SCAN_DEPTH = 2;
 	public void destroyBlock(Location loc, final Arena arena) {
-		int y = loc.getBlockY();
+		int y = loc.getBlockY() + 1;
 		Block block = null;
 		for (int i = 0; i <= SCAN_DEPTH; i++) {
 			block = getBlockUnderPlayer(y, loc);

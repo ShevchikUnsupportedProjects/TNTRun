@@ -117,7 +117,7 @@ public class GameCommands implements CommandExecutor {
 			}
 			player.sendMessage("§7Played games: §6" + Stats.getPlayedGames(player));
 			player.sendMessage("§7Wins: §6" + Stats.getWins(player));
-			player.sendMessage("§7Looses: §6" + Stats.getLooses(player));
+			player.sendMessage("§7Loses: §6" + Stats.getLooses(player));
 		}
 		// leave arena
 		else if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {

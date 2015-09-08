@@ -212,7 +212,7 @@ public class RestrictionHandler implements Listener {
 			    	  }
 			      }, 40);
             		player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
-         	   	    player.chat("/tr stats");
+         	   	    player.chat("/tntrun stats");
            	    }
         	}
         }
@@ -284,9 +284,16 @@ public class RestrictionHandler implements Listener {
 			return;
 		}
 		
-        plugin.mysql.query("INSERT IGNORE INTO `tntrun` (`username`, `played`, "
-                + "`wins`, `looses`) VALUES " 
-        		+ "('" + p.getName()
-                + "', '0', '0', '0');");
+		if(Bukkit.getOnlineMode()){
+	        plugin.mysql.query("INSERT IGNORE INTO `stats` (`username`, `played`, "
+	                + "`wins`, `looses`) VALUES " 
+	        		+ "('" + p.getUniqueId().toString()
+	                + "', '0', '0', '0');");
+		}else{
+	        plugin.mysql.query("INSERT IGNORE INTO `stats` (`username`, `played`, "
+	                + "`wins`, `looses`) VALUES " 
+	        		+ "('" + p.getName()
+	                + "', '0', '0', '0');");
+		}
 	}
 }

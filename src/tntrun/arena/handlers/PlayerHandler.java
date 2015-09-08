@@ -164,7 +164,7 @@ public class PlayerHandler {
 		}
 		// check for game start
 		if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMinPlayers()) {
-			arena.getGameHandler().runArenaCountdown();
+		arena.getGameHandler().runArenaCountdown();
 		}
 	}
 
