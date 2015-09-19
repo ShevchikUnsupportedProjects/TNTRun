@@ -171,5 +171,4 @@ public class TNTRun extends JavaPlugin {
         
         Bukkit.getLogger().info("[TNTRun] Connected to MySQL database!");
 	}
-
 }

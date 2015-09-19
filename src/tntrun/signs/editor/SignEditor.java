@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
@@ -117,20 +116,32 @@ public class SignEditor {
 			int players = arena.getPlayersManager().getPlayersCount();
 			int maxPlayers = arena.getStructureManager().getMaxPlayers();
 			if (!arena.getStatusManager().isArenaEnabled()) {
-				text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Disabled";
-			} else if (arena.getStatusManager().isArenaRunning()) {
-				text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "In Game";
-			} else if (arena.getStatusManager().isArenaRegenerating()) {
-				text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Regen...";
-			} else if (players == maxPlayers) {
-				text = ChatColor.RED.toString() + ChatColor.BOLD.toString() + Integer.toString(players) + "/" + Integer.toString(maxPlayers);
+				text = plugin.getConfig().getString("signs.status.disabled").replace("&", "§");
+			}else
+			if (arena.getStatusManager().isArenaRunning()) {
+				text = plugin.getConfig().getString("signs.status.ingame").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
+			}else
+			if (arena.getStatusManager().isArenaRegenerating()) {
+				text = plugin.getConfig().getString("signs.status.regenerating").replace("&", "§");
+			}else
+			if (players == maxPlayers) {
+				if (arena.getStatusManager().isArenaRunning()) {
+					text = plugin.getConfig().getString("signs.status.ingame").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
+				}else{
+					text = plugin.getConfig().getString("signs.status.waiting").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
+				}
 			} else {
-				text = ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + Integer.toString(players) + "/" + Integer.toString(maxPlayers);
+				if (arena.getStatusManager().isArenaRunning()) {
+					text = plugin.getConfig().getString("signs.status.ingame").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
+				}else{
+					text = plugin.getConfig().getString("signs.status.waiting").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
+				}
 			}
 
 			for (Block block : getSignsBlocks(arenaname)) {
 				if (block.getState() instanceof Sign) {
 					Sign sign = (Sign) block.getState();
+					sign.setLine(0, plugin.getConfig().getString("signs.prefix").replace("&", "§"));
 					sign.setLine(3, text);
 					sign.update();
 				} else {

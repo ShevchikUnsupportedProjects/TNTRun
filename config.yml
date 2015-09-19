@@ -4,6 +4,7 @@ special:
    UseBarApi: true
    UseTitle: true
    UseScoreboard: true
+   UseActionBar: true
 info:
    list:
    - '&6&lThe TNTRun plugin by The_TadeSK'
@@ -62,3 +63,10 @@ MySQL:
    name: tntrun
    user: root
    pass: password
+signs:
+   prefix: '&6&lTNTRun'
+   status:
+      disabled: '&cDisabled'
+      ingame: '&c&l{PS}&7/&c&l{MPS}'
+      regenerating: '&6&lRegen...'
+      waiting: '&a&l{PS}&7/&a&l{MPS}'

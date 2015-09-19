@@ -39,11 +39,15 @@ import tntrun.signs.type.VoteSign;
 public class SignHandler implements Listener {
 
 	private HashMap<String, SignType> signs = new HashMap<String, SignType>();
+	
+	private TNTRun pl;
 
 	public SignHandler(TNTRun plugin) {
 		signs.put("[join]", new JoinSign(plugin));
 		signs.put("[leave]", new LeaveSign(plugin));
 		signs.put("[vote]", new VoteSign(plugin));
+		
+		pl = plugin;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -72,7 +76,7 @@ public class SignHandler implements Listener {
 			return;
 		}
 		Sign sign = (Sign) e.getClickedBlock().getState();
-		if (sign.getLine(0).equalsIgnoreCase("§7[§6TNTRun§7]")) {
+		if (sign.getLine(0).equalsIgnoreCase(pl.getConfig().getString("signs.prefix").replace("&", "§"))) {
 			String line = sign.getLine(1).toLowerCase();
 			if (signs.containsKey(line)) {
 				signs.get(line).handleClick(e);
@@ -87,7 +91,7 @@ public class SignHandler implements Listener {
 		}
 		Player player = e.getPlayer();
 		Sign sign = (Sign) e.getBlock().getState();
-		if (sign.getLine(0).equalsIgnoreCase("§7[§6TNTRun§7]")) {
+		if (sign.getLine(0).equalsIgnoreCase(pl.getConfig().getString("signs.prefix").replace("&", "§"))) {
 			if (!player.hasPermission("tntrun.setup")) {
 				Messages.sendMessage(player, Messages.nopermission);
 				e.setCancelled(true);

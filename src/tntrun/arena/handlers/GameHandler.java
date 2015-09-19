@@ -365,7 +365,7 @@ public class GameHandler {
 				for(String s : plugin.getConfig().getStringList("scoreboard.playing")){
 					s = s.replace("&", "§");
 					s = s.replace("{ARENA}", arena.getArenaName());
-					s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
+					s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");		
 					s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
 					s = s.replace("{LOST}", lostPlayers + "");
 					s = s.replace("{LIMIT}", timelimit/20 + "");
@@ -373,6 +373,16 @@ public class GameHandler {
 					size--;
 				}
 				for(Player p : arena.getPlayersManager().getPlayers()){
+			    	if(!plugin.getConfig().getBoolean("special.UseActionBar")){
+			    		return;
+			    	}
+			    	
+			    	if (ActionBar.getVersion().contains("1_7")) {
+			    		Bukkit.getLogger().info("[TNTRun] Action bar for " + ActionBar.getVersion() + " is not supported, disabling Action Bar");
+			    		plugin.getConfig().set("special.UseActionBar", false);
+			    		return;
+			    	}
+			    	
 					ActionBar bar = new ActionBar();
 					bar.sendActionBar(p, Messages.getdoublejumpsaction.replace("&", "§").replace("{DB}", plugin.getConfig().getInt("doublejumps." + p.getName()) + ""));
 				}

@@ -40,7 +40,7 @@ public class JoinSign implements SignType {
 	public void handleCreation(SignChangeEvent e) {
 		final Arena arena = plugin.amanager.getArenaByName(e.getLine(2));
 		if (arena != null) {
-			e.setLine(0, "§7[§6TNTRun§7]");
+			e.setLine(0, plugin.getConfig().getString("signs.prefix").replace("&", "§"));
 			e.getPlayer().sendMessage("Sign succesfully created");
 			plugin.signEditor.addSign(e.getBlock(), arena.getArenaName());
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
@@ -69,6 +69,7 @@ public class JoinSign implements SignType {
 			e.setCancelled(true);
 		} else {
 			e.getPlayer().sendMessage("Arena does not exist");
+			e.getClickedBlock().breakNaturally();
 		}
 	}
 
