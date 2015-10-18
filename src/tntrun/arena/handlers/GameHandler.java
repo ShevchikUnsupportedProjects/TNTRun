@@ -380,6 +380,7 @@ public class GameHandler {
 			    	if (ActionBar.getVersion().contains("1_7")) {
 			    		Bukkit.getLogger().info("[TNTRun] Action bar for " + ActionBar.getVersion() + " is not supported, disabling Action Bar");
 			    		plugin.getConfig().set("special.UseActionBar", false);
+			    		plugin.saveConfig();
 			    		return;
 			    	}
 			    	

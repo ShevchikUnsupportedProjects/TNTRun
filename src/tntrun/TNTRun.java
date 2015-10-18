@@ -52,9 +52,12 @@ public class TNTRun extends JavaPlugin {
 	public SignEditor signEditor;
 	public boolean file = false;
 	public boolean usestats = false;
+	
+	public static TNTRun instance;
 
 	@Override
 	public void onEnable() {
+		instance = this;
 		log = getLogger();
 		signEditor = new SignEditor(this);
 		globallobby = new GlobalLobby(this);
@@ -124,6 +127,10 @@ public class TNTRun extends JavaPlugin {
 	    	 Bukkit.getLogger().info("[TNTRun] Disabling stats...");
 	     }
 	     new Stats(this);
+	}
+	
+	public static TNTRun getInstance(){
+		return instance;
 	}
 
 	@Override

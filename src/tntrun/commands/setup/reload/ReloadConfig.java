@@ -16,6 +16,7 @@ public class ReloadConfig  implements CommandHandlerInterface {
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
 		plugin.reloadConfig();
+		plugin.signEditor.loadConfiguration();
 		player.sendMessage("Config reloaded");
 		return true;
 	}
