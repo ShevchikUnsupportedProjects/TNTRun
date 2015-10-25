@@ -23,6 +23,7 @@ import java.util.HashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Sound;
@@ -322,6 +323,13 @@ public class PlayerHandler {
 		player.updateInventory();
 		// remove fly
 		player.setAllowFlight(false);
+		if(player.getGameMode() == GameMode.CREATIVE){
+			player.setAllowFlight(true);
+		}
+		if(player.hasPermission("tntrun.fly.everywhere")){
+			player.setAllowFlight(true);
+			player.setFlying(true);
+		}
 		player.setFlying(false);
 		// check is in arena 0 players
 		if (arena.getPlayersManager().getPlayersCount() == 0) {

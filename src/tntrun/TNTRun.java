@@ -141,6 +141,7 @@ public class TNTRun extends JavaPlugin {
 		}
 		// save arenas
 		for (Arena arena : amanager.getArenas()) {
+			arena.getStructureManager().getGameZone().regenNow();
 			arena.getStatusManager().disableArena();
 			arena.getStructureManager().saveToConfig();
 		}
