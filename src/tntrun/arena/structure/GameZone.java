@@ -17,6 +17,7 @@
 
 package tntrun.arena.structure;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -138,19 +139,23 @@ public class GameZone {
 				new Runnable() {
 					@Override
 					public void run() {
-						while (bsit.hasNext()) {
-							String bl = bsit.next();
-							String[] bd = bl.split(":");
+						try{
+							while (bsit.hasNext()) {
+								String bl = bsit.next();
+								String[] bd = bl.split(":");
+								
+								int id = Integer.parseInt(bd[0]);
+								byte data = Byte.parseByte(bd[1]);
+								World world = Bukkit.getWorld(bd[2]);
+								int x = Integer.parseInt(bd[3]);
+								int y = Integer.parseInt(bd[4]);
+								int z = Integer.parseInt(bd[5]);
+								
+								world.getBlockAt(x, y, z).setTypeId(id);
+								world.getBlockAt(x, y, z).setData(data);
+							}
+						}catch(ConcurrentModificationException e){
 							
-							int id = Integer.parseInt(bd[0]);
-							byte data = Byte.parseByte(bd[1]);
-							World world = Bukkit.getWorld(bd[2]);
-							int x = Integer.parseInt(bd[3]);
-							int y = Integer.parseInt(bd[4]);
-							int z = Integer.parseInt(bd[5]);
-							
-							world.getBlockAt(x, y, z).setTypeId(id);
-							world.getBlockAt(x, y, z).setData(data);
 						}
 					}
 				},
