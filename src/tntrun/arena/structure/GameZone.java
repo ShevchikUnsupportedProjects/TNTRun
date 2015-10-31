@@ -102,11 +102,13 @@ public class GameZone {
 	
 	public void removeBlocksGrenade(Location loc) {
 		for(Block b : Main.getBlockInRadius(loc, 2.5D, 999.9D).keySet()){
-			if(b.getLocation().add(0, 1, 0).getBlock().getType() == Material.AIR){
-				if(Main.getInstance().mat.contains(b.getType())){
-					removeGLBlocks(b);
-					if(Main.getInstance().getConfig().getBoolean("useparticles")){
-						ParticleEffect.FIREWORKS_SPARK.display(0.5F, 0.5F, 0.5F, 0.05F, 10, b.getLocation(), 50);
+			if (!blockstodestroy.contains(b)) {
+				if(b.getLocation().add(0, 1, 0).getBlock().getType() == Material.AIR){
+					if(Main.getInstance().mat.contains(b.getType())){
+						removeGLBlocks(b);
+						if(Main.getInstance().getConfig().getBoolean("useparticles")){
+							ParticleEffect.FIREWORKS_SPARK.display(0.5F, 0.5F, 0.5F, 0.05F, 10, b.getLocation(), 50);
+						}
 					}
 				}
 			}
