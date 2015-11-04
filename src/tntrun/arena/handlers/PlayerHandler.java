@@ -134,16 +134,21 @@ public class PlayerHandler {
 				player.getInventory().setItem(8, item);
 				
 				if(plugin.getConfig().getBoolean("items.vote.use")){
-					addVoteDiamond(player, 0);
+					addVoteDiamond(player);
 				}
 				if(plugin.getConfig().getBoolean("items.shop.use")){
-					addShop(player, 2);
+					addShop(player);
 				}
 				if(plugin.getConfig().getBoolean("items.info.use")){
-					addInfo(player, 1);
+					addInfo(player);
 				}
 				if(plugin.getConfig().getBoolean("items.stats.use")){
-					addStats(player, 3);
+					addStats(player);
+				}
+				if(plugin.getConfig().getBoolean("items.effects.use")){
+					if(Bukkit.getPluginManager().getPlugin("TNTRun-Effects") != null){
+						addEffects(player);
+					}
 				}
 			}
 		}, 5L);
@@ -213,10 +218,10 @@ public class PlayerHandler {
 				player.getInventory().setItem(8, item);
 				
 				if(plugin.getConfig().getBoolean("items.info.use")){
-					addInfo(player, 0);
+					addInfo(player);
 				}
 				if(plugin.getConfig().getBoolean("items.stats.use")){
-					addInfo(player, 0);
+					addStats(player);
 				}
 			}
 		}, 5L);
@@ -351,7 +356,7 @@ public class PlayerHandler {
 		return false;
 	}
 	
-	public void addInfo(Player p, int slot){
+	public void addInfo(Player p){
 		String[] ids = plugin.getConfig().getString("items.info.ID").split(":");
 		@SuppressWarnings("deprecation")
 		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
@@ -364,7 +369,7 @@ public class PlayerHandler {
 	    
 	}
 	
-	public void addVoteDiamond(Player p, int slot){
+	public void addVoteDiamond(Player p){
 		String[] ids = plugin.getConfig().getString("items.vote.ID").split(":");
 		@SuppressWarnings("deprecation")
 		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
@@ -376,7 +381,7 @@ public class PlayerHandler {
 	     p.getInventory().addItem(item);
 	}
 	
-	public void addShop(Player p, int slot){
+	public void addShop(Player p){
 		String[] ids = plugin.getConfig().getString("items.shop.ID").split(":");
 		@SuppressWarnings("deprecation")
 		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
@@ -388,13 +393,25 @@ public class PlayerHandler {
 	     p.getInventory().addItem(item);
 	}
 	
-	public void addStats(Player p, int slot){
+	public void addStats(Player p){
 		String[] ids = plugin.getConfig().getString("items.stats.ID").split(":");
 		@SuppressWarnings("deprecation")
 		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
 	     
 	     ItemMeta meta = item.getItemMeta();
 	     meta.setDisplayName(plugin.getConfig().getString("items.stats.name").replace("&", "§"));
+	     item.setItemMeta(meta);
+	    
+	     p.getInventory().addItem(item);
+	}
+	
+	public void addEffects(Player p){
+		String[] ids = plugin.getConfig().getString("items.effects.ID").split(":");
+		@SuppressWarnings("deprecation")
+		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
+	     
+	     ItemMeta meta = item.getItemMeta();
+	     meta.setDisplayName(plugin.getConfig().getString("items.effects.name").replace("&", "§"));
 	     item.setItemMeta(meta);
 	    
 	     p.getInventory().addItem(item);

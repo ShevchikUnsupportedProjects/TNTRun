@@ -91,7 +91,7 @@ public class GameHandler {
 
 	// arena start handler (running status updater)
 	int runtaskid;
-	int count;
+	public static int count;
 
 	public void runArenaCountdown() {
 		count = arena.getStructureManager().getCountdown();

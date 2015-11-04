@@ -38,6 +38,10 @@ items:
    leave:
       ID: '355:0'
       name: '&cLEAVE'
+   effects:
+      use: true
+      ID: '348:0'
+      name: '&cEFFECTS'
 scoreboard:
    waiting:
    - '&fWelcome to TNTRun'

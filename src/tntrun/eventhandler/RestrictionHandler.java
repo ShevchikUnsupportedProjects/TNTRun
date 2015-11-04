@@ -56,7 +56,7 @@ public class RestrictionHandler implements Listener {
 	}
 
 	private HashSet<String> allowedcommands = new HashSet<String>(
-		Arrays.asList("/tntrun leave", "/tntrun vote", "/tr leave", "/tr vote", "/tr help", "/tr info", "/tr stats", "/tntrun stats", "/tr", "/tntrun")
+		Arrays.asList("/tntrun leave", "/tntrun vote", "/tr leave", "/tr vote", "/tr help", "/tr info", "/tr stats", "/tntrun stats", "/treffects", "/tr", "/tntrun")
 	);
 
 	// player should not be able to issue any commands besides /tr leave and /tr vote while in arena
@@ -126,6 +126,7 @@ public class RestrictionHandler implements Listener {
 		String[] ids3 = plugin.getConfig().getString("items.info.ID").split(":");
 		String[] ids4 = plugin.getConfig().getString("items.leave.ID").split(":");
 		String[] ids5 = plugin.getConfig().getString("items.stats.ID").split(":");
+		String[] ids6 = plugin.getConfig().getString("items.effects.ID").split(":");
 		
 		// check item
 		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
@@ -213,6 +214,24 @@ public class RestrictionHandler implements Listener {
 			      }, 40);
             		player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
          	   	    player.chat("/tntrun stats");
+           	    }
+        	}
+        }
+        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids6[0]))){
+        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids6[1])){
+            	if (arena != null) {
+       				if(u.contains(player)){
+    					player.playSound(player.getLocation(), Sound.WITHER_HURT, 1, (float) 0.001);
+    					return;
+    				}
+       				u.add(player);
+  			      Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+			    	  public void run(){
+			    		  u.remove(player);
+			    	  }
+			      }, 40);
+            		player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 1);
+         	   	    player.chat("/treffects");
            	    }
         	}
         }
