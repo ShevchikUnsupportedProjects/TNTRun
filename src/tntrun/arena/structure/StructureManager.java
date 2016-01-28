@@ -38,7 +38,7 @@ public class StructureManager {
 	private String world;
 	private Vector p1 = null;
 	private Vector p2 = null;
-	private GameZone gamezone = new GameZone();
+	private GameZone gamezone = new GameZone(arena);
 	private int gameleveldestroydelay = 8;
 	private LoseLevel loselevel = new LoseLevel();
 	private Vector spectatorspawn = null;

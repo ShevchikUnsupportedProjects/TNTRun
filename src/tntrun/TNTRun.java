@@ -86,7 +86,6 @@ public class TNTRun extends JavaPlugin {
 		// load arenas
 		final File arenasfolder = new File(getDataFolder() + File.separator + "arenas");
 		arenasfolder.mkdirs();
-		final TNTRun instance = this;
 		getServer().getScheduler().scheduleSyncDelayedTask(
 			this,
 			new Runnable() {

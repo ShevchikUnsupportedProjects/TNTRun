@@ -292,7 +292,7 @@ public class GameHandler {
 		Location plloc = player.getLocation();
 		Location plufloc = plloc.clone().add(0, -1, 0);
 		// remove block under player feet
-		arena.getStructureManager().getGameZone().destroyBlock(plufloc, arena);
+		arena.getStructureManager().getGameZone().destroyBlock(plufloc);
 		// check for win
 		if (arena.getPlayersManager().getPlayersCount() == 1) {
 			// last player won
@@ -397,7 +397,7 @@ public class GameHandler {
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// schedule gamezone regen
-		int delay = arena.getStructureManager().getGameZone().regen(arena.plugin);
+		int delay = arena.getStructureManager().getGameZone().regen();
 		// regen finished
 		Bukkit.getScheduler().scheduleSyncDelayedTask(
 			arena.plugin,

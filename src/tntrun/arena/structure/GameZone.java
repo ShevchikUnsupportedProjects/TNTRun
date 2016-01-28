@@ -42,8 +42,14 @@ public class GameZone {
 
 	private HashSet<Block> blockstodestroy = new HashSet<Block>();
 	
+	public Arena arena;
+	
+	public GameZone(Arena arena){
+		this.arena = arena;
+	}
+	
 	private final int SCAN_DEPTH = 2;
-	public void destroyBlock(Location loc, final Arena arena) {
+	public void destroyBlock(Location loc) {
 		int y = loc.getBlockY() + 1;
 		Block block = null;
 		for (int i = 0; i <= SCAN_DEPTH; i++) {
@@ -58,13 +64,13 @@ public class GameZone {
 			if (!blockstodestroy.contains(fblock)) {
 				blockstodestroy.add(fblock);
 				Bukkit.getScheduler().scheduleSyncDelayedTask(
-					arena.plugin,
+					TNTRun.getInstance(),
 					new Runnable() {
 						@Override
 						public void run() {
 							if (arena.getStatusManager().isArenaRunning()) {
 								blockstodestroy.remove(fblock);
-								if(arena.plugin.getConfig().getBoolean("special.FancyBlockBreak")){
+								if(TNTRun.getInstance().getConfig().getBoolean("special.FancyBlockBreak")){
 									fblock.getWorld().playEffect(fblock.getLocation(), Effect.STEP_SOUND, fblock.getTypeId());
 								}
 								removeGLBlocks(fblock);
@@ -149,11 +155,11 @@ public class GameZone {
 		b.setType(Material.AIR);
 	}
 	
-	public int regen(TNTRun plugin){
+	public int regen(){
 		final Iterator<String> bsit = B.iterator();
 		int ticks = 1;
 		for (;ticks <= (B.size() / MAX_BLOCKS_PER_TICK) + 1; ticks++) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
+			Bukkit.getScheduler().scheduleSyncDelayedTask(TNTRun.getInstance(),
 				new Runnable() {
 					@Override
 					public void run() {
