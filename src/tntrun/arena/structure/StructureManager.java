@@ -33,12 +33,13 @@ public class StructureManager {
 	private Arena arena;
 	public StructureManager(Arena arena) {
 		this.arena = arena;
+		gamezone = new GameZone(arena);
 	}
 
 	private String world;
 	private Vector p1 = null;
 	private Vector p2 = null;
-	private GameZone gamezone = new GameZone(arena);
+	private GameZone gamezone;
 	private int gameleveldestroydelay = 8;
 	private LoseLevel loselevel = new LoseLevel();
 	private Vector spectatorspawn = null;
