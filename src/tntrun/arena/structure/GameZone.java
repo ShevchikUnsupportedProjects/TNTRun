@@ -33,6 +33,9 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.NumberConversions;
 
 import tntrun.TNTRun;
@@ -144,7 +147,7 @@ public class GameZone {
 		return null;
 	}
 
-	private final int MAX_BLOCKS_PER_TICK = 10;
+	private final int MAX_BLOCKS_PER_TICK = 20;
 	
 	private static List<String> B = new LinkedList<>();
 	
@@ -157,8 +160,28 @@ public class GameZone {
 	
 	public int regen(){
 		final Iterator<String> bsit = B.iterator();
-		int ticks = 1;
-		for (;ticks <= (B.size() / MAX_BLOCKS_PER_TICK) + 1; ticks++) {
+		final BukkitTask ta = new BukkitRunnable() {
+            @Override
+            public void run() {
+            	for(int i = MAX_BLOCKS_PER_TICK; i >= 0;i--){
+                	while (bsit.hasNext()) {
+    					String bl = bsit.next();
+    					String[] bd = bl.split(":");
+    					
+    					int id = Integer.parseInt(bd[0]);
+    					byte data = Byte.parseByte(bd[1]);
+    					World world = Bukkit.getWorld(bd[2]);
+    					int x = Integer.parseInt(bd[3]);
+    					int y = Integer.parseInt(bd[4]);
+    					int z = Integer.parseInt(bd[5]);
+    					
+    					world.getBlockAt(x, y, z).setTypeId(id);
+    					world.getBlockAt(x, y, z).setData(data);
+    				}	
+            	}
+            }
+        }.runTaskTimer(TNTRun.getInstance(), 0L, 1L);
+		/*for (;ticks <= (B.size() / MAX_BLOCKS_PER_TICK) + 1; ticks++) {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(TNTRun.getInstance(),
 				new Runnable() {
 					@Override
@@ -185,8 +208,14 @@ public class GameZone {
 				},
 				ticks
 			);
-		}
-		return ticks;
+		}*/
+        Bukkit.getScheduler().runTaskLater(TNTRun.getInstance(), new Runnable(){
+        	public void run(){
+        		ta.cancel();
+        	}
+        }, 100L);
+        System.out.println((B.size() / MAX_BLOCKS_PER_TICK*2));
+		return 100;
 	}
 	
 	private static class PlayerPosition {

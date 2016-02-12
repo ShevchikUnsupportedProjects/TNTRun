@@ -38,7 +38,7 @@ public class Shop implements Listener{
 	public static HashMap<Player, ArrayList<ItemStack>> pitems = new HashMap<Player, ArrayList<ItemStack>>();
 	public static List<Player> bought = new ArrayList<Player>();
 	public static String invname;
-	public static int invsize;
+	public static int invsize; 
 	
 	private void giveItem(int slot, Player player, String title) {
 		int kit = itemSlot.get(slot);
