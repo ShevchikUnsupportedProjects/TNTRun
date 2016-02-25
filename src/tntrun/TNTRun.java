@@ -27,6 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import tntrun.arena.Arena;
@@ -57,6 +58,8 @@ public class TNTRun extends JavaPlugin {
 	public SignEditor signEditor;
 	public boolean file = false;
 	public boolean usestats = false;
+	public boolean needUpdate = false;
+	public String[] ver = {"Nothing", "Nothing"};
 	
 	public static TNTRun instance;
 
@@ -106,6 +109,46 @@ public class TNTRun extends JavaPlugin {
 			},
 			20
 		);
+		
+		Bukkit.getScheduler().runTaskLaterAsynchronously(getInstance(), new Runnable(){
+			public void run(){
+				getLogger().info(" ");
+				getLogger().info(" ");
+				getLogger().info(" ");
+				getLogger().info("Checking plugin version...");
+				new VersionChecker();
+				String[] version = VersionChecker.get().getVersion().split(";");
+				ver = version;
+				if(version[0].equalsIgnoreCase("error")){
+					throw new NullPointerException("An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun.7320/");
+				}else{
+					ver = version;
+					if(version[0].equalsIgnoreCase(getDescription().getVersion())){
+						getLogger().info("You are running a latest version!");
+						needUpdate = false;
+					}else{
+						getLogger().info("Your version: " + getDescription().getVersion());
+						getLogger().info("New version: " + version[0]);
+						getLogger().info("What is a new? " + version[1]);
+						getLogger().info("New version is avaiable! Download now: https://www.spigotmc.org/threads/tntrun.7320/");
+						needUpdate = true;
+						for(Player p : Bukkit.getOnlinePlayers()){
+							if(p.hasPermission("tntrun.version.check")){
+								p.sendMessage(" ");
+								p.sendMessage(" ");
+								p.sendMessage(" ");
+								p.sendMessage("§7[§6TNTRun§7] §6New Update is avaiable!");
+								p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + getDescription().getVersion());
+								p.sendMessage("§7[§6TNTRun§7] §7New version: §6" + version[0]);
+								p.sendMessage("§7[§6TNTRun§7] §7What is a new? §6" + version[1]);
+								p.sendMessage("§7[§6TNTRun§7] §7New version is avaiable! Download now: §6https://www.spigotmc.org/threads/tntrun.7320/");
+							}
+						}
+					}
+				}
+				getLogger().info(" ");
+			}
+		}, 30L);
 		
 	     try {
 	    	 Bukkit.getLogger().info("[TNTRun] Starting Metrics...");

@@ -42,6 +42,7 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.Inventory;
 
 import tntrun.TNTRun;
+import tntrun.VersionChecker;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 import tntrun.utils.Shop;
@@ -284,7 +285,10 @@ public class RestrictionHandler implements Listener {
 			}else{
 				if(p.hasPermission("tntrun.fly.everywhere")){
 					e.setCancelled(false);
+					p.setFlying(true);
+					p.setAllowFlight(true);
 				}else{
+					p.setFlying(false);
 					e.setCancelled(true);
 				}
 			}
@@ -293,7 +297,21 @@ public class RestrictionHandler implements Listener {
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e){
-		Player p = e.getPlayer();
+		final Player p = e.getPlayer();
+		
+		if(p.hasPermission("tntrun.version.check")){
+			if(TNTRun.getInstance().needUpdate){
+				Bukkit.getScheduler().runTaskLaterAsynchronously(TNTRun.getInstance(), new Runnable(){
+					public void run(){
+						p.sendMessage("§7[§6TNTRun§7] §6New Update is avaiable!");
+						p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + TNTRun.getInstance().getDescription().getVersion());
+						p.sendMessage("§7[§6TNTRun§7] §7New version: §6" + TNTRun.getInstance().ver[0]);
+						p.sendMessage("§7[§6TNTRun§7] §7What is a new? §6" + TNTRun.getInstance().ver[1]);
+						p.sendMessage("§7[§6TNTRun§7] §7New version is avaiable! Download now: §6https://www.spigotmc.org/threads/tntrun.7320/");	
+					}
+				}, 30L);
+			}
+		}
 		
 		if(!plugin.usestats){
 			return;

@@ -392,6 +392,9 @@ public class GameHandler {
 	}
 
 	private void startArenaRegen() {
+		if(arena.getStatusManager().isArenaRegenerating()){
+			return;
+		}
 		// set arena is regenerating status
 		arena.getStatusManager().setRegenerating(true);
 		// modify signs
@@ -417,7 +420,7 @@ public class GameHandler {
 		public void startEnding(final Player player){
 			Stats.addWins(player, 1);
 			for(Player all : Bukkit.getOnlinePlayers()){
-				all.playSound(arena.getStructureManager().getSpawnPoint(), Sound.ENDERDRAGON_DEATH, 1, 20F);
+				all.playSound(arena.getStructureManager().getSpawnPoint(), Sound.ENDERDRAGON_DEATH, 999, 999F);
 				try {
 					TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
 				} catch (IOException e) {

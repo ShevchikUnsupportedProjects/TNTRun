@@ -337,7 +337,7 @@ public class PlayerHandler {
 		}
 		player.setFlying(false);
 		// check is in arena 0 players
-		if (arena.getPlayersManager().getPlayersCount() == 0) {
+		if (arena.getStatusManager().isArenaRunning() && arena.getPlayersManager().getPlayersCount() == 0) {
 			arena.getGameHandler().stopArena();
 		}
 	}
