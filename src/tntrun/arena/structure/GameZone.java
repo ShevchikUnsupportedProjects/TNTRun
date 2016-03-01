@@ -164,7 +164,7 @@ public class GameZone {
             @Override
             public void run() {
             	for(int i = MAX_BLOCKS_PER_TICK; i >= 0;i--){
-                	while (bsit.hasNext()) {
+                	while(bsit.hasNext()) {
     					String bl = bsit.next();
     					String[] bd = bl.split(":");
     					
@@ -213,9 +213,8 @@ public class GameZone {
         	public void run(){
         		ta.cancel();
         	}
-        }, 100L);
-        System.out.println((B.size() / MAX_BLOCKS_PER_TICK*2));
-		return 100;
+        }, 50L);
+		return 50;
 	}
 	
 	private static class PlayerPosition {

@@ -25,7 +25,7 @@ public class VersionChecker {
 	
 	public String getVersion(){
 		try {
-			byte[] ver = get(new URL("http://u-games.tk/tade/tntrun/"));
+			byte[] ver = get(new URL("http://the-tadesk.tk/updater/tntrun/"));
 			String data = new String(ver);
 			if(data == null || data.isEmpty()){
 				return "error";
@@ -33,7 +33,7 @@ public class VersionChecker {
 			return data;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
-			Bukkit.getLogger().log(Level.WARNING, "[TNTRun] An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun.7320/");
+			Bukkit.getLogger().log(Level.WARNING, "[TNTRun] An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun.67418/");
 			return "error";
 		}
 	}
@@ -49,7 +49,7 @@ public class VersionChecker {
 	        return out.toByteArray();
 	        }catch (IOException e) {
 	        	e.printStackTrace();
-	        	Bukkit.getLogger().log(Level.WARNING, "[TNTRun] An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun.7320/");
+	        	Bukkit.getLogger().log(Level.WARNING, "[TNTRun] An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun.67418/");
 	    }
 		return null;
 	}

@@ -5,6 +5,7 @@ special:
    UseTitle: true
    UseScoreboard: true
    UseActionBar: true
+   CheckForNewVersion: true
 info:
    list:
    - '&6&lThe TNTRun plugin by The_TadeSK'

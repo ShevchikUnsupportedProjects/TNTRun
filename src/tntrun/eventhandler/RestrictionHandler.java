@@ -284,7 +284,6 @@ public class RestrictionHandler implements Listener {
 			      }, 20);
 			}else{
 				if(p.hasPermission("tntrun.fly.everywhere")){
-					e.setCancelled(false);
 					p.setFlying(true);
 					p.setAllowFlight(true);
 				}else{
@@ -292,6 +291,8 @@ public class RestrictionHandler implements Listener {
 					e.setCancelled(true);
 				}
 			}
+		}else{
+			p.setAllowFlight(true);
 		}
 	}
 	
@@ -303,11 +304,14 @@ public class RestrictionHandler implements Listener {
 			if(TNTRun.getInstance().needUpdate){
 				Bukkit.getScheduler().runTaskLaterAsynchronously(TNTRun.getInstance(), new Runnable(){
 					public void run(){
+						p.sendMessage(" ");
+						p.sendMessage(" ");
+						p.sendMessage(" ");
 						p.sendMessage("§7[§6TNTRun§7] §6New Update is avaiable!");
 						p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + TNTRun.getInstance().getDescription().getVersion());
 						p.sendMessage("§7[§6TNTRun§7] §7New version: §6" + TNTRun.getInstance().ver[0]);
 						p.sendMessage("§7[§6TNTRun§7] §7What is a new? §6" + TNTRun.getInstance().ver[1]);
-						p.sendMessage("§7[§6TNTRun§7] §7New version is avaiable! Download now: §6https://www.spigotmc.org/threads/tntrun.7320/");	
+						p.sendMessage("§7[§6TNTRun§7] §7New version is avaiable! Download now: §6https://www.spigotmc.org/resources/tntrun.7320/");
 					}
 				}, 30L);
 			}
