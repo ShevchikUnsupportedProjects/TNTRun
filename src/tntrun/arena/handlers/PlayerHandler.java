@@ -71,7 +71,6 @@ public class PlayerHandler {
 	}
 
 	// spawn player on arena
-	@SuppressWarnings("deprecation")
 	public void spawnPlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
 		// teleport player to arena
 		plugin.pdata.storePlayerLocation(player);
@@ -191,7 +190,6 @@ public class PlayerHandler {
 		plugin.signEditor.modifySigns(arena.getArenaName());
 	}
 
-	@SuppressWarnings("deprecation")
 	private void removePlayerFromArenaAndRestoreState(Player player, boolean winner) {
 		// remove vote
 		votes.remove(player.getName());

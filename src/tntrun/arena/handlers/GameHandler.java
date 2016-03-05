@@ -21,7 +21,6 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
@@ -97,7 +96,6 @@ public class GameHandler {
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							Messages.sendMessage(player, message);
-							player.playSound(player.getLocation(), Sound.CLICK, 1, 5);
 						}
 					}else
 					// sending bars

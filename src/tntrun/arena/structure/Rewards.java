@@ -92,7 +92,7 @@ public class Rewards {
 			rewardmessage += reward.getAmount() + " x " + reward.getType().toString().replace("_", "").toLowerCase()+ ", ";
 		}
 		if (moneyreward != 0) {
-			rewardMoney(player.getName(), moneyreward);
+			rewardMoney(player, moneyreward);
 			rewardmessage += ChatColor.GOLD.toString() + moneyreward;
 		}
 		if (rewardmessage.endsWith(", ")) {
@@ -109,10 +109,10 @@ public class Rewards {
 		}
 	}
 
-	private void rewardMoney(String playername, int money) {
+	private void rewardMoney(Player player, int money) {
 		if (economy != null) {
 			Economy econ = (Economy) economy;
-			econ.depositPlayer(playername, money);
+			econ.depositPlayer(player, money);
 		}
 	}
 
