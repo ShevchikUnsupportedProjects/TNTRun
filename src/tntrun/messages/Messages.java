@@ -21,11 +21,11 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 
 public class Messages {
@@ -61,13 +61,13 @@ public class Messages {
 
 	public static void sendMessage(Player player, String message) {
 		if (!message.equals("")) {
-			player.sendMessage(FormattingCodesParser.parseFormattingCodes(message));
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
 		}
 	}
 
 	public static void broadcastMessage(String message) {
 		if (!message.equals("")) {
-			Bukkit.broadcastMessage(FormattingCodesParser.parseFormattingCodes(message));
+			Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', message));
 		}
 	}
 
