@@ -26,17 +26,11 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
-import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.DamageEnabled;
+import tntrun.datahandler.ArenasManager;
 
 public class PlayerStatusHandler implements Listener {
-
-	private TNTRun plugin;
-
-	public PlayerStatusHandler(TNTRun plugin) {
-		this.plugin = plugin;
-	}
 
 	// handle damage based on arena settings
 	// fall damage is always cancelled
@@ -44,7 +38,7 @@ public class PlayerStatusHandler implements Listener {
 	public void onPlayerDamage(EntityDamageEvent e) {
 		if (e.getEntity() instanceof Player) {
 			Player player = (Player) e.getEntity();
-			Arena arena = plugin.amanager.getPlayerArena(player.getName());
+			Arena arena = ArenasManager.getInstance().getPlayerArena(player.getName());
 			if (arena != null) {
 				if (e.getCause() == DamageCause.FALL) {
 					e.setCancelled(true);
@@ -74,7 +68,7 @@ public class PlayerStatusHandler implements Listener {
 		if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
 			Player player = (Player) e.getEntity();
 			Player damager = (Player) e.getDamager();
-			Arena arena = plugin.amanager.getPlayerArena(player.getName());
+			Arena arena = ArenasManager.getInstance().getPlayerArena(player.getName());
 			if (arena != null) {
 				if (arena.getPlayersManager().isSpectator(player.getName()) || arena.getPlayersManager().isSpectator(damager.getName())) {
 					e.setCancelled(true);
@@ -88,7 +82,7 @@ public class PlayerStatusHandler implements Listener {
 	public void onPlayerDamage(FoodLevelChangeEvent e) {
 		if (e.getEntity() instanceof Player) {
 			Player player = (Player) e.getEntity();
-			if (plugin.amanager.getPlayerArena(player.getName()) != null) {
+			if (ArenasManager.getInstance().getPlayerArena(player.getName()) != null) {
 				e.setCancelled(true);
 			}
 		}

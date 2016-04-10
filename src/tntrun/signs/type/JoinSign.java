@@ -27,28 +27,24 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.datahandler.ArenasManager;
 import tntrun.messages.Messages;
+import tntrun.signs.editor.SignEditor;
 
 public class JoinSign implements SignType {
 
-	private TNTRun plugin;
-
-	public JoinSign(TNTRun plugin) {
-		this.plugin = plugin;
-	}
-
 	@Override
 	public void handleCreation(SignChangeEvent e) {
-		final Arena arena = plugin.amanager.getArenaByName(e.getLine(2));
+		final Arena arena = ArenasManager.getInstance().getArenaByName(e.getLine(2));
 		if (arena != null) {
 			e.setLine(0, ChatColor.BLUE + "[TNTRun]");
 			e.getPlayer().sendMessage("Sign succesfully created");
-			plugin.signEditor.addSign(e.getBlock(), arena.getArenaName());
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
+			SignEditor.getInstance().addSign(e.getBlock(), arena.getArenaName());
+			Bukkit.getScheduler().scheduleSyncDelayedTask(TNTRun.getInstance(),
 				new Runnable() {
 					@Override
 					public void run() {
-						plugin.signEditor.modifySigns(arena.getArenaName());
+						SignEditor.getInstance().modifySigns(arena.getArenaName());
 					}
 				}
 			);
@@ -61,7 +57,7 @@ public class JoinSign implements SignType {
 
 	@Override
 	public void handleClick(PlayerInteractEvent e) {
-		Arena arena = plugin.amanager.getArenaByName(((Sign) e.getClickedBlock().getState()).getLine(2));
+		Arena arena = ArenasManager.getInstance().getArenaByName(((Sign) e.getClickedBlock().getState()).getLine(2));
 		if (arena != null) {
 			boolean canJoin = arena.getPlayerHandler().checkJoin(e.getPlayer());
 			if (canJoin) {
@@ -76,7 +72,7 @@ public class JoinSign implements SignType {
 	@Override
 	public void handleDestroy(BlockBreakEvent e) {
 		Block b = e.getBlock();
-		plugin.signEditor.removeSign(b, ((Sign) b.getState()).getLine(2));
+		SignEditor.getInstance().removeSign(b, ((Sign) b.getState()).getLine(2));
 		e.getPlayer().sendMessage("Sign succesfully removed");
 	}
 

@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
+import tntrun.signs.editor.SignEditor;
 
 public class StatusManager {
 
@@ -42,7 +43,7 @@ public class StatusManager {
 		if (arena.getStructureManager().isArenaConfigured()) {
 			enabled = true;
 			arena.getGameHandler().startArenaAntiLeaveHandler();
-			arena.plugin.signEditor.modifySigns(arena.getArenaName());
+			SignEditor.getInstance().modifySigns(arena.getArenaName());
 			return true;
 		}
 		return false;
@@ -67,7 +68,7 @@ public class StatusManager {
 		// regen gamezone
 		arena.getStructureManager().getGameZone().regenNow();
 		// modify signs
-		arena.plugin.signEditor.modifySigns(arena.getArenaName());
+		SignEditor.getInstance().modifySigns(arena.getArenaName());
 	}
 
 	public boolean isArenaStarting() {

@@ -25,19 +25,18 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.TeleportDestination;
 import tntrun.bars.Bars;
+import tntrun.datahandler.PlayerDataStore;
+import tntrun.lobby.GlobalLobby;
 import tntrun.messages.Messages;
+import tntrun.signs.editor.SignEditor;
 
 public class PlayerHandler {
 
-	private TNTRun plugin;
-	private Arena arena;
-
-	public PlayerHandler(TNTRun plugin, Arena arena) {
-		this.plugin = plugin;
+	private final Arena arena;
+	public PlayerHandler(Arena arena) {
 		this.arena = arena;
 	}
 
@@ -72,21 +71,21 @@ public class PlayerHandler {
 
 	// spawn player on arena
 	public void spawnPlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
+		PlayerDataStore storage = PlayerDataStore.getInstance();
 		// teleport player to arena
-		plugin.pdata.storePlayerLocation(player);
+		storage.storePlayerLocation(player);
 		player.teleport(arena.getStructureManager().getSpawnPoint());
 		// set player visible to everyone
 		for (Player aplayer : Bukkit.getOnlinePlayers()) {
 			aplayer.showPlayer(player);
 		}
 		// change player status
-		plugin.pdata.storePlayerGameMode(player);
+		storage.storePlayerGameMode(player);
 		player.setFlying(false);
 		player.setAllowFlight(false);
-		plugin.pdata.storePlayerInventory(player);
-		plugin.pdata.storePlayerArmor(player);
-		plugin.pdata.storePlayerPotionEffects(player);
-		plugin.pdata.storePlayerHunger(player);
+		storage.storePlayerInventory(player);
+		storage.storePlayerPotionEffects(player);
+		storage.storePlayerHunger(player);
 		// update inventory
 		player.updateInventory();
 		// add mining fatigue effect so player won't even attempt to break blocks
@@ -105,7 +104,7 @@ public class PlayerHandler {
 		message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getCount()));
 		Messages.sendMessage(player, message);
 		// modify signs
-		plugin.signEditor.modifySigns(arena.getArenaName());
+		SignEditor.getInstance().modifySigns(arena.getArenaName());
 		// modify bars
 		if (!arena.getStatusManager().isArenaStarting()) {
 			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
@@ -137,7 +136,7 @@ public class PlayerHandler {
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// modify signs
-		plugin.signEditor.modifySigns(arena.getArenaName());
+		SignEditor.getInstance().modifySigns(arena.getArenaName());
 		// send message to other players and update bars
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
@@ -170,7 +169,7 @@ public class PlayerHandler {
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// modify signs
-		plugin.signEditor.modifySigns(arena.getArenaName());
+		SignEditor.getInstance().modifySigns(arena.getArenaName());
 		// send message to other players and update bars
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
@@ -187,10 +186,11 @@ public class PlayerHandler {
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// modify signs
-		plugin.signEditor.modifySigns(arena.getArenaName());
+		SignEditor.getInstance().modifySigns(arena.getArenaName());
 	}
 
 	private void removePlayerFromArenaAndRestoreState(Player player, boolean winner) {
+		PlayerDataStore storage = PlayerDataStore.getInstance();
 		// remove vote
 		votes.remove(player.getName());
 		// remove bar
@@ -202,33 +202,36 @@ public class PlayerHandler {
 			player.removePotionEffect(effect.getType());
 		}
 		// restore player status
-		plugin.pdata.restorePlayerHunger(player);
-		plugin.pdata.restorePlayerPotionEffects(player);
-		plugin.pdata.restorePlayerArmor(player);
-		plugin.pdata.restorePlayerInventory(player);
+		storage.restorePlayerHunger(player);
+		storage.restorePlayerPotionEffects(player);
+		storage.restorePlayerInventory(player);
 		// reward player before restoring gamemode if player is winner
 		if (winner) {
 			arena.getStructureManager().getRewards().rewardPlayer(player);
 		}
-		plugin.pdata.restorePlayerGameMode(player);
-		// restore location ot teleport to lobby
-		if (arena.getStructureManager().getTeleportDestination() == TeleportDestination.LOBBY && plugin.globallobby.isLobbyLocationWorldAvailable()) {
-			player.teleport(plugin.globallobby.getLobbyLocation());
-			plugin.pdata.clearPlayerLocation(player);
+		storage.restorePlayerGameMode(player);
+		// restore location or teleport to lobby
+		if (arena.getStructureManager().getTeleportDestination() == TeleportDestination.LOBBY && GlobalLobby.getInstance().isLobbyLocationWorldAvailable()) {
+			player.teleport(GlobalLobby.getInstance().getLobbyLocation());
+			storage.clearPlayerLocation(player);
 		} else {
-			plugin.pdata.restorePlayerLocation(player);
+			storage.restorePlayerLocation(player);
 		}
 		// update inventory
 		player.updateInventory();
 	}
 
 	// vote for game start
-	private HashSet<String> votes = new HashSet<String>();
+	private final HashSet<String> votes = new HashSet<String>();
 
 	public boolean vote(Player player) {
 		if (!votes.contains(player.getName())) {
 			votes.add(player.getName());
-			if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getCount() > 1 && votes.size() >= arena.getPlayersManager().getCount() * arena.getStructureManager().getVotePercent()) {
+			if (
+				!arena.getStatusManager().isArenaStarting() &&
+				arena.getPlayersManager().getCount() > 1 &&
+				(votes.size() >= arena.getPlayersManager().getCount() * arena.getStructureManager().getVotePercent())
+			) {
 				arena.getGameHandler().runArenaCountdown();
 			}
 			return true;

@@ -29,11 +29,15 @@ import tntrun.TNTRun;
 
 public class GlobalLobby {
 
-	private File lobbyFile;
-
-	public GlobalLobby(TNTRun plugin) {
-		lobbyFile = new File(plugin.getDataFolder() + File.separator + "lobby.yml");
+	private GlobalLobby() {
 	}
+
+	private static final GlobalLobby instance = new GlobalLobby();
+	public static GlobalLobby getInstance() {
+		return instance;
+	}
+
+	private File lobbyFile = new File(TNTRun.getInstance().getDataFolder(), "lobby.yml");
 
 	private LobbyLocation lobbyLocation;
 

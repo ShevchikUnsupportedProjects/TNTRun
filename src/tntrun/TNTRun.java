@@ -39,49 +39,49 @@ import tntrun.signs.editor.SignEditor;
 
 public class TNTRun extends JavaPlugin {
 
-	private Logger log;
+	private static TNTRun instance;
+	public static TNTRun getInstance() {
+		return instance;
+	}
 
-	public PlayerDataStore pdata;
-	public ArenasManager amanager;
-	public GlobalLobby globallobby;
-	public SignEditor signEditor;
+	private Logger log;
 
 	@Override
 	public void onEnable() {
+		instance = this;
 		log = getLogger();
-		signEditor = new SignEditor(this);
-		globallobby = new GlobalLobby(this);
-		Messages.loadMessages(this);
-		Bars.loadBars(this);
-		pdata = new PlayerDataStore();
-		amanager = new ArenasManager();
-		getCommand("tntrunsetup").setExecutor(new SetupCommandsHandler(this));
-		getCommand("tntrun").setExecutor(new GameCommands(this));
-		getCommand("tntrunconsole").setExecutor(new ConsoleCommands(this));
-		getServer().getPluginManager().registerEvents(new PlayerStatusHandler(this), this);
-		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
-		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
-		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
+		Messages.loadMessages();
+		Bars.loadBars();
+		ArenasManager.getInstance();
+		PlayerDataStore.getInstance();
+		SignEditor.getInstance();
+		GlobalLobby.getInstance();
+		getCommand("tntrunsetup").setExecutor(new SetupCommandsHandler());
+		getCommand("tntrun").setExecutor(new GameCommands());
+		getCommand("tntrunconsole").setExecutor(new ConsoleCommands());
+		getServer().getPluginManager().registerEvents(new PlayerStatusHandler(), this);
+		getServer().getPluginManager().registerEvents(new RestrictionHandler(), this);
+		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(), this);
+		getServer().getPluginManager().registerEvents(new SignHandler(), this);
 		// load arenas
 		final File arenasfolder = new File(getDataFolder() + File.separator + "arenas");
 		arenasfolder.mkdirs();
-		final TNTRun instance = this;
 		getServer().getScheduler().scheduleSyncDelayedTask(
 			this,
 			new Runnable() {
 				@Override
 				public void run() {
 					// load globallobyy
-					globallobby.loadFromConfig();
+					GlobalLobby.getInstance().loadFromConfig();
 					// load arenas
 					for (String file : arenasfolder.list()) {
-						Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
+						Arena arena = new Arena(file.substring(0, file.length() - 4));
 						arena.getStructureManager().loadFromConfig();
 						arena.getStatusManager().enableArena();
-						amanager.registerArena(arena);
+						ArenasManager.getInstance().registerArena(arena);
 					}
 					// load signs
-					signEditor.loadConfiguration();
+					SignEditor.getInstance().loadConfiguration();
 				}
 			},
 			20
@@ -91,20 +91,16 @@ public class TNTRun extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		// save arenas
-		for (Arena arena : amanager.getArenas()) {
+		for (Arena arena : ArenasManager.getInstance().getArenas()) {
 			arena.getStatusManager().disableArena();
 			arena.getStructureManager().saveToConfig();
 		}
 		// save lobby
-		globallobby.saveToConfig();
-		globallobby = null;
+		GlobalLobby.getInstance().saveToConfig();
 		// save signs
-		signEditor.saveConfiguration();
-		signEditor = null;
-		// unload other things
-		pdata = null;
-		amanager = null;
-		log = null;
+		SignEditor.getInstance().saveConfiguration();
+		// set instance to null
+		instance = null;
 	}
 
 	public void logSevere(String message) {

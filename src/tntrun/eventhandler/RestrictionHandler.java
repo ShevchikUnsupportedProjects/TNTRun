@@ -29,26 +29,23 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
-import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.datahandler.ArenasManager;
 
 public class RestrictionHandler implements Listener {
 
-	private TNTRun plugin;
-
-	public RestrictionHandler(TNTRun plugin) {
-		this.plugin = plugin;
-	}
-
-	private HashSet<String> allowedcommands = new HashSet<String>(
-		Arrays.asList("/tntrun leave", "/tntrun vote", "/tr leave", "/tr vote")
+	private final HashSet<String> allowedcommands = new HashSet<String>(
+		Arrays.asList(
+			"/tntrun leave", "/tntrun vote", "/tr leave", "/tr vote",
+			"/tntrun:tntrun leave", "/tntrun:tntrun vote", "/tntrun:tr leave", "/tntrun:tr vote"
+		)
 	);
 
 	// player should not be able to issue any commands besides /tr leave and /tr vote while in arena
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
 		Player player = e.getPlayer();
-		Arena arena = plugin.amanager.getPlayerArena(player.getName());
+		Arena arena = ArenasManager.getInstance().getPlayerArena(player.getName());
 		// ignore if player is not in arena
 		if (arena == null) {
 			return;
@@ -67,7 +64,7 @@ public class RestrictionHandler implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerBlockBreak(BlockBreakEvent e) {
 		Player player = e.getPlayer();
-		Arena arena = plugin.amanager.getPlayerArena(player.getName());
+		Arena arena = ArenasManager.getInstance().getPlayerArena(player.getName());
 		// ignore if player is not in arena
 		if (arena == null) {
 			return;
@@ -79,7 +76,7 @@ public class RestrictionHandler implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerBlockPlace(BlockPlaceEvent e) {
 		Player player = e.getPlayer();
-		Arena arena = plugin.amanager.getPlayerArena(player.getName());
+		Arena arena = ArenasManager.getInstance().getPlayerArena(player.getName());
 		// ignore if player is not in arena
 		if (arena == null) {
 			return;
@@ -91,7 +88,7 @@ public class RestrictionHandler implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerItemDrop(PlayerDropItemEvent e) {
 		Player player = e.getPlayer();
-		Arena arena = plugin.amanager.getPlayerArena(player.getName());
+		Arena arena = ArenasManager.getInstance().getPlayerArena(player.getName());
 		// ignore if player is not in arena
 		if (arena == null) {
 			return;

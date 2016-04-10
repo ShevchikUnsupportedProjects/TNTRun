@@ -28,14 +28,11 @@ import tntrun.arena.structure.StructureManager;
 
 public class Arena {
 
-	public TNTRun plugin;
-
-	public Arena(String name, TNTRun plugin) {
+	public Arena(String name) {
 		arenaname = name;
-		this.plugin = plugin;
-		arenagh = new GameHandler(plugin, this);
-		arenaph = new PlayerHandler(plugin, this);
-		arenafile = new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arenaname + ".yml");
+		arenagh = new GameHandler(this);
+		arenaph = new PlayerHandler(this);
+		arenafile = new File(TNTRun.getInstance().getDataFolder() + File.separator + "arenas" + File.separator + arenaname + ".yml");
 	}
 
 	private String arenaname;

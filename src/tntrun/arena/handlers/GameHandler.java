@@ -28,14 +28,12 @@ import tntrun.arena.Arena;
 import tntrun.arena.structure.Kits;
 import tntrun.bars.Bars;
 import tntrun.messages.Messages;
+import tntrun.signs.editor.SignEditor;
 
 public class GameHandler {
 
-	private TNTRun plugin;
-	private Arena arena;
-
-	public GameHandler(TNTRun plugin, Arena arena) {
-		this.plugin = plugin;
+	private final Arena arena;
+	public GameHandler(Arena arena) {
 		this.arena = arena;
 		count = arena.getStructureManager().getCountdown();
 	}
@@ -45,7 +43,7 @@ public class GameHandler {
 
 	public void startArenaAntiLeaveHandler() {
 		leavetaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(
-			plugin,
+			TNTRun.getInstance(),
 			new Runnable() {
 				@Override
 				public void run() {
@@ -76,7 +74,7 @@ public class GameHandler {
 	public void runArenaCountdown() {
 		arena.getStatusManager().setStarting(true);
 		runtaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(
-			plugin,
+			TNTRun.getInstance(),
 			new Runnable() {
 				@Override
 				public void run() {
@@ -131,7 +129,7 @@ public class GameHandler {
 		for (Player player : arena.getPlayersManager().getPlayers()) {
 			Messages.sendMessage(player, message);
 		}
-		plugin.signEditor.modifySigns(arena.getArenaName());
+		SignEditor.getInstance().modifySigns(arena.getArenaName());
 		Kits kits = arena.getStructureManager().getKits();
 		if (kits.getKits().size() > 0) {
 			String[] kitnames = kits.getKits().toArray(new String[kits.getKits().size()]);
@@ -141,7 +139,7 @@ public class GameHandler {
 		}
 		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
 		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(
-			plugin,
+			TNTRun.getInstance(),
 			new Runnable() {
 				@Override
 				public void run() {
@@ -183,7 +181,7 @@ public class GameHandler {
 		}
 		arena.getStatusManager().setRunning(false);
 		Bukkit.getScheduler().cancelTask(arenahandler);
-		plugin.signEditor.modifySigns(arena.getArenaName());
+		SignEditor.getInstance().modifySigns(arena.getArenaName());
 		if (arena.getStatusManager().isArenaEnabled()) {
 			startArenaRegen();
 		}
@@ -225,19 +223,19 @@ public class GameHandler {
 		// set arena is regenerating status
 		arena.getStatusManager().setRegenerating(true);
 		// modify signs
-		plugin.signEditor.modifySigns(arena.getArenaName());
+		SignEditor.getInstance().modifySigns(arena.getArenaName());
 		// schedule gamezone regen
-		int delay = arena.getStructureManager().getGameZone().regen(arena.plugin);
+		int delay = arena.getStructureManager().getGameZone().regen();
 		// regen finished
 		Bukkit.getScheduler().scheduleSyncDelayedTask(
-			arena.plugin,
+			TNTRun.getInstance(),
 			new Runnable() {
 				@Override
 				public void run() {
 					// set not regenerating status
 					arena.getStatusManager().setRegenerating(false);
 					// modify signs
-					plugin.signEditor.modifySigns(arena.getArenaName());
+					SignEditor.getInstance().modifySigns(arena.getArenaName());
 				}
 			},
 			delay

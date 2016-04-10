@@ -24,23 +24,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.datahandler.ArenasManager;
 import tntrun.messages.Messages;
 
 public class PlayerLeaveArenaChecker implements Listener {
-
-	private TNTRun plugin;
-
-	public PlayerLeaveArenaChecker(TNTRun plugin) {
-		this.plugin = plugin;
-	}
 
 	// remove player from arena on quit
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerQuitEvent(PlayerQuitEvent e) {
 		Player player = e.getPlayer();
-		Arena arena = plugin.amanager.getPlayerArena(player.getName());
+		Arena arena = ArenasManager.getInstance().getPlayerArena(player.getName());
 		// ignore if player is not in arena
 		if (arena == null) {
 			return;
@@ -52,7 +46,7 @@ public class PlayerLeaveArenaChecker implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerDeathEvent(PlayerDeathEvent e) {
 		Player player = e.getEntity();
-		Arena arena = plugin.amanager.getPlayerArena(player.getName());
+		Arena arena = ArenasManager.getInstance().getPlayerArena(player.getName());
 		// ignore if player is not in arena
 		if (arena == null) {
 			return;

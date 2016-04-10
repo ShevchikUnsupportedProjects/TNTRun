@@ -22,17 +22,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.datahandler.ArenasManager;
+import tntrun.lobby.GlobalLobby;
 import tntrun.messages.Messages;
 
 public class GameCommands implements CommandExecutor {
-
-	private TNTRun plugin;
-
-	public GameCommands(TNTRun plugin) {
-		this.plugin = plugin;
-	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -53,9 +48,9 @@ public class GameCommands implements CommandExecutor {
 			sender.sendMessage("§a/tr cmds §f- §cView all commands");
 			return true;
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("lobby")) {
-			if (plugin.globallobby.isLobbyLocationSet()) {
-				if (plugin.globallobby.isLobbyLocationWorldAvailable()) {
-					player.teleport(plugin.globallobby.getLobbyLocation());
+			if (GlobalLobby.getInstance().isLobbyLocationSet()) {
+				if (GlobalLobby.getInstance().isLobbyLocationWorldAvailable()) {
+					player.teleport(GlobalLobby.getInstance().getLobbyLocation());
 					Messages.sendMessage(player, Messages.teleporttolobby);
 				} else {
 					player.sendMessage("Lobby world is unloaded, can't join lobby");
@@ -70,7 +65,7 @@ public class GameCommands implements CommandExecutor {
 		else if (args.length == 1 && args[0].equalsIgnoreCase("list")) {
 			StringBuilder message = new StringBuilder(200);
 			message.append(Messages.availablearenas);
-			for (Arena arena : plugin.amanager.getArenas()) {
+			for (Arena arena : ArenasManager.getInstance().getArenas()) {
 				if (arena.getStatusManager().isArenaEnabled()) {
 					message.append("&a" + arena.getArenaName() + " ");
 				} else {
@@ -86,7 +81,7 @@ public class GameCommands implements CommandExecutor {
 				player.sendMessage("You can join the game only by using a sign");
 				return true;
 			}
-			Arena arena = plugin.amanager.getArenaByName(args[1]);
+			Arena arena = ArenasManager.getInstance().getArenaByName(args[1]);
 			if (arena != null) {
 				boolean canJoin = arena.getPlayerHandler().checkJoin(player);
 				if (canJoin) {
@@ -100,7 +95,7 @@ public class GameCommands implements CommandExecutor {
 		}
 		// leave arena
 		else if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {
-			Arena arena = plugin.amanager.getPlayerArena(player.getName());
+			Arena arena = ArenasManager.getInstance().getPlayerArena(player.getName());
 			if (arena != null) {
 				arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 				return true;
@@ -139,7 +134,7 @@ public class GameCommands implements CommandExecutor {
 		}
 		// vote
 		else if (args.length == 1 && args[0].equalsIgnoreCase("vote")) {
-			Arena arena = plugin.amanager.getPlayerArena(player.getName());
+			Arena arena = ArenasManager.getInstance().getPlayerArena(player.getName());
 			if (arena != null) {
 				if (arena.getPlayerHandler().vote(player)) {
 					Messages.sendMessage(player, Messages.playervotedforstart);

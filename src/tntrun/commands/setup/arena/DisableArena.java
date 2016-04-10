@@ -19,20 +19,15 @@ package tntrun.commands.setup.arena;
 
 import org.bukkit.entity.Player;
 
-import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.datahandler.ArenasManager;
 
 public class DisableArena implements CommandHandlerInterface {
 
-	private TNTRun plugin;
-	public DisableArena(TNTRun plugin) {
-		this.plugin = plugin;
-	}
-
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.amanager.getArenaByName(args[0]);
+		Arena arena = ArenasManager.getInstance().getArenaByName(args[0]);
 		if (arena != null) {
 			if (arena.getStatusManager().isArenaEnabled()) {
 				arena.getStatusManager().disableArena();

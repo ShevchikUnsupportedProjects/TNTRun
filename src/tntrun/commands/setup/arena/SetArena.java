@@ -19,24 +19,22 @@ package tntrun.commands.setup.arena;
 
 import org.bukkit.entity.Player;
 
-import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.datahandler.ArenasManager;
 import tntrun.selectionget.PlayerCuboidSelection;
 import tntrun.selectionget.PlayerSelection;
 
 public class SetArena implements CommandHandlerInterface {
 
-	private TNTRun plugin;
 	private PlayerSelection selection;
-	public SetArena(TNTRun plugin, PlayerSelection selection) {
-		this.plugin = plugin;
+	public SetArena(PlayerSelection selection) {
 		this.selection = selection;
 	}
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.amanager.getArenaByName(args[0]);
+		Arena arena = ArenasManager.getInstance().getArenaByName(args[0]);
 		if (arena != null) {
 			if (arena.getStatusManager().isArenaEnabled()) {
 				player.sendMessage("Disable arena first");

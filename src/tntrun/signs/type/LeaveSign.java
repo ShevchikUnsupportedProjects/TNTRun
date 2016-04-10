@@ -22,17 +22,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.datahandler.ArenasManager;
 import tntrun.messages.Messages;
 
 public class LeaveSign implements SignType {
-
-	private TNTRun plugin;
-
-	public LeaveSign(TNTRun plugin) {
-		this.plugin = plugin;
-	}
 
 	@Override
 	public void handleCreation(SignChangeEvent e) {
@@ -42,7 +36,7 @@ public class LeaveSign implements SignType {
 
 	@Override
 	public void handleClick(PlayerInteractEvent e) {
-		Arena arena = plugin.amanager.getPlayerArena(e.getPlayer().getName());
+		Arena arena = ArenasManager.getInstance().getPlayerArena(e.getPlayer().getName());
 		if (arena != null) {
 			arena.getPlayerHandler().leavePlayer(e.getPlayer(), Messages.playerlefttoplayer, Messages.playerlefttoothers);
 			e.setCancelled(true);

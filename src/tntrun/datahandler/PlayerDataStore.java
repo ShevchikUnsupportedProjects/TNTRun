@@ -29,23 +29,24 @@ import org.bukkit.potion.PotionEffect;
 
 public class PlayerDataStore {
 
-	private HashMap<String, ItemStack[]> plinv = new HashMap<String, ItemStack[]>();
-	private HashMap<String, ItemStack[]> plarmor = new HashMap<String, ItemStack[]>();
-	private HashMap<String, Collection<PotionEffect>> pleffects = new HashMap<String, Collection<PotionEffect>>();
-	private HashMap<String, Location> plloc = new HashMap<String, Location>();
-	private HashMap<String, Integer> plhunger = new HashMap<String, Integer>();
-	private HashMap<String, GameMode> plgamemode = new HashMap<String, GameMode>();
+	private PlayerDataStore() {
+	}
+
+	private static final PlayerDataStore instance = new PlayerDataStore();
+	public static PlayerDataStore getInstance() {
+		return instance;
+	}
+
+	private final HashMap<String, ItemStack[]> plinv = new HashMap<String, ItemStack[]>();
+	private final HashMap<String, Collection<PotionEffect>> pleffects = new HashMap<String, Collection<PotionEffect>>();
+	private final HashMap<String, Location> plloc = new HashMap<String, Location>();
+	private final HashMap<String, Integer> plhunger = new HashMap<String, Integer>();
+	private final HashMap<String, GameMode> plgamemode = new HashMap<String, GameMode>();
 
 	public void storePlayerInventory(Player player) {
 		PlayerInventory pinv = player.getInventory();
 		plinv.put(player.getName(), pinv.getContents());
 		pinv.clear();
-	}
-
-	public void storePlayerArmor(Player player) {
-		PlayerInventory pinv = player.getInventory();
-		plarmor.put(player.getName(), pinv.getArmorContents());
-		pinv.setArmorContents(null);
 	}
 
 	public void storePlayerPotionEffects(Player player) {
@@ -73,11 +74,6 @@ public class PlayerDataStore {
 	public void restorePlayerInventory(Player player) {
 		player.getInventory().setContents(plinv.get(player.getName()));
 		plinv.remove(player.getName());
-	}
-
-	public void restorePlayerArmor(Player player) {
-		player.getInventory().setArmorContents(plarmor.get(player.getName()));
-		plarmor.remove(player.getName());
 	}
 
 	public void restorePlayerPotionEffects(Player player) {

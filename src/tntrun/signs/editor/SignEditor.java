@@ -31,18 +31,20 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.datahandler.ArenasManager;
 
 public class SignEditor {
 
-	private TNTRun plugin;
-	private HashMap<String, HashSet<SignInfo>> signs = new HashMap<String, HashSet<SignInfo>>();
-
-	private File configfile;
-
-	public SignEditor(TNTRun plugin) {
-		this.plugin = plugin;
-		configfile = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "signs.yml");
+	private SignEditor() {
 	}
+
+	private static final SignEditor instance = new SignEditor();
+	public static SignEditor getInstance() {
+		return instance;
+	}
+
+	private final HashMap<String, HashSet<SignInfo>> signs = new HashMap<String, HashSet<SignInfo>>();
+	private final File configfile = new File(TNTRun.getInstance().getDataFolder().getAbsolutePath(), "signs.yml");
 
 	public void addArena(String arena) {
 		if (!signs.containsKey(arena)) {
@@ -73,7 +75,7 @@ public class SignEditor {
 			sign.update();
 		}
 		addArena(arena);
-		getSigns(arena).remove(getSignInfo(block, arena));
+		getSigns(arena).remove(new SignInfo(block));
 	}
 
 	public HashSet<Block> getSignsBlocks(String arena) {
@@ -85,15 +87,6 @@ public class SignEditor {
 			}
 		}
 		return signs;
-	}
-
-	private SignInfo getSignInfo(Block block, String arena) {
-		for (SignInfo si : getSigns(arena)) {
-			if (si.getBlock().equals(block)) {
-				return si;
-			}
-		}
-		return new SignInfo(block);
 	}
 
 	private void addSignInfo(SignInfo si, String arena) {
@@ -108,7 +101,7 @@ public class SignEditor {
 
 	public void modifySigns(String arenaname) {
 		try {
-			Arena arena = plugin.amanager.getArenaByName(arenaname);
+			Arena arena = ArenasManager.getInstance().getArenaByName(arenaname);
 			if (arena == null) {
 				return;
 			}

@@ -30,7 +30,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import tntrun.TNTRun;
 import tntrun.messages.Messages;
 import tntrun.signs.type.JoinSign;
 import tntrun.signs.type.LeaveSign;
@@ -40,11 +39,10 @@ import tntrun.signs.type.VoteSign;
 public class SignHandler implements Listener {
 
 	private HashMap<String, SignType> signs = new HashMap<String, SignType>();
-
-	public SignHandler(TNTRun plugin) {
-		signs.put("[join]", new JoinSign(plugin));
-		signs.put("[leave]", new LeaveSign(plugin));
-		signs.put("[vote]", new VoteSign(plugin));
+	{
+		signs.put("[join]", new JoinSign());
+		signs.put("[leave]", new LeaveSign());
+		signs.put("[vote]", new VoteSign());
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

@@ -23,18 +23,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 
-import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.bars.Bars;
+import tntrun.datahandler.ArenasManager;
 import tntrun.messages.Messages;
 
 public class ConsoleCommands implements CommandExecutor {
-
-	private TNTRun plugin;
-
-	public ConsoleCommands(TNTRun plugin) {
-		this.plugin = plugin;
-	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -45,7 +39,7 @@ public class ConsoleCommands implements CommandExecutor {
 		// handle commands
 		// disable arena
 		else if (args.length == 2 && args[1].equalsIgnoreCase("disable")) {
-			Arena arena = plugin.amanager.getArenaByName(args[0]);
+			Arena arena = ArenasManager.getInstance().getArenaByName(args[0]);
 			if (arena != null) {
 				arena.getStatusManager().disableArena();
 				sender.sendMessage("Arena disabled");
@@ -56,7 +50,7 @@ public class ConsoleCommands implements CommandExecutor {
 		}
 		// enable arena
 		else if (args.length == 2 && args[1].equalsIgnoreCase("enable")) {
-			Arena arena = plugin.amanager.getArenaByName(args[0]);
+			Arena arena = ArenasManager.getInstance().getArenaByName(args[0]);
 			if (arena != null) {
 				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Arena already enabled.");
@@ -74,13 +68,13 @@ public class ConsoleCommands implements CommandExecutor {
 		}
 		// reload messages
 		else if (args.length == 1 && args[0].equalsIgnoreCase("reloadmsg")) {
-			Messages.loadMessages(plugin);
+			Messages.loadMessages();
 			sender.sendMessage("Messages reloaded");
 			return true;
 		}
 		// reload bars
 		else if (args.length == 1 && args[0].equalsIgnoreCase("reloadbars")) {
-			Bars.loadBars(plugin);
+			Bars.loadBars();
 			sender.sendMessage("Bars reloaded");
 			return true;
 		}

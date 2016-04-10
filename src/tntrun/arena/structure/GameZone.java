@@ -35,7 +35,7 @@ import tntrun.arena.Arena;
 
 public class GameZone {
 
-	private HashSet<Block> blockstodestroy = new HashSet<Block>();
+	private final HashSet<Block> blockstodestroy = new HashSet<Block>();
 
 	private final int SCAN_DEPTH = 1;
 	public void destroyBlock(Location loc, final Arena arena) {
@@ -53,7 +53,7 @@ public class GameZone {
 			if (!blockstodestroy.contains(fblock)) {
 				blockstodestroy.add(fblock);
 				Bukkit.getScheduler().scheduleSyncDelayedTask(
-					arena.plugin,
+					TNTRun.getInstance(),
 					new Runnable() {
 						@Override
 						public void run() {
@@ -110,11 +110,11 @@ public class GameZone {
 	}
 
 	private final int MAX_BLOCKS_PER_TICK = 10;
-	public int regen(TNTRun plugin) {
+	public int regen() {
 		final Iterator<BlockState> bsit = blocks.iterator();
 		int ticks = 1;
 		for (;ticks <= (blocks.size() / MAX_BLOCKS_PER_TICK) + 1; ticks++) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
+			Bukkit.getScheduler().scheduleSyncDelayedTask(TNTRun.getInstance(),
 				new Runnable() {
 					@Override
 					public void run() {

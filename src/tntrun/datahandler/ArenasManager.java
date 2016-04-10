@@ -25,6 +25,14 @@ import tntrun.arena.Arena;
 
 public class ArenasManager {
 
+	private ArenasManager() {
+	}
+
+	private static final ArenasManager instance = new ArenasManager();
+	public static ArenasManager getInstance() {
+		return instance;
+	}
+
 	private HashMap<String, Arena> arenanames = new HashMap<String, Arena>();
 
 	public void registerArena(Arena arena) {

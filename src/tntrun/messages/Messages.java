@@ -71,8 +71,8 @@ public class Messages {
 		}
 	}
 
-	public static void loadMessages(TNTRun plugin) {
-		File messageconfig = new File(plugin.getDataFolder(), "configmsg.yml");
+	public static void loadMessages() {
+		File messageconfig = new File(TNTRun.getInstance().getDataFolder(), "configmsg.yml");
 		FileConfiguration config = YamlConfiguration.loadConfiguration(messageconfig);
 		nopermission = config.getString("nopermission", nopermission);
 		teleporttolobby = config.getString("teleporttolobby", teleporttolobby);
