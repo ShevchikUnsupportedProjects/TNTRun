@@ -17,6 +17,8 @@
 
 package tntrun.arena.structure;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -90,7 +92,7 @@ public class GameZone {
 		return null;
 	}
 
-	private LinkedList<BlockState> blocks = new LinkedList<BlockState>();
+	private final ArrayList<BlockState> blocks = new ArrayList<BlockState>(1000);
 
 	private void removeGLBlocks(Block block) {
 		blocks.add(block.getState());
@@ -101,12 +103,10 @@ public class GameZone {
 	}
 
 	public void regenNow() {
-		Iterator<BlockState> bsit = blocks.iterator();
-		while (bsit.hasNext()) {
-			BlockState bs = bsit.next();
+		for (BlockState bs : blocks) {
 			bs.update(true);
-			bsit.remove();
 		}
+		blocks.clear();
 	}
 
 	private final int MAX_BLOCKS_PER_TICK = 10;
