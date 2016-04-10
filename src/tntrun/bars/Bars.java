@@ -38,7 +38,7 @@ public class Bars {
 	public static String starting = "&6Arena starts in:&r {SECONDS} seconds";
 	public static String playing = "&6Time left:&r {SECONDS} &6Players in game count:&r {COUNT}";
 
-	private static final HashMap<Player, BossBar> bossbars = new HashMap<>();
+	private static final HashMap<Player, BossBar> bossbars = new HashMap<Player, BossBar>();
 
 	public static void setBar(Player player, String message, int count, int seconds, float percent) {
 		try {
