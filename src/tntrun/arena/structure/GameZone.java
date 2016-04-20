@@ -17,11 +17,9 @@
 
 package tntrun.arena.structure;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -39,7 +37,7 @@ public class GameZone {
 
 	private final HashSet<Block> blockstodestroy = new HashSet<Block>();
 
-	private final int SCAN_DEPTH = 1;
+	private static final int SCAN_DEPTH = 1;
 	public void destroyBlock(Location loc, final Arena arena) {
 		int y = loc.getBlockY();
 		Block block = null;
@@ -52,8 +50,7 @@ public class GameZone {
 		}
 		if (block != null) {
 			final Block fblock = block;
-			if (!blockstodestroy.contains(fblock)) {
-				blockstodestroy.add(fblock);
+			if (blockstodestroy.add(fblock)) {
 				Bukkit.getScheduler().scheduleSyncDelayedTask(
 					TNTRun.getInstance(),
 					new Runnable() {
@@ -70,7 +67,7 @@ public class GameZone {
 		}
 	}
 
-	private static double PLAYER_BOUNDINGBOX_ADD = 0.3;
+	private static final double PLAYER_BOUNDINGBOX_ADD = 0.3;
 	private Block getBlockUnderPlayer(int y, Location location) {
 		PlayerPosition loc = new PlayerPosition(location.getX(), y, location.getZ());
 		Block b11 = loc.getBlock(location.getWorld(), +PLAYER_BOUNDINGBOX_ADD, -PLAYER_BOUNDINGBOX_ADD);
@@ -109,7 +106,7 @@ public class GameZone {
 		blocks.clear();
 	}
 
-	private final int MAX_BLOCKS_PER_TICK = 10;
+	private static final int MAX_BLOCKS_PER_TICK = 10;
 	public int regen() {
 		final Iterator<BlockState> bsit = blocks.iterator();
 		int ticks = 1;
