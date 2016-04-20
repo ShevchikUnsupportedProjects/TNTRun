@@ -68,8 +68,8 @@ public class GameHandler {
 	}
 
 	// arena start handler (running status updater)
-	int runtaskid;
-	int count;
+	protected int runtaskid;
+	protected int count;
 
 	public void runArenaCountdown() {
 		arena.getStatusManager().setStarting(true);
@@ -78,26 +78,22 @@ public class GameHandler {
 			new Runnable() {
 				@Override
 				public void run() {
-					// check if countdown should be stopped for some various reasons
 					if (arena.getPlayersManager().getCount() < arena.getStructureManager().getMinPlayers()) {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getCount(), 0, arena.getPlayersManager().getCount() * 100 / arena.getStructureManager().getMinPlayers());
 						}
 						stopArenaCountdown();
-					} else
-					// start arena if countdown is 0
-					if (count == 0) {
+					} else if (count == 0) {
 						stopArenaCountdown();
 						startArena();
-					}else if(count<11){
+					} else if (count < 11) {
 						String message = Messages.arenacountdown;
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							Messages.sendMessage(player, message);
 						}
-					}else
-					// sending bars
-					{
+						count--;
+					} else {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown());
 							player.setLevel(count);
