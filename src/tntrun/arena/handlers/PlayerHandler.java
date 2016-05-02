@@ -165,7 +165,7 @@ public class PlayerHandler {
 			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
 				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers(), plugin);
 				// play sound
-				oplayer.playSound(oplayer.getLocation(), Sound.NOTE_PLING, 1, 1);
+				oplayer.playSound(oplayer.getLocation(), Sound.ENTITY_ZOMBIE_DEATH, 1, 1);
 			}
 		}
 		// check for game start

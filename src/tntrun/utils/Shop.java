@@ -32,7 +32,7 @@ public class Shop implements Listener{
 		
 		invsize = pl.getConfig().getInt("shop.size");
 		invname = pl.getConfig().getString("shop.name").replace("&", "§");
-	}
+	}  
 	
 	public static HashMap<Integer, Integer> itemSlot = new HashMap<Integer, Integer>();
 	public static HashMap<Player, ArrayList<ItemStack>> pitems = new HashMap<Player, ArrayList<ItemStack>>();
@@ -101,7 +101,7 @@ public class Shop implements Listener{
 	          String permission = cfg.getString(kit + ".permission");
 	          if(bought.contains(p)){
 	        	  p.sendMessage(Messages.alreadyboughtitem.replace("&", "§"));
-	        	  p.playSound(p.getLocation(), Sound.WITHER_HURT, 1, (float) 0.001);
+	        	  p.playSound(p.getLocation(), Sound.ENTITY_CHICKEN_HURT, 1, (float) 0.001);
 	        	  return;
 	          }
 	          if (p.hasPermission(permission)) {
@@ -111,7 +111,7 @@ public class Shop implements Listener{
 	        	  if(cfg.getInt(kit + ".ID") == 288){
 						if((pl.getConfig().getInt("shop.doublejump.maxdoublejumps") <= pl.getConfig().getInt("doublejumps." + p.getName()))){
 				        	  p.sendMessage(Messages.alreadyboughtitem.replace("&", "§"));
-				        	  p.playSound(p.getLocation(), Sound.WITHER_HURT, 1, (float) 0.001);
+				        	  p.playSound(p.getLocation(), Sound.ENTITY_CHICKEN_HURT, 1, (float) 0.001);
 				        	  return;
 						}
 	        	  }
@@ -119,10 +119,10 @@ public class Shop implements Listener{
 	        	  if(hasMoney(cost, p)) {
 	        		  p.sendMessage(Messages.playerboughtitem.replace("&", "§").replace("{ITEM}", title).replace("{MONEY}", cost + ""));
 	        		  p.sendMessage(Messages.playerboughtwait.replace("&", "§"));
-	        		  p.playSound(p.getLocation(), Sound.LEVEL_UP, 1, 1);
+	        		  p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
 	        	  }else{
 	        		  p.sendMessage(Messages.notenoughtmoney.replace("&", "§").replace("{MONEY}", cost + ""));
-	        		  p.playSound(p.getLocation(), Sound.WITHER_HURT, 1, (float) 0.001);
+	        		  p.playSound(p.getLocation(), Sound.ENTITY_CHICKEN_HURT, 1, (float) 0.001);
 	        		  return;
 	        	  }
 		          if(cfg.getInt(kit + ".ID") == 288){
@@ -139,7 +139,7 @@ public class Shop implements Listener{
 	          } else {
 	            p.closeInventory();
 	            p.sendMessage(Messages.nopermission.replace("&", "§"));
-	            p.playSound(p.getLocation(), Sound.WITHER_HURT, 1, (float) 0.001);
+	            p.playSound(p.getLocation(), Sound.ENTITY_CHICKEN_HURT, 1, (float) 0.001);
 	          }
 	        }
 	      }
@@ -155,7 +155,7 @@ public class Shop implements Listener{
 					economy = economyProvider.getProvider();
 				}
 			}
-			
+			 
 			if (economy != null) {
 				Economy econ = (Economy) economy;
 				double pmoney = econ.getBalance(player.getName());

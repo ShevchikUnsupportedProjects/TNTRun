@@ -118,7 +118,7 @@ public class GameHandler {
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							player.teleport(arena.getStructureManager().getSpawnPoint());
-							player.playSound(player.getLocation(), Sound.CLICK, 1, 5);
+							player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 5);
 							Messages.sendMessage(player, message);
 							try {
 								TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
@@ -131,7 +131,7 @@ public class GameHandler {
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							Messages.sendMessage(player, message);
-							player.playSound(player.getLocation(), Sound.CLICK, 1, 5);
+							player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 5);
 							try {
 								TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
 							} catch (IOException e) {
@@ -143,7 +143,7 @@ public class GameHandler {
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
 				          for (Player all : arena.getPlayersManager().getPlayers()) {
 				        	  Messages.sendMessage(all, message);
-								all.playSound(all.getLocation(), Sound.CLICK, 1, 5);
+								all.playSound(all.getLocation(), Sound.UI_BUTTON_CLICK, 1, 5);
 								try {
 									TitleMsg.sendFullTitle(all, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
 								} catch (IOException e) {
@@ -154,7 +154,7 @@ public class GameHandler {
 					if(count == 5) {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							player.teleport(arena.getStructureManager().getSpawnPoint());
-							player.playSound(player.getLocation(), Sound.CLICK, 1, 5);
+							player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 5);
 						}
 					}
 					// scoreboard
@@ -193,7 +193,7 @@ public class GameHandler {
 			Stats.addPlayedGames(player, 1);
 			player.setAllowFlight(true);
 			Messages.sendMessage(player, message);
-			player.playSound(player.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 1);
+			player.playSound(player.getLocation(), Sound.ENTITY_ENDERDRAGON_GROWL, 1, 1);
 			String[] ids1 = plugin.getConfig().getString("items.shop.ID").split(":");
 			String[] ids2 = plugin.getConfig().getString("items.vote.ID").split(":");
 			String[] ids3 = plugin.getConfig().getString("items.info.ID").split(":");
@@ -420,7 +420,7 @@ public class GameHandler {
 		public void startEnding(final Player player){
 			Stats.addWins(player, 1);
 			for(Player all : Bukkit.getOnlinePlayers()){
-				all.playSound(arena.getStructureManager().getSpawnPoint(), Sound.ENDERDRAGON_DEATH, 999, 999F);
+				all.playSound(arena.getStructureManager().getSpawnPoint(), Sound.ENTITY_ENDERDRAGON_DEATH, 999, 999F);
 				try {
 					TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
 				} catch (IOException e) {
@@ -432,7 +432,7 @@ public class GameHandler {
 				all.sendMessage(message.replace("&", "§"));
 			}
 				for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
-					p.playSound(p.getLocation(), Sound.EXPLODE, 1, 1);
+					p.playSound(p.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1);
 					p.setAllowFlight(true);
 					p.setFlying(true);
 					p.teleport(arena.getStructureManager().getSpawnPoint());
