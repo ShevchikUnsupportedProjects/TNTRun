@@ -269,9 +269,9 @@ public class Title {
 				Object serialized = getMethod(nmsChatSerializer, "a",
 						String.class).invoke(
 						null,
-						"{text:\""
+						"{\"text\":\""
 								+ ChatColor.translateAlternateColorCodes('&',
-										title) + "\",color:"
+										title) + "\",\"color\":"
 								+ titleColor.name().toLowerCase() + "}");
 				packet = packetTitle.getConstructor(packetActions,
 						chatBaseComponent).newInstance(actions[0], serialized);
@@ -280,11 +280,11 @@ public class Title {
 					// Send subtitle if present
 					serialized = getMethod(nmsChatSerializer, "a", String.class)
 							.invoke(null,
-									"{text:\""
+									"{\"text\":\""
 											+ ChatColor
 													.translateAlternateColorCodes(
 															'&', subtitle)
-											+ "\",color:"
+											+ "\",\"color\":"
 											+ subtitleColor.name()
 													.toLowerCase() + "}");
 					packet = packetTitle.getConstructor(packetActions,

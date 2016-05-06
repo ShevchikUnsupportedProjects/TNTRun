@@ -247,9 +247,9 @@ public class Title_1_7_R4 {
 				Object serialized = getMethod(nmsChatSerializer, "a",
 						String.class).invoke(
 						null,
-						"{text:\""
+						"{\"text\":\""
 								+ ChatColor.translateAlternateColorCodes('&',
-										title) + "\",color:"
+										title) + "\",\"color\":"
 								+ titleColor.name().toLowerCase() + "}");
 				packet = packetTitle.getConstructor(packetActions,
 						getNMSClass("IChatBaseComponent")).newInstance(
@@ -259,17 +259,17 @@ public class Title_1_7_R4 {
 					// Send subtitle if present
 					serialized = getMethod(nmsChatSerializer, "a", String.class)
 							.invoke(null,
-									"{text:\""
+									"{\"text\":\""
 											+ ChatColor
 													.translateAlternateColorCodes(
 															'&', subtitle)
-											+ "\",color:"
+											+ "\",\"color\":"
 											+ subtitleColor.name()
 													.toLowerCase() + "}");
 					packet = packetTitle.getConstructor(packetActions,
 							getNMSClass("IChatBaseComponent")).newInstance(
 							actions[1], serialized);
-					sendPacket.invoke(connection, packet);
+					sendPacket.invoke(connection, packet); 
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
