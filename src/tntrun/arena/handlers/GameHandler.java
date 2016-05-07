@@ -120,11 +120,7 @@ public class GameHandler {
 							player.teleport(arena.getStructureManager().getSpawnPoint());
 							player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 5);
 							Messages.sendMessage(player, message);
-							try {
-								TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
+							TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
 						}
 					} else if (count < 11) {
 						String message = Messages.arenacountdown;
@@ -132,11 +128,7 @@ public class GameHandler {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							Messages.sendMessage(player, message);
 							player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 5);
-							try {
-								TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
+							TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
 						}
 					} else if (count % 10 == 0) {
 						String message = Messages.arenacountdown;
@@ -144,11 +136,7 @@ public class GameHandler {
 				          for (Player all : arena.getPlayersManager().getPlayers()) {
 				        	  Messages.sendMessage(all, message);
 								all.playSound(all.getLocation(), Sound.UI_BUTTON_CLICK, 1, 5);
-								try {
-									TitleMsg.sendFullTitle(all, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
+								TitleMsg.sendFullTitle(all, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
 				          }
 				        }
 					if(count == 5) {
@@ -216,11 +204,7 @@ public class GameHandler {
                 }
                 player.updateInventory();
             }
-			try {
-				TitleMsg.sendFullTitle(player, TitleMsg.start, TitleMsg.substart, 20, 20, 20, plugin);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			TitleMsg.sendFullTitle(player, TitleMsg.start, TitleMsg.substart, 20, 20, 20, plugin);
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		Kits kits = arena.getStructureManager().getKits();
@@ -421,11 +405,7 @@ public class GameHandler {
 			Stats.addWins(player, 1);
 			for(Player all : Bukkit.getOnlinePlayers()){
 				all.playSound(arena.getStructureManager().getSpawnPoint(), Sound.ENTITY_ENDERDRAGON_DEATH, 999, 999F);
-				try {
-					TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
 				String message = Messages.playerwonbroadcast;
 				message = message.replace("{PLAYER}", player.getName());
 				message = message.replace("{ARENA}", arena.getArenaName());
