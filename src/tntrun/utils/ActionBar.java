@@ -40,6 +40,10 @@ public class ActionBar {
                 nmsPacketTitle = getNMSClass("PacketPlayOutTitle");
                 nmsTitleAction = getNMSClass("PacketPlayOutTitle$EnumTitleAction");
             }
+        }else if(getVersion().contains("1_9")){
+        	nmsChatSerializer = getNMSClass("IChatBaseComponent$ChatSerializer");
+            nmsPacketTitle = getNMSClass("PacketPlayOutTitle");
+            nmsTitleAction = getNMSClass("PacketPlayOutTitle$EnumTitleAction");
         }
     }
 
@@ -64,7 +68,7 @@ public class ActionBar {
                 Object packet = null;
                 if (getVersion().contains("1_7")) {
                     packet = this.nmsPacketChat.getConstructor(this.nmsChatBaseComponent, Integer.class).newInstance(serializedMessage, (int) 2);
-                } else if (getVersion().contains("1_8")) {
+                } else if (getVersion().contains("1_8") || getVersion().contains("1_9")) {
                     packet = this.nmsPacketChat.getConstructor(this.nmsChatBaseComponent, byte.class).newInstance(serializedMessage, (byte) 2);
                 }
 

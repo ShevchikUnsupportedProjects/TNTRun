@@ -33,6 +33,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -44,6 +45,7 @@ import tntrun.arena.Arena;
 public class GameZone {
 
 	private HashSet<Block> blockstodestroy = new HashSet<Block>();
+	private LinkedList<BlockState> blocks = new LinkedList<BlockState>();
 	
 	public Arena arena;
 	
@@ -86,7 +88,13 @@ public class GameZone {
 	}
 
 	public void regenNow() {
-		final Iterator<String> bsit = B.iterator();
+		Iterator<BlockState> bsi = blocks.iterator();
+		while (bsi.hasNext()) {
+			BlockState bs = bsi.next();
+			bs.update(true);
+			bsi.remove();
+		}
+		/*final Iterator<String> bsit = B.iterator();
 		while (bsit.hasNext()) {
 			String bl = bsit.next();
 			String[] bd = bl.split(":");
@@ -100,12 +108,15 @@ public class GameZone {
 			
 			world.getBlockAt(x, y, z).setTypeId(id);
 			world.getBlockAt(x, y, z).setData(data);
-		}
+			bsit.remove();
+		}*/
 	}
 	
 	private void removeGLBlocks(Block block) {
+		blocks.add(block.getState());
 		saveBlock(block);
 		block = block.getRelative(BlockFace.DOWN);
+		blocks.add(block.getState());
 		saveBlock(block);
 	}
 	
@@ -152,20 +163,29 @@ public class GameZone {
 	private static List<String> B = new LinkedList<>();
 	
 	public void saveBlock(Block b){
-		String block = b.getTypeId() + ":" + b.getData() + ":" + b.getWorld().getName() + 
+		/*String block = b.getTypeId() + ":" + b.getData() + ":" + b.getWorld().getName() + 
 				":" + b.getX() + ":" + b.getY() + ":" + b.getZ();
-		B.add(block);
+		B.add(block);*/
 		b.setType(Material.AIR);
 	}
 	
 	public int regen(){
-		final Iterator<String> bsit = B.iterator();
-		final BukkitTask ta = new BukkitRunnable() {
+		//final Iterator<String> bsi = B.iterator();
+		final Iterator<BlockState> bsit = blocks.iterator();
+		new BukkitRunnable() {
             @Override
             public void run() {
             	for(int i = MAX_BLOCKS_PER_TICK; i >= 0;i--){
-                	while(bsit.hasNext()) {
-    					String bl = bsit.next();
+            		if(bsit.hasNext()){
+            			BlockState bs = bsit.next();
+            			bs.update(true);
+            			bsit.remove();
+            		}else{
+            			TNTRun.getInstance().getLogger().info("Stoped");
+            			cancel();
+            		}
+                	/*if(bsi.hasNext()) {
+    					String bl = bsi.next();
     					String[] bd = bl.split(":");
     					
     					int id = Integer.parseInt(bd[0]);
@@ -177,44 +197,12 @@ public class GameZone {
     					
     					world.getBlockAt(x, y, z).setTypeId(id);
     					world.getBlockAt(x, y, z).setData(data);
-    				}	
+    					bsi.remove();
+    				}*/
             	}
             }
         }.runTaskTimer(TNTRun.getInstance(), 0L, 1L);
-		/*for (;ticks <= (B.size() / MAX_BLOCKS_PER_TICK) + 1; ticks++) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(TNTRun.getInstance(),
-				new Runnable() {
-					@Override
-					public void run() {
-						try{
-							while (bsit.hasNext()) {
-								String bl = bsit.next();
-								String[] bd = bl.split(":");
-								
-								int id = Integer.parseInt(bd[0]);
-								byte data = Byte.parseByte(bd[1]);
-								World world = Bukkit.getWorld(bd[2]);
-								int x = Integer.parseInt(bd[3]);
-								int y = Integer.parseInt(bd[4]);
-								int z = Integer.parseInt(bd[5]);
-								
-								world.getBlockAt(x, y, z).setTypeId(id);
-								world.getBlockAt(x, y, z).setData(data);
-							}
-						}catch(ConcurrentModificationException e){
-							
-						}
-					}
-				},
-				ticks
-			);
-		}*/
-        Bukkit.getScheduler().runTaskLater(TNTRun.getInstance(), new Runnable(){
-        	public void run(){
-        		ta.cancel();
-        	}
-        }, 50L);
-		return 50;
+		return 60;
 	}
 	
 	private static class PlayerPosition {
