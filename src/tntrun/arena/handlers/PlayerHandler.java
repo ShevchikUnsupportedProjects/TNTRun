@@ -161,7 +161,7 @@ public class PlayerHandler {
 			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
 				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers(), plugin);
 				// play sound
-				oplayer.playSound(oplayer.getLocation(), Sound.ENTITY_ZOMBIE_DEATH, 1, 1);
+				TNTRun.getInstance().sound.NOTE_PLING(oplayer, 5, 999);
 			}
 		}
 		// check for game start
@@ -323,7 +323,7 @@ public class PlayerHandler {
 		// update inventory
 		player.updateInventory();
 		// remove fly
-		player.setAllowFlight(false);
+		player.setAllowFlight(true);
 		if(player.getGameMode() == GameMode.CREATIVE){
 			player.setAllowFlight(true);
 		}

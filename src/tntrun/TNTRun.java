@@ -33,6 +33,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import tntrun.arena.Arena;
 import tntrun.utils.Bars;
 import tntrun.utils.Shop;
+import tntrun.utils.Sounds;
+import tntrun.utils.Sounds_1_8;
+import tntrun.utils.Sounds_1_9;
 import tntrun.utils.Stats;
 import tntrun.utils.TitleMsg;
 import tntrun.commands.ConsoleCommands;
@@ -60,6 +63,7 @@ public class TNTRun extends JavaPlugin {
 	public boolean usestats = false;
 	public boolean needUpdate = false;
 	public String[] ver = {"Nothing", "Nothing"};
+	public Sounds sound;
 	
 	public static TNTRun instance;
 
@@ -111,6 +115,13 @@ public class TNTRun extends JavaPlugin {
 		);
 		
 		checkUpdate(true);
+		
+		String version = Bukkit.getBukkitVersion().split("-")[0];
+		if(version.contains("1.9") || version.contains("1.10")){
+			sound = new Sounds_1_9();
+		}else{
+			sound = new Sounds_1_8();
+		}
 		
 	     try {
 	    	 Bukkit.getLogger().info("[TNTRun] Starting Metrics...");
