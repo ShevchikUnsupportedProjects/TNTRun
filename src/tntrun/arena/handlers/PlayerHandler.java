@@ -94,6 +94,7 @@ public class PlayerHandler {
 		}
 		// change player status
 		plugin.pdata.storePlayerGameMode(player);
+		plugin.pdata.storePlayerFlight(player);
 		player.setFlying(false);
 		player.setAllowFlight(false);
 		plugin.pdata.storePlayerLevel(player);
@@ -323,15 +324,21 @@ public class PlayerHandler {
 		// update inventory
 		player.updateInventory();
 		// remove fly
-		player.setAllowFlight(true);
-		if(player.getGameMode() == GameMode.CREATIVE){
-			player.setAllowFlight(true);
-		}
 		if(player.hasPermission("tntrun.fly.everywhere")){
 			player.setAllowFlight(true);
 			player.setFlying(true);
+		}else{
+			player.setAllowFlight(false);
+			player.setFlying(false);
 		}
-		player.setFlying(false);
+		
+		plugin.pdata.restorePlayerFlight(player);
+		
+		if(player.getGameMode() == GameMode.CREATIVE){
+			player.setAllowFlight(true);
+		}
+		
+		
 		// check is in arena 0 players
 		if (arena.getStatusManager().isArenaRunning() && arena.getPlayersManager().getPlayersCount() == 0) {
 			arena.getGameHandler().stopArena();

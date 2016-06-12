@@ -36,11 +36,16 @@ public class PlayerDataStore {
 	private HashMap<String, Integer> plhunger = new HashMap<String, Integer>();
 	private HashMap<String, GameMode> plgamemode = new HashMap<String, GameMode>();
 	private HashMap<String, Integer> pllevel = new HashMap<String, Integer>();
+	private HashMap<String, Boolean> plflight = new HashMap<String, Boolean>();
 
 	public void storePlayerInventory(Player player) {
 		PlayerInventory pinv = player.getInventory();
 		plinv.put(player.getName(), pinv.getContents());
 		pinv.clear();
+	}
+	
+	public void storePlayerFlight(Player player) {
+		plflight.put(player.getName(), player.getAllowFlight());
 	}
 
 	public void storePlayerArmor(Player player) {
@@ -90,6 +95,10 @@ public class PlayerDataStore {
 
 	public void restorePlayerLocation(Player player) {
 		player.teleport(plloc.remove(player.getName()));
+	}
+	
+	public void restorePlayerFlight(Player player) {
+		player.setAllowFlight(plflight.get(player.getName()));
 	}
 
 	public void clearPlayerLocation(Player player) {

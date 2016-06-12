@@ -287,6 +287,7 @@ public class RestrictionHandler implements Listener {
 					p.setFlying(true);
 					p.setAllowFlight(true);
 				}else{
+					p.setAllowFlight(false);
 					p.setFlying(false);
 					e.setCancelled(true);
 				}
