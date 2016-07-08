@@ -141,7 +141,7 @@ public class GameZone {
 		return null;
 	}
 
-	private final int MAX_BLOCKS_PER_TICK = 20;
+	private final int MAX_BLOCKS_PER_TICK = 10;
 	
 	private static List<String> B = new LinkedList<>();
 	
@@ -160,9 +160,13 @@ public class GameZone {
             public void run() {
             	for(int i = MAX_BLOCKS_PER_TICK; i >= 0;i--){
             		if(bsit.hasNext()){
-            			BlockState bs = bsit.next();
-            			bs.update(true);
-            			bsit.remove();
+            			try{
+            				BlockState bs = bsit.next();
+                			bs.update(true);
+                			bsit.remove();
+            			}catch(ConcurrentModificationException ex){
+            				
+            			}
             		}else{
             			cancel();
             		}
