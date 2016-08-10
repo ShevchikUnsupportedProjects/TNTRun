@@ -25,7 +25,6 @@ public class ActionBar {
     private void loadClasses(){
         nmsIChatBaseComponent = getNMSClass("IChatBaseComponent");
         nmsPacketChat = getNMSClass("PacketPlayOutChat");
-
         nmsChatBaseComponent = getNMSClass("IChatBaseComponent");
 
         if (getVersion().contains("1_7")) {
