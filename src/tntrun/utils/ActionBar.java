@@ -16,7 +16,7 @@ public class ActionBar {
     private Class<?> nmsPacketTitle;
     private Class<?> nmsPacketChat;
     private Class<?> nmsChatBaseComponent;
-    private Object nmsIChatBaseComponent;
+    private Object   nmsIChatBaseComponent;
     private final String networkManager = "networkManager";
     private final String handle = "getHandle";
     private final String playerConnection = "playerConnection";
@@ -31,6 +31,7 @@ public class ActionBar {
             nmsChatSerializer = getNMSClass("ChatSerializer");
             return;
         }
+
         if (getVersion().contains("1_8") && getVersion().contains("R1")) {
             nmsChatSerializer = getNMSClass("ChatSerializer");
             nmsPacketTitle = getNMSClass("PacketPlayOutTitle");
