@@ -6,8 +6,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+/*
 import me.tade.trgrenade.Main;
 import me.tade.trgrenade.ParticleEffect;
+*/
 
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -103,6 +105,7 @@ public class GameZone {
 		saveBlock(block);
 	}
 	
+	/*
 	public void removeBlocksGrenade(Location loc) {
 		for(Block b : Main.getBlockInRadius(loc, 2.5D, 999.9D).keySet()){
 			if (!blockstodestroy.contains(b)) {
@@ -117,6 +120,7 @@ public class GameZone {
 			}
 		}
 	}
+	*/
 	
 	private static double PLAYER_BOUNDINGBOX_ADD = 0.3;
 	
