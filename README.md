@@ -5,14 +5,14 @@ Players start on layer of sand and every block that they step on dissapears. If 
 
 Features
 
-Multiple arenas
-Block destroy delay
-Custom gamelevel
-AntiCamping system
-Custom messages
-Formatting codes support
-Signs
-Time limit
-Automatic arena regeneration
-Arena leave checker
-Player rewards
+- Multiple arenas
+- Block destroy delay
+- Custom gamelevel
+- AntiCamping system
+- Custom messages
+- Formatting codes support
+- Signs
+- Time limit
+- Automatic arena regeneration
+- Arena leave checker
+- Player rewards
