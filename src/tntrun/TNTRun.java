@@ -18,15 +18,9 @@
 package tntrun;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -98,7 +92,7 @@ public class TNTRun extends JavaPlugin {
 			new Runnable() {
 				@Override
 				public void run() {
-					// load globallobyy
+					// load global lobby
 					globallobby.loadFromConfig();
 					// load arenas
 					for (String file : arenasfolder.list()) {
@@ -124,15 +118,9 @@ public class TNTRun extends JavaPlugin {
 			sound = new Sounds_1_9();
 		}
 		
-	     try {
-	    	 Bukkit.getLogger().info("[TNTRun] Starting Metrics...");
-	         Metrics metrics = new Metrics(this);
-	         metrics.start();
-	         Bukkit.getLogger().info("[TNTRun] Metrics started!");
-	     } catch (IOException e) {
-	    	 e.printStackTrace();
-	        Bukkit.getLogger().info("[TNTRun] Error, can't start metrics, please report this! http://www.spigotmc.org/resources/tntrun.7320/");
-	     }
+	    Bukkit.getLogger().info("[TNTRun] Starting Metrics...");
+	    Metrics metrics = new Metrics(this);
+	    Bukkit.getLogger().info("[TNTRun] Metrics started!");
 	     
 	     if(this.getConfig().getString("database").equals("file")){
 	    	 file = true;

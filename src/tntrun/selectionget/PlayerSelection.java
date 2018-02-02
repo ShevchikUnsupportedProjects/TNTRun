@@ -17,10 +17,11 @@
 
 package tntrun.selectionget;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class PlayerSelection {
@@ -50,14 +51,14 @@ public class PlayerSelection {
 		return null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void setSelectionPoint1(Player player) {
-		ownlocations.putPlayerLoc1(player.getName(), player.getTargetBlock((HashSet<Byte>) null, 30).getLocation());
+		//ownlocations.putPlayerLoc1(player.getName(), player.getTargetBlock((HashSet<Byte>) null, 30).getLocation());
+		ownlocations.putPlayerLoc1(player.getName(), player.getTargetBlock((Set<Material>) null, 30).getLocation());
 	}
 
-	@SuppressWarnings("deprecation")
 	public void setSelectionPoint2(Player player) {
-		ownlocations.putPlayerLoc2(player.getName(), player.getTargetBlock((HashSet<Byte>) null, 30).getLocation());
+		//ownlocations.putPlayerLoc2(player.getName(), player.getTargetBlock((HashSet<Byte>) null, 30).getLocation());
+		ownlocations.putPlayerLoc2(player.getName(), player.getTargetBlock((Set<Material>) null, 30).getLocation());
 	}
 
 	public void clearSelectionPoints(Player player) {
