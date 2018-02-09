@@ -6,22 +6,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-/*
-import me.tade.trgrenade.Main;
-import me.tade.trgrenade.ParticleEffect;
-*/
-
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.NumberConversions;
 
 import tntrun.TNTRun;
@@ -33,6 +26,7 @@ public class GameZone {
 	private LinkedList<BlockState> blocks = new LinkedList<BlockState>();
 	
 	public Arena arena;
+	private String version = Bukkit.getBukkitVersion().split("-")[0];
 	
 	public GameZone(Arena arena){
 		this.arena = arena;
@@ -61,7 +55,9 @@ public class GameZone {
 							if (arena.getStatusManager().isArenaRunning()) {
 								blockstodestroy.remove(fblock);
 								if(TNTRun.getInstance().getConfig().getBoolean("special.FancyBlockBreak")){
-									fblock.getWorld().playEffect(fblock.getLocation(), Effect.STEP_SOUND, fblock.getTypeId());
+									if (!version.contains("1.8") && !version.contains("1.7")) {
+										fblock.getWorld().playSound(fblock.getLocation(), Sound.BLOCK_SAND_BREAK, 5.0F, 1.0F);
+									}
 								}
 								removeGLBlocks(fblock);
 							}

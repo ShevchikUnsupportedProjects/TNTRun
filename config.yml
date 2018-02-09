@@ -8,7 +8,7 @@ special:
    CheckForNewVersion: true
 info:
    list:
-   - '&6&lThe TNTRun plugin by The_TadeSK'
+   - '&6&lThe TNTRun plugin by Shevchik'
    - '&6 '
    - '&6&lNow try and play'
 shop:
@@ -22,26 +22,26 @@ commandsonwin:
 items:
    vote:
       use: true
-      ID: '264:0'
+      material: DIAMOND
       name: '&cVOTE'
    info:
       use: true
-      ID: '388:0'
+      material: EMERALD
       name: '&cINFO'
    shop:
       use: true
-      ID: '399:0'
+      material: NETHER_STAR
       name: '&cSHOP'
    stats:
       use: true
-      ID: '331:0'
+      material: REDSTONE
       name: '&cSTATS'
    leave:
-      ID: '355:0'
+      material: BED
       name: '&cLEAVE'
    effects:
       use: true
-      ID: '348:0'
+      material: GLOWSTONE_DUST
       name: '&cEFFECTS'
 scoreboard:
    waiting:

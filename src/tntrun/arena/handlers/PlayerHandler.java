@@ -17,7 +17,6 @@
 
 package tntrun.arena.handlers;
 
-import java.io.IOException;
 import java.util.HashSet;
 
 import org.bukkit.Bukkit;
@@ -26,7 +25,6 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
-import org.bukkit.Sound;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -47,6 +45,7 @@ public class PlayerHandler {
 
 	private TNTRun plugin;
 	private Arena arena;
+	private String version = Bukkit.getBukkitVersion().split("-")[0];
 
 	public PlayerHandler(TNTRun plugin, Arena arena) {
 		this.plugin = plugin;
@@ -71,6 +70,10 @@ public class PlayerHandler {
 			Messages.sendMessage(player, Messages.arenaregenerating);
 			return false;
 		}
+		if (!player.hasPermission("tntrun.join")) {
+			Messages.sendMessage(player, Messages.nopermission);
+			return false;
+		}
 		if (player.isInsideVehicle()) {
 			Messages.sendMessage(player, Messages.arenavehicle);
 			return false;
@@ -83,14 +86,17 @@ public class PlayerHandler {
 	}
 
 	// spawn player on arena
-	@SuppressWarnings("deprecation")
 	public void spawnPlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
 		// teleport player to arena
 		plugin.pdata.storePlayerLocation(player);
 		player.teleport(arena.getStructureManager().getSpawnPoint());
 		// set player visible to everyone
 		for (Player aplayer : Bukkit.getOnlinePlayers()) {
-			aplayer.showPlayer(player);
+			if (!version.contains("1.12")) {
+				aplayer.showPlayer(player);
+			} else {
+				aplayer.showPlayer(plugin, player);
+			}
 		}
 		// change player status
 		plugin.pdata.storePlayerGameMode(player);
@@ -122,8 +128,7 @@ public class PlayerHandler {
 		// start cooldown and add leave item
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
 			public void run(){
-				String[] ids = plugin.getConfig().getString("items.leave.ID").split(":");
-				ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
+				ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.leave.material")));
 				ItemMeta im = item.getItemMeta();
 				im.setDisplayName(plugin.getConfig().getString("items.leave.name").replace("&", "§"));
 				item.setItemMeta(im);
@@ -189,7 +194,11 @@ public class PlayerHandler {
 		player.setFlying(true);
 		// hide from others
 		for (Player oplayer : Bukkit.getOnlinePlayers()) {
-			oplayer.hidePlayer(player);
+			if (!version.contains("1.12")) {
+				oplayer.hidePlayer(player);
+			} else {
+				oplayer.hidePlayer(plugin, player);
+			}
 		}
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
@@ -205,9 +214,7 @@ public class PlayerHandler {
 		// start cooldown and add leave item
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
 			public void run(){
-				String[] ids = plugin.getConfig().getString("items.leave.ID").split(":");
-				@SuppressWarnings("deprecation")
-				ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
+				ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.leave.material")));
 				ItemMeta im = item.getItemMeta();
 				im.setDisplayName(plugin.getConfig().getString("items.leave.name").replace("&", "§"));
 				item.setItemMeta(im);
@@ -231,7 +238,11 @@ public class PlayerHandler {
 		if (spectator) {
 			arena.getPlayersManager().removeSpecator(player.getName());
 			for (Player oplayer : Bukkit.getOnlinePlayers()) {
-				oplayer.showPlayer(player);
+				if (!version.contains("1.12")) {
+					oplayer.showPlayer(player);
+				} else {
+					oplayer.showPlayer(plugin, player);
+				}
 			}
 			player.setAllowFlight(false);
 			player.setFlying(false);
@@ -360,64 +371,49 @@ public class PlayerHandler {
 	}
 	
 	public void addInfo(Player p){
-		String[] ids = plugin.getConfig().getString("items.info.ID").split(":");
-		@SuppressWarnings("deprecation")
-		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
-	     
-	     ItemMeta meta = item.getItemMeta();
-	     meta.setDisplayName(plugin.getConfig().getString("items.info.name").replace("&", "§"));
-	     item.setItemMeta(meta);
+		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.info.material")));	     
+	    ItemMeta meta = item.getItemMeta();
+	    meta.setDisplayName(plugin.getConfig().getString("items.info.name").replace("&", "§"));
+	    item.setItemMeta(meta);
 	    
-	     p.getInventory().addItem(item);
+	    p.getInventory().addItem(item);
 	    
 	}
 	
 	public void addVoteDiamond(Player p){
-		String[] ids = plugin.getConfig().getString("items.vote.ID").split(":");
-		@SuppressWarnings("deprecation")
-		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
-	     
-	     ItemMeta meta = item.getItemMeta();
-	     meta.setDisplayName(plugin.getConfig().getString("items.vote.name").replace("&", "§"));
-	     item.setItemMeta(meta);
+		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.vote.material")));     
+	    ItemMeta meta = item.getItemMeta();
+	    meta.setDisplayName(plugin.getConfig().getString("items.vote.name").replace("&", "§"));
+	    item.setItemMeta(meta);
 	    
-	     p.getInventory().addItem(item);
+	    p.getInventory().addItem(item);
 	}
 	
 	public void addShop(Player p){
-		String[] ids = plugin.getConfig().getString("items.shop.ID").split(":");
-		@SuppressWarnings("deprecation")
-		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
-	     
-	     ItemMeta meta = item.getItemMeta();
-	     meta.setDisplayName(plugin.getConfig().getString("items.shop.name").replace("&", "§"));
-	     item.setItemMeta(meta);
+		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.shop.material"))); 
+	    ItemMeta meta = item.getItemMeta();
+	    meta.setDisplayName(plugin.getConfig().getString("items.shop.name").replace("&", "§"));
+	    item.setItemMeta(meta);
 	    
-	     p.getInventory().addItem(item);
+	    p.getInventory().addItem(item);
 	}
 	
 	public void addStats(Player p){
-		String[] ids = plugin.getConfig().getString("items.stats.ID").split(":");
-		@SuppressWarnings("deprecation")
-		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
-	     
-	     ItemMeta meta = item.getItemMeta();
-	     meta.setDisplayName(plugin.getConfig().getString("items.stats.name").replace("&", "§"));
-	     item.setItemMeta(meta);
+		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
+	    ItemMeta meta = item.getItemMeta();
+	    meta.setDisplayName(plugin.getConfig().getString("items.stats.name").replace("&", "§"));
+	    item.setItemMeta(meta);
 	    
-	     p.getInventory().addItem(item);
+	    p.getInventory().addItem(item);
 	}
 	
 	public void addEffects(Player p){
-		String[] ids = plugin.getConfig().getString("items.effects.ID").split(":");
-		@SuppressWarnings("deprecation")
-		ItemStack item = new ItemStack(Material.getMaterial(Integer.parseInt(ids[0])), 1, (byte) Byte.parseByte(ids[1]));
-	     
-	     ItemMeta meta = item.getItemMeta();
-	     meta.setDisplayName(plugin.getConfig().getString("items.effects.name").replace("&", "§"));
-	     item.setItemMeta(meta);
+		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.effects.material")));
+	    ItemMeta meta = item.getItemMeta();
+	    meta.setDisplayName(plugin.getConfig().getString("items.effects.name").replace("&", "§"));
+	    item.setItemMeta(meta);
 	    
-	     p.getInventory().addItem(item);
+	    p.getInventory().addItem(item);
 	}
 
 }

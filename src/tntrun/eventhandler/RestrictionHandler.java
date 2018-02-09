@@ -24,9 +24,6 @@ import java.util.HashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -42,11 +39,9 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.Inventory;
 
 import tntrun.TNTRun;
-import tntrun.VersionChecker;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 import tntrun.utils.Shop;
-import tntrun.utils.Stats;
 
 public class RestrictionHandler implements Listener {
 
@@ -122,118 +117,99 @@ public class RestrictionHandler implements Listener {
 		final Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
 		
-		String[] ids1 = plugin.getConfig().getString("items.shop.ID").split(":");
-		String[] ids2 = plugin.getConfig().getString("items.vote.ID").split(":");
-		String[] ids3 = plugin.getConfig().getString("items.info.ID").split(":");
-		String[] ids4 = plugin.getConfig().getString("items.leave.ID").split(":");
-		String[] ids5 = plugin.getConfig().getString("items.stats.ID").split(":");
-		String[] ids6 = plugin.getConfig().getString("items.effects.ID").split(":");
-		
 		// check item
 		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
-	        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids4[0]))){
-	        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids4[1])){
-	        						TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
-					if (arena != null) {
-						e.setCancelled(true);
-						arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
-					}
-	        	}
+	        if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.leave.material"))) {
+				if (arena != null) {
+					TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
+					e.setCancelled(true);
+					arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+				}
 	        }
 		}
-        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids1[0]))){
-        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids1[1])){
-    			if (arena != null) {
-    								TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
-    				Inventory inv = Bukkit.createInventory(null, Shop.invsize, Shop.invname);
-    				Shop.setItems(inv);
-    				player.openInventory(inv);
-    			}
+        if(e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.shop.material"))){
+    		if (arena != null) {
+    			TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
+    			Inventory inv = Bukkit.createInventory(null, Shop.invsize, Shop.invname);
+    			Shop.setItems(inv);
+    			player.openInventory(inv);
         	}
 		}
 		
-        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids3[0]))){
-        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids3[1])){
-            	if (arena != null) {
-       				if(u.contains(player)){
-    									TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
-    					return;
-    				}
-       				u.add(player);
-  			      Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-			    	  public void run(){
-			    		  u.remove(player);
-			    	  }
-			      }, 40);
-            						TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
-         	   	     for(String list : plugin.getConfig().getStringList("info.list")){
+        if(e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.info.material"))){
+            if (arena != null) {
+       			if(u.contains(player)){
+    				TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
+    				return;
+    			}
+       			u.add(player);
+  			    Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+			    	public void run(){
+			    		u.remove(player);
+			    	}
+			    }, 40);
+            	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
+         	   	for(String list : plugin.getConfig().getStringList("info.list")){
           		    	 player.sendMessage(list.replace("&", "§"));
-          		     }
            	    }
         	}
         }
         
-        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids2[0]))){
-        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids2[1])){
-            	if (arena != null) {
-    				if(u.contains(player)){
-    									TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
-    					return;
-    				}
-            						TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
-            		u.add(player);
-  			      Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-			    	  public void run(){
-			    		  u.remove(player);
-			    	  }
-			      }, 40);
-            		if(arena.getStatusManager().isArenaStarting()){
-            			player.sendMessage(Messages.arenastarting.replace("&", "§"));
-            			return;
-            		}
-          	   	     if(arena.getPlayerHandler().vote(player)){
+        if(e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.vote.material"))){
+            if (arena != null) {
+    			if(u.contains(player)){
+    				TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
+    				return;
+    			}
+            	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
+            	u.add(player);
+  			    Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+			    	public void run(){
+			    		u.remove(player);
+			    	}
+			    }, 40);
+            	if(arena.getStatusManager().isArenaStarting()){
+            		player.sendMessage(Messages.arenastarting.replace("&", "§"));
+            		return;
+            	}
+          	   	if(arena.getPlayerHandler().vote(player)){
           	   	     player.sendMessage(Messages.playervotedforstart.replace("&", "§"));
-           	   	     }else{
-           	   	   player.sendMessage(Messages.playeralreadyvotedforstart.replace("&", "§"));
-           	   	     }
+           	   	}else{
+           	   	     player.sendMessage(Messages.playeralreadyvotedforstart.replace("&", "§"));
             	}
         	}
         }
         
-        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids5[0]))){
-        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids5[1])){
-            	if (arena != null) {
-       				if(u.contains(player)){
-    									TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
-    					return;
-    				}
-       				u.add(player);
-  			      Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-			    	  public void run(){
-			    		  u.remove(player);
-			    	  }
-			      }, 40);
-            						TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
-         	   	    player.chat("/tntrun stats");
-           	    }
+        if(e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.stats.material"))){
+            if (arena != null) {
+       			if(u.contains(player)){
+    				TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
+    				return;
+    			}
+       			u.add(player);
+  			    Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+  			    	public void run(){
+  			    		u.remove(player);
+  			    	}
+			    }, 40);
+            	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
+         	   	player.chat("/tntrun stats");
         	}
         }
-        if(e.getMaterial() == Material.getMaterial(Integer.parseInt(ids6[0]))){
-        	if(e.getItem().getData().getData() == (byte) Byte.parseByte(ids6[1])){
-            	if (arena != null) {
-       				if(u.contains(player)){
-    									TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
-    					return;
-    				}
-       				u.add(player);
-  			      Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-			    	  public void run(){
+        if(e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.effects.material"))){
+            if (arena != null) {
+       			if(u.contains(player)){
+    				TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
+    				return;
+    			}
+       			u.add(player);
+  			    Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+			    	public void run(){
 			    		  u.remove(player);
 			    	  }
-			      }, 40);
-            						TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
-         	   	    player.chat("/treffects");
-           	    }
+			      	}, 40);
+            	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
+         	   	player.chat("/treffects");
         	}
         }
 	}

@@ -17,7 +17,6 @@
 
 package tntrun.arena.handlers;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,7 +25,7 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -171,7 +170,6 @@ public class GameHandler {
 	private int playingtask;
 
 	Random rnd = new Random();
-	@SuppressWarnings("deprecation")
 	public void startArena() {
 		arena.getStatusManager().setRunning(true);
 		String message = Messages.arenastarted;
@@ -182,15 +180,11 @@ public class GameHandler {
 			player.setAllowFlight(true);
 			Messages.sendMessage(player, message);
 			TNTRun.getInstance().sound.ENDER_DRAGON(player, 1, 999);
-			String[] ids1 = plugin.getConfig().getString("items.shop.ID").split(":");
-			String[] ids2 = plugin.getConfig().getString("items.vote.ID").split(":");
-			String[] ids3 = plugin.getConfig().getString("items.info.ID").split(":");
-			String[] ids4 = plugin.getConfig().getString("items.stats.ID").split(":");
 			
-			player.getInventory().remove(Integer.parseInt(ids1[0]));
-			player.getInventory().remove(Integer.parseInt(ids2[0]));
-			player.getInventory().remove(Integer.parseInt(ids3[0]));
-			player.getInventory().remove(Integer.parseInt(ids4[0]));
+			player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.shop.material")));
+			player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.vote.material")));
+			player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.info.material")));
+			player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
 			
             if (Shop.pitems.containsKey(player)) {
             	ArrayList<ItemStack> items = Shop.pitems.get(player);

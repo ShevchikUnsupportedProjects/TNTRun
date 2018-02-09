@@ -67,7 +67,7 @@ public class GameCommands implements CommandExecutor {
 					player.sendMessage("§7[§6TNTRun§7] §cLobby world is unloaded or doesn't exist");
 				}
 			} else {
-				sender.sendMessage("§7[§6TNTRun§7] §cLobby is't set");
+				sender.sendMessage("§7[§6TNTRun§7] §cLobby isn't set");
 
 			}
 			return true;

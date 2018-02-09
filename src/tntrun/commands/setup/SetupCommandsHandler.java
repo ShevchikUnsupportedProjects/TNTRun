@@ -20,7 +20,6 @@ package tntrun.commands.setup;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

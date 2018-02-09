@@ -108,7 +108,9 @@ public class TNTRun extends JavaPlugin {
 			20
 		);
 		
+		/* Don't check for update
 		checkUpdate(true);
+		*/
 		
 		/* Version 1.9 and above should use new_Sounds_1_9 */
 		String version = Bukkit.getBukkitVersion().split("-")[0];

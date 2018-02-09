@@ -65,8 +65,10 @@ public class ActionBar {
             Object packet = null;
             if (getVersion().contains("1_7")) {
                 packet = this.nmsPacketChat.getConstructor(this.nmsChatBaseComponent, Integer.class).newInstance(serializedMessage, (int) 2);
+            } else if (getVersion().contains("1_12")){
+                packet = this.nmsPacketChat.getConstructor(this.nmsChatBaseComponent).newInstance(serializedMessage);
             } else {
-                packet = this.nmsPacketChat.getConstructor(this.nmsChatBaseComponent, byte.class).newInstance(serializedMessage, (byte) 2);
+            	packet = this.nmsPacketChat.getConstructor(this.nmsChatBaseComponent, byte.class).newInstance(serializedMessage, (byte) 2);
             }
 
             getMethod(playerConnection.getClass(), this.sendPacket).invoke(playerConnection, packet);
