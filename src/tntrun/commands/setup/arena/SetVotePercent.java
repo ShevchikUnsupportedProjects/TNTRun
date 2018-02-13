@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.utils.Utils;
 
 public class SetVotePercent implements CommandHandlerInterface {
 
@@ -38,8 +39,12 @@ public class SetVotePercent implements CommandHandlerInterface {
 				player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
 				return true;
 			}
-			arena.getStructureManager().setVotePercent(Double.valueOf(args[1]));
-			player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 VotePercent set to §6" + Double.valueOf(args[1]));
+			if (Utils.isDouble(args[1]) && Double.valueOf(args[1]) > 0 && Double.valueOf(args[1]) < 1) {
+				arena.getStructureManager().setVotePercent(Double.valueOf(args[1]));
+				player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 VotePercent set to §6" + Double.valueOf(args[1]));
+			} else {
+				player.sendMessage("§7[§6TNTRun§7] §cVotePercent amount must be an decimal between 0 and 1");
+			}
 		} else {
 			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
 		}

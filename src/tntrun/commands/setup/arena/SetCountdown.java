@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.utils.Utils;
 
 public class SetCountdown implements CommandHandlerInterface {
 
@@ -38,8 +39,12 @@ public class SetCountdown implements CommandHandlerInterface {
 				player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
 				return true;
 			}
-			arena.getStructureManager().setCountdown(Integer.parseInt(args[1]));
-			player.sendMessage("§7[§6TNTRun§7] §7CountDown for arena §6" +arena.getArenaName() + "§7 set to: §6"+ Integer.parseInt(args[1]) + "§7 seconds");
+			if (Utils.isNumber(args[1])) {
+				arena.getStructureManager().setCountdown(Integer.parseInt(args[1]));
+				player.sendMessage("§7[§6TNTRun§7] §7CountDown for arena §6" +arena.getArenaName() + "§7 set to §6"+ args[1] + "§7 seconds");
+			} else {
+				player.sendMessage("§7[§6TNTRun§7] §cCountdown amount must be an integer");
+			}
 		} else {
 			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
 		}

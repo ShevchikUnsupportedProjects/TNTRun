@@ -2,7 +2,7 @@ name: TNTRun_reloaded
 main: tntrun.TNTRun
 depend: [WorldEdit]
 softdepend: [Vault]
-version: 6.3.4
+version: 6.3.5
 author: [_Shevchik_, steve4744]
 commands:
   tntrunsetup:
@@ -18,3 +18,6 @@ permissions:
   tntrun.join:
     description: used to control who can play TNTRun and where.
     default: true
+  tntrun.setup:
+    description: used to create and modify arenas and gameplay
+    default: op

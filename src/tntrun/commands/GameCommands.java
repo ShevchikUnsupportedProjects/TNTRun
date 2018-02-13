@@ -44,10 +44,11 @@ public class GameCommands implements CommandExecutor {
 		Player player = (Player) sender;
 		if (args.length < 1){
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");
-			sender.sendMessage("§7[§6TNTRun§7] §6Please use §6/tr help");
+			sender.sendMessage("§7[§6TNTRun§7] §cPlease use §6/tr help");
+			return true;
 		}
 		// help command
-		if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
+		if (args[0].equalsIgnoreCase("help")) {
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");
 			sender.sendMessage("§6/tr lobby §f- §cTeleport to lobby");
 			sender.sendMessage("§6/tr list §f- §cList all arenas");
@@ -56,9 +57,9 @@ public class GameCommands implements CommandExecutor {
 			sender.sendMessage("§6/tr vote §f- §cVote for current arena");
 			sender.sendMessage("§6/tr cmds §f- §cView all commands");
 			sender.sendMessage("§6/tr info §f- §cPlugin info");
-			sender.sendMessage("§c§lNEW! §6/tr stats §f- §cStats");
+			sender.sendMessage("§6/tr stats §f- §cStats");
 			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("lobby")) {
+		} else if (args[0].equalsIgnoreCase("lobby")) {
 			if (plugin.globallobby.isLobbyLocationSet()) {
 				if (plugin.globallobby.isLobbyLocationWorldAvailable()) {
 					player.teleport(plugin.globallobby.getLobbyLocation());
@@ -73,7 +74,7 @@ public class GameCommands implements CommandExecutor {
 			return true;
 		}
 		// list arenas
-		else if (args.length == 1 && args[0].equalsIgnoreCase("list")) {
+		else if (args[0].equalsIgnoreCase("list")) {
 			StringBuilder message = new StringBuilder(200);
 			message.append(Messages.availablearenas);
 			for (Arena arena : plugin.amanager.getArenas()) {
@@ -87,7 +88,11 @@ public class GameCommands implements CommandExecutor {
 			return true;
 		}
 		// join arena
-		else if (args.length == 2 && args[0].equalsIgnoreCase("join")) {
+		else if (args[0].equalsIgnoreCase("join")) {
+			if (args.length != 2) {
+				player.sendMessage("§7[§6TNTRun§7] §cInvalid number of arguments supplied");
+				return false;
+			}
 			Arena arena = plugin.amanager.getArenaByName(args[1]);
 			if (arena != null) {
 				boolean canJoin = arena.getPlayerHandler().checkJoin(player);
@@ -96,20 +101,21 @@ public class GameCommands implements CommandExecutor {
 				}
 				return true;
 			} else {
-				sender.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
+				sender.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[1] + "§c doesn't exist");
 				return true;
 			}
 		}
 		// tntrun info
-		else if (args.length == 1 && args[0].equalsIgnoreCase("info")) {
+		else if (args[0].equalsIgnoreCase("info")) {
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");
 			sender.sendMessage("§cVersion of plugin> §6" + plugin.getDescription().getVersion());
-			sender.sendMessage("§cWebsite> §6http://www.spigotmc.org/resources/tntrun.7320/");
-			sender.sendMessage("§cAuthors> §6Shevchikden | The_TadeSK (tade159SK)");
+			sender.sendMessage("§cWebsite> §6http://www.spigotmc.org/resources/tntrun.xxxx/");
+			sender.sendMessage("§cOriginal Author> §6Shevchikden");
+			sender.sendMessage("§cCurrent Author> §6steve4744");
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");
 		}
-		// leave arena
-		else if (args.length == 1 && args[0].equalsIgnoreCase("stats")) {
+		// player stats
+		else if (args[0].equalsIgnoreCase("stats")) {
 			player.sendMessage("§7============[§6TNTRun§7]§7============");
 			if(!plugin.usestats){
 				player.sendMessage("§cStats are disabled");
@@ -117,35 +123,35 @@ public class GameCommands implements CommandExecutor {
 			}
 			player.sendMessage("§7Played games: §6" + Stats.getPlayedGames(player));
 			player.sendMessage("§7Wins: §6" + Stats.getWins(player));
-			player.sendMessage("§7Loses: §6" + Stats.getLooses(player));
+			player.sendMessage("§7Losses: §6" + Stats.getLooses(player));
 		}
 		// leave arena
-		else if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {
+		else if (args[0].equalsIgnoreCase("leave")) {
 			Arena arena = plugin.amanager.getPlayerArena(player.getName());
 			if (arena != null) {
 				arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 				return true;
 			} else {
-				sender.sendMessage("§7[§6TNTRun§7] §cYou are not in arena");
+				sender.sendMessage("§7[§6TNTRun§7] §cYou are not in an arena");
 				return true;
 			}
 		}
 		// all commands
-		else if (args.length == 1 && args[0].equalsIgnoreCase("cmds")) {
+		else if (args[0].equalsIgnoreCase("cmds")) {
 			sender.sendMessage("§7============[§6TNTRun§7]============");
-			sender.sendMessage("§6/trsetup setlobby §f- §cSet lobby on your location");
+			sender.sendMessage("§6/trsetup setlobby §f- §cSet lobby at your current location");
 			sender.sendMessage("§6/trsetup create {arena} §f- §cCreate new Arena");
 			sender.sendMessage("§6/trsetup setarena {arena} §f- §cSet bounds for arena");
 			sender.sendMessage("§6/trsetup setloselevel {arena} §f- §cSet looselevel bounds for arena");
-			sender.sendMessage("§6/trsetup setspawn {arena} §f- §cSet spawn for players on your location");
+			sender.sendMessage("§6/trsetup setspawn {arena} §f- §cSet spawn for players at your current location");
 			sender.sendMessage("§6/trsetup setspectate {arena} §f- §cSet spectators spawn");
 			sender.sendMessage("§6/trsetup finish {arena} §f- §cFinish arena and save it to config file");
 			sender.sendMessage("§7============[§6Other commands§7]============");
 			sender.sendMessage("§6/trsetup delspectate {arena} §f- §cDelete spectators spawn");
-			sender.sendMessage("§6/trsetup setgameleveldestroydelay {arena} {ticks} §f- §cSet a delay of removing blocks when player stepped on it");
+			sender.sendMessage("§6/trsetup setgameleveldestroydelay {arena} {ticks} §f- §cSet a delay for removing blocks when player steps on it");
 			sender.sendMessage("§6/trsetup setmaxplayers {arena} {players} §f- §cSet a max players for arena");
 			sender.sendMessage("§6/trsetup setminplayers {arena} {players} §f- §cSet a min players for arena");
-			sender.sendMessage("§6/trsetup setvotepercent {arena} {0<votepercent<1} §f- §cSet a vote percent for arena  (Default: 0.75)");
+			sender.sendMessage("§6/trsetup setvotepercent {arena} {0<votepercent<1} §f- §cSet a vote percentage for arena  (Default: 0.75)");
 			sender.sendMessage("§6/trsetup settimelimit {arena} {seconds} §f- §cSet a limit for arena");
 			sender.sendMessage("§6/trsetup setcountdown {arena} {seconds} §f- §cSet a countdown for arena");
 			sender.sendMessage("§6/trsetup setitemsrewards {arena} §f- §cSet a everithing to reward (Item)");
@@ -161,7 +167,7 @@ public class GameCommands implements CommandExecutor {
 			sender.sendMessage("§6/trsetup delete {arena} §f- §cDelete Arena");
 		}
 		// vote
-		else if (args.length == 1 && args[0].equalsIgnoreCase("vote")) {
+		else if (args[0].equalsIgnoreCase("vote")) {
 			Arena arena = plugin.amanager.getPlayerArena(player.getName());
 			if (arena != null) {
 				if (arena.getPlayerHandler().vote(player)) {
@@ -174,7 +180,11 @@ public class GameCommands implements CommandExecutor {
 				sender.sendMessage("§7[§6TNTRun§7] §cYou are not in arena");
 				return true;
 			}
-		}
+		} 
+		else {
+			sender.sendMessage("§7[§6TNTRun§7] §cInvalid argument supplied, please use §6/tr help");
+			return true;
+		}	
 		return false;
 	}
 

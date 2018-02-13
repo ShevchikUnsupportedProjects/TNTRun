@@ -75,22 +75,6 @@ public class GameZone {
 			bs.update(true);
 			bsi.remove();
 		}
-		/*final Iterator<String> bsit = B.iterator();
-		while (bsit.hasNext()) {
-			String bl = bsit.next();
-			String[] bd = bl.split(":");
-			
-			int id = Integer.parseInt(bd[0]);
-			byte data = Byte.parseByte(bd[1]);
-			World world = Bukkit.getWorld(bd[2]);
-			int x = Integer.parseInt(bd[3]);
-			int y = Integer.parseInt(bd[4]);
-			int z = Integer.parseInt(bd[5]);
-			
-			world.getBlockAt(x, y, z).setTypeId(id);
-			world.getBlockAt(x, y, z).setData(data);
-			bsit.remove();
-		}*/
 	}
 	
 	private void removeGLBlocks(Block block) {
@@ -100,23 +84,6 @@ public class GameZone {
 		blocks.add(block.getState());
 		saveBlock(block);
 	}
-	
-	/*
-	public void removeBlocksGrenade(Location loc) {
-		for(Block b : Main.getBlockInRadius(loc, 2.5D, 999.9D).keySet()){
-			if (!blockstodestroy.contains(b)) {
-				if(b.getLocation().add(0, 1, 0).getBlock().getType() == Material.AIR){
-					if(Main.getInstance().mat.contains(b.getType())){
-						removeGLBlocks(b);
-						if(Main.getInstance().getConfig().getBoolean("useparticles")){
-							ParticleEffect.FIREWORKS_SPARK.display(0.5F, 0.5F, 0.5F, 0.05F, 10, b.getLocation(), 50);
-						}
-					}
-				}
-			}
-		}
-	}
-	*/
 	
 	private static double PLAYER_BOUNDINGBOX_ADD = 0.3;
 	
@@ -170,21 +137,6 @@ public class GameZone {
             		}else{
             			cancel();
             		}
-                	/*if(bsi.hasNext()) {
-    					String bl = bsi.next();
-    					String[] bd = bl.split(":");
-    					
-    					int id = Integer.parseInt(bd[0]);
-    					byte data = Byte.parseByte(bd[1]);
-    					World world = Bukkit.getWorld(bd[2]);
-    					int x = Integer.parseInt(bd[3]);
-    					int y = Integer.parseInt(bd[4]);
-    					int z = Integer.parseInt(bd[5]);
-    					
-    					world.getBlockAt(x, y, z).setTypeId(id);
-    					world.getBlockAt(x, y, z).setData(data);
-    					bsi.remove();
-    				}*/
             	}
             }
         }.runTaskTimer(TNTRun.getInstance(), 0L, 1L);
