@@ -1,11 +1,11 @@
-#Titles only works for spigot/craftbukkit 1.8 or higher + protocol hack working
+#Titles only works for spigot/craftbukkit 1.8.3 or higher
 special:
    FancyBlockBreak: true
    UseBarApi: true
    UseTitle: true
    UseScoreboard: true
    UseActionBar: true
-   CheckForNewVersion: true
+   CheckForNewVersion: false
 info:
    list:
    - '&6&lThe TNTRun plugin by Shevchik'
@@ -15,9 +15,9 @@ shop:
    name: '&6&lTNTRun &f&lSHOP'
    size: 27
    doublejump:
-      maxdoublejumps: 50
+      maxdoublejumps: 10
 commandsonwin:
-- say {PLAYER} won tntrun
+- say {PLAYER} won TNTRun
 - say Congratulations...
 items:
    vote:

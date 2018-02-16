@@ -25,7 +25,7 @@ public class VersionChecker {
 	
 	public String getVersion(){
 		try {
-			byte[] ver = get(new URL("http://the-tadesk.tk/updater/tntrun/"));
+			byte[] ver = get(new URL("http://xxxxxxx/updater/tntrun/"));
 			String data = new String(ver);
 			if(data == null || data.isEmpty()){
 				return "error";

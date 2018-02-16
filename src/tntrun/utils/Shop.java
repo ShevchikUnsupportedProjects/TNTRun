@@ -132,7 +132,6 @@ public class Shop implements Listener{
 							pl.getConfig().set("doublejumps." + p.getName(), pl.getConfig().getInt("doublejumps." + p.getName()) + 1);
 						}
 						pl.saveConfig();
-						p.sendMessage(Messages.playerboughtitem.replace("&", "§").replace("{ITEM}", title).replace("{MONEY}", cost + ""));
 						return;
 		          }
 	            giveItem(e.getSlot(), p, current.getItemMeta().getDisplayName());  

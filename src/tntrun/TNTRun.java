@@ -120,9 +120,9 @@ public class TNTRun extends JavaPlugin {
 			sound = new Sounds_1_9();
 		}
 		
-	    Bukkit.getLogger().info("[TNTRun] Starting Metrics...");
+	    Bukkit.getLogger().info("[TNTRun_reloaded] Starting Metrics...");
 	    Metrics metrics = new Metrics(this);
-	    Bukkit.getLogger().info("[TNTRun] Metrics started!");
+	    Bukkit.getLogger().info("[TNTRun_reloaded] Metrics started!");
 	     
 	     if(this.getConfig().getString("database").equals("file")){
 	    	 file = true;

@@ -39,7 +39,7 @@ public class Messages {
 	public static String arenadisabled = "&7[&6TNTRun&7] Arena is disabled";
 	public static String arenarunning = "&7[&6TNTRun&7] Arena already running";
 	public static String arenaregenerating = "&7[&6TNTRun&7] Arena is regenerating";
-	public static String arenavehicle = "&7[&6TNTRun&7] You can't join the game while sitting inside vehicle";
+	public static String arenavehicle = "&7[&6TNTRun&7] You can't join the game while sitting inside a vehicle";
 	public static String arenadisabling = "&7[&6TNTRun&7] &6Arena is disabling";
 	public static String arenastarting = "&7[&6TNTRun&7] &6Arena already starting";
 	
@@ -53,14 +53,14 @@ public class Messages {
 	public static String playeralreadyvotedforstart = "&7[&6TNTRun&7] You already voted";
 	public static String arenastarted = "&7[&6TNTRun&7] Arena started. Time limit is {TIMELIMIT} seconds";
 	public static String arenacountdown = "&7[&6TNTRun&7] Arena starts in {COUNTDOWN} seconds";
-	public static String arenatimeout = "&7[&6TNTRun&7] Time is out. Ending game";
+	public static String arenatimeout = "&7[&6TNTRun&7] Time is up. Ending game";
 	public static String playerwontoplayer = "&7[&6TNTRun&7] You won the game!";
 	public static String playerlosttoplayer = "&7[&6TNTRun&7] You lost the game";
 	public static String playerlosttoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7lost the game";
 	public static String playerwonbroadcast = "&7[&6TNTRun&7] &6{PLAYER}&7 won the game on arena &c{ARENA}";
 	public static String playerrewardmessage = "&7[&6TNTRun&7] You have been rewarded: &6{REWARD}";
 	public static String playerboughtitem = "&7[&6TNTRun&7] You have bought item &6{ITEM} &7for &6{MONEY} &7coins";
-	public static String playerboughtwait = "&7[&6TNTRun&7] You will get your items when game starts";
+	public static String playerboughtwait = "&7[&6TNTRun&7] You will get your items when the game starts";
 	public static String notenoughtmoney = "&7[&6TNTRun&7] &cYou need {MONEY} coins to buy this item";
 	public static String alreadyboughtitem = "&7[&6TNTRun&7] &cYou already bought item";
 	public static String getdoublejumpsaction = "&7&lYour double jumps: &6&l{DB}";
