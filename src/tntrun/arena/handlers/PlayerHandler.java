@@ -92,7 +92,7 @@ public class PlayerHandler {
 		player.teleport(arena.getStructureManager().getSpawnPoint());
 		// set player visible to everyone
 		for (Player aplayer : Bukkit.getOnlinePlayers()) {
-			if (!version.contains("1.12")) {
+			if (!version.contains("1.12.2")) {
 				aplayer.showPlayer(player);
 			} else {
 				aplayer.showPlayer(plugin, player);
@@ -194,7 +194,7 @@ public class PlayerHandler {
 		player.setFlying(true);
 		// hide from others
 		for (Player oplayer : Bukkit.getOnlinePlayers()) {
-			if (!version.contains("1.12")) {
+			if (!version.contains("1.12.2")) {
 				oplayer.hidePlayer(player);
 			} else {
 				oplayer.hidePlayer(plugin, player);
@@ -238,7 +238,7 @@ public class PlayerHandler {
 		if (spectator) {
 			arena.getPlayersManager().removeSpecator(player.getName());
 			for (Player oplayer : Bukkit.getOnlinePlayers()) {
-				if (!version.contains("1.12")) {
+				if (!version.contains("1.12.2")) {
 					oplayer.showPlayer(player);
 				} else {
 					oplayer.showPlayer(plugin, player);

@@ -109,7 +109,7 @@ public class GameCommands implements CommandExecutor {
 		else if (args[0].equalsIgnoreCase("info")) {
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");
 			sender.sendMessage("§cVersion of plugin> §6" + plugin.getDescription().getVersion());
-			sender.sendMessage("§cWebsite> §6http://www.spigotmc.org/resources/tntrun.xxxx/");
+			sender.sendMessage("§cWebsite> §6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 			sender.sendMessage("§cOriginal Author> §6Shevchikden");
 			sender.sendMessage("§cCurrent Author> §6steve4744");
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");
