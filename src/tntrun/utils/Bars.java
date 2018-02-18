@@ -32,7 +32,7 @@ import tntrun.TNTRun;
 
 public class Bars {
 
-	public static String waiting = "&6Waiting for more players, current players count:&r {COUNT}";
+	public static String waiting = "&6Waiting for more players, current player count:&r {COUNT}";
 	public static String starting = "&6Arena starts in:&r {SECONDS} seconds";
 	public static String playing = "&6Time left:&r {SECONDS} &6Players in game count:&r {COUNT}";
 

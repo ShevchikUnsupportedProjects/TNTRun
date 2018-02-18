@@ -186,7 +186,7 @@ public class TNTRun extends JavaPlugin {
 				String[] version = VersionChecker.get().getVersion().split(";");
 				ver = version;
 				if(version[0].equalsIgnoreCase("error")){
-					throw new NullPointerException("An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun.67418/");
+					throw new NullPointerException("An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun_reloaded.303586/");
 				}else{
 					ver = version;
 					if(version[0].equalsIgnoreCase(getDescription().getVersion())){
@@ -195,7 +195,7 @@ public class TNTRun extends JavaPlugin {
 						getLogger().info("Your version: " + getDescription().getVersion());
 						getLogger().info("New version: " + version[0]);
 						getLogger().info("What is a new? " + version[1]);
-						getLogger().info("New version is avaiable! Download now: https://www.spigotmc.org/resources/tntrun.7320/");
+						getLogger().info("New version is avaiable! Download now: https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 						needUpdate = true;
 						for(Player p : Bukkit.getOnlinePlayers()){
 							if(p.hasPermission("tntrun.version.check")){
@@ -206,7 +206,7 @@ public class TNTRun extends JavaPlugin {
 								p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + getDescription().getVersion());
 								p.sendMessage("§7[§6TNTRun§7] §7New version: §6" + version[0]);
 								p.sendMessage("§7[§6TNTRun§7] §7What is a new? §6" + version[1]);
-								p.sendMessage("§7[§6TNTRun§7] §7New version is avaiable! Download now: §6https://www.spigotmc.org/resources/tntrun.7320/");
+								p.sendMessage("§7[§6TNTRun§7] §7New version is avaiable! Download now: §6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 							}
 						}
 					}

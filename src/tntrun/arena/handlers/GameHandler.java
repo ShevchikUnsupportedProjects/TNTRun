@@ -38,7 +38,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.Kits;
-import tntrun.utils.ActionBar;
 import tntrun.utils.Bars;
 import tntrun.utils.Shop;
 import tntrun.utils.Stats;
@@ -349,21 +348,6 @@ public class GameHandler {
 					s = s.replace("{LIMIT}", timelimit/20 + "");
 					o.getScore(s).setScore(size);
 					size--;
-				}
-				for(Player p : arena.getPlayersManager().getPlayers()){
-			    	if(!plugin.getConfig().getBoolean("special.UseActionBar")){
-			    		return;
-			    	}
-			    	
-			    	if (ActionBar.getVersion().contains("1_7")) {
-			    		Bukkit.getLogger().info("[TNTRun] Action bar for " + ActionBar.getVersion() + " is not supported, disabling Action Bar");
-			    		plugin.getConfig().set("special.UseActionBar", false);
-			    		plugin.saveConfig();
-			    		return;
-			    	}
-			    	
-					ActionBar bar = new ActionBar();
-					bar.sendActionBar(p, Messages.getdoublejumpsaction.replace("&", "§").replace("{DB}", plugin.getConfig().getInt("doublejumps." + p.getName()) + ""));
 				}
 			}
 		}, 0, 20);
