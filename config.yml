@@ -4,7 +4,6 @@ special:
    UseBarApi: true
    UseTitle: true
    UseScoreboard: true
-   UseActionBar: true
    CheckForNewVersion: false
 info:
    list:
