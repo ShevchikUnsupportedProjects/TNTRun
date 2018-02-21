@@ -100,7 +100,7 @@ public class GameHandler {
 				@Override
 				public void run() {
 					// check if countdown should be stopped for some various reasons
-					if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers()) {
+					if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers() && !arena.getPlayerHandler().forceStart()) {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers(), plugin);
 							createWaitingScoreBoard();
@@ -117,26 +117,32 @@ public class GameHandler {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							player.teleport(arena.getStructureManager().getSpawnPoint());
 							TNTRun.getInstance().sound.NOTE_PLING(player, 1, 999);
-							Messages.sendMessage(player, message);
+							if(plugin.getConfig().getBoolean("special.UseTitle") == false){
+								Messages.sendMessage(player, message);
+							} 
 							TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
 						}
 					} else if (count < 11) {
 						String message = Messages.arenacountdown;
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
 						for (Player player : arena.getPlayersManager().getPlayers()) {
-							Messages.sendMessage(player, message);
 							TNTRun.getInstance().sound.NOTE_PLING(player, 1, 999);
+							if(plugin.getConfig().getBoolean("special.UseTitle") == false){
+								Messages.sendMessage(player, message);
+							} 
 							TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
 						}
 					} else if (count % 10 == 0) {
 						String message = Messages.arenacountdown;
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
-				          for (Player all : arena.getPlayersManager().getPlayers()) {
-				        	  Messages.sendMessage(all, message);
-				        	  TNTRun.getInstance().sound.NOTE_PLING(all, 1, 999);
-								TitleMsg.sendFullTitle(all, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
-				          }
+				        for (Player all : arena.getPlayersManager().getPlayers()) {
+				        	TNTRun.getInstance().sound.NOTE_PLING(all, 1, 999);
+				        	if(plugin.getConfig().getBoolean("special.UseTitle") == false){
+				        		Messages.sendMessage(all, message);
+				        	} 
+				        	TitleMsg.sendFullTitle(all, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
 				        }
+				    }
 					if(count == 5) {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							player.teleport(arena.getStructureManager().getSpawnPoint());

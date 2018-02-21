@@ -115,7 +115,9 @@ public class PlayerHandler {
 			arena.getGameHandler().count = arena.getStructureManager().getCountdown();
 		}
 		// send message to player
-		Messages.sendMessage(player, msgtoplayer);	
+		if(plugin.getConfig().getBoolean("special.UseTitle") == false){
+			Messages.sendMessage(player, msgtoplayer);
+		}	
 		// set player on arena data
 		arena.getPlayersManager().add(player);
 		// send message to other players
@@ -155,9 +157,11 @@ public class PlayerHandler {
 			}
 		}, 5L);
 		// send message about arena player count
-		String message = Messages.playerscountinarena;
-		message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
-		Messages.sendMessage(player, message);
+		if(plugin.getConfig().getBoolean("special.UseBarApi") == false || Bukkit.getPluginManager().getPlugin("BarAPI") == null){
+			String message = Messages.playerscountinarena;
+			message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
+			Messages.sendMessage(player, message);
+		}
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// create scoreboard
@@ -362,9 +366,16 @@ public class PlayerHandler {
 	public boolean vote(Player player) {
 		if (!votes.contains(player.getName())) {
 			votes.add(player.getName());
-			if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() > 1 && votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getStructureManager().getVotePercent()) {
+			if (!arena.getStatusManager().isArenaStarting() && forceStart()) {
 				arena.getGameHandler().runArenaCountdown();
 			}
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean forceStart() {
+		if (arena.getPlayersManager().getPlayersCount() > 1 && votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getStructureManager().getVotePercent()) {
 			return true;
 		}
 		return false;
