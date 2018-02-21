@@ -4,8 +4,6 @@ import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -110,7 +108,7 @@ public class GameZone {
 
 	private final int MAX_BLOCKS_PER_TICK = 10;
 	
-	private static List<String> B = new LinkedList<>();
+	//private static List<String> B = new LinkedList<>();
 	
 	public void saveBlock(Block b){
 		/*String block = b.getTypeId() + ":" + b.getData() + ":" + b.getWorld().getName() + 
