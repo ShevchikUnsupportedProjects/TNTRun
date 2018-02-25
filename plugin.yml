@@ -21,3 +21,6 @@ permissions:
   tntrun.setup:
     description: used to create and modify arenas and gameplay
     default: op
+  tntrun.version.check:
+    description: display new version message on player join
+    default: op

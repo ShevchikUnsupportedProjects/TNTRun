@@ -4,10 +4,11 @@ special:
    UseBarApi: true
    UseTitle: true
    UseScoreboard: true
-   CheckForNewVersion: false
+   CheckForNewVersion: true
 info:
    list:
-   - '&6&lThe TNTRun plugin by Shevchik'
+   - '&6&lThe original TNTRun plugin by Shevchik'
+   - '&6&lThis version updated/supported by steve4744'
    - '&6 '
    - '&6&lNow try and play'
 shop:

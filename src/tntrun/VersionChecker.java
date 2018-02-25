@@ -1,14 +1,9 @@
 package tntrun;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.Proxy;
 import java.net.URL;
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 
 public class VersionChecker {
@@ -25,32 +20,17 @@ public class VersionChecker {
 	
 	public String getVersion(){
 		try {
-			byte[] ver = get(new URL("http://xxxxxxx/updater/tntrun/"));
-			String data = new String(ver);
-			if(data == null || data.isEmpty()){
-				return "error";
+			HttpURLConnection con = (HttpURLConnection) new URL("https://www.spigotmc.org/api/general.php").openConnection();
+			con.setDoOutput(true);
+			con.setRequestMethod("POST");
+			con.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=53359").getBytes("UTF-8"));
+			String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+			if (version.length() <= 7) {
+				return version;
 			}
-			return data;
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			Bukkit.getLogger().log(Level.WARNING, "[TNTRun] An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun.67418/");
-			return "error";
+		} catch (Exception ex) {
+			Bukkit.getLogger().info("[TNTRun] Failed to check for a update on spigot.");
 		}
-	}
-	
-	public static byte[] get(URL url){
-		try{
-			HttpURLConnection c = (HttpURLConnection)url.openConnection(Proxy.NO_PROXY);
-	        c.setRequestMethod("GET");
-	        c.setRequestProperty("Host", url.getHost());
-	        BufferedInputStream in = new BufferedInputStream(c.getInputStream());
-	        ByteArrayOutputStream out = new ByteArrayOutputStream();
-	        Streams.pipeStreams(in, out);
-	        return out.toByteArray();
-	        }catch (IOException e) {
-	        	e.printStackTrace();
-	        	Bukkit.getLogger().log(Level.WARNING, "[TNTRun] An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun.67418/");
-	    }
-		return null;
+		return "error";
 	}
 }

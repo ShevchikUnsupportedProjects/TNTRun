@@ -56,7 +56,7 @@ public class TNTRun extends JavaPlugin {
 	public boolean file = false;
 	public boolean usestats = false;
 	public boolean needUpdate = false;
-	public String[] ver = {"Nothing", "Nothing"};
+	public String[] version = {"Nothing", "Nothing"};
 	public Sounds sound;
 	
 	public static TNTRun instance;
@@ -108,9 +108,8 @@ public class TNTRun extends JavaPlugin {
 			20
 		);
 		
-		/* Don't check for update
-		checkUpdate(true);
-		*/
+		//check for update
+		checkUpdate();
 		
 		/* Version 1.9 and above should use new_Sounds_1_9 */
 		String version = Bukkit.getBukkitVersion().split("-")[0];
@@ -172,59 +171,42 @@ public class TNTRun extends JavaPlugin {
 		log.severe(message);
 	}
 	
-	private void checkUpdate(final boolean runUpdateTask){
+	//private void checkUpdate(final boolean runUpdateTask){
+	private void checkUpdate(){
 		if(!getConfig().getBoolean("special.CheckForNewVersion", true)){
 			return;
 		}
 		Bukkit.getScheduler().runTaskLaterAsynchronously(getInstance(), new Runnable(){
 			public void run(){
 				getLogger().info(" ");
-				getLogger().info(" ");
-				getLogger().info(" ");
 				getLogger().info("Checking plugin version...");
 				new VersionChecker();
-				String[] version = VersionChecker.get().getVersion().split(";");
-				ver = version;
+				version = VersionChecker.get().getVersion().split(";");
 				if(version[0].equalsIgnoreCase("error")){
 					throw new NullPointerException("An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun_reloaded.303586/");
 				}else{
-					ver = version;
 					if(version[0].equalsIgnoreCase(getDescription().getVersion())){
+						getLogger().info("You are running the most recent version");
 						needUpdate = false;
 					}else{
 						getLogger().info("Your version: " + getDescription().getVersion());
-						getLogger().info("New version: " + version[0]);
-						getLogger().info("What is a new? " + version[1]);
-						getLogger().info("New version is avaiable! Download now: https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
+						getLogger().info("New version : " + version[0]);
+						getLogger().info("New version available! Download now: https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 						needUpdate = true;
 						for(Player p : Bukkit.getOnlinePlayers()){
 							if(p.hasPermission("tntrun.version.check")){
 								p.sendMessage(" ");
-								p.sendMessage(" ");
-								p.sendMessage(" ");
-								p.sendMessage("§7[§6TNTRun§7] §6New Update is avaiable!");
+								p.sendMessage("§7[§6TNTRun§7] §6New update available!");
 								p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + getDescription().getVersion());
-								p.sendMessage("§7[§6TNTRun§7] §7New version: §6" + version[0]);
-								p.sendMessage("§7[§6TNTRun§7] §7What is a new? §6" + version[1]);
-								p.sendMessage("§7[§6TNTRun§7] §7New version is avaiable! Download now: §6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
+								p.sendMessage("§7[§6TNTRun§7] §7New version : §6" + version[0]);
+								p.sendMessage("§7[§6TNTRun§7] §7New version available! Download now: §6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 							}
 						}
 					}
 				}
 				getLogger().info(" ");
-				if(runUpdateTask){
-					runUpdateTask();
-				}
 			}
 		}, 30L);
-	}
-	
-	private void runUpdateTask(){
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(getInstance(), new Runnable(){
-			public void run(){
-				checkUpdate(false);	
-			}
-		}, 20L, (20 * 60) * 60);
 	}
 	
 	public MySQL mysql;

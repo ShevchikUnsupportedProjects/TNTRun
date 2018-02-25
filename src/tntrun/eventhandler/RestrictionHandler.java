@@ -182,6 +182,7 @@ public class RestrictionHandler implements Listener {
         
         if(e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.stats.material"))){
             if (arena != null) {
+            	e.setCancelled(true);
        			if(u.contains(player)){
     				TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
     				return;
@@ -282,13 +283,10 @@ public class RestrictionHandler implements Listener {
 				Bukkit.getScheduler().runTaskLaterAsynchronously(TNTRun.getInstance(), new Runnable(){
 					public void run(){
 						p.sendMessage(" ");
-						p.sendMessage(" ");
-						p.sendMessage(" ");
-						p.sendMessage("§7[§6TNTRun§7] §6New Update is avaiable!");
+						p.sendMessage("§7[§6TNTRun§7] §6New update available!");
 						p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + TNTRun.getInstance().getDescription().getVersion());
-						p.sendMessage("§7[§6TNTRun§7] §7New version: §6" + TNTRun.getInstance().ver[0]);
-						p.sendMessage("§7[§6TNTRun§7] §7What is a new? §6" + TNTRun.getInstance().ver[1]);
-						p.sendMessage("§7[§6TNTRun§7] §7New version is avaiable! Download now: §6https://www.spigotmc.org/resources/tntrun.7320/");
+						p.sendMessage("§7[§6TNTRun§7] §7New version: §6" + TNTRun.getInstance().version[0]);
+						p.sendMessage("§7[§6TNTRun§7] §7New version available! Download now: §6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 					}
 				}, 30L);
 			}
