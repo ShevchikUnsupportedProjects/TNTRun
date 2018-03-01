@@ -119,9 +119,9 @@ public class TNTRun extends JavaPlugin {
 			sound = new Sounds_1_9();
 		}
 		
-	    Bukkit.getLogger().info("[TNTRun_reloaded] Starting Metrics...");
+	    log.info("Starting Metrics...");
 	    Metrics metrics = new Metrics(this);
-	    Bukkit.getLogger().info("[TNTRun_reloaded] Metrics started!");
+	    log.info("Metrics started!");
 	     
 	     if(this.getConfig().getString("database").equals("file")){
 	    	 file = true;
@@ -131,10 +131,10 @@ public class TNTRun extends JavaPlugin {
 	    	 usestats = true;
 	    	 file = false;
 	     }else{
-	    	 Bukkit.getLogger().info("[TNTRun] This database is not supported, supported database: sql, file");
+	    	 log.info("This database is not supported, supported database: sql, file");
 	    	 usestats = false;
 	    	 file = false;
-	    	 Bukkit.getLogger().info("[TNTRun] Disabling stats...");
+	    	 log.info("Disabling stats...");
 	     }
 	     new Stats(this);
 	}
@@ -178,20 +178,20 @@ public class TNTRun extends JavaPlugin {
 		}
 		Bukkit.getScheduler().runTaskLaterAsynchronously(getInstance(), new Runnable(){
 			public void run(){
-				getLogger().info(" ");
-				getLogger().info("Checking plugin version...");
+				log.info(" ");
+				log.info("Checking plugin version...");
 				new VersionChecker();
 				version = VersionChecker.get().getVersion().split(";");
 				if(version[0].equalsIgnoreCase("error")){
 					throw new NullPointerException("An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun_reloaded.303586/");
 				}else{
 					if(version[0].equalsIgnoreCase(getDescription().getVersion())){
-						getLogger().info("You are running the most recent version");
+						log.info("You are running the most recent version");
 						needUpdate = false;
 					}else{
-						getLogger().info("Your version: " + getDescription().getVersion());
-						getLogger().info("New version : " + version[0]);
-						getLogger().info("New version available! Download now: https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
+						log.info("Your version: " + getDescription().getVersion());
+						log.info("New version : " + version[0]);
+						log.info("New version available! Download now: https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 						needUpdate = true;
 						for(Player p : Bukkit.getOnlinePlayers()){
 							if(p.hasPermission("tntrun.version.check")){
@@ -204,7 +204,7 @@ public class TNTRun extends JavaPlugin {
 						}
 					}
 				}
-				getLogger().info(" ");
+				log.info(" ");
 			}
 		}, 30L);
 	}
@@ -212,7 +212,7 @@ public class TNTRun extends JavaPlugin {
 	public MySQL mysql;
 	
 	private void connectToMySQL(){
-		Bukkit.getLogger().info("[TNTRun] Connecting to MySQL database...");
+		log.info("Connecting to MySQL database...");
 		String host = this.getConfig().getString("MySQL.host");
         Integer port = this.getConfig().getInt("MySQL.port");
         String name = this.getConfig().getString("MySQL.name");
@@ -225,6 +225,6 @@ public class TNTRun extends JavaPlugin {
                 + "`played` int(16) NOT NULL, "
                 + "UNIQUE KEY `username` (`username`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
         
-        Bukkit.getLogger().info("[TNTRun] Connected to MySQL database!");
+        log.info("Connected to MySQL database!");
 	}
 }

@@ -29,7 +29,7 @@ public class VersionChecker {
 				return version;
 			}
 		} catch (Exception ex) {
-			Bukkit.getLogger().info("[TNTRun] Failed to check for a update on spigot.");
+			Bukkit.getLogger().info("[TNTRun_reloaded] Failed to check for update on Spigot");
 		}
 		return "error";
 	}

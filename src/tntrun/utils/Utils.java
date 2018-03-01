@@ -17,6 +17,9 @@
 
 package tntrun.utils;
 
+import tntrun.TNTRun;
+import tntrun.arena.Arena;
+
 public class Utils {
 	
 	public static boolean isNumber(String text) {
@@ -33,6 +36,14 @@ public class Utils {
 			return true;
 		} catch (NumberFormatException e) {}
 		return false;
+	}
+	
+	public static int playerCount() {
+		int pCount = 0;
+		for (Arena arena : TNTRun.getInstance().amanager.getArenas()) {
+			pCount += arena.getPlayersManager().getPlayersCount();			
+		}
+		return pCount;
 	}
 
 }
