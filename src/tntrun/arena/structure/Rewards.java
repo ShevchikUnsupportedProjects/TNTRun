@@ -24,6 +24,7 @@ import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -66,6 +67,13 @@ public class Rewards {
 			if (reward != null) {
 				itemrewards.add(reward);
 			}
+		}
+	}
+	public void setItemsReward(String block, String amount) {
+		itemrewards.clear();
+		ItemStack reward = new ItemStack(Material.getMaterial(block), Integer.parseInt(amount));
+		if (reward != null) {
+			itemrewards.add(reward);
 		}
 	}
 

@@ -45,6 +45,7 @@ import tntrun.commands.setup.arena.SetLoseLevel;
 import tntrun.commands.setup.arena.SetMaxPlayers;
 import tntrun.commands.setup.arena.SetMinPlayers;
 import tntrun.commands.setup.arena.SetMoneyRewards;
+import tntrun.commands.setup.arena.SetReward;
 import tntrun.commands.setup.arena.SetSpawn;
 import tntrun.commands.setup.arena.SetSpectatorSpawn;
 import tntrun.commands.setup.arena.SetTeleport;
@@ -59,6 +60,7 @@ import tntrun.commands.setup.reload.ReloadTitles;
 import tntrun.commands.setup.selection.Clear;
 import tntrun.commands.setup.selection.SetP1;
 import tntrun.commands.setup.selection.SetP2;
+import tntrun.conversation.TNTRunConversation;
 import tntrun.messages.Messages;
 import tntrun.selectionget.PlayerSelection;
 
@@ -102,6 +104,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("finish", new FinishArena(plugin));
 		commandHandlers.put("disable", new DisableArena(plugin));
 		commandHandlers.put("enable", new EnableArena(plugin));
+		commandHandlers.put("setreward", new SetReward(plugin));
 	}
 
 	@Override

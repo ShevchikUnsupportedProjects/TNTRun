@@ -165,6 +165,7 @@ public class GameCommands implements CommandExecutor {
 			sender.sendMessage("§6/trsetup enable {arena} §f- §cEnable Arena");
 			sender.sendMessage("§6/trsetup disable {arena} §f- §cDisable Arena");
 			sender.sendMessage("§6/trsetup delete {arena} §f- §cDelete Arena");
+			sender.sendMessage("§6/trsetup setreward {arena} §f- §cSet the rewards for the arena");
 		}
 		// vote
 		else if (args[0].equalsIgnoreCase("vote")) {
