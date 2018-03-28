@@ -222,53 +222,45 @@ public class RestrictionHandler implements Listener {
 		final Player p = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(p.getName());
 		
+		if (arena == null) {
+			return;
+		}
 		if (p.getGameMode() != GameMode.CREATIVE) {
-			if(arena != null){
-				if(arena.getPlayersManager().isSpectator(p.getName())){
-					e.setCancelled(false);
-					p.setFlying(true);
-					return;
-				}
-				if(!arena.getStatusManager().isArenaRunning()){
-					e.setCancelled(true);
-					return;
-				}
-				if(u.contains(p)){
-					e.setCancelled(true);
-					return;
-				}
-				if(plugin.getConfig().get("doublejumps." + p.getName()) == null || plugin.getConfig().getInt("doublejumps." + p.getName()) == 0){
-					e.setCancelled(true);
-					p.setAllowFlight(false);
-					plugin.getConfig().set("doublejumps." + p.getName(), null);
-					plugin.saveConfig();
-					return;
-				}else{
-					plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) - 1);
-				}
-			      e.setCancelled(true);
-			      p.setFlying(false);
-			      p.setVelocity(p.getLocation().getDirection().multiply(1.5D).setY(0.7D));
-					TNTRun.getInstance().sound.NOTE_PLING(p, 5, 999);
-			      plugin.saveConfig();
-			      u.add(p);
-			      
-			      Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-			    	  public void run(){
-			    		  u.remove(p);
-			    		  p.setAllowFlight(true);
-			    	  }
-			      }, 20);
-			}else{
-				if(p.hasPermission("tntrun.fly.everywhere")){
-					p.setFlying(true);
-					p.setAllowFlight(true);
-				}else{
-					p.setAllowFlight(false);
-					p.setFlying(false);
-					e.setCancelled(true);
-				}
+			if(arena.getPlayersManager().isSpectator(p.getName())){
+				e.setCancelled(false);
+				p.setFlying(true);
+				return;
 			}
+			if(!arena.getStatusManager().isArenaRunning()){
+				e.setCancelled(true);
+				return;
+			}
+			if(u.contains(p)){
+				e.setCancelled(true);
+				return;
+			}
+			if(plugin.getConfig().get("doublejumps." + p.getName()) == null || plugin.getConfig().getInt("doublejumps." + p.getName()) == 0){
+				e.setCancelled(true);
+				p.setAllowFlight(false);
+				plugin.getConfig().set("doublejumps." + p.getName(), null);
+				plugin.saveConfig();
+				return;
+			}else{
+				plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) - 1);
+			}
+			e.setCancelled(true);
+			p.setFlying(false);
+			p.setVelocity(p.getLocation().getDirection().multiply(1.5D).setY(0.7D));
+			TNTRun.getInstance().sound.NOTE_PLING(p, 5, 999);
+			plugin.saveConfig();
+			u.add(p);
+			      
+			Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+			    public void run(){
+			    	u.remove(p);
+			    	p.setAllowFlight(true);
+			    }
+			}, 20);
 		}else{
 			p.setAllowFlight(true);
 		}

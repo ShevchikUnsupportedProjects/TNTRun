@@ -313,7 +313,7 @@ public class PlayerHandler {
 		plugin.pdata.restorePlayerLevel(player);
 		// add player damage resistance
 		player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, 80, true), true);
-		// restore location ot teleport to lobby
+		// restore location or teleport to lobby
 		if (arena.getStructureManager().getTeleportDestination() == TeleportDestination.LOBBY && plugin.globallobby.isLobbyLocationWorldAvailable()) {
 			player.teleport(plugin.globallobby.getLobbyLocation());
 			plugin.pdata.clearPlayerLocation(player);
@@ -338,14 +338,6 @@ public class PlayerHandler {
 		plugin.pdata.restorePlayerGameMode(player);
 		// update inventory
 		player.updateInventory();
-		// remove fly
-		if(player.hasPermission("tntrun.fly.everywhere")){
-			player.setAllowFlight(true);
-			player.setFlying(true);
-		}else{
-			player.setAllowFlight(false);
-			player.setFlying(false);
-		}
 		
 		plugin.pdata.restorePlayerFlight(player);
 		
@@ -354,7 +346,7 @@ public class PlayerHandler {
 		}
 		
 		
-		// check is in arena 0 players
+		// check if arena has 0 players
 		if (arena.getStatusManager().isArenaRunning() && arena.getPlayersManager().getPlayersCount() == 0) {
 			arena.getGameHandler().stopArena();
 		}
