@@ -25,7 +25,6 @@ public class SetReward implements CommandHandlerInterface {
 			// start prize conversation
 			new TNTRunConversation(plugin, player, arena, ConversationType.ARENAPRIZE).begin();
 			
-			//arena.getStructureManager().getRewards().setItemsReward(player.getInventory().getContents());
 			player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 set reward");
 		} else {
 			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
@@ -37,5 +36,4 @@ public class SetReward implements CommandHandlerInterface {
 	public int getMinArgsLength() {
 		return 1;
 	}
-
 }

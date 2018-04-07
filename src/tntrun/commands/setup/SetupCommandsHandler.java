@@ -26,9 +26,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
-import tntrun.commands.setup.arena.AddCommandsRewards;
 import tntrun.commands.setup.arena.AddKit;
-import tntrun.commands.setup.arena.ClearCommandsRewards;
 import tntrun.commands.setup.arena.CreateArena;
 import tntrun.commands.setup.arena.DeleteArena;
 import tntrun.commands.setup.arena.DeleteKit;
@@ -40,7 +38,6 @@ import tntrun.commands.setup.arena.SetArena;
 import tntrun.commands.setup.arena.SetCountdown;
 import tntrun.commands.setup.arena.SetDamage;
 import tntrun.commands.setup.arena.SetGameLevelDestroyDelay;
-import tntrun.commands.setup.arena.SetItemsRewards;
 import tntrun.commands.setup.arena.SetLoseLevel;
 import tntrun.commands.setup.arena.SetMaxPlayers;
 import tntrun.commands.setup.arena.SetMinPlayers;
@@ -60,7 +57,6 @@ import tntrun.commands.setup.reload.ReloadTitles;
 import tntrun.commands.setup.selection.Clear;
 import tntrun.commands.setup.selection.SetP1;
 import tntrun.commands.setup.selection.SetP2;
-import tntrun.conversation.TNTRunConversation;
 import tntrun.messages.Messages;
 import tntrun.selectionget.PlayerSelection;
 
@@ -92,10 +88,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("setminplayers", new SetMinPlayers(plugin));
 		commandHandlers.put("setvotepercent", new SetVotePercent(plugin));
 		commandHandlers.put("setcountdown", new SetCountdown(plugin));
-		commandHandlers.put("setitemsrewards", new SetItemsRewards(plugin));
-		commandHandlers.put("setmoneyrewards", new SetMoneyRewards(plugin));
-		commandHandlers.put("addcommandrewards", new AddCommandsRewards(plugin));
-		commandHandlers.put("clearcommandrewards", new ClearCommandsRewards(plugin));
+		commandHandlers.put("setmoneyreward", new SetMoneyRewards(plugin));
 		commandHandlers.put("addkit", new AddKit(plugin));
 		commandHandlers.put("deleteKit", new DeleteKit(plugin));
 		commandHandlers.put("settimelimit", new SetTimeLimit(plugin));
@@ -134,5 +127,4 @@ public class SetupCommandsHandler implements CommandExecutor {
 		Messages.sendMessage(player,"§7[§6TNTRun§7] §cERROR: Please use §6/tr cmds§c to view all valid commands for game");
 		return false;
 	}
-
 }

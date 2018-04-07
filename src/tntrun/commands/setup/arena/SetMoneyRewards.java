@@ -55,5 +55,4 @@ public class SetMoneyRewards implements CommandHandlerInterface {
 	public int getMinArgsLength() {
 		return 2;
 	}
-
 }

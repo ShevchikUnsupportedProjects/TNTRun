@@ -25,6 +25,7 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -45,64 +46,70 @@ public class Rewards {
 		}
 	}
 
-	private List<ItemStack> itemrewards = new ArrayList<ItemStack>();
-	private List<String> commands = new ArrayList<String>();
+	private List<String> materialrewards = new ArrayList<String>();
 	private int moneyreward = 0;
+	private int xpreward = 0;
+	private String commandreward;
 
-	public List<String> getCommandsToExecute() {
-		return commands;
-	}
-
-	public List<ItemStack> getItemsRewad() {
-		return itemrewards;
+	public List<String> getMaterialReward() {
+		return materialrewards;
 	}
 
 	public int getMoneyReward() {
 		return moneyreward;
 	}
-
-	public void setItemsReward(ItemStack[] rewards) {
-		itemrewards.clear();
-		for (ItemStack reward : rewards) {
-			if (reward != null) {
-				itemrewards.add(reward);
-			}
-		}
+	
+	public String getCommandReward() {
+		return commandreward;
 	}
-	public void setItemsReward(String block, String amount) {
-		itemrewards.clear();
-		ItemStack reward = new ItemStack(Material.getMaterial(block), Integer.parseInt(amount));
-		if (reward != null) {
-			itemrewards.add(reward);
-		}
+	
+	public int getXPReward() {
+		return xpreward;
+	}
+	
+	public void setMaterialReward(String block, String amount) {
+		materialrewards.clear();
+		materialrewards.add(block);
+		materialrewards.add(amount);
 	}
 
 	public void setMoneyReward(int money) {
 		moneyreward = money;
 	}
-
-	public void addCommandToExecute(String command) {
-		commands.add(command);
+	
+	public void setCommandReward(String cmdreward) {
+		commandreward = cmdreward;
 	}
-
-	public void clearCommandsToExceute() {
-		commands.clear();
+	
+	public void setXPReward(int xprwd) {
+		xpreward = xprwd;
 	}
 
 	public void rewardPlayer(Player player) {
 		String rewardmessage = "";
-		for (ItemStack reward : itemrewards) {
+		if (isValidReward(materialrewards)) {
+			ItemStack reward = new ItemStack(Material.getMaterial(materialrewards.get(0)), Integer.parseInt(materialrewards.get(1)));
 			if (player.getInventory().firstEmpty() != -1) {
 				player.getInventory().addItem(reward);
 			} else {
 				player.getWorld().dropItemNaturally(player.getLocation(),reward);
 			}
-			rewardmessage += reward.getAmount() + " x " + reward.getType().toString().replace("_", "").toLowerCase()+ ", ";
+			rewardmessage += reward.getAmount() + " x " + reward.getType().toString() + ", ";
 		}
 		if (moneyreward != 0) {
-			rewardMoney(player.getName(), moneyreward);
-			rewardmessage += ChatColor.GOLD.toString() + moneyreward;
+			OfflinePlayer offplayer = player.getPlayer();
+			rewardMoney(offplayer, moneyreward);
+			rewardmessage += ChatColor.GOLD.toString() + moneyreward + " coins, ";
 		}
+		if (xpreward > 0) {
+			player.giveExp(xpreward);
+			rewardmessage += ChatColor.GOLD.toString() + xpreward + " XP";
+		}
+		if (commandreward != null && commandreward.length() != 0) {
+			Bukkit.getServer().dispatchCommand(
+					Bukkit.getServer().getConsoleSender(), commandreward.replace("%PLAYER%", player.getName()));
+		}
+		
 		if (rewardmessage.endsWith(", ")) {
 			rewardmessage = rewardmessage.substring(0, rewardmessage.length() - 2);
 		}
@@ -110,32 +117,38 @@ public class Rewards {
 		if (!rewardmessage.isEmpty()) {
 			Messages.sendMessage(player, rewardmessage);
 		}
-		for (String command : commands) {
-			command = command.replace("{playerName}", player.getName());
-			command = command.replace("{playerUUID}", player.getUniqueId().toString());
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
-		}
 	}
 
-	private void rewardMoney(String playername, int money) {
+	private void rewardMoney(OfflinePlayer offplayer, int money) {
 		if (economy != null) {
 			Economy econ = (Economy) economy;
-			econ.depositPlayer(playername, money);
+			econ.depositPlayer(offplayer, money);
 		}
 	}
 
 	public void saveToConfig(FileConfiguration config) {
 		config.set("reward.money", moneyreward);
-		config.set("reward.items", itemrewards);
+		config.set("reward.material", materialrewards.get(0));
+		config.set("reward.amount", Integer.parseInt(materialrewards.get(1)));
+		config.set("reward.command", commandreward);
+		config.set("reward.xp", xpreward);
 	}
 
-	@SuppressWarnings("unchecked")
 	public void loadFromConfig(FileConfiguration config) {
 		moneyreward = config.getInt("reward.money", moneyreward);
-		Object obj = config.get("reward.items");
-		if (obj != null) {
-			itemrewards = (List<ItemStack>) obj;
+		xpreward = config.getInt("reward.xp", xpreward);
+		commandreward = config.getString("reward.command", commandreward);
+		String material = null;
+		int amount = 0;
+		materialrewards.add(0, config.getString("reward.material", material));
+		materialrewards.add(1, String.valueOf(config.getInt("reward.amount", amount)));
+	}
+	
+	public boolean isValidReward(List<String> materialrewards) {
+		if (Material.getMaterial(materialrewards.get(0)) != null && Integer.parseInt(materialrewards.get(1)) > 0) {
+			return true;
 		}
+		return false;
 	}
 
 }

@@ -154,8 +154,7 @@ public class GameCommands implements CommandExecutor {
 			sender.sendMessage("§6/trsetup setvotepercent {arena} {0<votepercent<1} §f- §cSet a vote percentage for arena  (Default: 0.75)");
 			sender.sendMessage("§6/trsetup settimelimit {arena} {seconds} §f- §cSet a limit for arena");
 			sender.sendMessage("§6/trsetup setcountdown {arena} {seconds} §f- §cSet a countdown for arena");
-			sender.sendMessage("§6/trsetup setitemsrewards {arena} §f- §cSet a everithing to reward (Item)");
-			sender.sendMessage("§6/trsetup setmoneyrewards {arena} {money} §f- §cSet a money reward for winning player");
+			sender.sendMessage("§6/trsetup setmoneyreward {arena} {money} §f- §cSet a money reward for winning player");
 			sender.sendMessage("§6/trsetup setteleport {arena} {previous/lobby} §f- §cSet teleport when you lose or win in arena");
 			sender.sendMessage("§6/trsetup setdamage {arena} {on/off/zero} §f- §cSet a pvp for arena");
 			sender.sendMessage("§6/trsetup reloadbars §f- §cReload Bar messages");

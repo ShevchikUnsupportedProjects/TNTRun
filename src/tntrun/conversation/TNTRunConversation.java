@@ -16,7 +16,6 @@ import tntrun.commands.setup.arena.ArenaRewardConversation;
 public class TNTRunConversation implements ConversationAbandonedListener {
 	private ConversationFactory conversationFactory;
 
-    //private String courseName;
     private Player player;
     private TNTRun plugin;
     private Arena arena;
@@ -29,18 +28,18 @@ public class TNTRunConversation implements ConversationAbandonedListener {
         conversationFactory = new ConversationFactory(this.plugin)
                 .withEscapeSequence("cancel")
                 .withTimeout(30)
-                .thatExcludesNonPlayersWithMessage("This is only possible in game, sorry.")
+                .thatExcludesNonPlayersWithMessage("This is only possible in-game, sorry.")
                 .addConversationAbandonedListener(this)
                 .withFirstPrompt(getEntryPrompt(conversationType, player));
     }
 
     private Prompt getEntryPrompt(ConversationType type, Player player) {
-        player.sendMessage(ChatColor.GRAY + "Note: Enter 'cancel' to quit the conversation.");
+        player.sendMessage(ChatColor.GRAY + "Enter 'cancel' anytime to quit the conversation.");
         switch (type){
             case ARENAPRIZE:
-                return new ArenaRewardConversation(player, arena);
+                return new ArenaRewardConversation(arena);
             default:
-                player.sendMessage(ChatColor.RED + "Something went wrong.");
+                player.sendMessage("§7[§6TNTRun§7] §cUnexpected conversation type: " + type);
                 return null;
         }
     }
@@ -55,18 +54,9 @@ public class TNTRunConversation implements ConversationAbandonedListener {
         context.getForWhom().sendRawMessage("§7[§6TNTRun§7] §c" + message + ". Please try again...");
     }
 
-    /*
-    public ParkourConversation withCourseName(String courseName) {
-        this.courseName = courseName;
-        return this;
-    }*/
-
     public void begin() {
         Conversation convo = conversationFactory.buildConversation(player);
         convo.getContext().setSessionData("playerName", player.getName());
-        /*if (courseName != null)
-            convo.getContext().setSessionData("courseName", courseName);*/
-
         convo.begin();
     }
 

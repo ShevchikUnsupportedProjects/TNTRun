@@ -8,6 +8,7 @@ import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -162,10 +163,11 @@ public class Shop implements Listener{
 		}
 			 
 		if (economy != null) {
+			OfflinePlayer offplayer = player.getPlayer();
 			Economy econ = (Economy) economy;
-			double pmoney = econ.getBalance(player.getName());
+			double pmoney = econ.getBalance(offplayer);
 			if(pmoney >= moneyneed){
-				econ.withdrawPlayer(player.getName(), moneyneed);
+				econ.withdrawPlayer(offplayer, moneyneed);
 				return true;
 			}
 		}
