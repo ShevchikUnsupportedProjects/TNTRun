@@ -31,6 +31,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -311,19 +312,19 @@ public class GameHandler {
 		resetScoreboard();
 		Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
 		try{
-		int size = plugin.getConfig().getStringList("scoreboard.waiting").size();
-		for(String s : plugin.getConfig().getStringList("scoreboard.waiting")){
-			s = s.replace("&", "§");
-			s = s.replace("{ARENA}", arena.getArenaName());
-			s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
-			s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
-			s = s.replace("{COUNT}", count + "");
-			o.getScore(s).setScore(size);
-			size--;
-		}
-		for (Player p : arena.getPlayersManager().getPlayers()) {
-			p.setScoreboard(scoreboard);
-		}
+			int size = plugin.getConfig().getStringList("scoreboard.waiting").size();
+			for(String s : plugin.getConfig().getStringList("scoreboard.waiting")){
+				s = s.replace("&", "§");
+				s = s.replace("{ARENA}", arena.getArenaName());
+				s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
+				s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
+				s = s.replace("{COUNT}", count + "");
+				o.getScore(s).setScore(size);
+				size--;
+			}
+			for (Player p : arena.getPlayersManager().getPlayers()) {
+				p.setScoreboard(scoreboard);
+			}
 		}catch (NullPointerException ex){
 			
 		}
@@ -385,62 +386,70 @@ public class GameHandler {
 		);
 	}
 	
-		public void startEnding(final Player player){
-			Stats.addWins(player, 1);
-			for(Player all : Bukkit.getOnlinePlayers()){
-				TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
-				String message = Messages.playerwonbroadcast;
-				message = message.replace("{PLAYER}", player.getName());
-				message = message.replace("{ARENA}", arena.getArenaName());
-				all.sendMessage(message.replace("&", "§"));
-			}
-				for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
-					TNTRun.getInstance().sound.ENDER_DRAGON(p, 5, 999);
-					p.setAllowFlight(true);
-					p.setFlying(true);
-					p.teleport(arena.getStructureManager().getSpawnPoint());
-					p.getInventory().clear();
-				}
+	public void startEnding(final Player player){
+		Stats.addWins(player, 1);
+		for(Player all : Bukkit.getOnlinePlayers()){
+			TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
+			String message = Messages.playerwonbroadcast;
+			message = message.replace("{PLAYER}", player.getName());
+			message = message.replace("{ARENA}", arena.getArenaName());
+			all.sendMessage(message.replace("&", "§"));
+		}
+		for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
+			TNTRun.getInstance().sound.ENDER_DRAGON(p, 5, 999);
+			p.setAllowFlight(true);
+			p.setFlying(true);
+			p.teleport(arena.getStructureManager().getSpawnPoint());
+			p.getInventory().clear();
+		}
 				
-				Bukkit.getScheduler().cancelTask(arenahandler);
-				Bukkit.getScheduler().cancelTask(playingtask);
+		Bukkit.getScheduler().cancelTask(arenahandler);
+		Bukkit.getScheduler().cancelTask(playingtask);
+		
+		if (plugin.getConfig().getBoolean("fireworksonwin")) {
 				
-				final int endtask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
-					@Override
-					public void run() {
-						Firework f = player.getWorld().spawn(arena.getStructureManager().getSpawnPoint(), Firework.class);
-						FireworkMeta fm = f.getFireworkMeta();
-						fm.addEffect(FireworkEffect.builder()
+			new BukkitRunnable() {
+				int i = 0;
+				@Override
+				public void run() {
+					if (i == 8) {
+						this.cancel();
+					}
+					Firework f = player.getWorld().spawn(arena.getStructureManager().getSpawnPoint(), Firework.class);
+					FireworkMeta fm = f.getFireworkMeta();
+					fm.addEffect(FireworkEffect.builder()
 								.withColor(Color.GREEN).withColor(Color.RED)
 								.withColor(Color.PURPLE)
 								.with(Type.BALL_LARGE)
 								.withFlicker()
 								.build());
-						fm.setPower(1);
-						f.setFireworkMeta(fm);
-					}
+					fm.setPower(1);
+					f.setFireworkMeta(fm);
+					i++;
+				}
 					
-				}, 0, 10);
+			}.runTaskTimer(plugin, 0, 10);
+		}
 				
-				Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-					public void run(){
-						try{
-						Bukkit.getScheduler().cancelTask(endtask);
-						arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
-						stopArena();
+		new BukkitRunnable() {
+			public void run(){
+				try{
+					arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
+					stopArena();
 						
-						final ConsoleCommandSender console = Bukkit.getConsoleSender();
+					final ConsoleCommandSender console = Bukkit.getConsoleSender();
 						
-						if(plugin.getConfig().getStringList("commandsonwin") == null){
-							return;
-						}
-						for(String commands : plugin.getConfig().getStringList("commandsonwin")){
-							Bukkit.dispatchCommand(console, commands.replace("{PLAYER}", player.getName()));
-						}
-						}catch (NullPointerException ex){
-							
-						}
+					if(plugin.getConfig().getStringList("commandsonwin") == null){
+						return;
 					}
-				}, 160);
+					for(String commands : plugin.getConfig().getStringList("commandsonwin")){
+						Bukkit.dispatchCommand(console, commands.replace("{PLAYER}", player.getName()));
+					}
+				}catch (NullPointerException ex){
+							
+				}
 			}
+			
+		}.runTaskLater(plugin, 120);
+	}
 }

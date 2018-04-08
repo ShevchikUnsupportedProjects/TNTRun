@@ -19,6 +19,7 @@ shop:
 commandsonwin:
 - say {PLAYER} won TNTRun
 - say Congratulations...
+fireworksonwin: true
 items:
    vote:
       use: true
