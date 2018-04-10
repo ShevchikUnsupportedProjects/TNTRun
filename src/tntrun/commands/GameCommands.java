@@ -17,6 +17,8 @@
 
 package tntrun.commands;
 
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -51,10 +53,10 @@ public class GameCommands implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("help")) {
 			sender.sendMessage("§7============[§6TNTRun§7]§7============");
 			sender.sendMessage("§6/tr lobby §f- §cTeleport to lobby");
-			sender.sendMessage("§6/tr list §f- §cList all arenas");
+			sender.sendMessage("§6/tr list [arena] §f- §cList all arenas §for §cList arena details");
 			sender.sendMessage("§6/tr join {arena} §f- §cJoin arena");
 			sender.sendMessage("§6/tr leave §f- §cLeave current arena");
-			sender.sendMessage("§6/tr vote §f- §cVote for current arena");
+			sender.sendMessage("§6/tr vote §f- §cVote to force start current arena");
 			sender.sendMessage("§6/tr cmds §f- §cView all commands");
 			sender.sendMessage("§6/tr info §f- §cPlugin info");
 			sender.sendMessage("§6/tr stats §f- §cStats");
@@ -75,6 +77,44 @@ public class GameCommands implements CommandExecutor {
 		}
 		// list arenas
 		else if (args[0].equalsIgnoreCase("list")) {
+			if (args.length >= 2) {
+				Arena arena = plugin.amanager.getArenaByName(args[1]);
+				if (arena == null) {
+					sender.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[1] + "§c doesn't exist");
+					return true;
+				}
+				//list arena details
+				sender.sendMessage("§7============[§6TNTRun§7]§7============");
+				sender.sendMessage("§7Arena Details: §a" + arena.getArenaName());
+				
+				String arenaStatus = "Enabled";
+				if (!arena.getStatusManager().isArenaEnabled()) {
+					arenaStatus = "Disabled";
+				}
+				sender.sendMessage("§6Status §f- §c " + arenaStatus);
+				sender.sendMessage("§6Min Players §f- §c " + arena.getStructureManager().getMinPlayers());
+				sender.sendMessage("§6Max Players §f- §c " + arena.getStructureManager().getMaxPlayers());
+				sender.sendMessage("§6Time Limit §f- §c " + arena.getStructureManager().getTimeLimit() + " seconds");
+				sender.sendMessage("§6Countdown §f- §c " + arena.getStructureManager().getCountdown() + " seconds");
+				sender.sendMessage("§6Teleport to §f- §c " + arena.getStructureManager().getTeleportDestination());
+				sender.sendMessage("§6Player Count §f- §c " + arena.getPlayersManager().getPlayersCount());
+				sender.sendMessage("§6Vote Percent §f- §c " + arena.getStructureManager().getVotePercent());
+				if (arena.getStructureManager().getRewards().getXPReward() != 0) {
+					sender.sendMessage("§6XP Reward §f- §c " + arena.getStructureManager().getRewards().getXPReward());
+				}
+				if (arena.getStructureManager().getRewards().getMoneyReward() != 0) {
+					sender.sendMessage("§6Money Reward §f- §c " + arena.getStructureManager().getRewards().getMoneyReward());
+				}
+				List<String> materialreward = arena.getStructureManager().getRewards().getMaterialReward();
+				if (Integer.parseInt(materialreward.get(1)) > 0 && materialreward.get(0) != null) {
+					sender.sendMessage("§6Material Reward §f- §c " + materialreward.get(1) + "§6 x §c" + materialreward.get(0));
+				}
+				if (arena.getStructureManager().getRewards().getCommandReward() != null) {
+					sender.sendMessage("§6Command Reward §f- §6\"§c" + arena.getStructureManager().getRewards().getCommandReward() + "§6\"");
+				}
+
+				return true;
+			}
 			StringBuilder message = new StringBuilder(200);
 			message.append(Messages.availablearenas);
 			for (Arena arena : plugin.amanager.getArenas()) {
@@ -83,6 +123,9 @@ public class GameCommands implements CommandExecutor {
 				} else {
 					message.append("&c" + arena.getArenaName() + " ; ");
 				}
+			}
+			if (message.length() > 0) {
+				message.setLength(message.length() - 2);
 			}
 			Messages.sendMessage(player, message.toString());
 			return true;
@@ -149,10 +192,10 @@ public class GameCommands implements CommandExecutor {
 			sender.sendMessage("§7============[§6Other commands§7]============");
 			sender.sendMessage("§6/trsetup delspectate {arena} §f- §cDelete spectators spawn");
 			sender.sendMessage("§6/trsetup setgameleveldestroydelay {arena} {ticks} §f- §cSet a delay for removing blocks when player steps on it");
-			sender.sendMessage("§6/trsetup setmaxplayers {arena} {players} §f- §cSet a max players for arena");
-			sender.sendMessage("§6/trsetup setminplayers {arena} {players} §f- §cSet a min players for arena");
+			sender.sendMessage("§6/trsetup setmaxplayers {arena} {players} §f- §cSet maximum players for arena");
+			sender.sendMessage("§6/trsetup setminplayers {arena} {players} §f- §cSet minimum players for arena");
 			sender.sendMessage("§6/trsetup setvotepercent {arena} {0<votepercent<1} §f- §cSet a vote percentage for arena  (Default: 0.75)");
-			sender.sendMessage("§6/trsetup settimelimit {arena} {seconds} §f- §cSet a limit for arena");
+			sender.sendMessage("§6/trsetup settimelimit {arena} {seconds} §f- §cSet a time limit for arena");
 			sender.sendMessage("§6/trsetup setcountdown {arena} {seconds} §f- §cSet a countdown for arena");
 			sender.sendMessage("§6/trsetup setmoneyreward {arena} {money} §f- §cSet a money reward for winning player");
 			sender.sendMessage("§6/trsetup setteleport {arena} {previous/lobby} §f- §cSet teleport when you lose or win in arena");

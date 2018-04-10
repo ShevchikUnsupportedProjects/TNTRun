@@ -113,8 +113,8 @@ public class Rewards {
 		if (rewardmessage.endsWith(", ")) {
 			rewardmessage = rewardmessage.substring(0, rewardmessage.length() - 2);
 		}
-		rewardmessage = Messages.playerrewardmessage.replace("{REWARD}", rewardmessage);
 		if (!rewardmessage.isEmpty()) {
+			rewardmessage = Messages.playerrewardmessage.replace("{REWARD}", rewardmessage);
 			Messages.sendMessage(player, rewardmessage);
 		}
 	}
