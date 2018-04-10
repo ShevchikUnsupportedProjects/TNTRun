@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.commands.setup.arena.ArenaRewardConversation;
 
 public class TNTRunConversation implements ConversationAbandonedListener {
 	private ConversationFactory conversationFactory;

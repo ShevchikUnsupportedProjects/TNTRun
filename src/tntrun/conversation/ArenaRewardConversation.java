@@ -1,4 +1,4 @@
-package tntrun.commands.setup.arena;
+package tntrun.conversation;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,7 +25,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 	
 	@Override
 	public String getPromptText(ConversationContext context) {
-		return ChatColor.GOLD + " What type of prize would you like to set?\n" 
+		return ChatColor.GOLD + " What type of reward would you like to set?\n" 
 				+ ChatColor.GREEN + formatFixedSet();
 	}
 	
@@ -94,7 +94,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
                     context.getSessionData("material").toString(),
                     context.getSessionData("amount").toString());
 
-			return "§7[§6TNTRun§7] The Material prize for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " was set to " + ChatColor.GOLD + context.getSessionData("amount") + " " + context.getSessionData("material");
+			return "§7[§6TNTRun§7] The Material reward for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " was set to " + ChatColor.GOLD + context.getSessionData("amount") + " " + context.getSessionData("material");
 		}
 
 		@Override
@@ -103,13 +103,13 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 		}
 	}
 	
-	/* BEGIN COMMAND PRIZE */
+	/* BEGIN COMMAND REWARD */
 	private class ChooseCommand extends StringPrompt {
 
 		@Override
 		public String getPromptText(ConversationContext context) {
 			context.getForWhom().sendRawMessage(ChatColor.GRAY + "Remember you can include %PLAYER% to apply it to that player.\nExample: 'kick %PLAYER%'");
-			return ChatColor.GOLD + " What would you like the Command prize to be?";
+			return ChatColor.GOLD + " What would you like the Command reward to be?";
 		}
 
 		@Override
@@ -146,7 +146,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 			arena.getStructureManager().getRewards().setCommandReward(
                     context.getSessionData("command").toString());
 
-			return "§7[§6TNTRun§7] The Command prize for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " was set to /" + ChatColor.GOLD + context.getSessionData("command");
+			return "§7[§6TNTRun§7] The Command reward for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " was set to /" + ChatColor.GOLD + context.getSessionData("command");
 		}
 
 		@Override
@@ -155,7 +155,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 		}
 	}
 	
-	/* BEGIN XP PRIZE */
+	/* BEGIN XP REWARD */
 	private class ChooseXP extends NumericPrompt {
 
 		@Override
@@ -186,7 +186,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 			arena.getStructureManager().getRewards().setXPReward(
                     Integer.parseInt(context.getSessionData("amount").toString()));
 
-			return "§7[§6TNTRun§7] The XP prize for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " was set to " + ChatColor.GOLD + context.getSessionData("amount");
+			return "§7[§6TNTRun§7] The XP reward for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " was set to " + ChatColor.GOLD + context.getSessionData("amount");
 		}
 
 		@Override
