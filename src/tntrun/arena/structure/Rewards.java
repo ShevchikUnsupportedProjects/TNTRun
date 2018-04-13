@@ -128,8 +128,10 @@ public class Rewards {
 
 	public void saveToConfig(FileConfiguration config) {
 		config.set("reward.money", moneyreward);
-		config.set("reward.material", materialrewards.get(0));
-		config.set("reward.amount", Integer.parseInt(materialrewards.get(1)));
+		if (!materialrewards.isEmpty() && !materialrewards.get(0).equals(null)) {
+			config.set("reward.material", materialrewards.get(0));
+			config.set("reward.amount", Integer.parseInt(materialrewards.get(1)));
+		}
 		config.set("reward.command", commandreward);
 		config.set("reward.xp", xpreward);
 	}
