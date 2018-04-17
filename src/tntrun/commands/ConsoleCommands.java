@@ -17,6 +17,7 @@
 
 package tntrun.commands;
 
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -38,14 +39,14 @@ public class ConsoleCommands implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (!(sender instanceof ConsoleCommandSender || sender instanceof RemoteConsoleCommandSender)) {
+		if (!(sender instanceof ConsoleCommandSender || sender instanceof RemoteConsoleCommandSender  || sender instanceof BlockCommandSender)) {
 			sender.sendMessage("Console is expected");
 			return true;
 		}
 		// handle commands
 		// disable arena
-		else if (args.length == 2 && args[1].equalsIgnoreCase("disable")) {
-			Arena arena = plugin.amanager.getArenaByName(args[0]);
+		else if (args.length == 2 && args[0].equalsIgnoreCase("disable")) {
+			Arena arena = plugin.amanager.getArenaByName(args[1]);
 			if (arena != null) {
 				arena.getStatusManager().disableArena();
 				sender.sendMessage("Arena disabled");
@@ -55,8 +56,8 @@ public class ConsoleCommands implements CommandExecutor {
 			return true;
 		}
 		// enable arena
-		else if (args.length == 2 && args[1].equalsIgnoreCase("enable")) {
-			Arena arena = plugin.amanager.getArenaByName(args[0]);
+		else if (args.length == 2 && args[0].equalsIgnoreCase("enable")) {
+			Arena arena = plugin.amanager.getArenaByName(args[1]);
 			if (arena != null) {
 				if (arena.getStatusManager().isArenaEnabled()) {
 					sender.sendMessage("Arena already enabled.");

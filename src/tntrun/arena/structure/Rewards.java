@@ -19,6 +19,7 @@ package tntrun.arena.structure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import net.milkbowl.vault.economy.Economy;
 
@@ -47,12 +48,17 @@ public class Rewards {
 	}
 
 	private List<String> materialrewards = new ArrayList<String>();
+	private List<String> materialamounts = new ArrayList<String>();
 	private int moneyreward = 0;
 	private int xpreward = 0;
 	private String commandreward;
 
 	public List<String> getMaterialReward() {
 		return materialrewards;
+	}
+	
+	public List<String> getMaterialAmount() {
+		return materialamounts;
 	}
 
 	public int getMoneyReward() {
@@ -69,8 +75,9 @@ public class Rewards {
 	
 	public void setMaterialReward(String block, String amount) {
 		materialrewards.clear();
+		materialamounts.clear();
 		materialrewards.add(block);
-		materialrewards.add(amount);
+		materialamounts.add(amount);
 	}
 
 	public void setMoneyReward(int money) {
@@ -87,8 +94,8 @@ public class Rewards {
 
 	public void rewardPlayer(Player player) {
 		String rewardmessage = "";
-		if (isValidReward(materialrewards)) {
-			ItemStack reward = new ItemStack(Material.getMaterial(materialrewards.get(0)), Integer.parseInt(materialrewards.get(1)));
+		if (isValidReward(materialrewards, materialamounts)) {
+			ItemStack reward = new ItemStack(Material.getMaterial(materialrewards.get(0)), Integer.parseInt(materialamounts.get(0)));
 			if (player.getInventory().firstEmpty() != -1) {
 				player.getInventory().addItem(reward);
 			} else {
@@ -128,27 +135,40 @@ public class Rewards {
 
 	public void saveToConfig(FileConfiguration config) {
 		config.set("reward.money", moneyreward);
-		if (!materialrewards.isEmpty() && !materialrewards.get(0).equals(null)) {
-			config.set("reward.material", materialrewards.get(0));
-			config.set("reward.amount", Integer.parseInt(materialrewards.get(1)));
-		}
 		config.set("reward.command", commandreward);
 		config.set("reward.xp", xpreward);
+		
+		String path = "reward.material";
+		for (String material : materialrewards) {
+			if (material != null) {
+				config.set(path, material);
+				for (String amount : materialamounts) {
+					config.set(path + "." + material + ".amount", Integer.parseInt(amount));
+				}
+			}
+		}
 	}
 
 	public void loadFromConfig(FileConfiguration config) {
 		moneyreward = config.getInt("reward.money", moneyreward);
 		xpreward = config.getInt("reward.xp", xpreward);
 		commandreward = config.getString("reward.command", commandreward);
-		String material = null;
-		int amount = 0;
-		materialrewards.add(0, config.getString("reward.material", material));
-		materialrewards.add(1, String.valueOf(config.getInt("reward.amount", amount)));
+		
+		//check that path exists
+		if (config.getConfigurationSection("reward.material") != null) {
+			Set<String> materials = config.getConfigurationSection("reward.material").getKeys(false);
+			for (String material : materials) {
+				materialrewards.add(material);
+				materialamounts.add(String.valueOf(config.getInt("reward.material." + material  + ".amount")));
+			}
+		}
 	}
 	
-	public boolean isValidReward(List<String> materialrewards) {
-		if (Material.getMaterial(materialrewards.get(0)) != null && Integer.parseInt(materialrewards.get(1)) > 0) {
-			return true;
+	public boolean isValidReward(List<String> materialrewards, List<String> materialamounts) {
+		if (materialrewards != null && !materialrewards.isEmpty() && materialamounts != null && !materialamounts.isEmpty()) {
+			if (Material.getMaterial(materialrewards.get(0)) != null && Integer.parseInt(materialamounts.get(0)) > 0) {
+				return true;
+			}
 		}
 		return false;
 	}

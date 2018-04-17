@@ -106,11 +106,12 @@ public class GameCommands implements CommandExecutor {
 					sender.sendMessage("§6Money Reward §f- §c " + arena.getStructureManager().getRewards().getMoneyReward());
 				}
 				List<String> materialreward = arena.getStructureManager().getRewards().getMaterialReward();
-				if (!materialreward.isEmpty()) {
-					if (Integer.parseInt(materialreward.get(1)) > 0 && materialreward.get(0) != null) {
-						sender.sendMessage("§6Material Reward §f- §c " + materialreward.get(1) + "§6 x §c" + materialreward.get(0));
-					}
+				List<String> materialamount = arena.getStructureManager().getRewards().getMaterialAmount();
+						
+				if (arena.getStructureManager().getRewards().isValidReward(materialreward, materialamount)) {
+						sender.sendMessage("§6Material Reward §f- §c " + materialamount.get(0) + "§6 x §c" + materialreward.get(0));
 				}
+				
 				if (arena.getStructureManager().getRewards().getCommandReward() != null) {
 					sender.sendMessage("§6Command Reward §f- §6\"§c" + arena.getStructureManager().getRewards().getCommandReward() + "§6\"");
 				}

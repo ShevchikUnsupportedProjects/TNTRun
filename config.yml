@@ -7,8 +7,9 @@ special:
    CheckForNewVersion: true
 info:
    list:
-   - '&6&lThe original TNTRun plugin by Shevchik'
-   - '&6&lUpdated/supported by steve4744 since version 6.3.3'
+   - '&6&lThe TNTRun plugin'
+   - '&6&lOriginal author Shevchik'
+   - '&6&lCurrent author steve4744'
    - '&6 '
    - '&6&lNow try and play'
 shop:

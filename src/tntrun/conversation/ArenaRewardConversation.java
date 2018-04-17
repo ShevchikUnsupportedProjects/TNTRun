@@ -43,7 +43,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 		return null;
 	}
 	
-	// Reward Material
+	/* === Reward Material === */
 	private class ChooseMaterial extends StringPrompt {
 		@Override
 		public String getPromptText(ConversationContext context) {
@@ -103,7 +103,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 		}
 	}
 	
-	/* BEGIN COMMAND REWARD */
+	/* === Reward Command === */
 	private class ChooseCommand extends StringPrompt {
 
 		@Override
@@ -155,7 +155,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 		}
 	}
 	
-	/* BEGIN XP REWARD */
+	/* === Reward XP === */
 	private class ChooseXP extends NumericPrompt {
 
 		@Override
