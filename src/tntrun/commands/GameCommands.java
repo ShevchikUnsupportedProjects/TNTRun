@@ -51,15 +51,15 @@ public class GameCommands implements CommandExecutor {
 		}
 		// help command
 		if (args[0].equalsIgnoreCase("help")) {
-			sender.sendMessage("§7============[§6TNTRun§7]§7============");
-			sender.sendMessage("§6/tr lobby §f- §cTeleport to lobby");
-			sender.sendMessage("§6/tr list [arena] §f- §cList all arenas §for §cList arena details");
-			sender.sendMessage("§6/tr join {arena} §f- §cJoin arena");
-			sender.sendMessage("§6/tr leave §f- §cLeave current arena");
-			sender.sendMessage("§6/tr vote §f- §cVote to force start current arena");
-			sender.sendMessage("§6/tr cmds §f- §cView all commands");
-			sender.sendMessage("§6/tr info §f- §cPlugin info");
-			sender.sendMessage("§6/tr stats §f- §cStats");
+			player.sendMessage("§7============[§6TNTRun§7]§7============");
+			Messages.sendMessage(player, "§6/tr lobby §f- §c" + Messages.helplobby);
+			Messages.sendMessage(player, "§6/tr list [arena] §f- §c" + Messages.helplist);
+			Messages.sendMessage(player, "§6/tr join {arena} §f- §c" + Messages.helpjoin);
+			Messages.sendMessage(player, "§6/tr leave §f- §c" + Messages.helpleave);
+			Messages.sendMessage(player, "§6/tr vote §f- §c" + Messages.helpvote);
+			Messages.sendMessage(player, "§6/tr cmds §f- §c" + Messages.helpcmds);
+			Messages.sendMessage(player, "§6/tr info §f- §c" + Messages.helpinfo);
+			Messages.sendMessage(player, "§6/tr stats §f- §c" + Messages.helpstats);
 			return true;
 		} else if (args[0].equalsIgnoreCase("lobby")) {
 			if (plugin.globallobby.isLobbyLocationSet()) {
@@ -162,14 +162,14 @@ public class GameCommands implements CommandExecutor {
 		}
 		// player stats
 		else if (args[0].equalsIgnoreCase("stats")) {
-			player.sendMessage("§7============[§6TNTRun§7]§7============");
 			if(!plugin.usestats){
-				player.sendMessage("§cStats are disabled");
+				Messages.sendMessage(player, Messages.statsdisabled);
 				return true;
 			}
-			player.sendMessage("§7Played games: §6" + Stats.getPlayedGames(player));
-			player.sendMessage("§7Wins: §6" + Stats.getWins(player));
-			player.sendMessage("§7Losses: §6" + Stats.getLooses(player));
+			player.sendMessage("§7============[§6TNTRun§7]§7============");
+			Messages.sendMessage(player, Messages.gamesplayed + Stats.getPlayedGames(player));
+			Messages.sendMessage(player, Messages.gameswon + Stats.getWins(player));
+			Messages.sendMessage(player, Messages.gameslost + Stats.getLooses(player));
 		}
 		// leave arena
 		else if (args[0].equalsIgnoreCase("leave")) {
@@ -178,39 +178,39 @@ public class GameCommands implements CommandExecutor {
 				arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 				return true;
 			} else {
-				sender.sendMessage("§7[§6TNTRun§7] §cYou are not in an arena");
+				Messages.sendMessage(player, Messages.playernotinarena);
 				return true;
 			}
 		}
 		// all commands
 		else if (args[0].equalsIgnoreCase("cmds")) {
 			sender.sendMessage("§7============[§6TNTRun§7]============");
-			sender.sendMessage("§6/trsetup setlobby §f- §cSet lobby at your current location");
-			sender.sendMessage("§6/trsetup create {arena} §f- §cCreate new Arena");
-			sender.sendMessage("§6/trsetup setarena {arena} §f- §cSet bounds for arena");
-			sender.sendMessage("§6/trsetup setloselevel {arena} §f- §cSet looselevel bounds for arena");
-			sender.sendMessage("§6/trsetup setspawn {arena} §f- §cSet spawn for players at your current location");
-			sender.sendMessage("§6/trsetup setspectate {arena} §f- §cSet spectators spawn");
-			sender.sendMessage("§6/trsetup finish {arena} §f- §cFinish arena and save it to config file");
+			Messages.sendMessage(player, "§6/trsetup setlobby §f- §c" + Messages.setuplobby);
+			Messages.sendMessage(player, "§6/trsetup create {arena} §f- §c" + Messages.setupcreate);
+			Messages.sendMessage(player, "§6/trsetup setarena {arena} §f- §c" + Messages.setupbounds);
+			Messages.sendMessage(player, "§6/trsetup setloselevel {arena} §f- §c" + Messages.setuploselevel);
+			Messages.sendMessage(player, "§6/trsetup setspawn {arena} §f- §c" + Messages.setupspawn);
+			Messages.sendMessage(player, "§6/trsetup setspectate {arena} §f- §c" + Messages.setupspectate);
+			Messages.sendMessage(player, "§6/trsetup finish {arena} §f- §c" + Messages.setupfinish);
 			sender.sendMessage("§7============[§6Other commands§7]============");
-			sender.sendMessage("§6/trsetup delspectate {arena} §f- §cDelete spectators spawn");
-			sender.sendMessage("§6/trsetup setgameleveldestroydelay {arena} {ticks} §f- §cSet a delay for removing blocks when player steps on it");
-			sender.sendMessage("§6/trsetup setmaxplayers {arena} {players} §f- §cSet maximum players for arena");
-			sender.sendMessage("§6/trsetup setminplayers {arena} {players} §f- §cSet minimum players for arena");
-			sender.sendMessage("§6/trsetup setvotepercent {arena} {0<votepercent<1} §f- §cSet a vote percentage for arena  (Default: 0.75)");
-			sender.sendMessage("§6/trsetup settimelimit {arena} {seconds} §f- §cSet a time limit for arena");
-			sender.sendMessage("§6/trsetup setcountdown {arena} {seconds} §f- §cSet a countdown for arena");
-			sender.sendMessage("§6/trsetup setmoneyreward {arena} {money} §f- §cSet a money reward for winning player");
-			sender.sendMessage("§6/trsetup setteleport {arena} {previous/lobby} §f- §cSet teleport when you lose or win in arena");
-			sender.sendMessage("§6/trsetup setdamage {arena} {on/off/zero} §f- §cSet a pvp for arena");
-			sender.sendMessage("§6/trsetup reloadbars §f- §cReload Bar messages");
-			sender.sendMessage("§6/trsetup reloadtitles §f- §cReload Title messages");
-			sender.sendMessage("§6/trsetup reloadmsg §f- §cReload arena messages");
-			sender.sendMessage("§6/trsetup reloadconfig §f- §cReload config file");
-			sender.sendMessage("§6/trsetup enable {arena} §f- §cEnable Arena");
-			sender.sendMessage("§6/trsetup disable {arena} §f- §cDisable Arena");
-			sender.sendMessage("§6/trsetup delete {arena} §f- §cDelete Arena");
-			sender.sendMessage("§6/trsetup setreward {arena} §f- §cSet the rewards for the arena");
+			Messages.sendMessage(player, "§6/trsetup delspectate {arena} §f- §c" + Messages.setupdelspectate);
+			Messages.sendMessage(player, "§6/trsetup setgameleveldestroydelay {arena} {ticks} §f- §c" + Messages.setupdelay);
+			Messages.sendMessage(player, "§6/trsetup setmaxplayers {arena} {players} §f- §c" + Messages.setupmax);
+			Messages.sendMessage(player, "§6/trsetup setminplayers {arena} {players} §f- §c" + Messages.setupmin);
+			Messages.sendMessage(player, "§6/trsetup setvotepercent {arena} {0<votepercent<1} §f- §c" + Messages.setupvote);
+			Messages.sendMessage(player, "§6/trsetup settimelimit {arena} {seconds} §f- §c" + Messages.setuptimelimit);
+			Messages.sendMessage(player, "§6/trsetup setcountdown {arena} {seconds} §f- §c" + Messages.setupcountdown);
+			Messages.sendMessage(player, "§6/trsetup setmoneyreward {arena} {amount} §f- §c" + Messages.setupmoney);
+			Messages.sendMessage(player, "§6/trsetup setteleport {arena} {previous/lobby} §f- §c" + Messages.setupteleport);
+			Messages.sendMessage(player, "§6/trsetup setdamage {arena} {on/off/zero} §f- §c" + Messages.setupdamage);
+			Messages.sendMessage(player, "§6/trsetup reloadbars §f- §c" + Messages.setupreloadbars);
+			Messages.sendMessage(player, "§6/trsetup reloadtitles §f- §c" + Messages.setupreloadtitles);
+			Messages.sendMessage(player, "§6/trsetup reloadmsg §f- §c" + Messages.setupreloadmsg);
+			Messages.sendMessage(player, "§6/trsetup reloadconfig §f- §c" + Messages.setupreloadconfig);
+			Messages.sendMessage(player, "§6/trsetup enable {arena} §f- §c" + Messages.setupenable);
+			Messages.sendMessage(player, "§6/trsetup disable {arena} §f- §c" + Messages.setupdisable);
+			Messages.sendMessage(player, "§6/trsetup delete {arena} §f- §c" + Messages.setupdelete);
+			Messages.sendMessage(player, "§6/trsetup setreward {arena} §f- §c" + Messages.setupreward);
 		}
 		// vote
 		else if (args[0].equalsIgnoreCase("vote")) {
@@ -223,7 +223,7 @@ public class GameCommands implements CommandExecutor {
 				}
 				return true;
 			} else {
-				sender.sendMessage("§7[§6TNTRun§7] §cYou are not in arena");
+				Messages.sendMessage(player, Messages.playernotinarena);
 				return true;
 			}
 		} 

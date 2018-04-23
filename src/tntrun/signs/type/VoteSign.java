@@ -50,7 +50,7 @@ public class VoteSign implements SignType {
 			}
 			e.setCancelled(true);
 		} else {
-			e.getPlayer().sendMessage("You are not in arena");
+			Messages.sendMessage(e.getPlayer(), Messages.playernotinarena);
 		}
 	}
 

@@ -120,7 +120,7 @@ public class TNTRun extends JavaPlugin {
 		}
 		
 	    log.info("Starting Metrics...");
-	    Metrics metrics = new Metrics(this);
+	    new Metrics(this);
 	    log.info("Metrics started!");
 	     
 	     if(this.getConfig().getString("database").equals("file")){

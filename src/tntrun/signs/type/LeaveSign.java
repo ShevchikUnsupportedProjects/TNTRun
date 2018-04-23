@@ -46,7 +46,7 @@ public class LeaveSign implements SignType {
 			arena.getPlayerHandler().leavePlayer(e.getPlayer(), Messages.playerlefttoplayer, Messages.playerlefttoothers);
 			e.setCancelled(true);
 		} else {
-			e.getPlayer().sendMessage("You are not in arena");
+			Messages.sendMessage(e.getPlayer(), Messages.playernotinarena);
 		}
 	}
 
