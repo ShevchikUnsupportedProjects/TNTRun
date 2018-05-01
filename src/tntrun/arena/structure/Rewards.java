@@ -73,9 +73,11 @@ public class Rewards {
 		return xpreward;
 	}
 	
-	public void setMaterialReward(String block, String amount) {
-		materialrewards.clear();
-		materialamounts.clear();
+	public void setMaterialReward(String block, String amount, Boolean isFirstItem) {
+		if (isFirstItem) {
+			materialrewards.clear();
+			materialamounts.clear();
+		}
 		materialrewards.add(block);
 		materialamounts.add(amount);
 	}
@@ -94,15 +96,19 @@ public class Rewards {
 
 	public void rewardPlayer(Player player) {
 		String rewardmessage = "";
-		if (isValidReward(materialrewards, materialamounts)) {
-			ItemStack reward = new ItemStack(Material.getMaterial(materialrewards.get(0)), Integer.parseInt(materialamounts.get(0)));
-			if (player.getInventory().firstEmpty() != -1) {
-				player.getInventory().addItem(reward);
-			} else {
-				player.getWorld().dropItemNaturally(player.getLocation(),reward);
+		for (int i=0; i < materialrewards.size(); i++) {
+			if (isValidReward(materialrewards.get(i), materialamounts.get(i))) {
+				ItemStack reward = new ItemStack(Material.getMaterial(materialrewards.get(i)), Integer.parseInt(materialamounts.get(i)));
+				if (player.getInventory().firstEmpty() != -1) {
+					player.getInventory().addItem(reward);
+					player.updateInventory();
+				} else {
+					player.getWorld().dropItemNaturally(player.getLocation(),reward);
+				}
+				rewardmessage += reward.getAmount() + " x " + reward.getType().toString() + ", ";
 			}
-			rewardmessage += reward.getAmount() + " x " + reward.getType().toString() + ", ";
 		}
+		
 		if (moneyreward != 0) {
 			OfflinePlayer offplayer = player.getPlayer();
 			rewardMoney(offplayer, moneyreward);
@@ -138,14 +144,10 @@ public class Rewards {
 		config.set("reward.command", commandreward);
 		config.set("reward.xp", xpreward);
 		
-		String path = "reward.material";
-		for (String material : materialrewards) {
-			if (material != null) {
-				config.set(path, material);
-				for (String amount : materialamounts) {
-					config.set(path + "." + material + ".amount", Integer.parseInt(amount));
-				}
-			}
+		String path = "";
+		for (int i=0; i < materialrewards.size(); i++) {
+			path = "reward.material." + materialrewards.get(i) + ".amount";
+			config.set(path, Integer.parseInt(materialamounts.get(i)));
 		}
 	}
 
@@ -163,12 +165,10 @@ public class Rewards {
 			}
 		}
 	}
-	
-	public boolean isValidReward(List<String> materialrewards, List<String> materialamounts) {
-		if (materialrewards != null && !materialrewards.isEmpty() && materialamounts != null && !materialamounts.isEmpty()) {
-			if (Material.getMaterial(materialrewards.get(0)) != null && Integer.parseInt(materialamounts.get(0)) > 0) {
-				return true;
-			}
+
+	public boolean isValidReward(String materialreward, String materialamount) {		
+		if (Material.getMaterial(materialreward) != null && Integer.parseInt(materialamount) > 0) {
+			return true;
 		}
 		return false;
 	}

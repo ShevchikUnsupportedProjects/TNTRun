@@ -17,6 +17,7 @@ import tntrun.conversation.TNTRunConversation;
 
 public class ArenaRewardConversation extends FixedSetPrompt {
 	private Arena arena;
+	private Boolean isFirstItem = true;
 	
 	public ArenaRewardConversation(Arena arena) {
 		super("material", "command", "xp");
@@ -72,12 +73,12 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 
 		@Override
 		protected boolean isNumberValid(ConversationContext context, Number input) {
-			return input.intValue() > 0 && input.intValue() <= 255;
+			return input.intValue() >= 0 && input.intValue() <= 255;
 		}
 
 		@Override
 		protected String getFailedValidationText(ConversationContext context, Number invalidInput) {
-			return "Amount must be between 1 and 255.";
+			return "Amount must be between 0 and 255.";
 		}
 
 		@Override
@@ -88,17 +89,25 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 		}
 	}
 
-	private class MaterialProcessComplete extends MessagePrompt {
+	private class MaterialProcessComplete extends BooleanPrompt {
 		public String getPromptText(ConversationContext context) {
+            return ChatColor.GOLD + " Reward saved - would you like to add another Material?\n" +
+                    ChatColor.GREEN + "[yes, no]";
+        }
+		@Override
+        protected Prompt acceptValidatedInput(ConversationContext context, boolean nextMaterial) {
 			arena.getStructureManager().getRewards().setMaterialReward(
                     context.getSessionData("material").toString(),
-                    context.getSessionData("amount").toString());
+                    context.getSessionData("amount").toString(),
+                    isFirstItem);
 
-			return "§7[§6TNTRun§7] The Material reward for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " was set to " + ChatColor.GOLD + context.getSessionData("amount") + " " + context.getSessionData("material");
-		}
+			context.getForWhom().sendRawMessage("§7[§6TNTRun§7] Material reward for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " set to " + ChatColor.GOLD + context.getSessionData("amount") + ChatColor.GRAY + " x " + ChatColor.GOLD + context.getSessionData("material"));
 
-		@Override
-		protected Prompt getNextPrompt(ConversationContext context) {
+			if (nextMaterial) {
+				isFirstItem = false;
+				return new ChooseMaterial();
+			}
+			isFirstItem = true;
 			return Prompt.END_OF_CONVERSATION;
 		}
 	}
@@ -108,7 +117,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 
 		@Override
 		public String getPromptText(ConversationContext context) {
-			context.getForWhom().sendRawMessage(ChatColor.GRAY + "Remember you can include %PLAYER% to apply it to that player.\nExample: 'kick %PLAYER%'");
+			context.getForWhom().sendRawMessage(ChatColor.GRAY + "Remember you can include %PLAYER% to apply it to that player.\nExample: 'perm setrank %PLAYER% vip'");
 			return ChatColor.GOLD + " What would you like the Command reward to be?";
 		}
 
@@ -165,12 +174,12 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 
 		@Override
 		protected boolean isNumberValid(ConversationContext context, Number input) {
-			return input.intValue() > 0 && input.intValue() <= 10000;
+			return input.intValue() >= 0 && input.intValue() <= 10000;
 		}
 
 		@Override
 		protected String getFailedValidationText(ConversationContext context, Number invalidInput) {
-			return "Amount must be between 1 and 10,000.";
+			return "Amount must be between 0 and 10,000.";
 		}
 
 		@Override

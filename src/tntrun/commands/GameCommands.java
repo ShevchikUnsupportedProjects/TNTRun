@@ -105,17 +105,23 @@ public class GameCommands implements CommandExecutor {
 				if (arena.getStructureManager().getRewards().getMoneyReward() != 0) {
 					sender.sendMessage("§6Money Reward §f- §c " + arena.getStructureManager().getRewards().getMoneyReward());
 				}
-				List<String> materialreward = arena.getStructureManager().getRewards().getMaterialReward();
-				List<String> materialamount = arena.getStructureManager().getRewards().getMaterialAmount();
+				List<String> materialrewards = arena.getStructureManager().getRewards().getMaterialReward();
+				List<String> materialamounts = arena.getStructureManager().getRewards().getMaterialAmount();
 						
-				if (arena.getStructureManager().getRewards().isValidReward(materialreward, materialamount)) {
-						sender.sendMessage("§6Material Reward §f- §c " + materialamount.get(0) + "§6 x §c" + materialreward.get(0));
+				String rewardmessage = "";
+				for (int i=0; i < materialrewards.size(); i++) {
+					if (arena.getStructureManager().getRewards().isValidReward(materialrewards.get(i), materialamounts.get(i))) {
+						rewardmessage += materialamounts.get(i) + "§6 x §c" + materialrewards.get(i) + ", ";
+					}
 				}
-				
+				if (rewardmessage.length() > 0) {
+					sender.sendMessage("§6Material Reward §f- §c " + rewardmessage.substring(0, rewardmessage.length() - 2));
+				}
+
 				if (arena.getStructureManager().getRewards().getCommandReward() != null) {
 					sender.sendMessage("§6Command Reward §f- §6\"§c" + arena.getStructureManager().getRewards().getCommandReward() + "§6\"");
 				}
-
+				
 				return true;
 			}
 			StringBuilder message = new StringBuilder(200);
