@@ -39,11 +39,15 @@ public class SetMaxPlayers implements CommandHandlerInterface {
 				player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
 				return true;
 			}
-			if (Utils.isNumber(args[1])) {
+			if (!Utils.isNumber(args[1]) || Integer.parseInt(args[1]) <= 0) {
+				player.sendMessage("§7[§6TNTRun§7] §cMaxPlayers must be a positive integer");
+				return true;
+			}
+			if (Integer.parseInt(args[1]) >= arena.getStructureManager().getMinPlayers()) {
 				arena.getStructureManager().setMaxPlayers(Integer.parseInt(args[1]));
 				player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 MaxPlayers set to §6" + args[1]);
 			} else {
-				player.sendMessage("§7[§6TNTRun§7] §cMaxPlayers must be an integer");
+				player.sendMessage("§7[§6TNTRun§7] §cMaxPlayers cannot be less than MinPlayers");
 			}
 		} else {
 			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
