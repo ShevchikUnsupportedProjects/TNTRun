@@ -388,14 +388,24 @@ public class GameHandler {
 	
 	public void startEnding(final Player player){
 		Stats.addWins(player, 1);
-		for(Player all : Bukkit.getOnlinePlayers()){
-			TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
-			String message = Messages.playerwonbroadcast;
-			message = message.replace("{PLAYER}", player.getName());
-			message = message.replace("{ARENA}", arena.getArenaName());
-			all.sendMessage(message.replace("&", "§"));
+		TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
+		
+		String message = Messages.playerwonbroadcast;
+		message = message.replace("{PLAYER}", player.getName());
+		message = message.replace("{ARENA}", arena.getArenaName());
+		
+		/* Determine who should receive notification of win (0 suppresses broadcast) */
+		if (plugin.getConfig().getInt("broadcastwinlevel") == 1) {
+			for (Player all : arena.getPlayersManager().getAllParticipantsCopy()) {
+				all.sendMessage(message.replace("&", "§"));
+			}
+		} else if (plugin.getConfig().getInt("broadcastwinlevel") >= 2) {
+			for (Player all : Bukkit.getOnlinePlayers()){
+				all.sendMessage(message.replace("&", "§"));
+			}
 		}
-		for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
+		
+		for(Player p : arena.getPlayersManager().getAllParticipantsCopy()) {
 			TNTRun.getInstance().sound.ENDER_DRAGON(p, 5, 999);
 			p.setAllowFlight(true);
 			p.setFlying(true);

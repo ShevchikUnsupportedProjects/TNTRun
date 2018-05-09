@@ -21,6 +21,7 @@ commandsonwin:
 - say {PLAYER} won TNTRun
 - say Congratulations...
 fireworksonwin: true
+broadcastwinlevel: 2
 items:
    vote:
       use: true

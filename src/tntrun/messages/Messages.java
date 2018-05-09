@@ -57,7 +57,7 @@ public class Messages {
 	public static String playerwontoplayer = "&7[&6TNTRun&7] You won the game!";
 	public static String playerlosttoplayer = "&7[&6TNTRun&7] You lost the game";
 	public static String playerlosttoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7lost the game";
-	public static String playerwonbroadcast = "&7[&6TNTRun&7] &6{PLAYER}&7 won the game on arena &c{ARENA}";
+	public static String playerwonbroadcast = "&7[&6TNTRun&7] &6{PLAYER}&7 won the game on arena &r{ARENA}";
 	public static String playerrewardmessage = "&7[&6TNTRun&7] You have been rewarded: &6{REWARD}";
 	public static String playerboughtitem = "&7[&6TNTRun&7] You have bought item &6{ITEM} &7for &6{MONEY} &7coins";
 	public static String playerboughtwait = "&7[&6TNTRun&7] You will get your items when the game starts";
