@@ -115,27 +115,20 @@ public class SignEditor {
 			String text = null;
 			int players = arena.getPlayersManager().getPlayersCount();
 			int maxPlayers = arena.getStructureManager().getMaxPlayers();
+			
 			if (!arena.getStatusManager().isArenaEnabled()) {
 				text = plugin.getConfig().getString("signs.status.disabled").replace("&", "§");
-			}else
-			if (arena.getStatusManager().isArenaRunning()) {
-				text = plugin.getConfig().getString("signs.status.ingame").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
-			}else
-			if (arena.getStatusManager().isArenaRegenerating()) {
-				text = plugin.getConfig().getString("signs.status.regenerating").replace("&", "§");
-			}else
-			if (players == maxPlayers) {
+			} else
 				if (arena.getStatusManager().isArenaRunning()) {
 					text = plugin.getConfig().getString("signs.status.ingame").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
-				}else{
-					text = plugin.getConfig().getString("signs.status.waiting").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
-				}
+			} else
+				if (arena.getStatusManager().isArenaRegenerating()) {
+					text = plugin.getConfig().getString("signs.status.regenerating").replace("&", "§");
+			} else 
+				if (players == maxPlayers) {
+					text = plugin.getConfig().getString("signs.status.ingame").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
 			} else {
-				if (arena.getStatusManager().isArenaRunning()) {
-					text = plugin.getConfig().getString("signs.status.ingame").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
-				}else{
-					text = plugin.getConfig().getString("signs.status.waiting").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
-				}
+				text = plugin.getConfig().getString("signs.status.waiting").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");					
 			}
 
 			for (Block block : getSignsBlocks(arenaname)) {

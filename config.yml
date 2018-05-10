@@ -75,6 +75,6 @@ signs:
    prefix: '&6&lTNTRun'
    status:
       disabled: '&cDisabled'
-      ingame: '&c&l{PS}&7/&c&l{MPS}'
+      ingame: '&c&l{PS}&8/&c&l{MPS}'
       regenerating: '&6&lRegen...'
-      waiting: '&a&l{PS}&7/&a&l{MPS}'
+      waiting: '&a&l{PS}&8/&a&l{MPS}'
