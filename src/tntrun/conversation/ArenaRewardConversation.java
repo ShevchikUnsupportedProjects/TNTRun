@@ -118,8 +118,12 @@ public class ArenaRewardConversation extends FixedSetPrompt {
                     context.getSessionData("amount").toString(),
                     isFirstItem);
 
-			context.getForWhom().sendRawMessage("§7[§6TNTRun§7] Material reward for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " set to " + ChatColor.GOLD + context.getSessionData("amount") + ChatColor.GRAY + " x " + ChatColor.GOLD + context.getSessionData("material"));
-
+			if (isFirstItem) {
+				context.getForWhom().sendRawMessage("§7[§6TNTRun§7] Material reward for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " set to " + ChatColor.GOLD + context.getSessionData("amount") + ChatColor.GRAY + " x " + ChatColor.GOLD + context.getSessionData("material"));
+			} else {
+				context.getForWhom().sendRawMessage("§7[§6TNTRun§7] " + ChatColor.GOLD + context.getSessionData("amount") + ChatColor.GRAY + " x " + ChatColor.GOLD + context.getSessionData("material") + ChatColor.GRAY + " added to Material reward for " + ChatColor.GOLD + arena.getArenaName());
+			}
+			
 			if (nextMaterial) {
 				isFirstItem = false;
 				return new ChooseMaterial();
