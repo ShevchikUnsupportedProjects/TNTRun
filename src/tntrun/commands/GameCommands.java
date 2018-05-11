@@ -28,6 +28,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 import tntrun.utils.Stats;
+import tntrun.utils.Utils;
 
 public class GameCommands implements CommandExecutor {
 
@@ -157,14 +158,9 @@ public class GameCommands implements CommandExecutor {
 				return true;
 			}
 		}
-		// tntrun info
+		// tntrun_reloaded info
 		else if (args[0].equalsIgnoreCase("info")) {
-			sender.sendMessage("§7============[§6TNTRun§7]§7============");
-			sender.sendMessage("§cVersion of plugin> §6" + plugin.getDescription().getVersion());
-			sender.sendMessage("§cWebsite> §6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
-			sender.sendMessage("§cOriginal Author> §6Shevchikden");
-			sender.sendMessage("§cCurrent Author> §6steve4744");
-			sender.sendMessage("§7============[§6TNTRun§7]§7============");
+			Utils.displayInfo(player);
 		}
 		// player stats
 		else if (args[0].equalsIgnoreCase("stats")) {

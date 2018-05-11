@@ -42,6 +42,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 import tntrun.utils.Shop;
+import tntrun.utils.Utils;
 
 public class RestrictionHandler implements Listener {
 
@@ -149,9 +150,7 @@ public class RestrictionHandler implements Listener {
 			    	}
 			    }, 40);
             	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
-         	   	for(String list : plugin.getConfig().getStringList("info.list")){
-          		    	 player.sendMessage(list.replace("&", "§"));
-           	    }
+            	Utils.displayInfo(player);
         	}
         }
         
