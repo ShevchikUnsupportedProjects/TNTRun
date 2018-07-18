@@ -40,7 +40,6 @@ public class PlayerHandler {
 
 	private TNTRun plugin;
 	private Arena arena;
-	private String version = Bukkit.getBukkitVersion().split("-")[0];
 
 	public PlayerHandler(TNTRun plugin, Arena arena) {
 		this.plugin = plugin;
@@ -87,11 +86,7 @@ public class PlayerHandler {
 		player.teleport(arena.getStructureManager().getSpawnPoint());
 		// set player visible to everyone
 		for (Player aplayer : Bukkit.getOnlinePlayers()) {
-			if (!version.contains("1.12.2")) {
-				aplayer.showPlayer(player);
-			} else {
-				aplayer.showPlayer(plugin, player);
-			}
+			aplayer.showPlayer(plugin, player);
 		}
 		// change player status
 		plugin.pdata.storePlayerGameMode(player);
@@ -191,14 +186,12 @@ public class PlayerHandler {
 		// allow flight
 		player.setAllowFlight(true);
 		player.setFlying(true);
+		
 		// hide from others
 		for (Player oplayer : Bukkit.getOnlinePlayers()) {
-			if (!version.contains("1.12.2")) {
-				oplayer.hidePlayer(player);
-			} else {
-				oplayer.hidePlayer(plugin, player);
-			}
+			oplayer.hidePlayer(plugin, player);
 		}
+		
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// modify signs
@@ -237,11 +230,7 @@ public class PlayerHandler {
 		if (spectator) {
 			arena.getPlayersManager().removeSpecator(player.getName());
 			for (Player oplayer : Bukkit.getOnlinePlayers()) {
-				if (!version.contains("1.12.2")) {
-					oplayer.showPlayer(player);
-				} else {
-					oplayer.showPlayer(plugin, player);
-				}
+				oplayer.showPlayer(plugin, player);
 			}
 			player.setAllowFlight(false);
 			player.setFlying(false);

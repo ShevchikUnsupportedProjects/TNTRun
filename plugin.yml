@@ -2,8 +2,8 @@ name: TNTRun_reloaded
 main: tntrun.TNTRun
 depend: [WorldEdit]
 softdepend: [Vault]
-version: 6.8
-author: [_Shevchik_, steve4744]
+version: 7.0
+author: [steve4744]
 commands:
   tntrunsetup:
     description: TNTRun arena setup commands

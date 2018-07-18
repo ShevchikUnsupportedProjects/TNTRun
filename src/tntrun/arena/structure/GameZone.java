@@ -24,7 +24,6 @@ public class GameZone {
 	private LinkedList<BlockState> blocks = new LinkedList<BlockState>();
 	
 	public Arena arena;
-	private String version = Bukkit.getBukkitVersion().split("-")[0];
 	
 	public GameZone(Arena arena){
 		this.arena = arena;
@@ -53,9 +52,7 @@ public class GameZone {
 							if (arena.getStatusManager().isArenaRunning()) {
 								blockstodestroy.remove(fblock);
 								if(TNTRun.getInstance().getConfig().getBoolean("special.FancyBlockBreak")){
-									if (!version.contains("1.8") && !version.contains("1.7")) {
-										fblock.getWorld().playSound(fblock.getLocation(), Sound.BLOCK_SAND_BREAK, 5.0F, 1.0F);
-									}
+									fblock.getWorld().playSound(fblock.getLocation(), Sound.BLOCK_SAND_BREAK, 5.0F, 1.0F);
 								}
 								removeGLBlocks(fblock);
 							}

@@ -28,7 +28,6 @@ import tntrun.arena.Arena;
 import tntrun.utils.Bars;
 import tntrun.utils.Shop;
 import tntrun.utils.Sounds;
-import tntrun.utils.Sounds_1_8;
 import tntrun.utils.Sounds_1_9;
 import tntrun.utils.Stats;
 import tntrun.utils.TitleMsg;
@@ -112,12 +111,7 @@ public class TNTRun extends JavaPlugin {
 		checkUpdate();
 		
 		/* Version 1.9 and above should use new_Sounds_1_9 */
-		String version = Bukkit.getBukkitVersion().split("-")[0];
-		if(version.contains("1.8") || version.contains("1.7")){
-			sound = new Sounds_1_8();
-		}else{
-			sound = new Sounds_1_9();
-		}
+		sound = new Sounds_1_9();
 		
 	    log.info("Starting Metrics...");
 	    new Metrics(this);
