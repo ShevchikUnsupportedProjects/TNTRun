@@ -173,7 +173,7 @@ public class PlayerHandler {
 		if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMinPlayers()) {
 		arena.getGameHandler().runArenaCountdown();
 		}
-	}
+	} 
 
 	// move to spectators
 	public void spectatePlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {

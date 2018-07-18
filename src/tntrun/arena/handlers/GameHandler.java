@@ -303,7 +303,7 @@ public class GameHandler {
 		o.setDisplaySlot(DisplaySlot.SIDEBAR);
 		o.setDisplayName("§6§lTNTRUN");
 		return scoreboard;
-	}
+	} 
 	
 	public void createWaitingScoreBoard() {
 		if(!plugin.getConfig().getBoolean("special.UseScoreboard")){
@@ -442,6 +442,7 @@ public class GameHandler {
 		}
 				
 		new BukkitRunnable() {
+			@Override
 			public void run(){
 				try{
 					arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
