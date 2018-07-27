@@ -98,8 +98,10 @@ public class PlayerHandler {
 		plugin.pdata.storePlayerArmor(player);
 		plugin.pdata.storePlayerPotionEffects(player);
 		plugin.pdata.storePlayerHunger(player);
+		
 		// update inventory
 		player.updateInventory();
+		
 		//set full countdown
 		if(!arena.getStatusManager().isArenaStarting()){
 			arena.getGameHandler().count = arena.getStructureManager().getCountdown();
@@ -117,6 +119,7 @@ public class PlayerHandler {
 			// send title for players
 			TitleMsg.sendFullTitle(oplayer, TitleMsg.join.replace("{PLAYER}", player.getName()), TitleMsg.subjoin.replace("{PLAYER}", player.getName()), 10, 20, 20, plugin);
 		}
+		
 		// start cooldown and add leave item
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
 			public void run(){
@@ -147,7 +150,8 @@ public class PlayerHandler {
 			}
 		}, 5L);
 		// send message about arena player count
-		if(plugin.getConfig().getBoolean("special.UseBarApi") == false || Bukkit.getPluginManager().getPlugin("BarAPI") == null){
+		//if(plugin.getConfig().getBoolean("special.UseBarApi") == false || Bukkit.getPluginManager().getPlugin("BarAPI") == null){
+		if(plugin.getConfig().getBoolean("special.UseBossBar") == false){
 			String message = Messages.playerscountinarena;
 			message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
 			Messages.sendMessage(player, message);
@@ -156,17 +160,24 @@ public class PlayerHandler {
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// create scoreboard
 		arena.getGameHandler().createWaitingScoreBoard();
+		
+		// add player to bar
+		Bars.addPlayerToBar(player, arena.getArenaName());
+		
 		// modify bars
 		if (!arena.getStatusManager().isArenaStarting()) {
+			double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers(); 
+			
+			Bars.newSetBar(arena.getArenaName(), Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
 			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
-				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers(), plugin);
+				//Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers(), plugin);
 				// play sound
 				TNTRun.getInstance().sound.NOTE_PLING(oplayer, 5, 999);
 			}
 		}
 		// check for game start
 		if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMinPlayers()) {
-		arena.getGameHandler().runArenaCountdown();
+			arena.getGameHandler().runArenaCountdown();
 		}
 	} 
 
@@ -257,12 +268,18 @@ public class PlayerHandler {
 		if(!arena.getStatusManager().isArenaRunning()){
 			arena.getGameHandler().createWaitingScoreBoard();
 		}
+		
+		// remove player from bar
+		Bars.newRemoveBar(player, arena.getArenaName());
+		
 		// send message to other players and update bars
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
 			Messages.sendMessage(oplayer, msgtoarenaplayers);
 			if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
-				Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers(), plugin);
+				//Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers(), plugin);
+				double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers();
+				Bars.newSetBar(arena.getArenaName(), Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
 			}
 		}
 	}
@@ -282,7 +299,8 @@ public class PlayerHandler {
 		// remove vote
 		votes.remove(player.getName());
 		// remove bar
-		Bars.removeBar(player);
+		//Bars.removeBar(player);
+		Bars.newRemoveBar(player, arena.getArenaName());
 		// remove player on arena data
 		arena.getPlayersManager().remove(player);
 		// remove all potion effects

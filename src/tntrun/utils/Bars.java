@@ -19,10 +19,12 @@ package tntrun.utils;
 
 import java.io.File;
 import java.io.IOException;
-
-import me.confuser.barapi.BarAPI;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -32,11 +34,13 @@ import tntrun.TNTRun;
 
 public class Bars {
 
+	private static HashMap<String, BossBar> barmap = new HashMap<String, BossBar>();
+	
 	public static String waiting = "&6Waiting for more players, current player count:&r {COUNT}";
 	public static String starting = "&6Arena starts in:&r {SECONDS} seconds";
 	public static String playing = "&6Time left:&r {SECONDS} &6Players in game count:&r {COUNT}";
 
-	public static void setBar(Player player, String message, int count, int seconds, float percent, TNTRun plugin) {
+	/*public static void setBar(Player player, String message, int count, int seconds, float percent, TNTRun plugin) {
 		try {
 			message = message.replace("{COUNT}", String.valueOf(count));
 			message = message.replace("{SECONDS}", String.valueOf(seconds));
@@ -51,15 +55,43 @@ public class Bars {
 			}
 		} catch (Throwable t) {
 		}
+	}*/
+	
+	public static void createBar(String arena) {
+		BossBar bar = Bukkit.createBossBar(null, BarColor.PINK, BarStyle.SOLID);
+		barmap.put(arena, bar);
+	}
+	
+	public static void addPlayerToBar(Player player, String arena) {
+		barmap.get(arena).addPlayer(player);
+	}
+	
+	public static void newSetBar(String arena, String message, int count, int seconds, double progress, TNTRun plugin) {
+		if(plugin.getConfig().getBoolean("special.UseBossBar") == false){
+			return;
+		}
+		message = message.replace("{COUNT}", String.valueOf(count));
+		message = message.replace("{SECONDS}", String.valueOf(seconds));
+		message = FormattingCodesParser.parseFormattingCodes(message);
+		barmap.get(arena).setTitle(message);
+		barmap.get(arena).setProgress(progress);
 	}
 
-	public static void removeBar(Player player) {
+	/*public static void removeBar(Player player) {
 		try {
 			if (Bukkit.getPluginManager().getPlugin("BarAPI") != null) {
 				BarAPI.removeBar(player);
 			}
 		} catch (Throwable t) {
 		}
+	}*/
+	
+	public static void newRemoveBar(Player player, String arena) {
+		barmap.get(arena).removePlayer(player);
+	}
+	
+	public static void removeAll(String arena) {
+		barmap.get(arena).removeAll();
 	}
 
 	public static void loadBars(TNTRun plugin) {

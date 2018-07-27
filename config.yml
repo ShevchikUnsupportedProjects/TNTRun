@@ -7,7 +7,7 @@
 #                                        #
 special:
    FancyBlockBreak: true
-   UseBarApi: true
+   UseBossBar: true
    UseTitle: true
    UseScoreboard: true
    CheckForNewVersion: true
@@ -39,7 +39,7 @@ items:
       material: REDSTONE
       name: '&cSTATS'
    leave:
-      material: BED
+      material: GREEN_BED
       name: '&cLEAVE'
    effects:
       use: true

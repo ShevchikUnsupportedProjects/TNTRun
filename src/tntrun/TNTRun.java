@@ -79,7 +79,7 @@ public class TNTRun extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
 		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
 		getServer().getPluginManager().registerEvents(new Shop(this), this);
-	    // config
+		
 	    saveDefaultConfig();
 	    getConfig().options().copyDefaults(true);
 	    saveConfig();
@@ -99,6 +99,7 @@ public class TNTRun extends JavaPlugin {
 						arena.getStructureManager().loadFromConfig();
 						arena.getStatusManager().enableArena();
 						amanager.registerArena(arena);
+						Bars.createBar(arena.getArenaName());
 					}
 					// load signs
 					signEditor.loadConfiguration();
@@ -148,6 +149,7 @@ public class TNTRun extends JavaPlugin {
 			arena.getStructureManager().getGameZone().regenNow();
 			arena.getStatusManager().disableArena();
 			arena.getStructureManager().saveToConfig();
+			Bars.removeAll(arena.getArenaName());
 		}
 		// save lobby
 		globallobby.saveToConfig();

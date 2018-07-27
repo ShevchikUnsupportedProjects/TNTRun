@@ -3,6 +3,7 @@ main: tntrun.TNTRun
 depend: [WorldEdit]
 softdepend: [Vault]
 version: 7.0
+api-version: 1.13
 author: [steve4744]
 commands:
   tntrunsetup:

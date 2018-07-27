@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.utils.Bars;
 
 public class FinishArena implements CommandHandlerInterface {
 
@@ -39,6 +40,7 @@ public class FinishArena implements CommandHandlerInterface {
 					arena.getStructureManager().saveToConfig();
 					plugin.amanager.registerArena(arena);
 					arena.getStatusManager().enableArena();
+					Bars.createBar(args[0]);
 					player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 saved and enabled");
 				} else {
 					player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c isn't configured. Reason: " + arena.getStructureManager().isArenaConfiguredString());

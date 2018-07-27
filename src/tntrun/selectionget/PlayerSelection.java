@@ -41,8 +41,9 @@ public class PlayerSelection {
 		if (locs != null) {
 			return new PlayerCuboidSelection(locs[0], locs[1]);
 		}
+		
 		// now check worldedit selection
-		if (weintegration != null) {
+		if (weintegration != null) {			
 			locs = weintegration.getLocations(player);
 			if (locs != null) {
 				return new PlayerCuboidSelection(locs[0], locs[1]);
