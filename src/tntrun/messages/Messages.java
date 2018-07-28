@@ -83,9 +83,9 @@ public class Messages {
 	public static String setuplobby = "Set lobby at your current location";
 	public static String setupcreate = "Create a new arena";
 	public static String setupbounds = "Set bounds for arena";
-	public static String setuploselevel = "Set loselevel bounds for arena";
-	public static String setupspawn = "Set arena spawn at your current location";
-	public static String setupspectate = "Set spectator spawn at your current location";
+	public static String setuploselevel = "Set loselevel bounds";
+	public static String setupspawn = "Set arena spawn at your feet";
+	public static String setupspectate = "Set spectator spawn point";
 	public static String setupfinish = "Finish arena and save";
 	public static String setupdelspectate = "Delete spectator spawn for arena";
 	public static String setupdelay = "Set a delay for removing blocks when player steps on it";
@@ -105,6 +105,7 @@ public class Messages {
 	public static String setupdisable = "Disable arena";
 	public static String setupdelete = "Delete arena";
 	public static String setupreward = "Set the rewards for the arena";
+	public static String setuphelp = "Commands required to setup a new arena";
 	
 	
 	public static void sendMessage(Player player, String message) {
@@ -191,6 +192,7 @@ public class Messages {
 		setupdisable = config.getString("setupdisable", setupdisable);
 		setupdelete = config.getString("setupdelete", setupdelete);
 		setupreward = config.getString("setupreward", setupreward);
+		setuphelp = config.getString("setuphelp", setuphelp);
 		saveMessages(messageconfig);
 	}
 
@@ -266,6 +268,7 @@ public class Messages {
 		config.set("setupdisable", setupdisable);
 		config.set("setupdelete", setupdelete);
 		config.set("setupreward", setupreward);
+		config.set("setuphelp", setuphelp);
 		try {
 			config.save(messageconfig);
 		} catch (IOException e) {

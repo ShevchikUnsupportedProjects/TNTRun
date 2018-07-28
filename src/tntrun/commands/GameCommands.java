@@ -46,8 +46,8 @@ public class GameCommands implements CommandExecutor {
 		}
 		Player player = (Player) sender;
 		if (args.length < 1){
-			sender.sendMessage("§7============[§6TNTRun§7]§7============");
-			sender.sendMessage("§7[§6TNTRun§7] §cPlease use §6/tr help");
+			player.sendMessage("§7============[§6TNTRun§7]§7============");
+			player.sendMessage("§7[§6TNTRun§7] §cPlease use §6/tr help");
 			return true;
 		}
 		// help command
@@ -71,7 +71,7 @@ public class GameCommands implements CommandExecutor {
 					player.sendMessage("§7[§6TNTRun§7] §cLobby world is unloaded or doesn't exist");
 				}
 			} else {
-				sender.sendMessage("§7[§6TNTRun§7] §cLobby isn't set");
+				player.sendMessage("§7[§6TNTRun§7] §cLobby isn't set");
 
 			}
 			return true;
@@ -81,30 +81,30 @@ public class GameCommands implements CommandExecutor {
 			if (args.length >= 2) {
 				Arena arena = plugin.amanager.getArenaByName(args[1]);
 				if (arena == null) {
-					sender.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[1] + "§c doesn't exist");
+					player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[1] + "§c doesn't exist");
 					return true;
 				}
 				//list arena details
-				sender.sendMessage("§7============[§6TNTRun§7]§7============");
-				sender.sendMessage("§7Arena Details: §a" + arena.getArenaName());
+				player.sendMessage("§7============[§6TNTRun§7]§7============");
+				player.sendMessage("§7Arena Details: §a" + arena.getArenaName());
 				
 				String arenaStatus = "Enabled";
 				if (!arena.getStatusManager().isArenaEnabled()) {
 					arenaStatus = "Disabled";
 				}
-				sender.sendMessage("§6Status §f- §c " + arenaStatus);
-				sender.sendMessage("§6Min Players §f- §c " + arena.getStructureManager().getMinPlayers());
-				sender.sendMessage("§6Max Players §f- §c " + arena.getStructureManager().getMaxPlayers());
-				sender.sendMessage("§6Time Limit §f- §c " + arena.getStructureManager().getTimeLimit() + " seconds");
-				sender.sendMessage("§6Countdown §f- §c " + arena.getStructureManager().getCountdown() + " seconds");
-				sender.sendMessage("§6Teleport to §f- §c " + arena.getStructureManager().getTeleportDestination());
-				sender.sendMessage("§6Player Count §f- §c " + arena.getPlayersManager().getPlayersCount());
-				sender.sendMessage("§6Vote Percent §f- §c " + arena.getStructureManager().getVotePercent());
+				player.sendMessage("§6Status §f- §c " + arenaStatus);
+				player.sendMessage("§6Min Players §f- §c " + arena.getStructureManager().getMinPlayers());
+				player.sendMessage("§6Max Players §f- §c " + arena.getStructureManager().getMaxPlayers());
+				player.sendMessage("§6Time Limit §f- §c " + arena.getStructureManager().getTimeLimit() + " seconds");
+				player.sendMessage("§6Countdown §f- §c " + arena.getStructureManager().getCountdown() + " seconds");
+				player.sendMessage("§6Teleport to §f- §c " + arena.getStructureManager().getTeleportDestination());
+				player.sendMessage("§6Player Count §f- §c " + arena.getPlayersManager().getPlayersCount());
+				player.sendMessage("§6Vote Percent §f- §c " + arena.getStructureManager().getVotePercent());
 				if (arena.getStructureManager().getRewards().getXPReward() != 0) {
-					sender.sendMessage("§6XP Reward §f- §c " + arena.getStructureManager().getRewards().getXPReward());
+					player.sendMessage("§6XP Reward §f- §c " + arena.getStructureManager().getRewards().getXPReward());
 				}
 				if (arena.getStructureManager().getRewards().getMoneyReward() != 0) {
-					sender.sendMessage("§6Money Reward §f- §c " + arena.getStructureManager().getRewards().getMoneyReward());
+					player.sendMessage("§6Money Reward §f- §c " + arena.getStructureManager().getRewards().getMoneyReward());
 				}
 				List<String> materialrewards = arena.getStructureManager().getRewards().getMaterialReward();
 				List<String> materialamounts = arena.getStructureManager().getRewards().getMaterialAmount();
@@ -116,11 +116,11 @@ public class GameCommands implements CommandExecutor {
 					}
 				}
 				if (rewardmessage.length() > 0) {
-					sender.sendMessage("§6Material Reward §f- §c " + rewardmessage.substring(0, rewardmessage.length() - 2));
+					player.sendMessage("§6Material Reward §f- §c " + rewardmessage.substring(0, rewardmessage.length() - 2));
 				}
 
 				if (arena.getStructureManager().getRewards().getCommandReward() != null) {
-					sender.sendMessage("§6Command Reward §f- §6\"§c" + arena.getStructureManager().getRewards().getCommandReward() + "§6\"");
+					player.sendMessage("§6Command Reward §f- §6\"§c" + arena.getStructureManager().getRewards().getCommandReward() + "§6\"");
 				}
 				
 				return true;
@@ -154,7 +154,7 @@ public class GameCommands implements CommandExecutor {
 				}
 				return true;
 			} else {
-				sender.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[1] + "§c doesn't exist");
+				player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[1] + "§c doesn't exist");
 				return true;
 			}
 		}
@@ -186,7 +186,7 @@ public class GameCommands implements CommandExecutor {
 		}
 		// all commands
 		else if (args[0].equalsIgnoreCase("cmds")) {
-			sender.sendMessage("§7============[§6TNTRun§7]============");
+			player.sendMessage("§7============[§6TNTRun§7]============");
 			Messages.sendMessage(player, "§6/trsetup setlobby §f- §c" + Messages.setuplobby);
 			Messages.sendMessage(player, "§6/trsetup create {arena} §f- §c" + Messages.setupcreate);
 			Messages.sendMessage(player, "§6/trsetup setarena {arena} §f- §c" + Messages.setupbounds);
@@ -194,7 +194,7 @@ public class GameCommands implements CommandExecutor {
 			Messages.sendMessage(player, "§6/trsetup setspawn {arena} §f- §c" + Messages.setupspawn);
 			Messages.sendMessage(player, "§6/trsetup setspectate {arena} §f- §c" + Messages.setupspectate);
 			Messages.sendMessage(player, "§6/trsetup finish {arena} §f- §c" + Messages.setupfinish);
-			sender.sendMessage("§7============[§6Other commands§7]============");
+			player.sendMessage("§7============[§6Other commands§7]============");
 			Messages.sendMessage(player, "§6/trsetup delspectate {arena} §f- §c" + Messages.setupdelspectate);
 			Messages.sendMessage(player, "§6/trsetup setgameleveldestroydelay {arena} {ticks} §f- §c" + Messages.setupdelay);
 			Messages.sendMessage(player, "§6/trsetup setmaxplayers {arena} {players} §f- §c" + Messages.setupmax);
@@ -213,6 +213,7 @@ public class GameCommands implements CommandExecutor {
 			Messages.sendMessage(player, "§6/trsetup disable {arena} §f- §c" + Messages.setupdisable);
 			Messages.sendMessage(player, "§6/trsetup delete {arena} §f- §c" + Messages.setupdelete);
 			Messages.sendMessage(player, "§6/trsetup setreward {arena} §f- §c" + Messages.setupreward);
+			Messages.sendMessage(player, "§6/trsetup help §f- §c" + Messages.setuphelp);
 		}
 		// vote
 		else if (args[0].equalsIgnoreCase("vote")) {
@@ -230,7 +231,7 @@ public class GameCommands implements CommandExecutor {
 			}
 		} 
 		else {
-			sender.sendMessage("§7[§6TNTRun§7] §cInvalid argument supplied, please use §6/tr help");
+			player.sendMessage("§7[§6TNTRun§7] §cInvalid argument supplied, please use §6/tr help");
 			return true;
 		}	
 		return false;

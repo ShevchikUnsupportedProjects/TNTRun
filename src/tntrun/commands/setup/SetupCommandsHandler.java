@@ -48,6 +48,7 @@ import tntrun.commands.setup.arena.SetSpectatorSpawn;
 import tntrun.commands.setup.arena.SetTeleport;
 import tntrun.commands.setup.arena.SetTimeLimit;
 import tntrun.commands.setup.arena.SetVotePercent;
+import tntrun.commands.setup.arena.SetupHelp;
 import tntrun.commands.setup.lobby.DeleteLobby;
 import tntrun.commands.setup.lobby.SetLobby;
 import tntrun.commands.setup.reload.ReloadBars;
@@ -98,6 +99,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("disable", new DisableArena(plugin));
 		commandHandlers.put("enable", new EnableArena(plugin));
 		commandHandlers.put("setreward", new SetReward(plugin));
+		commandHandlers.put("help", new SetupHelp(plugin));
 	}
 
 	@Override
@@ -124,7 +126,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 			boolean result = commandh.handleCommand(player, Arrays.copyOfRange(args, 1, args.length));
 			return result;
 		} 
-		Messages.sendMessage(player,"§7[§6TNTRun§7] §cERROR: Please use §6/tr cmds§c to view all valid commands for game");
+		Messages.sendMessage(player,"§7[§6TNTRun§7] §cERROR: Please use §6/tr cmds§c to view all valid game commands");
 		return false;
 	}
 }

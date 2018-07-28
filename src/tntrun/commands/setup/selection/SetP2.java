@@ -32,7 +32,7 @@ public class SetP2 implements CommandHandlerInterface {
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		player.sendMessage("§7[§6TNTRun§7] §cThis system is disabled, use worldedit to create arena");
+		player.sendMessage("§7[§6TNTRun§7] §cThis system is disabled, use worldedit to set the arena bounds");
 		/*
 		selection.setSelectionPoint2(player);
 		

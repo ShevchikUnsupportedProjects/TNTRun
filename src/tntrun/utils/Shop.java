@@ -97,15 +97,16 @@ public class Shop implements Listener{
 	    }
 	    
 	    if ((enchantments != null) && (!enchantments.isEmpty())) {
-	      for (String enchs : enchantments) {
-	        String[] array = enchs.split("#");
-	        String ench = array[0].toUpperCase();
-	        int level = Integer.valueOf(array[1]).intValue();
-	        Enchantment realEnch = Enchantment.getByName(ench);
-	        if (realEnch != null) {
-	        	meta.addEnchant(realEnch, level, true);
-	        }
-	      }
+	    	for (String enchs : enchantments) {
+	    		String[] array = enchs.split("#");
+	    		String ench = array[0].toUpperCase();
+	    		int level = Integer.valueOf(array[1]).intValue();
+	    		Enchantment realEnch = Enchantment.getByName(ench);
+	    		if (realEnch != null) {
+	    			meta.addEnchant(realEnch, level, true);
+	    		}
+	    		//item.addEnchantment(Realench, level);
+	    	}
 	    }
 	    item.setItemMeta(meta);
 	    return item;
