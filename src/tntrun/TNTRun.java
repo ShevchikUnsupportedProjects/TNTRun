@@ -109,7 +109,8 @@ public class TNTRun extends JavaPlugin {
 		);
 		
 		//check for update
-		checkUpdate();
+		//TODO re-instate after pre-release
+		//checkUpdate();
 		
 		/* Version 1.9 and above should use new_Sounds_1_9 */
 		sound = new Sounds_1_9();
