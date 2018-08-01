@@ -58,9 +58,9 @@ public class GameCommands implements CommandExecutor {
 			Messages.sendMessage(player, "§6/tr join {arena} §f- §c" + Messages.helpjoin);
 			Messages.sendMessage(player, "§6/tr leave §f- §c" + Messages.helpleave);
 			Messages.sendMessage(player, "§6/tr vote §f- §c" + Messages.helpvote);
-			Messages.sendMessage(player, "§6/tr cmds §f- §c" + Messages.helpcmds);
 			Messages.sendMessage(player, "§6/tr info §f- §c" + Messages.helpinfo);
 			Messages.sendMessage(player, "§6/tr stats §f- §c" + Messages.helpstats);
+			Messages.sendMessage(player, "§6/tr cmds §f- §c" + Messages.helpcmds);
 			return true;
 		} else if (args[0].equalsIgnoreCase("lobby")) {
 			if (plugin.globallobby.isLobbyLocationSet()) {

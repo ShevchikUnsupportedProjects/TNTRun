@@ -48,12 +48,12 @@ public class PlayerHandler {
 
 	// check if player can join the arena
 	public boolean checkJoin(Player player) {
-		if (arena.getStructureManager().getWorld() == null) {
-			Messages.sendMessage(player, Messages.arenawolrdna);
-			return false;
-		}
 		if (!arena.getStatusManager().isArenaEnabled()) {
 			Messages.sendMessage(player, Messages.arenadisabled);
+			return false;
+		}
+		if (arena.getStructureManager().getWorld() == null) {
+			Messages.sendMessage(player, Messages.arenawolrdna);
 			return false;
 		}
 		if (arena.getStatusManager().isArenaRunning()) {

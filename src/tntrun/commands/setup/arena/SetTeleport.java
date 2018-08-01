@@ -47,8 +47,11 @@ public class SetTeleport implements CommandHandlerInterface {
 				} else {
 					player.sendMessage("§7[§6TNTRun§7] §cGlobal lobby isn't set §6/trsetup setlobby");
 				}
+			} else {
+				player.sendMessage("§7[§6TNTRun§7] §c Teleport destination must be §6PREVIOUS §cor §6LOBBY");
+				return true;
 			}
-			player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 TeleportDestination set to §6" + args[1].toUpperCase());
+			player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 Teleport destination set to §6" + args[1].toUpperCase());
 		} else {
 			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
 		}

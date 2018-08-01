@@ -22,14 +22,11 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.session.SessionOwner;
-import com.sk89q.worldedit.world.World;
+import com.sk89q.worldedit.regions.RegionSelector;
 
 
 public class WEIntegration {
@@ -47,28 +44,21 @@ public class WEIntegration {
 
 	private Location[] getPlayerSelection(Player player) {
 		Location[] locs = new Location[2];
-		//Selection psel = we.getSelection(player);
-		//locs[0] = psel.getMinimumPoint();
-		//locs[1] = psel.getMaximumPoint();
 		
 		BukkitPlayer bplayer = new BukkitPlayer(weplugin, player);
-		SessionOwner so = (SessionOwner) bplayer;
 		
-		LocalSession session = we.getSessionManager().get(so);
-		World world = session.getSelectionWorld();
-		Region rg = null;
+		RegionSelector selector = we.getSessionManager().get(bplayer).getRegionSelector(bplayer.getWorld());
 		try {
-			rg = session.getSelection(world);
+			Vector v1 = selector.getRegion().getMinimumPoint();
+			Vector v2 = selector.getRegion().getMaximumPoint();
+			
+			locs[0] = new Location(player.getWorld(), v1.getX(), v1.getY(), v1.getZ());
+			locs[1] = new Location(player.getWorld(), v2.getX(), v2.getY(), v2.getZ());	
+			
 		} catch (IncompleteRegionException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			player.sendMessage("§7[§6TNTRun§7] §cInvalid WorldEdit selection");
+			return null;
 		}
-		
-		Vector v1 = rg.getMinimumPoint();
-		Vector v2 = rg.getMaximumPoint();
-		
-		locs[0] = new Location(player.getWorld(), v1.getX(), v1.getY(), v1.getZ());
-		locs[1] = new Location(player.getWorld(), v2.getX(), v2.getY(), v2.getZ());
 
 		return locs;
 	}

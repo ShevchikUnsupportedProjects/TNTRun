@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import tntrun.arena.Arena;
 import tntrun.utils.Bars;
@@ -31,9 +32,11 @@ import tntrun.utils.Sounds;
 import tntrun.utils.Sounds_1_9;
 import tntrun.utils.Stats;
 import tntrun.utils.TitleMsg;
+import tntrun.commands.AutoTabCompleter;
 import tntrun.commands.ConsoleCommands;
 import tntrun.commands.GameCommands;
 import tntrun.commands.setup.SetupCommandsHandler;
+import tntrun.commands.setup.SetupTabCompleter;
 import tntrun.datahandler.ArenasManager;
 import tntrun.datahandler.PlayerDataStore;
 import tntrun.eventhandler.PlayerLeaveArenaChecker;
@@ -71,9 +74,13 @@ public class TNTRun extends JavaPlugin {
 		TitleMsg.loadTitles(this);
 		pdata = new PlayerDataStore();
 		amanager = new ArenasManager();
-		getCommand("tntrunsetup").setExecutor(new SetupCommandsHandler(this));
+		
 		getCommand("tntrun").setExecutor(new GameCommands(this));
+		getCommand("tntrunsetup").setExecutor(new SetupCommandsHandler(this));
 		getCommand("tntrunconsole").setExecutor(new ConsoleCommands(this));
+		getCommand("tntrun").setTabCompleter(new AutoTabCompleter());
+		getCommand("tntrunsetup").setTabCompleter(new SetupTabCompleter());
+		
 		getServer().getPluginManager().registerEvents(new PlayerStatusHandler(this), this);
 		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
@@ -83,34 +90,30 @@ public class TNTRun extends JavaPlugin {
 	    saveDefaultConfig();
 	    getConfig().options().copyDefaults(true);
 	    saveConfig();
-		// load arenas
+		
+	    // load arenas
 		final File arenasfolder = new File(getDataFolder() + File.separator + "arenas");
 		arenasfolder.mkdirs();
-		getServer().getScheduler().scheduleSyncDelayedTask(
-			this,
-			new Runnable() {
-				@Override
-				public void run() {
-					// load global lobby
-					globallobby.loadFromConfig();
-					// load arenas
-					for (String file : arenasfolder.list()) {
-						Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
-						arena.getStructureManager().loadFromConfig();
-						arena.getStatusManager().enableArena();
-						amanager.registerArena(arena);
-						Bars.createBar(arena.getArenaName());
-					}
-					// load signs
-					signEditor.loadConfiguration();
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				// load global lobby
+				globallobby.loadFromConfig();
+				// load arenas
+				for (String file : arenasfolder.list()) {
+					Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
+					arena.getStructureManager().loadFromConfig();
+					arena.getStatusManager().enableArena();
+					amanager.registerArena(arena);
+					Bars.createBar(arena.getArenaName());
 				}
-			},
-			20
-		);
+				// load signs
+				signEditor.loadConfiguration();
+			}
+		}.runTaskLater(this, 20L);
 		
 		//check for update
-		//TODO re-instate after pre-release
-		//checkUpdate();
+		checkUpdate();
 		
 		/* Version 1.9 and above should use new_Sounds_1_9 */
 		sound = new Sounds_1_9();
@@ -119,14 +122,14 @@ public class TNTRun extends JavaPlugin {
 	    new Metrics(this);
 	    log.info("Metrics started!");
 	     
-	     if(this.getConfig().getString("database").equals("file")){
+	     if (this.getConfig().getString("database").equals("file")) {
 	    	 file = true;
 	    	 usestats = true;
-	     }else if(this.getConfig().getString("database").equals("sql")){
+	     } else if (this.getConfig().getString("database").equals("sql")) {
 	    	 this.connectToMySQL();
 	    	 usestats = true;
 	    	 file = false;
-	     }else{
+	     } else {
 	    	 log.info("This database is not supported, supported database: sql, file");
 	    	 usestats = false;
 	    	 file = false;
@@ -135,7 +138,7 @@ public class TNTRun extends JavaPlugin {
 	     new Stats(this);
 	}
 	
-	public static TNTRun getInstance(){
+	public static TNTRun getInstance() {
 		return instance;
 	}
 
@@ -169,29 +172,30 @@ public class TNTRun extends JavaPlugin {
 	}
 	
 	//private void checkUpdate(final boolean runUpdateTask){
-	private void checkUpdate(){
-		if(!getConfig().getBoolean("special.CheckForNewVersion", true)){
+	private void checkUpdate() {
+		if(!getConfig().getBoolean("special.CheckForNewVersion", true)) {
 			return;
 		}
-		Bukkit.getScheduler().runTaskLaterAsynchronously(getInstance(), new Runnable(){
-			public void run(){
+		new BukkitRunnable() {
+			@Override
+			public void run() {
 				log.info(" ");
 				log.info("Checking plugin version...");
 				new VersionChecker();
 				version = VersionChecker.get().getVersion().split(";");
-				if(version[0].equalsIgnoreCase("error")){
+				if (version[0].equalsIgnoreCase("error")) {
 					throw new NullPointerException("An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun_reloaded.303586/");
-				}else{
-					if(version[0].equalsIgnoreCase(getDescription().getVersion())){
+				} else {
+					if (version[0].equalsIgnoreCase(getDescription().getVersion())) {
 						log.info("You are running the most recent version");
 						needUpdate = false;
-					}else{
+					} else {
 						log.info("Your version: " + getDescription().getVersion());
 						log.info("New version : " + version[0]);
 						log.info("New version available! Download now: https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 						needUpdate = true;
-						for(Player p : Bukkit.getOnlinePlayers()){
-							if(p.hasPermission("tntrun.version.check")){
+						for (Player p : Bukkit.getOnlinePlayers()) {
+							if (p.hasPermission("tntrun.version.check")) {
 								p.sendMessage(" ");
 								p.sendMessage("§7[§6TNTRun§7] §6New update available!");
 								p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + getDescription().getVersion());
@@ -203,12 +207,12 @@ public class TNTRun extends JavaPlugin {
 				}
 				log.info(" ");
 			}
-		}, 30L);
+		}.runTaskLaterAsynchronously(getInstance(), 30L);
 	}
 	
 	public MySQL mysql;
 	
-	private void connectToMySQL(){
+	private void connectToMySQL() {
 		log.info("Connecting to MySQL database...");
 		String host = this.getConfig().getString("MySQL.host");
         Integer port = this.getConfig().getInt("MySQL.port");

@@ -47,7 +47,7 @@ public class SetArena implements CommandHandlerInterface {
 				arena.getStructureManager().setArenaPoints(sel.getMinimumLocation(), sel.getMaximumLocation());
 				player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 set");
 			} else {
-				player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c locations are wrong, use WorldEdit to make locations");
+				player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c locations are wrong - use WorldEdit to select the arena bounds");
 			}
 		} else {
 			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
