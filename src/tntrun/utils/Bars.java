@@ -39,23 +39,6 @@ public class Bars {
 	public static String waiting = "&6Waiting for more players, current player count:&r {COUNT}";
 	public static String starting = "&6Arena starts in:&r {SECONDS} seconds";
 	public static String playing = "&6Time left:&r {SECONDS} &6Players in game count:&r {COUNT}";
-
-	/*public static void setBar(Player player, String message, int count, int seconds, float percent, TNTRun plugin) {
-		try {
-			message = message.replace("{COUNT}", String.valueOf(count));
-			message = message.replace("{SECONDS}", String.valueOf(seconds));
-			message = FormattingCodesParser.parseFormattingCodes(message);
-			if(plugin.getConfig().getBoolean("special.UseBarApi") == false){
-				return;
-			}
-			if (Bukkit.getPluginManager().getPlugin("BarAPI") != null) {
-				if (!message.equals("")) {
-					BarAPI.setMessage(player, message, percent);
-				}
-			}
-		} catch (Throwable t) {
-		}
-	}*/
 	
 	public static void createBar(String arena) {
 		BossBar bar = Bukkit.createBossBar(null, BarColor.PINK, BarStyle.SOLID);
@@ -66,8 +49,8 @@ public class Bars {
 		barmap.get(arena).addPlayer(player);
 	}
 	
-	public static void newSetBar(String arena, String message, int count, int seconds, double progress, TNTRun plugin) {
-		if(plugin.getConfig().getBoolean("special.UseBossBar") == false){
+	public static void setBar(String arena, String message, int count, int seconds, double progress, TNTRun plugin) {
+		if (plugin.getConfig().getBoolean("special.UseBossBar") == false) {
 			return;
 		}
 		message = message.replace("{COUNT}", String.valueOf(count));
@@ -76,17 +59,8 @@ public class Bars {
 		barmap.get(arena).setTitle(message);
 		barmap.get(arena).setProgress(progress);
 	}
-
-	/*public static void removeBar(Player player) {
-		try {
-			if (Bukkit.getPluginManager().getPlugin("BarAPI") != null) {
-				BarAPI.removeBar(player);
-			}
-		} catch (Throwable t) {
-		}
-	}*/
 	
-	public static void newRemoveBar(Player player, String arena) {
+	public static void removeBar(Player player, String arena) {
 		barmap.get(arena).removePlayer(player);
 	}
 	

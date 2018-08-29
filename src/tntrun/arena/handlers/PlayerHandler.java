@@ -150,7 +150,6 @@ public class PlayerHandler {
 			}
 		}, 5L);
 		// send message about arena player count
-		//if(plugin.getConfig().getBoolean("special.UseBarApi") == false || Bukkit.getPluginManager().getPlugin("BarAPI") == null){
 		if(plugin.getConfig().getBoolean("special.UseBossBar") == false){
 			String message = Messages.playerscountinarena;
 			message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
@@ -168,9 +167,8 @@ public class PlayerHandler {
 		if (!arena.getStatusManager().isArenaStarting()) {
 			double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers(); 
 			
-			Bars.newSetBar(arena.getArenaName(), Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
+			Bars.setBar(arena.getArenaName(), Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
 			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
-				//Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers(), plugin);
 				// play sound
 				TNTRun.getInstance().sound.NOTE_PLING(oplayer, 5, 999);
 			}
@@ -270,16 +268,15 @@ public class PlayerHandler {
 		}
 		
 		// remove player from bar
-		Bars.newRemoveBar(player, arena.getArenaName());
+		Bars.removeBar(player, arena.getArenaName());
 		
 		// send message to other players and update bars
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
 			Messages.sendMessage(oplayer, msgtoarenaplayers);
 			if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
-				//Bars.setBar(oplayer, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers(), plugin);
 				double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers();
-				Bars.newSetBar(arena.getArenaName(), Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
+				Bars.setBar(arena.getArenaName(), Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
 			}
 		}
 	}
@@ -299,8 +296,7 @@ public class PlayerHandler {
 		// remove vote
 		votes.remove(player.getName());
 		// remove bar
-		//Bars.removeBar(player);
-		Bars.newRemoveBar(player, arena.getArenaName());
+		Bars.removeBar(player, arena.getArenaName());
 		// remove player on arena data
 		arena.getPlayersManager().remove(player);
 		// remove all potion effects

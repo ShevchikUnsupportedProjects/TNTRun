@@ -105,17 +105,11 @@ public class GameZone {
 
 	private final int MAX_BLOCKS_PER_TICK = 10;
 	
-	//private static List<String> B = new LinkedList<>();
-	
 	public void saveBlock(Block b){
-		/*String block = b.getTypeId() + ":" + b.getData() + ":" + b.getWorld().getName() + 
-				":" + b.getX() + ":" + b.getY() + ":" + b.getZ();
-		B.add(block);*/
 		b.setType(Material.AIR);
 	}
 	
 	public int regen(){
-		//final Iterator<String> bsi = B.iterator();
 		final Iterator<BlockState> bsit = blocks.iterator();
 		new BukkitRunnable() {
             @Override
@@ -153,6 +147,5 @@ public class GameZone {
 		public Block getBlock(World world, double addx, double addz) {
 			return world.getBlockAt(NumberConversions.floor(x + addx), y, NumberConversions.floor(z + addz));
 		}
-
 	}
 }

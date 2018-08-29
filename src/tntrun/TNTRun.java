@@ -171,7 +171,6 @@ public class TNTRun extends JavaPlugin {
 		log.severe(message);
 	}
 	
-	//private void checkUpdate(final boolean runUpdateTask){
 	private void checkUpdate() {
 		if(!getConfig().getBoolean("special.CheckForNewVersion", true)) {
 			return;

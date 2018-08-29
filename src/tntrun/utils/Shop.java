@@ -105,7 +105,6 @@ public class Shop implements Listener{
 	    		if (realEnch != null) {
 	    			meta.addEnchant(realEnch, level, true);
 	    		}
-	    		//item.addEnchantment(Realench, level);
 	    	}
 	    }
 	    item.setItemMeta(meta);

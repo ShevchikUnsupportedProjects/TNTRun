@@ -52,7 +52,7 @@ public class PlayerLeaveArenaChecker implements Listener {
 		}
 	}
 
-	// remove player from arena if he died (/kill command sux)
+	// remove player from arena if he died
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerDeathEvent(PlayerDeathEvent e) {
 		Player player = e.getEntity();

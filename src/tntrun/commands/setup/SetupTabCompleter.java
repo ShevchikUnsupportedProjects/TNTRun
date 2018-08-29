@@ -36,6 +36,10 @@ public class SetupTabCompleter implements TabCompleter {
 			return null;
 		}
 		
+		if (!sender.hasPermission("tntrun.setup")) {
+			return null;
+		}
+		
 		List<String> list = new ArrayList<String>();
 		List<String> auto = new ArrayList<String>();
 		List<String> complex = new ArrayList<String>();

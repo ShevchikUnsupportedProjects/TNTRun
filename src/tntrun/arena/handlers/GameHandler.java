@@ -103,12 +103,7 @@ public class GameHandler {
 					// check if countdown should be stopped for some various reasons
 					if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers() && !arena.getPlayerHandler().forceStart()) {
 						double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers();
-						Bars.newSetBar(arena.getArenaName(), Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
-						//TODO do we need this loop?
-						/*for (Player player : arena.getPlayersManager().getPlayers()) {
-							//Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers(), plugin);
-							createWaitingScoreBoard();
-						}*/
+						Bars.setBar(arena.getArenaName(), Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
 						createWaitingScoreBoard();
 						stopArenaCountdown();
 					} else
@@ -158,11 +153,10 @@ public class GameHandler {
 					createWaitingScoreBoard();
 					// update bar
 					double progressbar = (double) count / arena.getStructureManager().getCountdown();
-					Bars.newSetBar(arena.getArenaName(), Bars.starting, 0, count, progressbar, plugin);
+					Bars.setBar(arena.getArenaName(), Bars.starting, 0, count, progressbar, plugin);
 					
 					for (Player player : arena.getPlayersManager().getPlayers()) {
 						player.setLevel(count);
-						//Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown(), plugin);
 				    }
 					count--;
 				}
@@ -244,22 +238,13 @@ public class GameHandler {
 					}
 					// handle players
 					double progress = (double) timelimit / (arena.getStructureManager().getTimeLimit() * 20);
-					Bars.newSetBar(arena.getArenaName(), Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, progress, plugin);
+					Bars.setBar(arena.getArenaName(), Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, progress, plugin);
 					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 						// Xp level
 						player.setLevel(timelimit/20);
-						// update bar
-						//Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit(), plugin);
 						// handle player
 						handlePlayer(player);
 					}
-					// update bars for spectators too
-					/*TODO this is redundant now as spectators can still see the same bar
-					double progressbar = (double) timelimit / (arena.getStructureManager().getTimeLimit() * 20);
-					Bars.newSetBar(arena.getArenaName(), Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, progressbar, plugin);
-					for (Player player : arena.getPlayersManager().getSpectators()) {
-						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit(), plugin);
-					}*/
 					// decrease timelimit
 					timelimit--;
 				}
