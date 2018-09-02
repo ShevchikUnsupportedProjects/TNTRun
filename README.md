@@ -1,11 +1,24 @@
 # TNTRun_reloaded
 
-This is forked from the original (now unsupported) TNTRun by Shevchik (v6.3.2) and has been updated to work on MC versions 1.10.2, 1.11 and 1.12.2.
+This is forked from the original (now unsupported) TNTRun by Shevchik (for Minecraft 1.9) and has been updated to work on Minecraft versions 1.10.2 through to 1.13.1.
 
-TNTRun is a fully automated minigame plugin that is based on the popular map TNTRUN. For those who don't know what is it, here is an explanation.
+The release of version 6.8 of TNTRun\_reloaded is the final release to support all Minecraft versions from 1.8 through to 1.12.2.<br>
+Starting with version 7.0 of TNTRun\_reloaded, the plugin will only run on Minecraft versions 1.13 and later.
+
+## Description
+
+TNTRun is a fully automated minigame plugin that is based on the popular map TNTRUN. For those who don't know what it is, here is an explanation.
 Players start on a layer of sand and every block that they step on disappears. If  a player falls through the final layer he loses the game. The last player wins the game.
 
-Features:
+## Download
+
+The release of version 6.8 of TNTRun\_reloaded is the final release to support Minecraft versions 1.8 through to 1.12.2.<br>
+Starting with version 7.0 of TNTRun\_reloaded, the plugin will only run on Minecraft versions 1.13 and later.
+
+TNTRun\_reloaded can be [downloaded from Spigot](https://www.spigotmc.org/resources/tntrun_reloaded.53359/ "TNTRun_reloaded")
+
+
+## Features
 
 Multiple arenas <br />
 Block destroy delay <br />
@@ -13,6 +26,7 @@ Custom gamelevel <br />
 AntiCamping system <br />
 Custom messages <br />
 Formatting codes support <br />
+Tab completion <br>
 Signs <br />
 Time limit <br />
 Automatic arena regeneration <br />
@@ -25,4 +39,4 @@ Placeholder support - https://www.spigotmc.org/resources/tntrun_reloaded-expansi
 <br />
 <br />
 <br />
-Updated steve4744 - 12/05/2018
+Updated steve4744 - 31/08/2018
