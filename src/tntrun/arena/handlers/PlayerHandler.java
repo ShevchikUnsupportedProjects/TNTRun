@@ -123,15 +123,17 @@ public class PlayerHandler {
 		// start cooldown and add leave item
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
 			public void run(){
-				ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.leave.material")));
+				addLeaveItem(player);
+				
+				/*ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.leave.material")));
 				ItemMeta im = item.getItemMeta();
 				im.setDisplayName(plugin.getConfig().getString("items.leave.name").replace("&", "§"));
 				item.setItemMeta(im);
 				
-				player.getInventory().setItem(8, item);
+				player.getInventory().setItem(8, item);*/
 				
 				if(plugin.getConfig().getBoolean("items.vote.use")){
-					addVoteDiamond(player);
+					addVote(player);
 				}
 				if(plugin.getConfig().getBoolean("items.shop.use")){
 					addShop(player);
@@ -215,12 +217,13 @@ public class PlayerHandler {
 		// start cooldown and add leave item
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
 			public void run(){
-				ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.leave.material")));
+				addLeaveItem(player);
+				/*ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.leave.material")));
 				ItemMeta im = item.getItemMeta();
 				im.setDisplayName(plugin.getConfig().getString("items.leave.name").replace("&", "§"));
 				item.setItemMeta(im);
 				
-				player.getInventory().setItem(8, item);
+				player.getInventory().setItem(8, item);*/
 				
 				if(plugin.getConfig().getBoolean("items.info.use")){
 					addInfo(player);
@@ -359,7 +362,7 @@ public class PlayerHandler {
 		return false;
 	}
 	
-	public void addInfo(Player p){
+	private void addInfo(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.info.material")));	     
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(plugin.getConfig().getString("items.info.name").replace("&", "§"));
@@ -369,7 +372,7 @@ public class PlayerHandler {
 	    
 	}
 	
-	public void addVoteDiamond(Player p){
+	private void addVote(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.vote.material")));     
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(plugin.getConfig().getString("items.vote.name").replace("&", "§"));
@@ -378,7 +381,7 @@ public class PlayerHandler {
 	    p.getInventory().addItem(item);
 	}
 	
-	public void addShop(Player p){
+	private void addShop(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.shop.material"))); 
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(plugin.getConfig().getString("items.shop.name").replace("&", "§"));
@@ -387,7 +390,7 @@ public class PlayerHandler {
 	    p.getInventory().addItem(item);
 	}
 	
-	public void addStats(Player p){
+	private void addStats(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(plugin.getConfig().getString("items.stats.name").replace("&", "§"));
@@ -396,13 +399,29 @@ public class PlayerHandler {
 	    p.getInventory().addItem(item);
 	}
 	
-	public void addEffects(Player p){
+	private void addEffects(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.effects.material")));
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(plugin.getConfig().getString("items.effects.name").replace("&", "§"));
 	    item.setItemMeta(meta);
 	    
 	    p.getInventory().addItem(item);
+	}
+	
+	private void addLeaveItem(Player p) {
+		// Old config files will have BED as leave item which is no longer valid on 1.13. Update any invalid material to valid one.
+		Material leaveItem = Material.getMaterial(plugin.getConfig().getString("items.leave.material"));
+		if (leaveItem == null) {
+			leaveItem = Material.getMaterial("GREEN_BED");
+			plugin.getConfig().set("items.leave.material", leaveItem.toString());
+			plugin.saveConfig();
+		}
+		ItemStack item = new ItemStack(leaveItem);
+		ItemMeta im = item.getItemMeta();
+		im.setDisplayName(plugin.getConfig().getString("items.leave.name").replace("&", "§"));
+		item.setItemMeta(im);
+		
+		p.getInventory().setItem(8, item);
 	}
 
 }
