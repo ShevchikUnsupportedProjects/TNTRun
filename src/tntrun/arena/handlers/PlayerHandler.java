@@ -125,13 +125,6 @@ public class PlayerHandler {
 			public void run(){
 				addLeaveItem(player);
 				
-				/*ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.leave.material")));
-				ItemMeta im = item.getItemMeta();
-				im.setDisplayName(plugin.getConfig().getString("items.leave.name").replace("&", "§"));
-				item.setItemMeta(im);
-				
-				player.getInventory().setItem(8, item);*/
-				
 				if(plugin.getConfig().getBoolean("items.vote.use")){
 					addVote(player);
 				}
@@ -218,12 +211,6 @@ public class PlayerHandler {
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
 			public void run(){
 				addLeaveItem(player);
-				/*ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.leave.material")));
-				ItemMeta im = item.getItemMeta();
-				im.setDisplayName(plugin.getConfig().getString("items.leave.name").replace("&", "§"));
-				item.setItemMeta(im);
-				
-				player.getInventory().setItem(8, item);*/
 				
 				if(plugin.getConfig().getBoolean("items.info.use")){
 					addInfo(player);
