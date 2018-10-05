@@ -70,6 +70,7 @@ public class Messages {
 	public static String gameswon = "&7Wins: &6";
 	public static String gameslost = "&7Losses: &6";
 	public static String statsdisabled = "&7[&6TNTRun&7] &cStats are currently disabled";
+	public static String leaderboard = "{POSITION}) &b{PLAYER} &f: Wins &3{WINS}";
 	
 	public static String helplobby = "Teleport to lobby";
 	public static String helplist = "List all arenas &for &cList arena details";
@@ -79,6 +80,7 @@ public class Messages {
 	public static String helpcmds = "View all TNTRun commands";
 	public static String helpinfo = "View plugin info";
 	public static String helpstats = "View player stats";
+	public static String helplb = "Display the TNTRun leaderboard";
 	
 	public static String setuplobby = "Set lobby at your current location";
 	public static String setupcreate = "Create a new arena";

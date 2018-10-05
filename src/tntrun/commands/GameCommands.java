@@ -60,6 +60,7 @@ public class GameCommands implements CommandExecutor {
 			Messages.sendMessage(player, "§6/tr vote §f- §c" + Messages.helpvote);
 			Messages.sendMessage(player, "§6/tr info §f- §c" + Messages.helpinfo);
 			Messages.sendMessage(player, "§6/tr stats §f- §c" + Messages.helpstats);
+			Messages.sendMessage(player, "§6/tr leaderboard §f- §c" + Messages.helplb);
 			Messages.sendMessage(player, "§6/tr cmds §f- §c" + Messages.helpcmds);
 			return true;
 		} else if (args[0].equalsIgnoreCase("lobby")) {
@@ -171,7 +172,16 @@ public class GameCommands implements CommandExecutor {
 			player.sendMessage("§7============[§6TNTRun§7]§7============");
 			Messages.sendMessage(player, Messages.gamesplayed + Stats.getPlayedGames(player));
 			Messages.sendMessage(player, Messages.gameswon + Stats.getWins(player));
-			Messages.sendMessage(player, Messages.gameslost + Stats.getLooses(player));
+			Messages.sendMessage(player, Messages.gameslost + Stats.getLosses(player));
+		}
+		// leaderboard
+		else if (args[0].equalsIgnoreCase("leaderboard")) {
+			if(!plugin.usestats){
+				Messages.sendMessage(player, Messages.statsdisabled);
+				return true;
+			}
+			player.sendMessage("§7======[§6TNTRun Leaderboard§7]§7======");
+			Stats.getLeaderboard(player);
 		}
 		// leave arena
 		else if (args[0].equalsIgnoreCase("leave")) {

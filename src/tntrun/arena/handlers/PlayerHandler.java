@@ -238,7 +238,6 @@ public class PlayerHandler {
 		if(arena.getStatusManager().isArenaRunning()){
 			// add to lostPlayers
 			arena.getGameHandler().lostPlayers++;
-			Stats.addLoses(player, 1);
 		}
 		// remove scoreboard
 		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());

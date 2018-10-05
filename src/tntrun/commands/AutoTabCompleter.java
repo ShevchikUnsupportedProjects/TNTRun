@@ -50,6 +50,7 @@ public class AutoTabCompleter implements TabCompleter {
 				list.add("cmds");
 				list.add("info");
 				list.add("stats");
+				list.add("leaderboard");
 			} else if (args.length == 2) {
 				if (args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("list")) {
 					for (Arena arena : TNTRun.getInstance().amanager.getArenas()) {
