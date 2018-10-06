@@ -32,7 +32,6 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.TeleportDestination;
 import tntrun.utils.Bars;
-import tntrun.utils.Stats;
 import tntrun.utils.TitleMsg;
 import tntrun.messages.Messages;
 
