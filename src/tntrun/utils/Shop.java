@@ -25,6 +25,7 @@ import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -36,7 +37,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
-
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import tntrun.TNTRun;
 import tntrun.messages.Messages;
 
@@ -59,21 +61,51 @@ public class Shop implements Listener{
 	public static String invname;
 	public static int invsize; 
 	
+	//private HashMap<Player, PotionEffect> potionMap = new HashMap<Player, PotionEffect>();
+	private static HashMap<Player, List<PotionEffect>> potionMap = new HashMap<Player, List<PotionEffect>>();
+	
 	private void giveItem(int slot, Player player, String title) {
 		int kit = itemSlot.get(slot);		
 		ArrayList<ItemStack> item = new ArrayList<ItemStack>();
 		FileConfiguration cfg = ShopFiles.getShopConfiguration();
+		List<PotionEffect> pelist = new ArrayList<PotionEffect>();
 		
 		for(String items : cfg.getConfigurationSection(kit + ".items").getKeys(false)) {
 			try {				
 				Material material = Material.getMaterial(cfg.getString(kit + ".items." + items + ".material"));
 				int amount = Integer.valueOf(cfg.getInt(kit + ".items." + items + ".amount"));
+				
 				String displayname = cfg.getString(kit + ".items." + items + ".displayname").replace("&", "§");
 				List<String> lore = cfg.getStringList(kit + ".items." + items + ".lore");
+				
 				List<String> enchantments = cfg.getStringList(kit + ".items." + items + ".enchantments");
 				
 				if(!bought.contains(player)){
 					bought.add(player);
+				}
+				// if the item is a potion, store the potion effect and skip to next item
+				if (material == Material.POTION) {
+					if (enchantments != null && !enchantments.isEmpty()) {
+				    	for (String peffects : enchantments) {
+				    		String[] array = peffects.split("#");
+				    		String peffect = array[0].toUpperCase();
+				    		
+				    		// get duration of effect
+				    		int duration = 30;
+				    		if (array.length > 1) {
+				    			duration = Integer.valueOf(array[1]).intValue();
+				    		}
+				    		
+				    		//debug
+				    		pl.getLogger().info("duration = " + duration);
+				    		
+				    		PotionEffect effect = new PotionEffect(PotionEffectType.getByName(peffect), duration * 20, 1);
+				    		if (effect != null) {
+				    			pelist.add(effect);
+				    		}
+				    	}
+					}
+					continue;
 				}
 				
 				item.add(getItem(material, amount, displayname, lore, enchantments));				
@@ -84,6 +116,7 @@ public class Shop implements Listener{
 			}
 		}
 		pitems.put(player, item);
+		potionMap.put(player, pelist);
 	}
 
 	private ItemStack getItem(Material material, int amount, String displayname, List<String> lore, List<String> enchantments){
@@ -96,12 +129,21 @@ public class Shop implements Listener{
 	      meta.setLore(lore);
 	    }
 	    
-	    if ((enchantments != null) && (!enchantments.isEmpty())) {
+	    if (enchantments != null && !enchantments.isEmpty()) {
 	    	for (String enchs : enchantments) {
 	    		String[] array = enchs.split("#");
 	    		String ench = array[0].toUpperCase();
-	    		int level = Integer.valueOf(array[1]).intValue();
-	    		Enchantment realEnch = Enchantment.getByName(ench);
+	    		
+	    		// get the enchantment level
+	    		int level = 1;
+	    		if (array.length > 1) {
+	    			level = Integer.valueOf(array[1]).intValue();
+	    		}
+	    		
+	    		//debug
+	    		pl.getLogger().info("level = " + level);
+	    		
+	    		Enchantment realEnch = getEnchantmentFromString(ench);
 	    		if (realEnch != null) {
 	    			meta.addEnchant(realEnch, level, true);
 	    		}
@@ -219,5 +261,18 @@ public class Shop implements Listener{
 		}
 		item.setItemMeta(meta);
 		return item;
+	}
+	
+	private Enchantment getEnchantmentFromString(String enchantment) {		
+	    NamespacedKey key = new NamespacedKey(pl, enchantment);
+	    Enchantment realEnch = Enchantment.getByKey(key);
+	    //debug
+	    pl.getLogger().info("enchantment = " + realEnch);
+	    
+		return realEnch;
+	}
+	
+	public static List<PotionEffect> getPotionEffects(Player player) {
+		return potionMap.get(player);
 	}
 }

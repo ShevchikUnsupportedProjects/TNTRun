@@ -31,6 +31,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -188,30 +189,19 @@ public class GameHandler {
 			Messages.sendMessage(player, message);
 			TNTRun.getInstance().sound.ENDER_DRAGON(player, 1, 999);
 			
-			player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.shop.material")));
-			player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.vote.material")));
-			player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.info.material")));
-			player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
-			
-            if (Shop.pitems.containsKey(player)) {
-            	ArrayList<ItemStack> items = Shop.pitems.get(player);
-                Shop.pitems.remove(player);
-                Shop.bought.remove(player);
- 
-                if(items != null){
-                    for (ItemStack item : items) {
-                        player.getInventory().addItem(item);
-                    }	
-                }
-                player.updateInventory();
-            }
+			setGameInventory(player);
 			TitleMsg.sendFullTitle(player, TitleMsg.start, TitleMsg.substart, 20, 20, 20, plugin);
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		Kits kits = arena.getStructureManager().getKits();
+		//debug
+		plugin.getLogger().info("kits = " + kits);
 		if (kits.getKits().size() > 0) {
+			
+			plugin.getLogger().info("size > 0");
 			String[] kitnames = kits.getKits().toArray(new String[kits.getKits().size()]);
 			for (Player player : arena.getPlayersManager().getPlayers()) {
+				player.sendMessage("giving kit ...");
 				kits.giveKit(kitnames[rnd.nextInt(kitnames.length)], player);
 			}
 		}
@@ -275,11 +265,14 @@ public class GameHandler {
 		// remove block under player feet
 		arena.getStructureManager().getGameZone().destroyBlock(plufloc);
 		// check for win
+		//TODO uncomment debug
+		//debug
+		/*
 		if (arena.getPlayersManager().getPlayersCount() == 1) {
 			// last player won
 			startEnding(player);
 			return;
-		}
+		}*/
 		// check for lose
 		if (arena.getStructureManager().getLoseLevel().isLooseLocation(plloc)) {
 			// if we have the spectate spawn than we will move player to spectators, otherwise we will remove him from arena
@@ -459,5 +452,28 @@ public class GameHandler {
 			}
 			
 		}.runTaskLater(plugin, 120);
+	}
+	
+	private void setGameInventory(Player player) {
+		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.shop.material")));
+		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.vote.material")));
+		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.info.material")));
+		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
+		
+        if (Shop.pitems.containsKey(player)) {
+        	ArrayList<ItemStack> items = Shop.pitems.get(player);
+            Shop.pitems.remove(player);
+            Shop.bought.remove(player);
+
+            if(items != null){
+                for (ItemStack item : items) {
+                    player.getInventory().addItem(item);
+                }	
+            }
+            player.updateInventory();
+        }
+        for (PotionEffect pe : Shop.getPotionEffects(player)) {
+        	player.addPotionEffect(pe);
+        }
 	}
 }

@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -103,6 +104,9 @@ public class Kits {
 				Kit kit = new Kit();
 				kit.loadFromConfig(config, "kits."+name);
 				kits.put(name, kit);
+				//debug
+				Bukkit.getLogger().info("name = " + name);
+				Bukkit.getLogger().info("kits = " + kits);
 			}
 		}
 	}
