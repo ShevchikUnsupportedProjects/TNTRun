@@ -270,10 +270,10 @@ public class PlayerHandler {
 	}
 
 	protected void leaveWinner(Player player, String msgtoplayer) {
-		// remove player from arena and restore his state
-		removePlayerFromArenaAndRestoreState(player, true);
 		// remove scoreboard
 		removeScoreboard(player);
+		// remove player from arena and restore his state
+		removePlayerFromArenaAndRestoreState(player, true);
 		// send message to player
 		Messages.sendMessage(player, msgtoplayer);
 		// modify signs

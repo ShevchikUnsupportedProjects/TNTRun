@@ -13,11 +13,13 @@ When  a player falls through the final layer he loses the game. The last player 
 
 ## Download
 
-The release of version 6.8 of TNTRun\_reloaded is the final release to support Minecraft versions 1.8 through to 1.12.2.<br>
+Version 6.8 of TNTRun\_reloaded is the final release to support Minecraft versions 1.8 through to 1.12.2. 
 
 Starting with version 7.0 of TNTRun\_reloaded, the plugin will only run on Minecraft versions 1.13 and later.
 
 TNTRun\_reloaded can be [downloaded from Spigot.](https://www.spigotmc.org/resources/tntrun_reloaded.53359/ "TNTRun_reloaded")
+
+Note that there is a bug fix release (version 6.8.1) only available from the GitHub Releases tab above, which fixes a bug with Featherboard/scoreboards.
 
 
 ## Features
@@ -41,4 +43,4 @@ Placeholder support - https://www.spigotmc.org/resources/tntrun_reloaded-expansi
 <br />
 <br />
 <br />
-Updated steve4744 - 5th Oct 2018
+Updated steve4744 - 17th Oct 2018

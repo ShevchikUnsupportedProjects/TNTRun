@@ -265,14 +265,11 @@ public class GameHandler {
 		// remove block under player feet
 		arena.getStructureManager().getGameZone().destroyBlock(plufloc);
 		// check for win
-		//TODO uncomment debug
-		//debug
-		/*
 		if (arena.getPlayersManager().getPlayersCount() == 1) {
 			// last player won
 			startEnding(player);
 			return;
-		}*/
+		}
 		// check for lose
 		if (arena.getStructureManager().getLoseLevel().isLooseLocation(plloc)) {
 			// if we have the spectate spawn than we will move player to spectators, otherwise we will remove him from arena
@@ -289,9 +286,11 @@ public class GameHandler {
 		
 		Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
-		Objective o = scoreboard.registerNewObjective("TNTRun", "waiting", "TNTRun");
-		o.setDisplaySlot(DisplaySlot.SIDEBAR);
-		o.setDisplayName("§6§lTNTRUN");
+		if (TNTRun.getInstance().getConfig().getBoolean("special.UseScoreboard")) {
+			Objective o = scoreboard.registerNewObjective("TNTRun", "waiting", "TNTRun");
+			o.setDisplaySlot(DisplaySlot.SIDEBAR);
+			o.setDisplayName("§6§lTNTRUN");
+		}
 		return scoreboard;
 	} 
 	
@@ -320,7 +319,7 @@ public class GameHandler {
 		}
 	}
 
-	public void resetScoreboard() {
+	private void resetScoreboard() {
 		for (String entry : new ArrayList<String>(scoreboard.getEntries())) {
 			scoreboard.resetScores(entry);
 		}
