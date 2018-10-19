@@ -17,13 +17,11 @@
 
 package tntrun.arena.structure;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -78,21 +76,21 @@ public class Kits {
 		}
 
 		public void giveKit(Player player) {
-			player.getInventory().setArmorContents(armor);
 			player.getInventory().setContents(items);
-			player.addPotionEffects(effects);
+			player.getInventory().setArmorContents(armor);
+			//player.addPotionEffects(effects);
 		}
 
 		public void loadFromConfig(FileConfiguration config, String path) {
-			armor = config.getList(path+".armor").toArray(new ItemStack[1]);
-			items = config.getList(path+".items").toArray(new ItemStack[1]);
-			effects = Arrays.asList(config.getList(path+".effects").toArray(new PotionEffect[1]));
+			armor = config.getList(path + ".armor").toArray(new ItemStack[1]);
+			items = config.getList(path + ".items").toArray(new ItemStack[1]);
+			//effects = Arrays.asList(config.getList(path + ".effects").toArray(new PotionEffect[1]));
 		}
 
 		public void saveToConfig(FileConfiguration config, String path) {
-			config.set(path+".armor", Arrays.asList(armor));
-			config.set(path+".items", Arrays.asList(items));
-			config.set(path+".effects", new ArrayList<PotionEffect>(effects));
+			config.set(path + ".armor", Arrays.asList(armor));
+			config.set(path + ".items", Arrays.asList(items));
+			//config.set(path + ".effects", new ArrayList<PotionEffect>(effects));
 		}
 
 	}
@@ -102,11 +100,8 @@ public class Kits {
 		if (cs != null) {
 			for (String name : cs.getKeys(false)) {
 				Kit kit = new Kit();
-				kit.loadFromConfig(config, "kits."+name);
+				kit.loadFromConfig(config, "kits." + name);
 				kits.put(name, kit);
-				//debug
-				Bukkit.getLogger().info("name = " + name);
-				Bukkit.getLogger().info("kits = " + kits);
 			}
 		}
 	}

@@ -44,7 +44,7 @@ public class ShopFiles {
 	public void setShopItems() {
 	   FileConfiguration cfg = getShopConfiguration();
 	   cfg.options().copyDefaults(true);
-	   cfg.addDefault("1.name", "&7Default double jump");
+	   cfg.addDefault("1.name", "&7Double jump");
 	   cfg.addDefault("1.cost", Integer.valueOf(100));
 	   cfg.addDefault("1.material", "FEATHER");
 	   cfg.addDefault("1.amount", Integer.valueOf(1));

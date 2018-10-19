@@ -18,6 +18,7 @@
 package tntrun.arena.handlers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -32,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -193,12 +195,15 @@ public class GameHandler {
 			TitleMsg.sendFullTitle(player, TitleMsg.start, TitleMsg.substart, 20, 20, 20, plugin);
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
+		
 		Kits kits = arena.getStructureManager().getKits();
 		//debug
-		plugin.getLogger().info("kits = " + kits);
+		PotionEffectType petype = PotionEffectType.SPEED;
+		PotionEffect pe = new PotionEffect(petype, 30, 1);
+		plugin.getConfig().set("test.potioneffect", pe);
+		plugin.saveConfig();
+		
 		if (kits.getKits().size() > 0) {
-			
-			plugin.getLogger().info("size > 0");
 			String[] kitnames = kits.getKits().toArray(new String[kits.getKits().size()]);
 			for (Player player : arena.getPlayersManager().getPlayers()) {
 				player.sendMessage("giving kit ...");
@@ -265,11 +270,13 @@ public class GameHandler {
 		// remove block under player feet
 		arena.getStructureManager().getGameZone().destroyBlock(plufloc);
 		// check for win
+		//debug
+		/*
 		if (arena.getPlayersManager().getPlayersCount() == 1) {
 			// last player won
 			startEnding(player);
 			return;
-		}
+		}*/
 		// check for lose
 		if (arena.getStructureManager().getLoseLevel().isLooseLocation(plloc)) {
 			// if we have the spectate spawn than we will move player to spectators, otherwise we will remove him from arena
@@ -471,8 +478,10 @@ public class GameHandler {
             }
             player.updateInventory();
         }
-        for (PotionEffect pe : Shop.getPotionEffects(player)) {
-        	player.addPotionEffect(pe);
+        if (Shop.getPotionEffects(player) != null) {
+        	for (PotionEffect pe : Shop.getPotionEffects(player)) {
+        		player.addPotionEffect(pe);
+        	}
         }
 	}
 }

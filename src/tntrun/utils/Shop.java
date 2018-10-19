@@ -75,9 +75,6 @@ public class Shop implements Listener{
 				Material material = Material.getMaterial(cfg.getString(kit + ".items." + items + ".material"));
 				int amount = Integer.valueOf(cfg.getInt(kit + ".items." + items + ".amount"));
 				
-				String displayname = cfg.getString(kit + ".items." + items + ".displayname").replace("&", "§");
-				List<String> lore = cfg.getStringList(kit + ".items." + items + ".lore");
-				
 				List<String> enchantments = cfg.getStringList(kit + ".items." + items + ".enchantments");
 				
 				if(!bought.contains(player)){
@@ -96,9 +93,6 @@ public class Shop implements Listener{
 				    			duration = Integer.valueOf(array[1]).intValue();
 				    		}
 				    		
-				    		//debug
-				    		pl.getLogger().info("duration = " + duration);
-				    		
 				    		PotionEffect effect = new PotionEffect(PotionEffectType.getByName(peffect), duration * 20, 1);
 				    		if (effect != null) {
 				    			pelist.add(effect);
@@ -107,6 +101,9 @@ public class Shop implements Listener{
 					}
 					continue;
 				}
+				
+				String displayname = cfg.getString(kit + ".items." + items + ".displayname").replace("&", "§");
+				List<String> lore = cfg.getStringList(kit + ".items." + items + ".lore");
 				
 				item.add(getItem(material, amount, displayname, lore, enchantments));				
 				player.updateInventory();
@@ -125,7 +122,7 @@ public class Shop implements Listener{
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(displayname);
 	    
-	    if ((lore != null) && (!lore.isEmpty())) {
+	    if (lore != null && !lore.isEmpty()) {
 	      meta.setLore(lore);
 	    }
 	    
@@ -158,14 +155,14 @@ public class Shop implements Listener{
 	    
 	    if (e.getInventory().getName().equals(invname)) { 	
 	    	e.setCancelled(true);
-	    	if ((e.getSlot() == e.getRawSlot()) && (e.getCurrentItem() != null)) {
+	    	if (e.getSlot() == e.getRawSlot() && e.getCurrentItem() != null) {
 	    		ItemStack current = e.getCurrentItem();
-	    		if ((current.hasItemMeta()) && (current.getItemMeta().hasDisplayName())) {
+	    		if (current.hasItemMeta() && current.getItemMeta().hasDisplayName()) {
 	    			int kit = ((Integer)itemSlot.get(Integer.valueOf(e.getSlot()))).intValue();
 	    			FileConfiguration cfg = ShopFiles.getShopConfiguration();
 	    			String permission = cfg.getString(kit + ".permission");
 	    			
-	    			if(bought.contains(p)){
+	    			if (bought.contains(p)) {
 	    				p.sendMessage(Messages.alreadyboughtitem.replace("&", "§"));
 	    				TNTRun.getInstance().sound.WITHER_HURT(p, 5, 999);
 	    				return;
@@ -175,18 +172,18 @@ public class Shop implements Listener{
 	    				int cost = cfg.getInt(kit + ".cost");
 	        	  
 	    				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
-	    					if((pl.getConfig().getInt("shop.doublejump.maxdoublejumps") <= pl.getConfig().getInt("doublejumps." + p.getName()))){
+	    					if (pl.getConfig().getInt("shop.doublejump.maxdoublejumps") <= pl.getConfig().getInt("doublejumps." + p.getName())) {
 	    						p.sendMessage(Messages.alreadyboughtitem.replace("&", "§"));
 	    						TNTRun.getInstance().sound.WITHER_HURT(p, 5, 999);
 	    						return;
 	    					}
 	    				}
 	        	  
-	    				if(hasMoney(cost, p)) {
+	    				if (hasMoney(cost, p)) {
 	    					p.sendMessage(Messages.playerboughtitem.replace("&", "§").replace("{ITEM}", title).replace("{MONEY}", cost + ""));
 	    					p.sendMessage(Messages.playerboughtwait.replace("&", "§"));
 	    					TNTRun.getInstance().sound.NOTE_PLING(p, 5, 10);
-	    				}else{
+	    				} else {
 	    					p.sendMessage(Messages.notenoughtmoney.replace("&", "§").replace("{MONEY}", cost + ""));
 	    					TNTRun.getInstance().sound.WITHER_HURT(p, 5, 999);
 	    					return;
