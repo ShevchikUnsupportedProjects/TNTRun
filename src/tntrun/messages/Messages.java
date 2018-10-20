@@ -49,8 +49,8 @@ public class Messages {
 	public static String playerjoinedtoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7joined the arena";
 	public static String playerlefttoplayer = "&7[&6TNTRun&7] You left the arena";
 	public static String playerlefttoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7left the game";
-	public static String playervotedforstart = "&7[&6TNTRun&7] You voted for game start";
-	public static String playeralreadyvotedforstart = "&7[&6TNTRun&7] You already voted";
+	public static String playervotedforstart = "&7[&6TNTRun&7] You voted to force-start the game";
+	public static String playeralreadyvotedforstart = "&7[&6TNTRun&7] You have already voted";
 	public static String arenastarted = "&7[&6TNTRun&7] Arena started. Time limit is {TIMELIMIT} seconds";
 	public static String arenacountdown = "&7[&6TNTRun&7] Arena starts in {COUNTDOWN} seconds";
 	public static String arenatimeout = "&7[&6TNTRun&7] Time is up. Ending game";
@@ -62,9 +62,9 @@ public class Messages {
 	public static String playerboughtitem = "&7[&6TNTRun&7] You have bought item &6{ITEM} &7for &6{MONEY} &7coins";
 	public static String playerboughtwait = "&7[&6TNTRun&7] You will get your items when the game starts";
 	public static String notenoughtmoney = "&7[&6TNTRun&7] &cYou need {MONEY} coins to buy this item";
-	public static String alreadyboughtitem = "&7[&6TNTRun&7] &cYou already bought item";
+	public static String alreadyboughtitem = "&7[&6TNTRun&7] &cYou have already bought a shop item";
 	public static String getdoublejumpsaction = "&7&lYour double jumps: &6&l{DB}";
-	public static String playernotinarena = "&7[&6TNTRun&7] &cYou are not in an arena";
+	public static String playernotinarena = "&7[&6TNTRun&7] &cYou are not in a TNTRun arena";
 	
 	public static String gamesplayed = "&7Games played: &6";
 	public static String gameswon = "&7Wins: &6";
@@ -93,7 +93,7 @@ public class Messages {
 	public static String setupdelay = "Set a delay for removing blocks when player steps on it";
 	public static String setupmax = "Set maximum players for arena (Default: 15)";
 	public static String setupmin = "Set minimum players for arena (Default: 2)";
-	public static String setupvote = "Set a vote percentage to force-start arena (Default: 0.75)";
+	public static String setupvote = "Set vote percentage to force-start arena (Default: 0.75)";
 	public static String setuptimelimit = "Set a time limit for arena (Default: 300 seconds)";
 	public static String setupcountdown = "Set a countdown for arena (Default: 15 seconds)";
 	public static String setupmoney = "Set a money reward for winning player";
@@ -108,6 +108,8 @@ public class Messages {
 	public static String setupdelete = "Delete arena";
 	public static String setupreward = "Set the rewards for the arena";
 	public static String setuphelp = "Commands required to setup a new arena";
+	public static String setupenablekits = "Enable kits for the arena";
+	public static String setupdisablekits = "Disable kits for the arena";
 	
 	
 	public static void sendMessage(Player player, String message) {
@@ -195,6 +197,8 @@ public class Messages {
 		setupdelete = config.getString("setupdelete", setupdelete);
 		setupreward = config.getString("setupreward", setupreward);
 		setuphelp = config.getString("setuphelp", setuphelp);
+		setupenablekits = config.getString("setupenablekits", setupenablekits);
+		setupdisablekits = config.getString("setupdisablekits", setupdisablekits);
 		saveMessages(messageconfig);
 	}
 
@@ -271,6 +275,8 @@ public class Messages {
 		config.set("setupdelete", setupdelete);
 		config.set("setupreward", setupreward);
 		config.set("setuphelp", setuphelp);
+		config.set("setupenablekits", setupenablekits);
+		config.set("setupdisablekits", setupdisablekits);
 		try {
 			config.save(messageconfig);
 		} catch (IOException e) {

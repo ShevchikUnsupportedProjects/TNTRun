@@ -53,6 +53,7 @@ public class StructureManager {
 	private Rewards rewards = new Rewards();
 	private TeleportDestination teleportDest = TeleportDestination.PREVIOUS;
 	private DamageEnabled damageEnabled = DamageEnabled.NO;
+	private boolean kitsEnabled = false;
 
 	public String getWorldName() {
 		return world;
@@ -146,6 +147,10 @@ public class StructureManager {
 		YES, ZERO, NO
 	}
 
+	public boolean isKitsEnabled() {
+		return kitsEnabled;
+	}
+	
 	public boolean isInArenaBounds(Location loc) {
 		if (loc.toVector().isInAABB(getP1(), getP2())) {
 			return true;
@@ -235,6 +240,10 @@ public class StructureManager {
 	public void setDamageEnabled(DamageEnabled damageEnabled) {
 		this.damageEnabled = damageEnabled;
 	}
+	
+	public void enableKits(boolean kitsEnabled) {
+		this.kitsEnabled = kitsEnabled;
+	}
 
 	public void saveToConfig() {
 		FileConfiguration config = new YamlConfiguration();
@@ -276,8 +285,10 @@ public class StructureManager {
 		config.set("teleportto", teleportDest.toString());
 		// save damage enabled
 		config.set("damageenabled", damageEnabled.toString());
+		// save kits enabled
+		config.set("enableKits", kitsEnabled);
 		// save kits
-		kits.saveToConfig(config);
+		kits.saveToConfig();
 		// save rewards
 		rewards.saveToConfig(config);
 		try {
@@ -317,9 +328,11 @@ public class StructureManager {
 		// load damage enabled
 		damageEnabled = DamageEnabled.valueOf(config.getString("damageenabled", DamageEnabled.NO.toString()));
 		// load kits
-		kits.loadFromConfig(config);
+		kits.loadFromConfig();
 		// load rewards
 		rewards.loadFromConfig(config);
+		// kits enabled
+		kitsEnabled = config.getBoolean("enableKits");
 	}
 
 }

@@ -62,6 +62,8 @@ public class SetupTabCompleter implements TabCompleter {
 		complex.add("disable");
 		complex.add("delete");
 		complex.add("setreward");
+		complex.add("enablekits");
+		complex.add("disablekits");
 		
 		if (args.length == 1) {
 			list.add("help");

@@ -17,6 +17,9 @@
 
 package tntrun.arena.structure;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,9 +27,12 @@ import java.util.HashSet;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+
+import tntrun.TNTRun;
 
 public class Kits {
 
@@ -78,24 +84,33 @@ public class Kits {
 		public void giveKit(Player player) {
 			player.getInventory().setContents(items);
 			player.getInventory().setArmorContents(armor);
-			//player.addPotionEffects(effects);
+			player.addPotionEffects(effects);
 		}
 
 		public void loadFromConfig(FileConfiguration config, String path) {
 			armor = config.getList(path + ".armor").toArray(new ItemStack[1]);
 			items = config.getList(path + ".items").toArray(new ItemStack[1]);
-			//effects = Arrays.asList(config.getList(path + ".effects").toArray(new PotionEffect[1]));
+			effects = Arrays.asList(config.getList(path + ".effects").toArray(new PotionEffect[1]));
 		}
 
 		public void saveToConfig(FileConfiguration config, String path) {
 			config.set(path + ".armor", Arrays.asList(armor));
 			config.set(path + ".items", Arrays.asList(items));
-			//config.set(path + ".effects", new ArrayList<PotionEffect>(effects));
+			config.set(path + ".effects", new ArrayList<PotionEffect>(effects));
 		}
 
 	}
 
-	public void loadFromConfig(FileConfiguration config) {
+	public void loadFromConfig() {
+		File kitsconfig = new File(TNTRun.getInstance().getDataFolder(), "kits.yml");
+		if (!kitsconfig.exists()) {
+			try {
+				kitsconfig.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		FileConfiguration config = YamlConfiguration.loadConfiguration(kitsconfig);
 		ConfigurationSection cs = config.getConfigurationSection("kits");
 		if (cs != null) {
 			for (String name : cs.getKeys(false)) {
@@ -106,9 +121,11 @@ public class Kits {
 		}
 	}
 
-	public void saveToConfig(FileConfiguration config) {
+	public void saveToConfig() {
+		File kitsconfig = new File(TNTRun.getInstance().getDataFolder(), "kits.yml");
+		FileConfiguration config = YamlConfiguration.loadConfiguration(kitsconfig);
 		for (String name : kits.keySet()) {
-			kits.get(name).saveToConfig(config, "kits."+name);
+			kits.get(name).saveToConfig(config, "kits." + name);
 		}
 	}
 

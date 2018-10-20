@@ -32,7 +32,9 @@ import tntrun.commands.setup.arena.DeleteArena;
 import tntrun.commands.setup.arena.DeleteKit;
 import tntrun.commands.setup.arena.DeleteSpectatorSpawn;
 import tntrun.commands.setup.arena.DisableArena;
+import tntrun.commands.setup.arena.DisableKits;
 import tntrun.commands.setup.arena.EnableArena;
+import tntrun.commands.setup.arena.EnableKits;
 import tntrun.commands.setup.arena.FinishArena;
 import tntrun.commands.setup.arena.SetArena;
 import tntrun.commands.setup.arena.SetCountdown;
@@ -98,6 +100,8 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("finish", new FinishArena(plugin));
 		commandHandlers.put("disable", new DisableArena(plugin));
 		commandHandlers.put("enable", new EnableArena(plugin));
+		commandHandlers.put("enablekits", new EnableKits(plugin));
+		commandHandlers.put("disablekits", new DisableKits(plugin));
 		commandHandlers.put("setreward", new SetReward(plugin));
 		commandHandlers.put("help", new SetupHelp(plugin));
 	}

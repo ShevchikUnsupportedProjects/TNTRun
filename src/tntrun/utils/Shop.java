@@ -137,9 +137,6 @@ public class Shop implements Listener{
 	    			level = Integer.valueOf(array[1]).intValue();
 	    		}
 	    		
-	    		//debug
-	    		pl.getLogger().info("level = " + level);
-	    		
 	    		Enchantment realEnch = getEnchantmentFromString(ench);
 	    		if (realEnch != null) {
 	    			meta.addEnchant(realEnch, level, true);
@@ -263,8 +260,6 @@ public class Shop implements Listener{
 	private Enchantment getEnchantmentFromString(String enchantment) {		
 	    NamespacedKey key = new NamespacedKey(pl, enchantment);
 	    Enchantment realEnch = Enchantment.getByKey(key);
-	    //debug
-	    pl.getLogger().info("enchantment = " + realEnch);
 	    
 		return realEnch;
 	}
