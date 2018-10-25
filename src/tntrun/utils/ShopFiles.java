@@ -44,25 +44,224 @@ public class ShopFiles {
 	public void setShopItems() {
 	   FileConfiguration cfg = getShopConfiguration();
 	   cfg.options().copyDefaults(true);
-	   cfg.addDefault("1.name", "&7Double jump");
+	   /*
+	    * first item
+	    */
+	   cfg.addDefault("1.name", "&fDouble Jump");
 	   cfg.addDefault("1.cost", Integer.valueOf(100));
 	   cfg.addDefault("1.material", "FEATHER");
 	   cfg.addDefault("1.amount", Integer.valueOf(1));
 	   cfg.addDefault("1.permission", "shop.default");
 	   List<String> lore = new ArrayList<String>();
-	   lore.add("Basic kit");
-	   lore.add("Cost 100 coins");
+	   lore.add("Double Jump");
+	   lore.add("Cost&6 100 &5coins");
 	   cfg.addDefault("1.lore", lore);
 	   cfg.addDefault("1.items.1.material", "");
 	   cfg.addDefault("1.items.1.amount", Integer.valueOf(1));
-	   cfg.addDefault("1.items.1.displayname", "&cDefault");
+	   cfg.addDefault("1.items.1.displayname", "&cDouble jump");
 	   List<String> iLore = new ArrayList<String>();
 	   iLore.add("Basic kit - double jump");
 	   cfg.addDefault("1.items.1.lore", iLore);
 	   List<String> iEnch = new ArrayList<String>();
-	   iEnch.add("KNOCKBACK#1");
+	   iEnch.add("null");
 	   cfg.addDefault("1.items.1.enchantments", iEnch);
-	   //tidy up old IDs
+	   /*
+	    * second item
+	    */
+	   cfg.addDefault("2.name", "&fSwordsman");
+	   cfg.addDefault("2.cost", Integer.valueOf(250));
+	   cfg.addDefault("2.material", "IRON_SWORD");
+	   cfg.addDefault("2.amount", Integer.valueOf(1));
+	   cfg.addDefault("2.permission", "shop.2");
+	   lore = new ArrayList<String>();
+	   lore.add("Sword + Knockback#1");
+	   lore.add("Cost&6 250 &5coins");
+	   cfg.addDefault("2.lore", lore);
+	   cfg.addDefault("2.items.1.material", "IRON_SWORD");
+	   cfg.addDefault("2.items.1.amount", Integer.valueOf(1));
+	   cfg.addDefault("2.items.1.displayname", "&cSword + Knockback1");
+	   iLore = new ArrayList<String>();
+	   iLore.add("Sword + Knockback#1");
+	   cfg.addDefault("2.items.1.lore", iLore);
+	   iEnch = new ArrayList<String>();
+	   iEnch.add("KNOCKBACK#1");
+	   cfg.addDefault("2.items.1.enchantments", iEnch);
+	   /*
+	    * third item
+	    */
+	   cfg.addDefault("3.name", "&fProtection Plus");
+	   cfg.addDefault("3.cost", Integer.valueOf(300));
+	   cfg.addDefault("3.material", "GOLDEN_CHESTPLATE");
+	   cfg.addDefault("3.amount", Integer.valueOf(1));
+	   cfg.addDefault("3.permission", "shop.3");
+	   lore = new ArrayList<String>();
+	   lore.add("Chestplate + Thorns#1");
+	   lore.add("Cost&6 300 &5coins");
+	   cfg.addDefault("3.lore", lore);
+	   cfg.addDefault("3.items.1.material", "GOLDEN_CHESTPLATE");
+	   cfg.addDefault("3.items.1.amount", Integer.valueOf(1));
+	   cfg.addDefault("3.items.1.displayname", "&cChestplate + Thorns1");
+	   iLore = new ArrayList<String>();
+	   iLore.add("Chestplate + Thorns#1");
+	   cfg.addDefault("3.items.1.lore", iLore);
+	   iEnch = new ArrayList<String>();
+	   iEnch.add("THORNS#1");
+	   cfg.addDefault("3.items.1.enchantments", iEnch);
+	   /*
+	    * fourth item
+	    */
+	   cfg.addDefault("4.name", "&fSnowballsx10");
+	   cfg.addDefault("4.cost", Integer.valueOf(50));
+	   cfg.addDefault("4.material", "SNOWBALL");
+	   cfg.addDefault("4.amount", Integer.valueOf(10));
+	   cfg.addDefault("4.permission", "shop.4");
+	   lore = new ArrayList<String>();
+	   lore.add("Snowballs + Knockback2");
+	   lore.add("Cost&6 50 &5coins");
+	   cfg.addDefault("4.lore", lore);
+	   cfg.addDefault("4.items.1.material", "SNOWBALL");
+	   cfg.addDefault("4.items.1.amount", Integer.valueOf(10));
+	   cfg.addDefault("4.items.1.displayname", "&cSnowballs");
+	   iLore = new ArrayList<String>();
+	   iLore.add("Snowballs");
+	   cfg.addDefault("4.items.1.lore", iLore);
+	   iEnch = new ArrayList<String>();
+	   iEnch.add("KNOCKBACK#2");
+	   cfg.addDefault("4.items.1.enchantments", iEnch);
+	   /*
+	    * fifth item
+	    */
+	   cfg.addDefault("5.name", "&fPotion");
+	   cfg.addDefault("5.cost", Integer.valueOf(50));
+	   cfg.addDefault("5.material", "POTION");
+	   cfg.addDefault("5.amount", Integer.valueOf(1));
+	   cfg.addDefault("5.permission", "shop.5");
+	   lore = new ArrayList<String>();
+	   lore.add("Add&6 SPEED &5(1:00)");
+	   lore.add("Cost&6 50 &5coins");
+	   cfg.addDefault("5.lore", lore);
+	   cfg.addDefault("5.items.1.material", "POTION");
+	   cfg.addDefault("5.items.1.amount", Integer.valueOf(1));
+	   iEnch = new ArrayList<String>();
+	   iEnch.add("SPEED#60");
+	   cfg.addDefault("5.items.1.enchantments", iEnch);
+	   /*
+	    * sixth item
+	    */
+	   cfg.addDefault("6.name", "&fPotion");
+	   cfg.addDefault("6.cost", Integer.valueOf(50));
+	   cfg.addDefault("6.material", "POTION");
+	   cfg.addDefault("6.amount", Integer.valueOf(1));
+	   cfg.addDefault("6.permission", "shop.6");
+	   lore = new ArrayList<String>();
+	   lore.add("Add&6 INVISIBILITY &5(1:00)");
+	   lore.add("Cost&6 50 &5coins");
+	   cfg.addDefault("6.lore", lore);
+	   cfg.addDefault("6.items.1.material", "POTION");
+	   cfg.addDefault("6.items.1.amount", Integer.valueOf(1));
+	   iEnch = new ArrayList<String>();
+	   iEnch.add("INVISIBILITY#60");
+	   cfg.addDefault("6.items.1.enchantments", iEnch);
+	   /*
+	    * seventh item
+	    */
+	   cfg.addDefault("7.name", "&fPotion");
+	   cfg.addDefault("7.cost", Integer.valueOf(50));
+	   cfg.addDefault("7.material", "POTION");
+	   cfg.addDefault("7.amount", Integer.valueOf(1));
+	   cfg.addDefault("7.permission", "shop.7");
+	   lore = new ArrayList<String>();
+	   lore.add("Add&6 JUMP &5boost (0:45)");
+	   lore.add("Cost&6 50 &5coins");
+	   cfg.addDefault("7.lore", lore);
+	   cfg.addDefault("7.items.1.material", "POTION");
+	   cfg.addDefault("7.items.1.amount", Integer.valueOf(1));
+	   iEnch = new ArrayList<String>();
+	   iEnch.add("JUMP#45");
+	   cfg.addDefault("7.items.1.enchantments", iEnch);
+	   /*
+	    * eigth item
+	    */
+	   cfg.addDefault("8.name", "&fPotion");
+	   cfg.addDefault("8.cost", Integer.valueOf(50));
+	   cfg.addDefault("8.material", "POTION");
+	   cfg.addDefault("8.amount", Integer.valueOf(1));
+	   cfg.addDefault("8.permission", "shop.8");
+	   lore = new ArrayList<String>();
+	   lore.add("Add&6 NIGHT_VISION &5(2:00)");
+	   lore.add("Cost&6 50 &5coins");
+	   cfg.addDefault("8.lore", lore);
+	   cfg.addDefault("8.items.1.material", "POTION");
+	   cfg.addDefault("8.items.1.amount", Integer.valueOf(1));
+	   iEnch = new ArrayList<String>();
+	   iEnch.add("NIGHT_VISION#120");
+	   cfg.addDefault("8.items.1.enchantments", iEnch);
+	   /*
+	    * ninth item
+	    */
+	   cfg.addDefault("9.name", "&fSplash Potion");
+	   cfg.addDefault("9.cost", Integer.valueOf(50));
+	   cfg.addDefault("9.material", "SPLASH_POTION");
+	   cfg.addDefault("9.amount", Integer.valueOf(1));
+	   cfg.addDefault("9.permission", "shop.9");
+	   lore = new ArrayList<String>();
+	   lore.add("Add&6 BLINDNESS &5(1:30)");
+	   lore.add("Cost&6 50 &5coins");
+	   cfg.addDefault("9.lore", lore);
+	   cfg.addDefault("9.items.1.material", "SPLASH_POTION");
+	   cfg.addDefault("9.items.1.amount", Integer.valueOf(1));
+	   cfg.addDefault("9.items.1.displayname", "&cSplash Potion of Blindness");
+	   iLore = new ArrayList<String>();
+	   iLore.add("Blindness");
+	   cfg.addDefault("9.items.1.lore", iLore);
+	   iEnch = new ArrayList<String>();
+	   iEnch.add("BLINDNESS#90");
+	   cfg.addDefault("9.items.1.enchantments", iEnch);
+	   /*
+	    * tenth item
+	    */
+	   cfg.addDefault("10.name", "&fSplash Potion");
+	   cfg.addDefault("10.cost", Integer.valueOf(50));
+	   cfg.addDefault("10.material", "SPLASH_POTION");
+	   cfg.addDefault("10.amount", Integer.valueOf(1));
+	   cfg.addDefault("10.permission", "shop.10");
+	   lore = new ArrayList<String>();
+	   lore.add("Add&6 SLOWNESS &5(0:30)");
+	   lore.add("Cost&6 50 &5coins");
+	   cfg.addDefault("10.lore", lore);
+	   cfg.addDefault("10.items.1.material", "SPLASH_POTION");
+	   cfg.addDefault("10.items.1.amount", Integer.valueOf(1));
+	   cfg.addDefault("10.items.1.displayname", "&cSplash Potion of Slowness");
+	   iLore = new ArrayList<String>();
+	   iLore.add("Slowness");
+	   cfg.addDefault("10.items.1.lore", iLore);
+	   iEnch = new ArrayList<String>();
+	   iEnch.add("SLOW#30");
+	   cfg.addDefault("10.items.1.enchantments", iEnch);
+	   /*
+	    * eleventh item
+	    */
+	   cfg.addDefault("11.name", "&fSplash Potion");
+	   cfg.addDefault("11.cost", Integer.valueOf(50));
+	   cfg.addDefault("11.material", "SPLASH_POTION");
+	   cfg.addDefault("11.amount", Integer.valueOf(1));
+	   cfg.addDefault("11.permission", "shop.11");
+	   lore = new ArrayList<String>();
+	   lore.add("Add&6 CONFUSION &5(0:30)");
+	   lore.add("Cost&6 50 &5coins");
+	   cfg.addDefault("11.lore", lore);
+	   cfg.addDefault("11.items.1.material", "SPLASH_POTION");
+	   cfg.addDefault("11.items.1.amount", Integer.valueOf(1));
+	   cfg.addDefault("11.items.1.displayname", "&cSplash Potion of Confusion");
+	   iLore = new ArrayList<String>();
+	   iLore.add("Confusion");
+	   cfg.addDefault("11.items.1.lore", iLore);
+	   iEnch = new ArrayList<String>();
+	   iEnch.add("CONFUSION#30");
+	   cfg.addDefault("11.items.1.enchantments", iEnch);
+	   /*
+	    * tidy up old IDs 
+	    */
 	   cfg.set("1.ID", null);
 	   cfg.set("1.subID", null);
 	   cfg.set("1.items.1.ID", null);

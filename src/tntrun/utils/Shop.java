@@ -24,6 +24,7 @@ import java.util.List;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
@@ -34,8 +35,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -61,7 +64,6 @@ public class Shop implements Listener{
 	public static String invname;
 	public static int invsize; 
 	
-	//private HashMap<Player, PotionEffect> potionMap = new HashMap<Player, PotionEffect>();
 	private static HashMap<Player, List<PotionEffect>> potionMap = new HashMap<Player, List<PotionEffect>>();
 	
 	private void giveItem(int slot, Player player, String title) {
@@ -81,7 +83,7 @@ public class Shop implements Listener{
 					bought.add(player);
 				}
 				// if the item is a potion, store the potion effect and skip to next item
-				if (material == Material.POTION) {
+				if (material.toString().equalsIgnoreCase("POTION")) {
 					if (enchantments != null && !enchantments.isEmpty()) {
 				    	for (String peffects : enchantments) {
 				    		String[] array = peffects.split("#");
@@ -105,7 +107,11 @@ public class Shop implements Listener{
 				String displayname = cfg.getString(kit + ".items." + items + ".displayname").replace("&", "§");
 				List<String> lore = cfg.getStringList(kit + ".items." + items + ".lore");
 				
-				item.add(getItem(material, amount, displayname, lore, enchantments));				
+				if (material.toString().equalsIgnoreCase("SPLASH_POTION")) {
+					item.add(getPotionItem(material, amount, displayname, lore, enchantments));
+				} else {
+					item.add(getItem(material, amount, displayname, lore, enchantments));
+				}
 				player.updateInventory();
 				player.closeInventory();
 			} catch(Exception e) {
@@ -144,6 +150,38 @@ public class Shop implements Listener{
 	    	}
 	    }
 	    item.setItemMeta(meta);
+	    return item;
+	}
+	
+	private ItemStack getPotionItem(Material material, int amount, String displayname, List<String> lore, List<String> enchantments) {
+		ItemStack item = new ItemStack(material, amount);
+		PotionMeta potionmeta = (PotionMeta) item.getItemMeta();
+		
+		potionmeta.setDisplayName(displayname);
+		potionmeta.setColor(Color.RED);
+	    
+	    if (lore != null && !lore.isEmpty()) {
+	      potionmeta.setLore(lore);
+	    }
+	    
+	    if (enchantments != null && !enchantments.isEmpty()) {
+	    	for (String peffects : enchantments) {
+	    		String[] array = peffects.split("#");
+	    		String peffect = array[0].toUpperCase();
+	    		
+	    		// get duration of effect
+	    		int duration = 30;
+	    		if (array.length > 1) {
+	    			duration = Integer.valueOf(array[1]).intValue();
+	    		}
+	    		
+	    		PotionEffect effect = new PotionEffect(PotionEffectType.getByName(peffect), duration * 20, 1);
+	    		if (effect != null) {
+	    			potionmeta.addCustomEffect(effect, true);
+	    		}
+	    	}
+	    }
+	    item.setItemMeta(potionmeta);
 	    return item;
 	}
 	@EventHandler
@@ -237,23 +275,45 @@ public class Shop implements Listener{
 		    	  loreLines = loreLines.replace("&", "§");
 		          lore.add(loreLines);
 		      }
-		      Material material = Material.getMaterial(cfg.getString(kitCounter + ".material"));
+		      Material material = Material.getMaterial(cfg.getString(kitCounter + ".material"));		      
 		      int amount = cfg.getInt(kitCounter + ".amount");
-		      inventory.setItem(slot, getItem(material, title, lore, amount));
+
+		      if (material.toString().equalsIgnoreCase("POTION") || material.toString().equalsIgnoreCase("SPLASH_POTION")) {
+		    	  inventory.setItem(slot, getShopPotionItem(material, title, lore, amount));
+		      } else {
+		    	  inventory.setItem(slot, getShopItem(material, title, lore, amount));
+		      }
 		      itemSlot.put(Integer.valueOf(slot), Integer.valueOf(kitCounter));
 		      slot++;
 		}
 	}
 
-	private static ItemStack getItem(Material material, String title, List<String> lore, int amount){
+	private static ItemStack getShopItem(Material material, String title, List<String> lore, int amount){
 		ItemStack item = new ItemStack(material, amount);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(title);
 		
+		meta.setDisplayName(title);
 		if ((lore != null) && (!lore.isEmpty())) {
-		    meta.setLore(lore);
+			meta.setLore(lore);
 		}
 		item.setItemMeta(meta);
+		return item;
+	}
+	
+	private static ItemStack getShopPotionItem(Material material, String title, List<String> lore, int amount) {
+		ItemStack item = new ItemStack(material, amount);
+		PotionMeta potionmeta = (PotionMeta) item.getItemMeta();
+		
+		potionmeta.setDisplayName(title);
+		potionmeta.setColor(Color.BLUE);
+		if (material.toString().equalsIgnoreCase("SPLASH_POTION")) {
+			potionmeta.setColor(Color.RED);
+		}
+		potionmeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+		if ((lore != null) && (!lore.isEmpty())) {
+			potionmeta.setLore(lore);
+		}
+		item.setItemMeta(potionmeta);
 		return item;
 	}
 	
