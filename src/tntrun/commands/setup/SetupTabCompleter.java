@@ -64,6 +64,7 @@ public class SetupTabCompleter implements TabCompleter {
 		complex.add("setreward");
 		complex.add("enablekits");
 		complex.add("disablekits");
+		complex.add("setdamage");
 		
 		if (args.length == 1) {
 			list.add("help");
@@ -86,6 +87,10 @@ public class SetupTabCompleter implements TabCompleter {
 			if (args[0].equalsIgnoreCase("setteleport")) {
 				list.add("lobby");
 				list.add("previous");
+			} else if (args[0].equalsIgnoreCase("setdamage")) {
+				list.add("yes");
+				list.add("no");
+				list.add("zero");
 			}
 		}
 		for (String s : list) {
