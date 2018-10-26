@@ -479,6 +479,7 @@ public class GameHandler {
         	for (PotionEffect pe : Shop.getPotionEffects(player)) {
         		player.addPotionEffect(pe);
         	}
+        	Shop.removePotionEffects(player);
         }
 	}
 	

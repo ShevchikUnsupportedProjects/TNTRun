@@ -142,7 +142,6 @@ public class Shop implements Listener{
 	    		if (array.length > 1) {
 	    			level = Integer.valueOf(array[1]).intValue();
 	    		}
-	    		
 	    		Enchantment realEnch = getEnchantmentFromString(ench);
 	    		if (realEnch != null) {
 	    			meta.addEnchant(realEnch, level, true);
@@ -318,13 +317,14 @@ public class Shop implements Listener{
 	}
 	
 	private Enchantment getEnchantmentFromString(String enchantment) {		
-	    NamespacedKey key = new NamespacedKey(pl, enchantment);
-	    Enchantment realEnch = Enchantment.getByKey(key);
-	    
-		return realEnch;
+	    return Enchantment.getByKey(NamespacedKey.minecraft(enchantment.toLowerCase()));
 	}
 	
 	public static List<PotionEffect> getPotionEffects(Player player) {
 		return potionMap.get(player);
+	}
+	
+	public static void removePotionEffects(Player player) {
+		potionMap.remove(player);
 	}
 }
