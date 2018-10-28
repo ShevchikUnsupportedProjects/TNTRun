@@ -98,7 +98,7 @@ public class Messages {
 	public static String setupcountdown = "Set a countdown for arena (Default: 15 seconds)";
 	public static String setupmoney = "Set a money reward for winning player";
 	public static String setupteleport = "Set teleport when you lose or win in arena";
-	public static String setupdamage = "Set a pvp for arena";
+	public static String setupdamage = "Enable/disable PVP for the arena";
 	public static String setupreloadbars = "Reload Bar messages";
 	public static String setupreloadtitles = "Reload Title messages";
 	public static String setupreloadmsg = "Reload arena messages";

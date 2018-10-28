@@ -101,6 +101,8 @@ public class Shop implements Listener{
 				    		}
 				    	}
 					}
+					player.updateInventory();
+					player.closeInventory();
 					continue;
 				}
 				
@@ -184,7 +186,7 @@ public class Shop implements Listener{
 	    return item;
 	}
 	@EventHandler
-	public void onClick(InventoryClickEvent e){
+	public void onClick(InventoryClickEvent e) {
 	    Player p = (Player)e.getWhoClicked();
 	    
 	    if (e.getInventory().getName().equals(invname)) { 	
@@ -193,6 +195,7 @@ public class Shop implements Listener{
 	    		ItemStack current = e.getCurrentItem();
 	    		if (current.hasItemMeta() && current.getItemMeta().hasDisplayName()) {
 	    			int kit = ((Integer)itemSlot.get(Integer.valueOf(e.getSlot()))).intValue();
+
 	    			FileConfiguration cfg = ShopFiles.getShopConfiguration();
 	    			String permission = cfg.getString(kit + ".permission");
 	    			
@@ -201,7 +204,7 @@ public class Shop implements Listener{
 	    				TNTRun.getInstance().sound.WITHER_HURT(p, 5, 999);
 	    				return;
 	    			}
-	    			if (p.hasPermission(permission)) {
+	    			if (p.hasPermission(permission) || p.hasPermission("tntrun.shop")) {
 	    				String title = current.getItemMeta().getDisplayName();
 	    				int cost = cfg.getInt(kit + ".cost");
 	        	  

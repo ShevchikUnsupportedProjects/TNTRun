@@ -25,3 +25,6 @@ permissions:
   tntrun.version.check:
     description: display new version message on player join
     default: op
+  tntrun.shop:
+    description: allow players to buy any shop item (if they have money)
+    default: true

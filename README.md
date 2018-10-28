@@ -24,23 +24,29 @@ Note that there is a bug fix release (version 6.8.1) only available from the Git
 
 ## Features
 
-Multiple arenas <br />
-Block destroy delay <br />
-Custom gamelevel <br />
-AntiCamping system <br />
-Custom messages <br />
-Formatting codes support <br />
-Tab completion <br>
-Signs <br />
-Time limit <br />
-Automatic arena regeneration <br />
-Arena leave checker <br />
-Player rewards (items, xp, commands, money) <br />
-Titles and Bossbars <br />
-Spectator system <br />
-Shop <br />
-Placeholder support - https://www.spigotmc.org/resources/tntrun_reloaded-expansion.53945/ <br />
+    Supports multiple arenas
+    Automatic arena regeneration
+    Configurable block destroy delay
+    Force-start voting system
+    Anti-camping system
+    Custom messages
+    Formatting codes support
+    Full tab completion based on permissions
+    Signs
+    Configurable per-arena time limit
+    Configurable per-arena countdown
+    In-game scoreboard
+    Titles and bossbars
+    Spectator system
+    Player stats
+    Leader board
+    Arena leave checker
+    Customizable shop
+    PVP can be enabled/disabled per arena
+    Player rewards
+    Placeholder support - https://www.spigotmc.org/resources/tntrun_reloaded-expansion.53945/
+
 <br />
 <br />
 <br />
-Updated steve4744 - 25th Oct 2018
+Updated steve4744 - 27th Oct 2018
