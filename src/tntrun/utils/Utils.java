@@ -50,10 +50,9 @@ public class Utils {
 	
 	public static void displayInfo(Player player) {
 		player.sendMessage("§7============[§6TNTRun§7]§7============");
-		player.sendMessage("§cPlugin Version> §6" + TNTRun.getInstance().getDescription().getVersion());
-		player.sendMessage("§cWebsite> §6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
-		player.sendMessage("§cOriginal TNTRun Author> §6Shevchikden");
-		player.sendMessage("§cTNTRun_reloaded Author> §6steve4744");
+		player.sendMessage("§bPlugin Version: §f" + TNTRun.getInstance().getDescription().getVersion());
+		player.sendMessage("§bWebsite: §fhttps://www.spigotmc.org/resources/tntrun_reloaded.53359/");
+		player.sendMessage("§bTNTRun_reloaded Author: §fsteve4744");
 		player.sendMessage("§7============[§6TNTRun§7]§7============");
 	}
 

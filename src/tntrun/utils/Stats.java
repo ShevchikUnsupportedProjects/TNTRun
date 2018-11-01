@@ -186,7 +186,7 @@ public class Stats {
         }
     }
     
-    public static void getLeaderboard(Player player) {
+    public static void getLeaderboard(Player player, int entries) {
     	if (pl.file) {
     		FileConfiguration config = YamlConfiguration.loadConfiguration(file);
     		ConfigurationSection stats = config.getConfigurationSection("stats");
@@ -215,7 +215,7 @@ public class Stats {
     			position = 0;
     			statsMap.entrySet().stream()
     			        .sorted(Entry.comparingByValue(Comparator.reverseOrder()))
-    			        .limit(10)
+    			        .limit(entries)
     			        .forEach(e -> {position++;
     			            Messages.sendMessage(player, Messages.leaderboard
     			            		.replace("{POSITION}", String.valueOf(position))

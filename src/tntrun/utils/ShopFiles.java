@@ -108,7 +108,7 @@ public class ShopFiles {
 	   iEnch.add("THORNS#1");
 	   cfg.addDefault("3.items.1.enchantments", iEnch);
 	   /*
-	    * forth item
+	    * fourth item
 	    */
 	   cfg.addDefault("4.name", "&fSword and Helmet");
 	   cfg.addDefault("4.cost", Integer.valueOf(300));
