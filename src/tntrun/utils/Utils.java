@@ -55,5 +55,9 @@ public class Utils {
 		player.sendMessage("§bTNTRun_reloaded Author: §fsteve4744");
 		player.sendMessage("§7============[§6TNTRun§7]§7============");
 	}
+	
+	public static String getTitleCase(String input) {
+		return input.substring(0,1).toUpperCase() + input.substring(1).toLowerCase();
+	}
 
 }

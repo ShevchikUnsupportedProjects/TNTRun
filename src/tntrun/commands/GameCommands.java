@@ -98,9 +98,10 @@ public class GameCommands implements CommandExecutor {
 				player.sendMessage("§6Max Players §f- §c " + arena.getStructureManager().getMaxPlayers());
 				player.sendMessage("§6Time Limit §f- §c " + arena.getStructureManager().getTimeLimit() + " seconds");
 				player.sendMessage("§6Countdown §f- §c " + arena.getStructureManager().getCountdown() + " seconds");
-				player.sendMessage("§6Teleport to §f- §c " + arena.getStructureManager().getTeleportDestination());
+				player.sendMessage("§6Teleport to §f- §c " + Utils.getTitleCase(arena.getStructureManager().getTeleportDestination().toString()));
 				player.sendMessage("§6Player Count §f- §c " + arena.getPlayersManager().getPlayersCount());
 				player.sendMessage("§6Vote Percent §f- §c " + arena.getStructureManager().getVotePercent());
+				player.sendMessage("§6PVP Damage Enabled §f- §c " + Utils.getTitleCase(arena.getStructureManager().getDamageEnabled().toString()));
 				if (arena.getStructureManager().getRewards().getXPReward() != 0) {
 					player.sendMessage("§6XP Reward §f- §c " + arena.getStructureManager().getRewards().getXPReward());
 				}
