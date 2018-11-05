@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -40,7 +41,7 @@ public class Bars {
 
 	private static HashMap<String, BossBar> barmap = new HashMap<String, BossBar>();
 	
-	public static String waiting = "Minimum players:&r {MIN}, current player count:&r {COUNT}";
+	public static String waiting = "&6Minimum players:&r {MIN}&6, current player count:&r {COUNT}";
 	public static String starting = "&6Arena starts in:&r {SECONDS} seconds";
 	public static String playing = "&6Time left:&r {SECONDS} &6Players in game count:&r {COUNT}";
 	
@@ -53,7 +54,7 @@ public class Bars {
 		int index = 0;
 		String col = TNTRun.getInstance().getConfig().getString("special.BossBarColor");
 		
-		if (col == null || col.equalsIgnoreCase("RANDOM") || BarColor.valueOf(col) == null) {
+		if (col == null || col.equalsIgnoreCase("RANDOM") || !EnumUtils.isValidEnum(BarColor.class, col)) {
 			Random random = ThreadLocalRandom.current();
 			index = random.nextInt(BarColor.values().length);
 		} else {
@@ -69,11 +70,9 @@ public class Bars {
 	
 	public static void addPlayerToBar(Player player, String arena) {
 		barmap.get(arena).addPlayer(player);
-		// if this is the first player to join and bar colour is random, set new colour
+		// if this is the first player to join, set bar colour
 		if (barmap.get(arena).getPlayers().size() == 1) {
-			if (TNTRun.getInstance().getConfig().getString("special.BossBarColor").equalsIgnoreCase("RANDOM")) {
-				setBarColor(arena);
-			}
+			setBarColor(arena);
 		}
 	}
 	

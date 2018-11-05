@@ -99,6 +99,7 @@ public class Messages {
 	public static String setupmoney = "Set a money reward for winning player";
 	public static String setupteleport = "Set teleport when you lose or win in arena";
 	public static String setupdamage = "Enable/disable PVP for the arena";
+	public static String setupbarcolor = "Set the BossBar color";
 	public static String setupreloadbars = "Reload Bar messages";
 	public static String setupreloadtitles = "Reload Title messages";
 	public static String setupreloadmsg = "Reload arena messages";
@@ -188,6 +189,7 @@ public class Messages {
 		setupmoney = config.getString("setupmoney", setupmoney);
 		setupteleport = config.getString("setupteleport", setupteleport);
 		setupdamage = config.getString("setupdamage", setupdamage);
+		setupbarcolor = config.getString("setupbarcolor", setupbarcolor);
 		setupreloadbars = config.getString("setupreloadbars", setupreloadbars);
 		setupreloadtitles = config.getString("setupreloadtitles", setupreloadtitles);
 		setupreloadmsg = config.getString("setupreloadmsg", setupreloadmsg);
@@ -266,6 +268,7 @@ public class Messages {
 		config.set("setupmoney", setupmoney);
 		config.set("setupteleport", setupteleport);
 		config.set("setupdamage", setupdamage);
+		config.set("setupbarcolor", setupbarcolor);
 		config.set("setupreloadbars", setupreloadbars);
 		config.set("setupreloadtitles", setupreloadtitles);
 		config.set("setupreloadmsg", setupreloadmsg);

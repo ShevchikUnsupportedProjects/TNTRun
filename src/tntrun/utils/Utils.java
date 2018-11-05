@@ -21,7 +21,6 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.arena.handlers.PlayerHandler;
 
 public class Utils {
 	

@@ -37,6 +37,7 @@ import tntrun.commands.setup.arena.EnableArena;
 import tntrun.commands.setup.arena.EnableKits;
 import tntrun.commands.setup.arena.FinishArena;
 import tntrun.commands.setup.arena.SetArena;
+import tntrun.commands.setup.arena.SetBarColor;
 import tntrun.commands.setup.arena.SetCountdown;
 import tntrun.commands.setup.arena.SetDamage;
 import tntrun.commands.setup.arena.SetGameLevelDestroyDelay;
@@ -102,6 +103,8 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("enable", new EnableArena(plugin));
 		commandHandlers.put("enablekits", new EnableKits(plugin));
 		commandHandlers.put("disablekits", new DisableKits(plugin));
+		commandHandlers.put("setbarcolor", new SetBarColor(plugin));
+		commandHandlers.put("setbarcolour", new SetBarColor(plugin));
 		commandHandlers.put("setreward", new SetReward(plugin));
 		commandHandlers.put("help", new SetupHelp(plugin));
 	}

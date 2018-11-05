@@ -8,6 +8,7 @@
 special:
    FancyBlockBreak: true
    UseBossBar: true
+   BossBarColor: RANDOM
    UseTitle: true
    UseScoreboard: true
    CheckForNewVersion: true

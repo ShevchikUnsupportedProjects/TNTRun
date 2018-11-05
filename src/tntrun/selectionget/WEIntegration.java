@@ -22,7 +22,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.IncompleteRegionException;
-//import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
