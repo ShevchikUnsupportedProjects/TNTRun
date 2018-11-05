@@ -161,7 +161,7 @@ public class PlayerHandler {
 		if (!arena.getStatusManager().isArenaStarting()) {
 			double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers(); 
 			
-			Bars.setBar(arena.getArenaName(), Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
+			Bars.setBar(arena, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
 			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
 				// play sound
 				TNTRun.getInstance().sound.NOTE_PLING(oplayer, 5, 999);
@@ -264,7 +264,7 @@ public class PlayerHandler {
 			Messages.sendMessage(oplayer, msgtoarenaplayers);
 			if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
 				double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers();
-				Bars.setBar(arena.getArenaName(), Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
+				Bars.setBar(arena, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
 			}
 		}
 	}
@@ -332,6 +332,8 @@ public class PlayerHandler {
 	public boolean vote(Player player) {
 		if (!votes.contains(player.getName())) {
 			votes.add(player.getName());
+			//update scoreboard
+			arena.getGameHandler().createWaitingScoreBoard();
 			if (!arena.getStatusManager().isArenaStarting() && forceStart()) {
 				arena.getGameHandler().runArenaCountdown();
 			}
@@ -411,6 +413,10 @@ public class PlayerHandler {
 	
 	private void removeScoreboard(Player player) {
 		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+	}
+	
+	public int getVotesCast() {
+		return votes.size();
 	}
 
 }

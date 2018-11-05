@@ -104,7 +104,7 @@ public class GameHandler {
 					// check if countdown should be stopped for some various reasons
 					if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers() && !arena.getPlayerHandler().forceStart()) {
 						double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers();
-						Bars.setBar(arena.getArenaName(), Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
+						Bars.setBar(arena, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
 						createWaitingScoreBoard();
 						stopArenaCountdown();
 					} else
@@ -154,7 +154,7 @@ public class GameHandler {
 					createWaitingScoreBoard();
 					// update bar
 					double progressbar = (double) count / arena.getStructureManager().getCountdown();
-					Bars.setBar(arena.getArenaName(), Bars.starting, 0, count, progressbar, plugin);
+					Bars.setBar(arena, Bars.starting, 0, count, progressbar, plugin);
 					
 					for (Player player : arena.getPlayersManager().getPlayers()) {
 						player.setLevel(count);
@@ -228,7 +228,7 @@ public class GameHandler {
 					}
 					// handle players
 					double progress = (double) timelimit / (arena.getStructureManager().getTimeLimit() * 20);
-					Bars.setBar(arena.getArenaName(), Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, progress, plugin);
+					Bars.setBar(arena, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, progress, plugin);
 					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 						// Xp level
 						player.setLevel(timelimit/20);
@@ -295,12 +295,12 @@ public class GameHandler {
 	} 
 	
 	public void createWaitingScoreBoard() {
-		if(!plugin.getConfig().getBoolean("special.UseScoreboard")){
+		if(!plugin.getConfig().getBoolean("special.UseScoreboard")) {
 			return;
 		}
 		resetScoreboard();
 		Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
-		try{
+		try {
 			int size = plugin.getConfig().getStringList("scoreboard.waiting").size();
 			for(String s : plugin.getConfig().getStringList("scoreboard.waiting")){
 				s = s.replace("&", "§");
@@ -308,15 +308,24 @@ public class GameHandler {
 				s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
 				s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
 				s = s.replace("{COUNT}", count + "");
+				s = s.replace("{VOTES}", getVotesRequired(arena) + "");
 				o.getScore(s).setScore(size);
 				size--;
 			}
 			for (Player p : arena.getPlayersManager().getPlayers()) {
 				p.setScoreboard(scoreboard);
 			}
-		}catch (NullPointerException ex){
+		} catch (NullPointerException ex) {
 			
 		}
+	}
+	
+	private Integer getVotesRequired(Arena arena) {
+		int minPlayers = arena.getStructureManager().getMinPlayers();
+		double votePercent = arena.getStructureManager().getVotePercent();
+		int votesCast = arena.getPlayerHandler().getVotesCast();
+
+		return (int) (Math.ceil(minPlayers * votePercent) - votesCast);
 	}
 
 	private void resetScoreboard() {

@@ -53,6 +53,8 @@ scoreboard:
    - '&b '
    - '&fPlayers: &a&l{PS}&7&l/&c&l{MPS}'
    - '&c '
+   - '&fVotes needed: &6&l{VOTES}'
+   - '&d '
    - '&fStarting in: &6&l{COUNT}'
    playing:
    - '&fPlaying TNTRun'

@@ -22,7 +22,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.Vector;
+//import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
@@ -49,8 +50,8 @@ public class WEIntegration {
 		
 		RegionSelector selector = we.getSessionManager().get(bplayer).getRegionSelector(bplayer.getWorld());
 		try {
-			Vector v1 = selector.getRegion().getMinimumPoint();
-			Vector v2 = selector.getRegion().getMaximumPoint();
+			BlockVector3 v1 = selector.getRegion().getMinimumPoint();
+			BlockVector3 v2 = selector.getRegion().getMaximumPoint();
 			
 			locs[0] = new Location(player.getWorld(), v1.getX(), v1.getY(), v1.getZ());
 			locs[1] = new Location(player.getWorld(), v2.getX(), v2.getY(), v2.getZ());	
