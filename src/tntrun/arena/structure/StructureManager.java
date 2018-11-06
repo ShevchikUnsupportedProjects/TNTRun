@@ -256,7 +256,7 @@ public class StructureManager {
 		}
 		// save gamelevel destroy delay
 		config.set("gameleveldestroydelay", gameleveldestroydelay);
-		// save looselevel
+		// save loselevel
 		try {
 			loselevel.saveToConfig(config);
 		} catch (Exception e) {
@@ -307,7 +307,7 @@ public class StructureManager {
 		p2 = config.getVector("p2", null);
 		// load gamelevel destroy delay
 		gameleveldestroydelay = config.getInt("gameleveldestroydelay", gameleveldestroydelay);
-		// load looselevel
+		// load loselevel
 		loselevel.loadFromConfig(config);
 		// load spawnpoint
 		spawnpoint = config.getVector("spawnpoint", null);

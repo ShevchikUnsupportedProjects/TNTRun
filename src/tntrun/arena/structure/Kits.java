@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -126,6 +125,11 @@ public class Kits {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(kitsconfig);
 		for (String name : kits.keySet()) {
 			kits.get(name).saveToConfig(config, "kits." + name);
+		}
+		try {
+			config.save(kitsconfig);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

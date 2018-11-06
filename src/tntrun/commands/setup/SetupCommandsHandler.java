@@ -93,8 +93,6 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("setvotepercent", new SetVotePercent(plugin));
 		commandHandlers.put("setcountdown", new SetCountdown(plugin));
 		commandHandlers.put("setmoneyreward", new SetMoneyRewards(plugin));
-		commandHandlers.put("addkit", new AddKit(plugin));
-		commandHandlers.put("deleteKit", new DeleteKit(plugin));
 		commandHandlers.put("settimelimit", new SetTimeLimit(plugin));
 		commandHandlers.put("setteleport", new SetTeleport(plugin));
 		commandHandlers.put("setdamage", new SetDamage(plugin));
@@ -103,6 +101,8 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("enable", new EnableArena(plugin));
 		commandHandlers.put("enablekits", new EnableKits(plugin));
 		commandHandlers.put("disablekits", new DisableKits(plugin));
+		commandHandlers.put("addkit", new AddKit(plugin));
+		commandHandlers.put("deletekit", new DeleteKit(plugin));
 		commandHandlers.put("setbarcolor", new SetBarColor(plugin));
 		commandHandlers.put("setbarcolour", new SetBarColor(plugin));
 		commandHandlers.put("setreward", new SetReward(plugin));
