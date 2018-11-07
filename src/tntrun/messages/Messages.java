@@ -68,6 +68,8 @@ public class Messages {
 	public static String playerkit = "&7[&6TNTRun&7] You have been given kit &6{KIT}";
 	public static String kitadd = "&7[&6TNTRun&7] The kit &6{KIT} &7has been created";
 	public static String kitdel = "&7[&6TNTRun&7] The kit &6{KIT} &7has been deleted";
+	public static String kitexists = "&7[&6TNTRun&7] &cThe specified kit already exists : &6{KIT}";
+	public static String kitnotexists = "&7[&6TNTRun&7] &cThe specified kit does not exist : &6{KIT}";
 	
 	public static String gamesplayed = "&7Games played: &6";
 	public static String gameswon = "&7Wins: &6";
@@ -209,6 +211,8 @@ public class Messages {
 		setupdisablekits = config.getString("setupdisablekits", setupdisablekits);
 		setupaddkit = config.getString("setupaddkit", setupaddkit);
 		setupdelkit = config.getString("setupdelkit", setupaddkit);
+		kitexists = config.getString("kitexists", kitexists);
+		kitnotexists = config.getString("kitnotexists", kitnotexists);
 		saveMessages(messageconfig);
 	}
 
@@ -291,6 +295,8 @@ public class Messages {
 		config.set("setupdisablekits", setupdisablekits);
 		config.set("setupaddkit", setupaddkit);
 		config.set("setupdelkit", setupdelkit);
+		config.set("kitexists", kitexists);
+		config.set("kitnotexists", kitnotexists);
 		try {
 			config.save(messageconfig);
 		} catch (IOException e) {

@@ -38,7 +38,7 @@ public class EnableArena implements CommandHandlerInterface {
 				player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c already enabled");
 			} else {
 				if (arena.getStatusManager().enableArena()) {
-					player.sendMessage("§7[§6TNTRun§7] Arena §6" + args[0] + "§f enabled");
+					player.sendMessage("§7[§6TNTRun§7] Arena §6" + args[0] + "§7 enabled");
 				} else {
 					player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c isn't configured. Reason: " + arena.getStructureManager().isArenaConfigured());
 				}

@@ -42,7 +42,7 @@ public class Kits {
 	private File kitsconfig = new File(TNTRun.getInstance().getDataFolder(), "kits.yml");
 	private FileConfiguration config = YamlConfiguration.loadConfiguration(kitsconfig);
 
-	public boolean isKitExist(String name) {
+	private boolean isKitExists(String name) {
 		return kits.containsKey(name);
 	}
 
@@ -51,6 +51,10 @@ public class Kits {
 	}
 
 	public void registerKit(String name, Player player) {
+		if (isKitExists(name)) {
+			Messages.sendMessage(player, Messages.kitexists.replace("{KIT}", name));
+			return;
+		}
 		Kit kit = new Kit(player.getInventory().getArmorContents(), player.getInventory().getContents(), player.getActivePotionEffects());
 		registerKit(name, kit);
 		Messages.sendMessage(player, Messages.kitadd.replace("{KIT}", name));
@@ -61,6 +65,10 @@ public class Kits {
 	}
 
 	public void unregisterKit(String name, Player player) {
+		if (! isKitExists(name)) {
+			Messages.sendMessage(player, Messages.kitnotexists.replace("{KIT}", name));
+			return;
+		}
 		kits.remove(name);
 		config.set("kits." + name, null);
 		saveKits();
