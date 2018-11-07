@@ -65,6 +65,7 @@ public class Messages {
 	public static String alreadyboughtitem = "&7[&6TNTRun&7] &cYou have already bought a shop item";
 	public static String getdoublejumpsaction = "&7&lYour double jumps: &6&l{DB}";
 	public static String playernotinarena = "&7[&6TNTRun&7] &cYou are not in a TNTRun arena";
+	public static String playerkit = "&7[&6TNTRun&7] You have been given kit &6{KIT}";
 	
 	public static String gamesplayed = "&7Games played: &6";
 	public static String gameswon = "&7Wins: &6";

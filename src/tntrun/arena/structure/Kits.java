@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -32,10 +33,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
 import tntrun.TNTRun;
+import tntrun.messages.Messages;
 
 public class Kits {
 
 	private HashMap<String, Kit> kits = new HashMap<String, Kit>();
+	
+	private File kitsconfig = new File(TNTRun.getInstance().getDataFolder(), "kits.yml");
+	private FileConfiguration config = YamlConfiguration.loadConfiguration(kitsconfig);
 
 	public boolean isKitExist(String name) {
 		return kits.containsKey(name);
@@ -56,11 +61,14 @@ public class Kits {
 
 	public void unregisterKit(String name) {
 		kits.remove(name);
+		config.set("kits." + name, null);
+		saveKits();
 	}
 
 	public void giveKit(String name, Player player) {
 		try {
 			kits.get(name).giveKit(player);
+			Messages.sendMessage(player, Messages.playerkit.replace("{KIT}", name));
 		} catch (Exception e) {
 		}
 	}
@@ -101,7 +109,6 @@ public class Kits {
 	}
 
 	public void loadFromConfig() {
-		File kitsconfig = new File(TNTRun.getInstance().getDataFolder(), "kits.yml");
 		if (!kitsconfig.exists()) {
 			try {
 				kitsconfig.createNewFile();
@@ -109,7 +116,6 @@ public class Kits {
 				e.printStackTrace();
 			}
 		}
-		FileConfiguration config = YamlConfiguration.loadConfiguration(kitsconfig);
 		ConfigurationSection cs = config.getConfigurationSection("kits");
 		if (cs != null) {
 			for (String name : cs.getKeys(false)) {
@@ -121,11 +127,13 @@ public class Kits {
 	}
 
 	public void saveToConfig() {
-		File kitsconfig = new File(TNTRun.getInstance().getDataFolder(), "kits.yml");
-		FileConfiguration config = YamlConfiguration.loadConfiguration(kitsconfig);
 		for (String name : kits.keySet()) {
 			kits.get(name).saveToConfig(config, "kits." + name);
 		}
+		saveKits();
+	}
+	
+	private void saveKits() {
 		try {
 			config.save(kitsconfig);
 		} catch (IOException e) {

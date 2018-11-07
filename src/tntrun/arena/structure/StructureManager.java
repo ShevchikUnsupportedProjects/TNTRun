@@ -49,7 +49,6 @@ public class StructureManager {
 	private double votesPercent = 0.75;
 	private int timelimit = 300;
 	private int countdown = 10;
-	private Kits kits = new Kits();
 	private Rewards rewards = new Rewards();
 	private TeleportDestination teleportDest = TeleportDestination.PREVIOUS;
 	private DamageEnabled damageEnabled = DamageEnabled.NO;
@@ -121,10 +120,6 @@ public class StructureManager {
 
 	public int getCountdown() {
 		return countdown;
-	}
-
-	public Kits getKits() {
-		return kits;
 	}
 
 	public Rewards getRewards() {
@@ -287,8 +282,6 @@ public class StructureManager {
 		config.set("damageenabled", damageEnabled.toString());
 		// save kits enabled
 		config.set("enableKits", kitsEnabled);
-		// save kits
-		kits.saveToConfig();
 		// save rewards
 		rewards.saveToConfig(config);
 		try {
@@ -327,8 +320,6 @@ public class StructureManager {
 		teleportDest = TeleportDestination.valueOf(config.getString("teleportto", TeleportDestination.PREVIOUS.toString()));
 		// load damage enabled
 		damageEnabled = DamageEnabled.valueOf(config.getString("damageenabled", DamageEnabled.NO.toString()));
-		// load kits
-		kits.loadFromConfig();
 		// load rewards
 		rewards.loadFromConfig(config);
 		// kits enabled

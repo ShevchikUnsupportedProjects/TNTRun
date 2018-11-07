@@ -26,6 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import tntrun.arena.Arena;
+import tntrun.arena.structure.Kits;
 import tntrun.utils.Bars;
 import tntrun.utils.Shop;
 import tntrun.utils.Sounds;
@@ -55,6 +56,7 @@ public class TNTRun extends JavaPlugin {
 	public ArenasManager amanager;
 	public GlobalLobby globallobby;
 	public SignEditor signEditor;
+	public Kits kitmanager;
 	public boolean file = false;
 	public boolean usestats = false;
 	public boolean needUpdate = false;
@@ -69,6 +71,7 @@ public class TNTRun extends JavaPlugin {
 		log = getLogger();
 		signEditor = new SignEditor(this);
 		globallobby = new GlobalLobby(this);
+		kitmanager = new Kits();
 		Messages.loadMessages(this);
 		Bars.loadBars(this);
 		TitleMsg.loadTitles(this);
@@ -99,6 +102,8 @@ public class TNTRun extends JavaPlugin {
 			public void run() {
 				// load global lobby
 				globallobby.loadFromConfig();
+				// load kits
+				kitmanager.loadFromConfig();
 				// load arenas
 				for (String file : arenasfolder.list()) {
 					Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
@@ -120,7 +125,6 @@ public class TNTRun extends JavaPlugin {
 		
 	    log.info("Starting Metrics...");
 	    new Metrics(this);
-	    log.info("Metrics started!");
 	     
 	     if (this.getConfig().getString("database").equals("file")) {
 	    	 file = true;
@@ -158,6 +162,9 @@ public class TNTRun extends JavaPlugin {
 		// save lobby
 		globallobby.saveToConfig();
 		globallobby = null;
+		// save kits
+		kitmanager.saveToConfig();
+		kitmanager = null;
 		// save signs
 		signEditor.saveConfiguration();
 		signEditor = null;
