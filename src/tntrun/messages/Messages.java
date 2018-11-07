@@ -66,6 +66,8 @@ public class Messages {
 	public static String getdoublejumpsaction = "&7&lYour double jumps: &6&l{DB}";
 	public static String playernotinarena = "&7[&6TNTRun&7] &cYou are not in a TNTRun arena";
 	public static String playerkit = "&7[&6TNTRun&7] You have been given kit &6{KIT}";
+	public static String kitadd = "&7[&6TNTRun&7] The kit &6{KIT} &7has been created";
+	public static String kitdel = "&7[&6TNTRun&7] The kit &6{KIT} &7has been deleted";
 	
 	public static String gamesplayed = "&7Games played: &6";
 	public static String gameswon = "&7Wins: &6";
@@ -112,6 +114,8 @@ public class Messages {
 	public static String setuphelp = "Commands required to setup a new arena";
 	public static String setupenablekits = "Enable kits for the arena";
 	public static String setupdisablekits = "Disable kits for the arena";
+	public static String setupaddkit = "Create a TNTRun kit";
+	public static String setupdelkit = "Delete a TNTRun kit";
 	
 	
 	public static void sendMessage(Player player, String message) {
@@ -157,6 +161,7 @@ public class Messages {
 		playerrewardmessage = config.getString("playerrewardmessage", playerrewardmessage);
 		playerboughtitem = config.getString("playerboughtitem", playerboughtitem);
 		playerboughtwait = config.getString("playerboughtwait", playerboughtwait);
+		playerkit = config.getString("playerkit", playerkit);
 		notenoughtmoney = config.getString("notenoughtmoney", notenoughtmoney);
 		alreadyboughtitem = config.getString("alreadyboughtitem", alreadyboughtitem);
 		getdoublejumpsaction = config.getString("getdoublejumpsaction", getdoublejumpsaction);
@@ -202,6 +207,8 @@ public class Messages {
 		setuphelp = config.getString("setuphelp", setuphelp);
 		setupenablekits = config.getString("setupenablekits", setupenablekits);
 		setupdisablekits = config.getString("setupdisablekits", setupdisablekits);
+		setupaddkit = config.getString("setupaddkit", setupaddkit);
+		setupdelkit = config.getString("setupdelkit", setupaddkit);
 		saveMessages(messageconfig);
 	}
 
@@ -236,6 +243,7 @@ public class Messages {
 		config.set("playerrewardmessage", playerrewardmessage);
 		config.set("playerboughtitem", playerboughtitem);
 		config.set("playerboughtwait", playerboughtwait);
+		config.set("playerkit", playerkit);
 		config.set("notenoughtmoney", notenoughtmoney);
 		config.set("alreadyboughtitem", alreadyboughtitem);
 		config.set("getdoublejumpsaction", getdoublejumpsaction);
@@ -281,6 +289,8 @@ public class Messages {
 		config.set("setuphelp", setuphelp);
 		config.set("setupenablekits", setupenablekits);
 		config.set("setupdisablekits", setupdisablekits);
+		config.set("setupaddkit", setupaddkit);
+		config.set("setupdelkit", setupdelkit);
 		try {
 			config.save(messageconfig);
 		} catch (IOException e) {

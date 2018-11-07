@@ -31,8 +31,7 @@ public class DeleteKit implements CommandHandlerInterface {
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		plugin.kitmanager.unregisterKit(args[0]);
-		player.sendMessage("Kit deleted");
+		plugin.kitmanager.unregisterKit(args[0], player);
 		return true;
 	}
 

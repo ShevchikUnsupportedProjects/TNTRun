@@ -15,7 +15,7 @@
  *
  */
 
-package tntrun.arena.structure;
+package tntrun.kits;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,16 +53,18 @@ public class Kits {
 	public void registerKit(String name, Player player) {
 		Kit kit = new Kit(player.getInventory().getArmorContents(), player.getInventory().getContents(), player.getActivePotionEffects());
 		registerKit(name, kit);
+		Messages.sendMessage(player, Messages.kitadd.replace("{KIT}", name));
 	}
 
-	public void registerKit(String name, Kit kit) {
+	private void registerKit(String name, Kit kit) {
 		kits.put(name, kit);
 	}
 
-	public void unregisterKit(String name) {
+	public void unregisterKit(String name, Player player) {
 		kits.remove(name);
 		config.set("kits." + name, null);
 		saveKits();
+		Messages.sendMessage(player, Messages.kitdel.replace("{KIT}", name));
 	}
 
 	public void giveKit(String name, Player player) {

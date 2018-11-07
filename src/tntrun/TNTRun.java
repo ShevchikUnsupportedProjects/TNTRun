@@ -26,7 +26,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import tntrun.arena.Arena;
-import tntrun.arena.structure.Kits;
 import tntrun.utils.Bars;
 import tntrun.utils.Shop;
 import tntrun.utils.Sounds;
@@ -43,6 +42,7 @@ import tntrun.datahandler.PlayerDataStore;
 import tntrun.eventhandler.PlayerLeaveArenaChecker;
 import tntrun.eventhandler.PlayerStatusHandler;
 import tntrun.eventhandler.RestrictionHandler;
+import tntrun.kits.Kits;
 import tntrun.lobby.GlobalLobby;
 import tntrun.messages.Messages;
 import tntrun.signs.SignHandler;
