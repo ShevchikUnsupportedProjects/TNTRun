@@ -183,9 +183,10 @@ public class PlayerHandler {
 		removeScoreboard(player);
 		// teleport to spectators spawn
 		player.teleport(arena.getStructureManager().getSpectatorSpawn());
-		// clear inventory
+		// clear inventory and potion effects
 		player.getInventory().clear();
 		player.getInventory().setArmorContents(new ItemStack[4]);
+		clearPotionEffects(player);
 		// allow flight
 		player.setAllowFlight(true);
 		player.setFlying(true);
@@ -288,9 +289,7 @@ public class PlayerHandler {
 		// remove player on arena data
 		arena.getPlayersManager().remove(player);
 		// remove all potion effects
-		for (PotionEffect effect : player.getActivePotionEffects()) {
-			player.removePotionEffect(effect.getType());
-		}
+		clearPotionEffects(player);
 		// restore player status
 		plugin.pdata.restorePlayerHunger(player);
 		plugin.pdata.restorePlayerPotionEffects(player);
@@ -417,6 +416,12 @@ public class PlayerHandler {
 	
 	public int getVotesCast() {
 		return votes.size();
+	}
+	
+	public void clearPotionEffects(Player player) {
+		for (PotionEffect effect : player.getActivePotionEffects()) {
+			player.removePotionEffect(effect.getType());
+		}
 	}
 
 }

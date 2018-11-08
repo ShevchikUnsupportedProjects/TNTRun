@@ -385,6 +385,8 @@ public class GameHandler {
 	public void startEnding(final Player player){
 		Stats.addWins(player, 1);
 		TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
+		// clear any potion effects the winner may have
+		arena.getPlayerHandler().clearPotionEffects(player);
 		
 		String message = Messages.playerwonbroadcast;
 		message = message.replace("{PLAYER}", player.getName());
