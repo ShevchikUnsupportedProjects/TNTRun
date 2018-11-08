@@ -50,12 +50,15 @@ public class AutoTabCompleter implements TabCompleter {
 				list.add("cmds");
 				list.add("info");
 				list.add("stats");
+				list.add("listkits");
 				list.add("leaderboard");
 			} else if (args.length == 2) {
 				if (args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("list")) {
 					for (Arena arena : TNTRun.getInstance().amanager.getArenas()) {
 						list.add(arena.getArenaName());
 					}
+				} else if (args[0].equalsIgnoreCase("listkits") || args[0].equalsIgnoreCase("listkit")) {
+					list.addAll(TNTRun.getInstance().kitmanager.getKits());
 				}
 			}
 			for (String s : list) {

@@ -44,29 +44,29 @@ public class SetupTabCompleter implements TabCompleter {
 		
 		List<String> list = new ArrayList<String>();
 		List<String> auto = new ArrayList<String>();
-		List<String> complex = new ArrayList<String>();
+		List<String> arenacommands = new ArrayList<String>();
 		
-		complex.add("setarena");
-		complex.add("setloselevel");
-		complex.add("setspawn");
-		complex.add("setspectate");
-		complex.add("finish");
-		complex.add("delspectate");
-		complex.add("setgameleveldestroydelay");
-		complex.add("setmaxplayers");
-		complex.add("setminplayers");
-		complex.add("setvotepercent");
-		complex.add("settimelimit");
-		complex.add("setcountdown");
-		complex.add("setmoneyreward");
-		complex.add("setteleport");
-		complex.add("enable");
-		complex.add("disable");
-		complex.add("delete");
-		complex.add("setreward");
-		complex.add("enablekits");
-		complex.add("disablekits");
-		complex.add("setdamage");
+		arenacommands.add("setarena");
+		arenacommands.add("setloselevel");
+		arenacommands.add("setspawn");
+		arenacommands.add("setspectate");
+		arenacommands.add("finish");
+		arenacommands.add("delspectate");
+		arenacommands.add("setgameleveldestroydelay");
+		arenacommands.add("setmaxplayers");
+		arenacommands.add("setminplayers");
+		arenacommands.add("setvotepercent");
+		arenacommands.add("settimelimit");
+		arenacommands.add("setcountdown");
+		arenacommands.add("setmoneyreward");
+		arenacommands.add("setteleport");
+		arenacommands.add("enable");
+		arenacommands.add("disable");
+		arenacommands.add("delete");
+		arenacommands.add("setreward");
+		arenacommands.add("enablekits");
+		arenacommands.add("disablekits");
+		arenacommands.add("setdamage");
 		
 		if (args.length == 1) {
 			list.add("help");
@@ -77,22 +77,25 @@ public class SetupTabCompleter implements TabCompleter {
 			list.add("reloadmsg");
 			list.add("reloadconfig");
 			list.add("setbarcolor");
+			list.add("addkit");
+			list.add("deletekit");
 			
-			list.addAll(complex);
+			list.addAll(arenacommands);
 			
 		} else if (args.length == 2) {
-			if (complex.contains(args[0])) {
+			if (arenacommands.contains(args[0])) {
 				for (Arena arena : TNTRun.getInstance().amanager.getArenas()) {
 					list.add(arena.getArenaName());
 				}
-			} else {
-				if (args[0].equalsIgnoreCase("setbarcolor") || args[0].equalsIgnoreCase("setbarcolour")) {
-					for (BarColor color : EnumUtils.getEnumList(BarColor.class)) {
-						list.add(color.toString());
-					}
-					list.add("RANDOM");
+			} else if (args[0].equalsIgnoreCase("setbarcolor") || args[0].equalsIgnoreCase("setbarcolour")) {
+				for (BarColor color : EnumUtils.getEnumList(BarColor.class)) {
+					list.add(color.toString());
 				}
+				list.add("RANDOM");
+			} else if (args[0].equalsIgnoreCase("deletekit")) {
+				list.addAll(TNTRun.getInstance().kitmanager.getKits());	
 			}
+			
 		} else if (args.length == 3) {
 			if (args[0].equalsIgnoreCase("setteleport")) {
 				list.add("lobby");
