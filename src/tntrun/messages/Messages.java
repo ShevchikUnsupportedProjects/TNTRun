@@ -35,6 +35,7 @@ public class Messages {
 	public static String teleporttolobby = "&7[&6TNTRun&7] Teleported to lobby";
 
 	public static String availablearenas = "&7[&6TNTRun&7] Available arenas:&r ";
+	public static String availablekits = "&7[&6TNTRun&7] Available kits:&r ";
 	public static String arenawolrdna = "&7[&6TNTRun&7] Arena world is not loaded";
 	public static String arenadisabled = "&7[&6TNTRun&7] Arena is disabled";
 	public static String arenarunning = "&7[&6TNTRun&7] Arena already running";
@@ -86,6 +87,7 @@ public class Messages {
 	public static String helpinfo = "View plugin info";
 	public static String helpstats = "View player stats";
 	public static String helplb = "Display the TNTRun leaderboard";
+	public static String helplistkit = "List all kits &for &cList kit details";
 	
 	public static String setuplobby = "Set lobby at your current location";
 	public static String setupcreate = "Create a new arena";
@@ -138,6 +140,7 @@ public class Messages {
 		nopermission = config.getString("nopermission", nopermission);
 		teleporttolobby = config.getString("teleporttolobby", teleporttolobby);
 		availablearenas = config.getString("availablearenas", availablearenas);
+		availablekits = config.getString("availablekits", availablekits);
 		arenawolrdna = config.getString("arenawolrdna", arenawolrdna);
 		arenadisabled = config.getString("arenadisabled", arenadisabled);
 		arenarunning = config.getString("arenarunning", arenarunning);
@@ -174,6 +177,7 @@ public class Messages {
 		statsdisabled = config.getString("statsdisabled", statsdisabled);
 		helplobby = config.getString("helplobby", helplobby);
 		helplist = config.getString("helplist", helplist);
+		helplistkit = config.getString("helplistkit", helplistkit);
 		helpjoin = config.getString("helpjoin", helpjoin);
 		helpleave = config.getString("helpleave", helpleave);
 		helpvote = config.getString("helpvote", helpvote);
@@ -222,6 +226,7 @@ public class Messages {
 		config.set("nopermission", nopermission);
 		config.set("teleporttolobby", teleporttolobby);
 		config.set("availablearenas", availablearenas);
+		config.set("availablekits", availablekits);
 		config.set("arenawolrdna", arenawolrdna);
 		config.set("arenadisabled", arenadisabled);
 		config.set("arenarunning", arenarunning);
@@ -258,6 +263,7 @@ public class Messages {
 		config.set("statsdisabled", statsdisabled);
 		config.set("helplobby", helplobby);
 		config.set("helplist", helplist);
+		config.set("helplistkit", helplistkit);
 		config.set("helpjoin", helpjoin);
 		config.set("helpleave", helpleave);
 		config.set("helpvote", helpvote);

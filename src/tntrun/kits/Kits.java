@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -42,16 +43,16 @@ public class Kits {
 	private File kitsconfig = new File(TNTRun.getInstance().getDataFolder(), "kits.yml");
 	private FileConfiguration config = YamlConfiguration.loadConfiguration(kitsconfig);
 
-	private boolean isKitExists(String name) {
+	private boolean kitExists(String name) {
 		return kits.containsKey(name);
 	}
 
 	public HashSet<String> getKits() {
 		return new HashSet<String>(kits.keySet());
 	}
-
+	
 	public void registerKit(String name, Player player) {
-		if (isKitExists(name)) {
+		if (kitExists(name)) {
 			Messages.sendMessage(player, Messages.kitexists.replace("{KIT}", name));
 			return;
 		}
@@ -65,7 +66,7 @@ public class Kits {
 	}
 
 	public void unregisterKit(String name, Player player) {
-		if (! isKitExists(name)) {
+		if (! kitExists(name)) {
 			Messages.sendMessage(player, Messages.kitnotexists.replace("{KIT}", name));
 			return;
 		}
@@ -148,6 +149,34 @@ public class Kits {
 			config.save(kitsconfig);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void listKit(String name, Player player) {
+		if (!kitExists(name)) {
+			Messages.sendMessage(player, Messages.kitnotexists.replace("{KIT}", name));
+			return;
+		}
+		
+		for (ItemStack is : kits.get(name).armor) {
+			if (is == null || is.getType() == Material.AIR) {
+				continue;
+			}
+			player.sendMessage(is.getType().toString() + " x " + is.getAmount());
+		}
+		
+		for (ItemStack is : kits.get(name).items) {
+			if (is == null || is.getType() == Material.AIR) {
+				continue;
+			}
+			player.sendMessage(is.getType().toString() + " x " + is.getAmount());
+		}
+		
+		for (PotionEffect pe : kits.get(name).effects) {
+			if (pe == null) {
+				continue;
+			}
+			player.sendMessage("Potion Effect : " + pe.getType().getName());
 		}
 	}
 

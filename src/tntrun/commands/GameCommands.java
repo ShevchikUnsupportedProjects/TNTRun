@@ -23,7 +23,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
@@ -61,6 +60,7 @@ public class GameCommands implements CommandExecutor {
 			Messages.sendMessage(player, "§6/tr info §f- §c" + Messages.helpinfo);
 			Messages.sendMessage(player, "§6/tr stats §f- §c" + Messages.helpstats);
 			Messages.sendMessage(player, "§6/tr leaderboard [size] §f- §c" + Messages.helplb);
+			Messages.sendMessage(player, "§6/tr listkit [kit] §f- §c" + Messages.helplistkit);
 			Messages.sendMessage(player, "§6/tr cmds §f- §c" + Messages.helpcmds);
 			return true;
 		} else if (args[0].equalsIgnoreCase("lobby")) {
@@ -247,7 +247,28 @@ public class GameCommands implements CommandExecutor {
 				Messages.sendMessage(player, Messages.playernotinarena);
 				return true;
 			}
-		} 
+		}
+		// listkits
+		else if (args[0].equalsIgnoreCase("listkit") || args[0].equalsIgnoreCase("listkits")) {
+			if (args.length >= 2) {
+				//list kit details
+				player.sendMessage("§7============[§6TNTRun§7]§7============");
+				player.sendMessage("§7Kit Details: §a" + args[1]);
+				
+				plugin.kitmanager.listKit(args[1], player);
+				return true;
+			}
+			StringBuilder message = new StringBuilder(200);
+			message.append(Messages.availablekits);
+			for (String kit : plugin.kitmanager.getKits()) {
+				message.append("&a" + kit + " ; ");
+			}
+			if (message.length() > 0) {
+				message.setLength(message.length() - 2);
+			}
+			Messages.sendMessage(player, message.toString());
+			return true;
+		}
 		else {
 			player.sendMessage("§7[§6TNTRun§7] §cInvalid argument supplied, please use §6/tr help");
 			return true;
