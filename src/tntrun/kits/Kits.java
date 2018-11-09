@@ -56,7 +56,7 @@ public class Kits {
 			Messages.sendMessage(player, Messages.kitexists.replace("{KIT}", name));
 			return;
 		}
-		Kit kit = new Kit(player.getInventory().getArmorContents(), player.getInventory().getContents(), player.getActivePotionEffects());
+		Kit kit = new Kit(player.getInventory().getContents(), player.getActivePotionEffects());
 		registerKit(name, kit);
 		Messages.sendMessage(player, Messages.kitadd.replace("{KIT}", name));
 	}
@@ -86,33 +86,28 @@ public class Kits {
 
 	public static class Kit {
 
-		private ItemStack[] armor;
 		private ItemStack[] items;
 		private Collection<PotionEffect> effects;
 
 		protected Kit() {
 		}
 
-		public Kit(ItemStack[] armor, ItemStack[] items, Collection<PotionEffect> effects) {
-			this.armor = armor;
+		public Kit(ItemStack[] items, Collection<PotionEffect> effects) {
 			this.items = items;
 			this.effects = effects;
 		}
 
 		public void giveKit(Player player) {
 			player.getInventory().setContents(items);
-			player.getInventory().setArmorContents(armor);
 			player.addPotionEffects(effects);
 		}
 
 		public void loadFromConfig(FileConfiguration config, String path) {
-			armor = config.getList(path + ".armor").toArray(new ItemStack[1]);
 			items = config.getList(path + ".items").toArray(new ItemStack[1]);
 			effects = Arrays.asList(config.getList(path + ".effects").toArray(new PotionEffect[1]));
 		}
 
 		public void saveToConfig(FileConfiguration config, String path) {
-			config.set(path + ".armor", Arrays.asList(armor));
 			config.set(path + ".items", Arrays.asList(items));
 			config.set(path + ".effects", new ArrayList<PotionEffect>(effects));
 		}
@@ -159,18 +154,6 @@ public class Kits {
 		}
 		player.sendMessage("§7============[§6TNTRun§7]§7============");
 		player.sendMessage("§7Kit Details: §a" + name);
-		
-		for (ItemStack is : kits.get(name).armor) {
-			if (is == null || is.getType() == Material.AIR) {
-				continue;
-			}
-			StringBuilder message = new StringBuilder(200);
-			message.append("§6" + is.getType().toString());
-			if (is.getAmount() > 1) {
-				message.append("§7 x " + "§c" + is.getAmount());
-			}
-			player.sendMessage(message.toString());
-		}
 		
 		for (ItemStack is : kits.get(name).items) {
 			if (is == null || is.getType() == Material.AIR) {

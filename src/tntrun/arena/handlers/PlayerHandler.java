@@ -18,6 +18,7 @@
 package tntrun.arena.handlers;
 
 import java.util.HashSet;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -421,6 +422,19 @@ public class PlayerHandler {
 	public void clearPotionEffects(Player player) {
 		for (PotionEffect effect : player.getActivePotionEffects()) {
 			player.removePotionEffect(effect.getType());
+		}
+	}
+	
+	public void allocateKits() {
+		Random rnd = new Random();
+		HashSet<String> kits = plugin.kitmanager.getKits();
+		if (kits.size() > 0) {
+			String[] kitnames = kits.toArray(new String[kits.size()]);
+			for (Player player : arena.getPlayersManager().getPlayers()) {
+				plugin.kitmanager.giveKit(kitnames[rnd.nextInt(kitnames.length)], player);
+				//kits will replace the GUI items, so give each player the leave item again
+				addLeaveItem(player);
+			}
 		}
 	}
 

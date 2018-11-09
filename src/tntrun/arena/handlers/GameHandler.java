@@ -18,8 +18,6 @@
 package tntrun.arena.handlers;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -176,7 +174,6 @@ public class GameHandler {
 	private int arenahandler;
 	private int playingtask;
 
-	Random rnd = new Random();
 	public void startArena() {
 		arena.getStatusManager().setRunning(true);
 		String message = Messages.arenastarted;
@@ -195,13 +192,7 @@ public class GameHandler {
 		
 		//if kits are enabled on the arena, give each player a random kit
 		if (arena.getStructureManager().isKitsEnabled()) {
-			HashSet<String> kits = plugin.kitmanager.getKits();
-			if (kits.size() > 0) {
-				String[] kitnames = kits.toArray(new String[kits.size()]);
-				for (Player player : arena.getPlayersManager().getPlayers()) {
-					plugin.kitmanager.giveKit(kitnames[rnd.nextInt(kitnames.length)], player);
-				}
-			}
+			arena.getPlayerHandler().allocateKits();
 		}
 		resetScoreboard();
 		createPlayingScoreBoard();
