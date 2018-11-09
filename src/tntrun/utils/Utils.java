@@ -53,7 +53,7 @@ public class Utils {
 		player.sendMessage("§bPlugin Version: §f" + TNTRun.getInstance().getDescription().getVersion());
 		player.sendMessage("§bWebsite: §fhttps://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 		player.sendMessage("§bTNTRun_reloaded Author: §fsteve4744");
-		player.sendMessage("§7============[§6TNTRun§7]§7============");
+		//player.sendMessage("§7============[§6TNTRun§7]§7============");
 	}
 	
 	public static String getTitleCase(String input) {

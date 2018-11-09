@@ -72,9 +72,9 @@ public class Messages {
 	public static String kitexists = "&7[&6TNTRun&7] &cThe specified kit already exists : &6{KIT}";
 	public static String kitnotexists = "&7[&6TNTRun&7] &cThe specified kit does not exist : &6{KIT}";
 	
-	public static String gamesplayed = "&7Games played: &6";
-	public static String gameswon = "&7Wins: &6";
-	public static String gameslost = "&7Losses: &6";
+	public static String gamesplayed = "&bGames played &f: ";
+	public static String gameswon = "&bWins &f: ";
+	public static String gameslost = "&bLosses &f: ";
 	public static String statsdisabled = "&7[&6TNTRun&7] &cStats are currently disabled";
 	public static String leaderboard = "{POSITION}) &b{PLAYER} &f: Wins &3{WINS}";
 	

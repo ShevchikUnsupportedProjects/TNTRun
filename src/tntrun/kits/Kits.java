@@ -157,26 +157,38 @@ public class Kits {
 			Messages.sendMessage(player, Messages.kitnotexists.replace("{KIT}", name));
 			return;
 		}
+		player.sendMessage("§7============[§6TNTRun§7]§7============");
+		player.sendMessage("§7Kit Details: §a" + name);
 		
 		for (ItemStack is : kits.get(name).armor) {
 			if (is == null || is.getType() == Material.AIR) {
 				continue;
 			}
-			player.sendMessage(is.getType().toString() + " x " + is.getAmount());
+			StringBuilder message = new StringBuilder(200);
+			message.append("§6" + is.getType().toString());
+			if (is.getAmount() > 1) {
+				message.append("§7 x " + "§c" + is.getAmount());
+			}
+			player.sendMessage(message.toString());
 		}
 		
 		for (ItemStack is : kits.get(name).items) {
 			if (is == null || is.getType() == Material.AIR) {
 				continue;
 			}
-			player.sendMessage(is.getType().toString() + " x " + is.getAmount());
+			StringBuilder message = new StringBuilder(200);
+			message.append("§6" + is.getType().toString());
+			if (is.getAmount() > 1) {
+				message.append("§7 x " + "§c" + is.getAmount());
+			}
+			player.sendMessage(message.toString());
 		}
 		
 		for (PotionEffect pe : kits.get(name).effects) {
 			if (pe == null) {
 				continue;
 			}
-			player.sendMessage("Potion Effect : " + pe.getType().getName());
+			player.sendMessage("§6Potion Effect§7 : §c" + pe.getType().getName());
 		}
 	}
 

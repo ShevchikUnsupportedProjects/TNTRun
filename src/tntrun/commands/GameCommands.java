@@ -102,6 +102,11 @@ public class GameCommands implements CommandExecutor {
 				player.sendMessage("§6Player Count §f- §c " + arena.getPlayersManager().getPlayersCount());
 				player.sendMessage("§6Vote Percent §f- §c " + arena.getStructureManager().getVotePercent());
 				player.sendMessage("§6PVP Damage Enabled §f- §c " + Utils.getTitleCase(arena.getStructureManager().getDamageEnabled().toString()));
+				if (arena.getStructureManager().isKitsEnabled()) {
+					player.sendMessage("§6Kits Enabled §f- §c Yes");
+				} else {
+					player.sendMessage("§6Kits Enabled §f- §c No");
+				}
 				if (arena.getStructureManager().getRewards().getXPReward() != 0) {
 					player.sendMessage("§6XP Reward §f- §c " + arena.getStructureManager().getRewards().getXPReward());
 				}
@@ -252,9 +257,6 @@ public class GameCommands implements CommandExecutor {
 		else if (args[0].equalsIgnoreCase("listkit") || args[0].equalsIgnoreCase("listkits")) {
 			if (args.length >= 2) {
 				//list kit details
-				player.sendMessage("§7============[§6TNTRun§7]§7============");
-				player.sendMessage("§7Kit Details: §a" + args[1]);
-				
 				plugin.kitmanager.listKit(args[1], player);
 				return true;
 			}
