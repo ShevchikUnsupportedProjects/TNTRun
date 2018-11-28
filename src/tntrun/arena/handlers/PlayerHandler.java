@@ -28,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
@@ -121,7 +122,8 @@ public class PlayerHandler {
 		}
 		
 		// start cooldown and add leave item
-		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+		new BukkitRunnable() {
+			@Override
 			public void run(){
 				addLeaveItem(player);
 				
@@ -143,7 +145,8 @@ public class PlayerHandler {
 					}
 				}
 			}
-		}, 5L);
+		}.runTaskLater(plugin, 5L);
+		
 		// send message about arena player count
 		if(plugin.getConfig().getBoolean("special.UseBossBar") == false){
 			String message = Messages.playerscountinarena;
@@ -209,7 +212,8 @@ public class PlayerHandler {
 		// add to spectators
 		arena.getPlayersManager().addSpectator(player);
 		// start cooldown and add leave item
-		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+		new BukkitRunnable() {
+			@Override
 			public void run(){
 				addLeaveItem(player);
 				
@@ -220,7 +224,7 @@ public class PlayerHandler {
 					addStats(player);
 				}
 			}
-		}, 5L);
+		}.runTaskLater(plugin, 5L);
 	}
 
 	// remove player from arena
@@ -236,7 +240,7 @@ public class PlayerHandler {
 			player.setFlying(false);
 		}
 		// check if arena is running
-		if(arena.getStatusManager().isArenaRunning()){
+		if (arena.getStatusManager().isArenaRunning()) {
 			// add to lostPlayers
 			arena.getGameHandler().lostPlayers++;
 		}
@@ -253,7 +257,7 @@ public class PlayerHandler {
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// create scoreboard
-		if(!arena.getStatusManager().isArenaRunning()){
+		if (!arena.getStatusManager().isArenaRunning()) {
 			arena.getGameHandler().createWaitingScoreBoard();
 		}
 		
@@ -316,7 +320,7 @@ public class PlayerHandler {
 		
 		plugin.pdata.restorePlayerFlight(player);
 		
-		if(player.getGameMode() == GameMode.CREATIVE){
+		if (player.getGameMode() == GameMode.CREATIVE) {
 			player.setAllowFlight(true);
 		}		
 		

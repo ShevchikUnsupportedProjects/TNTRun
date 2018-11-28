@@ -213,7 +213,7 @@ public class TNTRun extends JavaPlugin {
 				}
 				log.info(" ");
 			}
-		}.runTaskLaterAsynchronously(getInstance(), 30L);
+		}.runTaskLaterAsynchronously(this, 30L);
 	}
 	
 	public MySQL mysql;

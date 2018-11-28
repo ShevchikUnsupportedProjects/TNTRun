@@ -38,8 +38,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import io.github.thatsmusic99.headsplus.events.HeadPurchaseEvent;
+import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
@@ -139,16 +140,12 @@ public class RestrictionHandler implements Listener {
 		
         if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.info.material"))) {
             if (arena != null) {
-       			if(u.contains(player)){
+       			if (u.contains(player)) {
     				TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
     				return;
     			}
        			u.add(player);
-  			    Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-			    	public void run(){
-			    		u.remove(player);
-			    	}
-			    }, 40);
+       			coolDown(player);
             	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
             	Utils.displayInfo(player);
         	}
@@ -162,11 +159,8 @@ public class RestrictionHandler implements Listener {
     			}
             	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
             	u.add(player);
-  			    Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-			    	public void run(){
-			    		u.remove(player);
-			    	}
-			    }, 40);
+            	coolDown(player);
+            	
             	if (arena.getStatusManager().isArenaStarting()) {
             		player.sendMessage(Messages.arenastarting.replace("&", "§"));
             		return;
@@ -182,60 +176,69 @@ public class RestrictionHandler implements Listener {
         if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.stats.material"))) {
             if (arena != null) {
             	e.setCancelled(true);
-       			if(u.contains(player)){
+       			if (u.contains(player)) {
     				TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
     				return;
     			}
        			u.add(player);
-  			    Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-  			    	public void run(){
-  			    		u.remove(player);
-  			    	}
-			    }, 40);
+  			    coolDown(player);
             	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
          	   	player.chat("/tntrun stats");
         	}
         }
         if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.heads.material"))) {
             if (arena != null) {
-       			if(u.contains(player)){
+       			if (u.contains(player)) {
     				TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
     				return;
     			}
        			u.add(player);
-  			    Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-			    	public void run(){
-			    		  u.remove(player);
-			    	  }
-			      	}, 40);
+       			coolDown(player);
             	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
          	   	player.chat("/headsplus:heads");
         	}
         }
 	}
 	
+	private void coolDown(Player player) {
+		new BukkitRunnable() {
+			@Override
+	    	public void run() {
+	    		  u.remove(player);
+			}
+		}.runTaskLater(plugin, 40);
+	}
+	
 	@EventHandler
 	public void onHeadPurchase(HeadPurchaseEvent e) {
+		if (e.isCancelled()) {
+			return;
+		}
 		final Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
 		if (arena == null) {
-			e.setCancelled(true);
 			return;
 		}
 		player.closeInventory();
-		
 		ItemStack itemStack = e.getItemStack();
-		if (itemStack.toString().contains("PLAYER_HEAD")) {
-			for (int i = 0; i < 9; i++) {
-				if (player.getInventory().getItem(i).getType() == itemStack.getType()) {
-					player.getInventory().setHelmet(player.getInventory().getItem(i));
-					player.getInventory().setItem(i, null);
-					break;
+
+		// need to delay equipping the head as the event is fired before the head is added to the inventory
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				for (int i = 0; i < 9; i++) {
+					if (player.getInventory().getItem(i) == null) {
+						continue;
+					}
+					if (player.getInventory().getItem(i).getType() == itemStack.getType()) {
+						player.getInventory().setHelmet(player.getInventory().getItem(i));
+						player.getInventory().setItem(i, null);
+						break;
+					}
 				}
+				player.updateInventory();
 			}
-			player.updateInventory();
-		}
-		e.setCancelled(true);
+		}.runTaskLater(plugin, 2L);
 	}
 	
 	public ArrayList<Player> u = new ArrayList<Player>();
@@ -278,32 +281,34 @@ public class RestrictionHandler implements Listener {
 			plugin.saveConfig();
 			u.add(p);
 			      
-			Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-			    public void run(){
+			new BukkitRunnable() {
+				@Override
+			    public void run() {
 			    	u.remove(p);
 			    	p.setAllowFlight(true);
 			    }
-			}, 20);
+			}.runTaskLater(plugin, 20);
 		} else {
 			p.setAllowFlight(true);
 		}
 	}
 	
 	@EventHandler
-	public void onJoin(PlayerJoinEvent e){
+	public void onJoin(PlayerJoinEvent e) {
 		final Player p = e.getPlayer();
 		
 		if (p.hasPermission("tntrun.version.check")) {
 			if (TNTRun.getInstance().needUpdate) {
-				Bukkit.getScheduler().runTaskLaterAsynchronously(TNTRun.getInstance(), new Runnable(){
-					public void run(){
+				new BukkitRunnable() {
+					@Override
+					public void run() {
 						p.sendMessage(" ");
 						p.sendMessage("§7[§6TNTRun§7] §6New update available!");
-						p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + TNTRun.getInstance().getDescription().getVersion());
-						p.sendMessage("§7[§6TNTRun§7] §7New version: §6" + TNTRun.getInstance().version[0]);
+						p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + plugin.getDescription().getVersion());
+						p.sendMessage("§7[§6TNTRun§7] §7New version: §6" + plugin.version[0]);
 						p.sendMessage("§7[§6TNTRun§7] §7New version available! Download now: §6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 					}
-				}, 30L);
+				}.runTaskLaterAsynchronously(plugin, 30L);
 			}
 		}
 		
