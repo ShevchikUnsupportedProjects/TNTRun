@@ -137,9 +137,9 @@ public class PlayerHandler {
 				if(plugin.getConfig().getBoolean("items.stats.use")){
 					addStats(player);
 				}
-				if(plugin.getConfig().getBoolean("items.effects.use")){
-					if(Bukkit.getPluginManager().getPlugin("TNTRun-Effects") != null){
-						addEffects(player);
+				if(plugin.getConfig().getBoolean("items.heads.use")){
+					if(Bukkit.getPluginManager().getPlugin("HeadsPlus") != null){
+						addHeads(player);
 					}
 				}
 			}
@@ -386,10 +386,10 @@ public class PlayerHandler {
 	    p.getInventory().addItem(item);
 	}
 	
-	private void addEffects(Player p) {
-		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.effects.material")));
+	private void addHeads(Player p) {
+		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.heads.material")));
 	    ItemMeta meta = item.getItemMeta();
-	    meta.setDisplayName(plugin.getConfig().getString("items.effects.name").replace("&", "§"));
+	    meta.setDisplayName(plugin.getConfig().getString("items.heads.name").replace("&", "§"));
 	    item.setItemMeta(meta);
 	    
 	    p.getInventory().addItem(item);

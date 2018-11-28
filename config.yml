@@ -42,10 +42,10 @@ items:
    leave:
       material: GREEN_BED
       name: '&cLEAVE'
-   effects:
+   heads:
       use: true
       material: GLOWSTONE_DUST
-      name: '&cEFFECTS'
+      name: '&cHeadsPlus'
 scoreboard:
    waiting:
    - '&fWelcome to TNTRun'
