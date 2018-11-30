@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -52,6 +53,7 @@ import tntrun.signs.editor.SignEditor;
 public class TNTRun extends JavaPlugin {
 
 	private Logger log;
+	private boolean headsplus = false;
 
 	public PlayerDataStore pdata;
 	public ArenasManager amanager;
@@ -84,22 +86,25 @@ public class TNTRun extends JavaPlugin {
 		getCommand("tntrunconsole").setExecutor(new ConsoleCommands(this));
 		getCommand("tntrun").setTabCompleter(new AutoTabCompleter());
 		getCommand("tntrunsetup").setTabCompleter(new SetupTabCompleter());
-		
+
 		getServer().getPluginManager().registerEvents(new PlayerStatusHandler(this), this);
 		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
 		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
 		getServer().getPluginManager().registerEvents(new Shop(this), this);
-		
-		if (getServer().getPluginManager().getPlugin("HeadsPlus") != null) {
+
+		Plugin HeadsPlus = getServer().getPluginManager().getPlugin("HeadsPlus");
+		if (HeadsPlus != null && HeadsPlus.isEnabled()) {
 			getServer().getPluginManager().registerEvents(new HeadsPlusHandler(this), this);
+			headsplus = true;
+			log.info("Successfully linked with HeadsPlus, version " + HeadsPlus.getDescription().getVersion());
 		}
-		
-	    saveDefaultConfig();
-	    getConfig().options().copyDefaults(true);
-	    saveConfig();
-		
-	    // load arenas
+
+		saveDefaultConfig();
+		getConfig().options().copyDefaults(true);
+		saveConfig();
+
+		// load arenas
 		final File arenasfolder = new File(getDataFolder() + File.separator + "arenas");
 		arenasfolder.mkdirs();
 		new BukkitRunnable() {
@@ -121,32 +126,32 @@ public class TNTRun extends JavaPlugin {
 				signEditor.loadConfiguration();
 			}
 		}.runTaskLater(this, 20L);
-		
+
 		//check for update
 		checkUpdate();
 		
 		/* Version 1.9 and above should use new_Sounds_1_9 */
 		sound = new Sounds_1_9();
 		
-	    log.info("Starting Metrics...");
-	    new Metrics(this);
+		log.info("Starting Metrics...");
+		new Metrics(this);
 	     
-	     if (this.getConfig().getString("database").equals("file")) {
-	    	 file = true;
-	    	 usestats = true;
-	     } else if (this.getConfig().getString("database").equals("sql")) {
-	    	 this.connectToMySQL();
-	    	 usestats = true;
-	    	 file = false;
-	     } else {
-	    	 log.info("This database is not supported, supported database: sql, file");
-	    	 usestats = false;
-	    	 file = false;
-	    	 log.info("Disabling stats...");
-	     }
-	     new Stats(this);
+		if (this.getConfig().getString("database").equals("file")) {
+			file = true;
+			usestats = true;
+		} else if (this.getConfig().getString("database").equals("sql")) {
+			this.connectToMySQL();
+			usestats = true;
+			file = false;
+		} else {
+			log.info("This database is not supported, supported database: sql, file");
+			usestats = false;
+			file = false;
+			log.info("Disabling stats...");
+		}
+		new Stats(this);
 	}
-	
+
 	public static TNTRun getInstance() {
 		return instance;
 	}
@@ -183,6 +188,10 @@ public class TNTRun extends JavaPlugin {
 		log.severe(message);
 	}
 	
+	public boolean isHeadsPlus() {
+		return headsplus;
+	}
+
 	private void checkUpdate() {
 		if (!getConfig().getBoolean("special.CheckForNewVersion", true)) {
 			return;
@@ -220,23 +229,23 @@ public class TNTRun extends JavaPlugin {
 			}
 		}.runTaskLaterAsynchronously(this, 30L);
 	}
-	
+
 	public MySQL mysql;
-	
+
 	private void connectToMySQL() {
 		log.info("Connecting to MySQL database...");
 		String host = this.getConfig().getString("MySQL.host");
-        Integer port = this.getConfig().getInt("MySQL.port");
-        String name = this.getConfig().getString("MySQL.name");
-        String user = this.getConfig().getString("MySQL.user");
-        String pass = this.getConfig().getString("MySQL.pass");
-        mysql = new MySQL(host, port, name, user, pass, this);
+		Integer port = this.getConfig().getInt("MySQL.port");
+		String name = this.getConfig().getString("MySQL.name");
+		String user = this.getConfig().getString("MySQL.user");
+		String pass = this.getConfig().getString("MySQL.pass");
+		mysql = new MySQL(host, port, name, user, pass, this);
 
-        mysql.query("CREATE TABLE IF NOT EXISTS `stats` ( `username` varchar(50) NOT NULL, "
-                + "`looses` int(16) NOT NULL, `wins` int(16) NOT NULL, "
-                + "`played` int(16) NOT NULL, "
-                + "UNIQUE KEY `username` (`username`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
-        
-        log.info("Connected to MySQL database!");
+		mysql.query("CREATE TABLE IF NOT EXISTS `stats` ( `username` varchar(50) NOT NULL, "
+				+ "`looses` int(16) NOT NULL, `wins` int(16) NOT NULL, "
+				+ "`played` int(16) NOT NULL, "
+				+ "UNIQUE KEY `username` (`username`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+
+		log.info("Connected to MySQL database!");
 	}
 }

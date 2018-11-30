@@ -54,7 +54,7 @@ public class RestrictionHandler implements Listener {
 	}
 
 	private HashSet<String> allowedcommands = new HashSet<String>(
-		Arrays.asList("/tntrun leave", "/tntrun vote", "/tr leave", "/tr vote", "/tr help", "/tr info", "/tr stats", "/tntrun stats", "/tr", "/tntrun", "/headsplus:heads"));
+		Arrays.asList("/tntrun leave", "/tntrun vote", "/tr leave", "/tr vote", "/tr help", "/tr info", "/tr stats", "/tntrun stats", "/tr", "/tntrun"));
 
 	// player should not be able to issue any commands besides /tr leave and /tr vote while in arena
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -70,6 +70,9 @@ public class RestrictionHandler implements Listener {
 			return;
 		}
 		// now check command
+		if (plugin.isHeadsPlus() && plugin.getConfig().getBoolean("items.heads.use")) {
+			allowedcommands.add("/headsplus:heads");
+		}
 		if (!allowedcommands.contains(e.getMessage().toLowerCase())) {
 			Messages.sendMessage(player, Messages.nopermission);
 			e.setCancelled(true);

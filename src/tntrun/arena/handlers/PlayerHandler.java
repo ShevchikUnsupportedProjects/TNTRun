@@ -139,10 +139,8 @@ public class PlayerHandler {
 				if (plugin.getConfig().getBoolean("items.stats.use")) {
 					addStats(player);
 				}
-				if (plugin.getConfig().getBoolean("items.heads.use")) {
-					if (Bukkit.getPluginManager().getPlugin("HeadsPlus") != null) {
-						addHeads(player);
-					}
+				if (plugin.isHeadsPlus() && plugin.getConfig().getBoolean("items.heads.use")) {
+					addHeads(player);
 				}
 			}
 		}.runTaskLater(plugin, 5L);
