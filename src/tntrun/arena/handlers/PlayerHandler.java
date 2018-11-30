@@ -104,11 +104,11 @@ public class PlayerHandler {
 		player.updateInventory();
 		
 		//set full countdown
-		if(!arena.getStatusManager().isArenaStarting()){
+		if (!arena.getStatusManager().isArenaStarting()) {
 			arena.getGameHandler().count = arena.getStructureManager().getCountdown();
 		}
 		// send message to player
-		if(plugin.getConfig().getBoolean("special.UseTitle") == false){
+		if (!plugin.getConfig().getBoolean("special.UseTitle")) {
 			Messages.sendMessage(player, msgtoplayer);
 		}	
 		// set player on arena data
@@ -127,20 +127,20 @@ public class PlayerHandler {
 			public void run(){
 				addLeaveItem(player);
 				
-				if(plugin.getConfig().getBoolean("items.vote.use")){
+				if (plugin.getConfig().getBoolean("items.vote.use")) {
 					addVote(player);
 				}
-				if(plugin.getConfig().getBoolean("items.shop.use")){
+				if (plugin.getConfig().getBoolean("items.shop.use")) {
 					addShop(player);
 				}
-				if(plugin.getConfig().getBoolean("items.info.use")){
+				if (plugin.getConfig().getBoolean("items.info.use")) {
 					addInfo(player);
 				}
-				if(plugin.getConfig().getBoolean("items.stats.use")){
+				if (plugin.getConfig().getBoolean("items.stats.use")) {
 					addStats(player);
 				}
-				if(plugin.getConfig().getBoolean("items.heads.use")){
-					if(Bukkit.getPluginManager().getPlugin("HeadsPlus") != null){
+				if (plugin.getConfig().getBoolean("items.heads.use")) {
+					if (Bukkit.getPluginManager().getPlugin("HeadsPlus") != null) {
 						addHeads(player);
 					}
 				}
@@ -148,7 +148,7 @@ public class PlayerHandler {
 		}.runTaskLater(plugin, 5L);
 		
 		// send message about arena player count
-		if(plugin.getConfig().getBoolean("special.UseBossBar") == false){
+		if (!plugin.getConfig().getBoolean("special.UseBossBar")) {
 			String message = Messages.playerscountinarena;
 			message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
 			Messages.sendMessage(player, message);
@@ -217,10 +217,10 @@ public class PlayerHandler {
 			public void run(){
 				addLeaveItem(player);
 				
-				if(plugin.getConfig().getBoolean("items.info.use")){
+				if (plugin.getConfig().getBoolean("items.info.use")) {
 					addInfo(player);
 				}
-				if(plugin.getConfig().getBoolean("items.stats.use")){
+				if (plugin.getConfig().getBoolean("items.stats.use")) {
 					addStats(player);
 				}
 			}

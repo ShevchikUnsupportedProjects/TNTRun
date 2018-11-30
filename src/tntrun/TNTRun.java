@@ -39,6 +39,7 @@ import tntrun.commands.setup.SetupCommandsHandler;
 import tntrun.commands.setup.SetupTabCompleter;
 import tntrun.datahandler.ArenasManager;
 import tntrun.datahandler.PlayerDataStore;
+import tntrun.eventhandler.HeadsPlusHandler;
 import tntrun.eventhandler.PlayerLeaveArenaChecker;
 import tntrun.eventhandler.PlayerStatusHandler;
 import tntrun.eventhandler.RestrictionHandler;
@@ -89,6 +90,10 @@ public class TNTRun extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
 		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
 		getServer().getPluginManager().registerEvents(new Shop(this), this);
+		
+		if (getServer().getPluginManager().getPlugin("HeadsPlus") != null) {
+			getServer().getPluginManager().registerEvents(new HeadsPlusHandler(this), this);
+		}
 		
 	    saveDefaultConfig();
 	    getConfig().options().copyDefaults(true);
@@ -179,7 +184,7 @@ public class TNTRun extends JavaPlugin {
 	}
 	
 	private void checkUpdate() {
-		if(!getConfig().getBoolean("special.CheckForNewVersion", true)) {
+		if (!getConfig().getBoolean("special.CheckForNewVersion", true)) {
 			return;
 		}
 		new BukkitRunnable() {

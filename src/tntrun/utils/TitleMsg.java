@@ -40,8 +40,8 @@ public class TitleMsg {
 	public static String start = "&7[&6TNTRun&7]";
 	public static String substart = "&7The Game has started";
 
-	public static void sendFullTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut, TNTRun plugin){
-		if(plugin.getConfig().getBoolean("special.UseTitle") == false){
+	public static void sendFullTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut, TNTRun plugin) {
+		if (!plugin.getConfig().getBoolean("special.UseTitle")) {
 			return;
 		}
 		sendTitle(player, fadeIn, stay, fadeOut, title, subtitle);

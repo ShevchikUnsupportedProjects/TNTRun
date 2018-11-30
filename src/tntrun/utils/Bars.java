@@ -77,7 +77,7 @@ public class Bars {
 	}
 	
 	public static void setBar(Arena arena, String message, int count, int seconds, double progress, TNTRun plugin) {
-		if (plugin.getConfig().getBoolean("special.UseBossBar") == false) {
+		if (!plugin.getConfig().getBoolean("special.UseBossBar")) {
 			return;
 		}
 		message = message.replace("{COUNT}", String.valueOf(count));

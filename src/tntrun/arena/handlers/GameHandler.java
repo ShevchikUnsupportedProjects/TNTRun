@@ -115,7 +115,7 @@ public class GameHandler {
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							player.teleport(arena.getStructureManager().getSpawnPoint());
 							TNTRun.getInstance().sound.NOTE_PLING(player, 1, 999);
-							if(plugin.getConfig().getBoolean("special.UseTitle") == false){
+							if (!plugin.getConfig().getBoolean("special.UseTitle")) {
 								Messages.sendMessage(player, message);
 							} 
 							TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
@@ -125,7 +125,7 @@ public class GameHandler {
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
 						for (Player player : arena.getPlayersManager().getPlayers()) {
 							TNTRun.getInstance().sound.NOTE_PLING(player, 1, 999);
-							if(plugin.getConfig().getBoolean("special.UseTitle") == false){
+							if (!plugin.getConfig().getBoolean("special.UseTitle")) {
 								Messages.sendMessage(player, message);
 							} 
 							TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
@@ -135,7 +135,7 @@ public class GameHandler {
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
 				        for (Player all : arena.getPlayersManager().getPlayers()) {
 				        	TNTRun.getInstance().sound.NOTE_PLING(all, 1, 999);
-				        	if(plugin.getConfig().getBoolean("special.UseTitle") == false){
+				        	if (!plugin.getConfig().getBoolean("special.UseTitle")) {
 				        		Messages.sendMessage(all, message);
 				        	} 
 				        	TitleMsg.sendFullTitle(all, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
@@ -405,13 +405,13 @@ public class GameHandler {
 		Bukkit.getScheduler().cancelTask(arenahandler);
 		Bukkit.getScheduler().cancelTask(playingtask);
 		
-		if (plugin.getConfig().getBoolean("fireworksonwin")) {
+		if (plugin.getConfig().getBoolean("fireworksonwin.enabled")) {
 				
 			new BukkitRunnable() {
 				int i = 0;
 				@Override
 				public void run() {
-					if (i == 8) {
+					if (i >= getFireworkDuration()) {
 						this.cancel();
 					}
 					Firework f = player.getWorld().spawn(arena.getStructureManager().getSpawnPoint(), Firework.class);
@@ -451,6 +451,17 @@ public class GameHandler {
 			}
 			
 		}.runTaskLater(plugin, 120);
+	}
+	
+	/**
+	 * Get the number of seconds to run the fireworks for from config.
+	 * The fireworks task repeats every 10 ticks so return double this number.
+	 * Default is 4 seconds.
+	 * @return number of half seconds
+	 */
+	private int getFireworkDuration() {
+		int duration = plugin.getConfig().getInt("fireworksonwin.duration", 4);
+		return (duration > 0 && duration < 5) ? duration * 2 : 8;
 	}
 	
 	private void setGameInventory(Player player) {

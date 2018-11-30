@@ -37,10 +37,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
@@ -119,6 +117,7 @@ public class RestrictionHandler implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		final Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
+
 		// check item
 		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 	        if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.leave.material"))) {
@@ -129,6 +128,7 @@ public class RestrictionHandler implements Listener {
 				}
 	        }
 		}
+		
         if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.shop.material"))) {
     		if (arena != null) {
     			TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
@@ -186,6 +186,7 @@ public class RestrictionHandler implements Listener {
          	   	player.chat("/tntrun stats");
         	}
         }
+        
         if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.heads.material"))) {
             if (arena != null) {
        			if (u.contains(player)) {
@@ -207,38 +208,6 @@ public class RestrictionHandler implements Listener {
 	    		  u.remove(player);
 			}
 		}.runTaskLater(plugin, 40);
-	}
-	
-	@EventHandler
-	public void onHeadPurchase(HeadPurchaseEvent e) {
-		if (e.isCancelled()) {
-			return;
-		}
-		final Player player = e.getPlayer();
-		Arena arena = plugin.amanager.getPlayerArena(player.getName());
-		if (arena == null) {
-			return;
-		}
-		player.closeInventory();
-		ItemStack itemStack = e.getItemStack();
-
-		// need to delay equipping the head as the event is fired before the head is added to the inventory
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				for (int i = 0; i < 9; i++) {
-					if (player.getInventory().getItem(i) == null) {
-						continue;
-					}
-					if (player.getInventory().getItem(i).getType() == itemStack.getType()) {
-						player.getInventory().setHelmet(player.getInventory().getItem(i));
-						player.getInventory().setItem(i, null);
-						break;
-					}
-				}
-				player.updateInventory();
-			}
-		}.runTaskLater(plugin, 2L);
 	}
 	
 	public ArrayList<Player> u = new ArrayList<Player>();

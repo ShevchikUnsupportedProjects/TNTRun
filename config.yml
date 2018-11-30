@@ -20,32 +20,34 @@ shop:
 commandsonwin:
 - say {PLAYER} won TNTRun
 - say Congratulations...
-fireworksonwin: true
+fireworksonwin:
+   enabled: true
+   duration: 4
 broadcastwinlevel: 2
 items:
    vote:
       use: true
       material: DIAMOND
-      name: '&cVOTE'
+      name: '&2&lVote'
    info:
       use: true
       material: EMERALD
-      name: '&cINFO'
+      name: '&2&lInfo'
    shop:
       use: true
       material: NETHER_STAR
-      name: '&cSHOP'
+      name: '&2&lShop'
    stats:
       use: true
       material: REDSTONE
-      name: '&cSTATS'
+      name: '&2&lStats'
    leave:
       material: GREEN_BED
-      name: '&cLEAVE'
+      name: '&2&lLeave'
    heads:
       use: true
       material: GLOWSTONE_DUST
-      name: '&cHeadsPlus'
+      name: '&e&lHeadsPlus'
 scoreboard:
    waiting:
    - '&fWelcome to TNTRun'

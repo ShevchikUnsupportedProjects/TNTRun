@@ -50,8 +50,8 @@ public class Messages {
 	public static String playerjoinedtoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7joined the arena";
 	public static String playerlefttoplayer = "&7[&6TNTRun&7] You left the arena";
 	public static String playerlefttoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7left the game";
-	public static String playervotedforstart = "&7[&6TNTRun&7] You voted to force-start the game";
-	public static String playeralreadyvotedforstart = "&7[&6TNTRun&7] You have already voted";
+	public static String playervotedforstart = "&7[&6TNTRun&7] &fYou voted to force-start the game";
+	public static String playeralreadyvotedforstart = "&7[&6TNTRun&7] &cYou have already voted";
 	public static String arenastarted = "&7[&6TNTRun&7] Arena started. Time limit is {TIMELIMIT} seconds";
 	public static String arenacountdown = "&7[&6TNTRun&7] Arena starts in {COUNTDOWN} seconds";
 	public static String arenatimeout = "&7[&6TNTRun&7] Time is up. Ending game";
