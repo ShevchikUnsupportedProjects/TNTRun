@@ -171,7 +171,7 @@ public class GameCommands implements CommandExecutor {
 		}
 		// player stats
 		else if (args[0].equalsIgnoreCase("stats")) {
-			if(!plugin.usestats){
+			if (!plugin.useStats()) {
 				Messages.sendMessage(player, Messages.statsdisabled);
 				return true;
 			}
@@ -182,7 +182,7 @@ public class GameCommands implements CommandExecutor {
 		}
 		// leaderboard
 		else if (args[0].equalsIgnoreCase("leaderboard")) {
-			if(!plugin.usestats){
+			if (!plugin.useStats()) {
 				Messages.sendMessage(player, Messages.statsdisabled);
 				return true;
 			}

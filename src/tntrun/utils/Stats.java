@@ -55,7 +55,7 @@ public class Stats {
 	}
 	
 	public static void addPlayedGames(Player player, int value) {
-		if (pl.file) {
+		if (pl.isFile()) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 			if (Bukkit.getOnlineMode()) {
 				if (config.get("stats." + player.getUniqueId().toString() + ".played") == null) {
@@ -81,7 +81,7 @@ public class Stats {
 	}
 	
 	public static void addWins(Player player, int value) {
-		if (pl.file) {
+		if (pl.isFile()) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 			if (Bukkit.getOnlineMode()) {
 				if (config.get("stats." + player.getUniqueId().toString() + ".wins") == null) {
@@ -111,7 +111,7 @@ public class Stats {
 	}
 	
 	public static int getWins(OfflinePlayer offlinePlayer) {
-		if (pl.file) {
+		if (pl.isFile()) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 			if (Bukkit.getOnlineMode()) {
 				if (config.get("stats." + offlinePlayer.getUniqueId().toString() + ".wins") == null) {
@@ -131,7 +131,7 @@ public class Stats {
 	}
 	
 	public static int getPlayedGames(Player player) {
-		if (pl.file) {
+		if (pl.isFile()) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 			if (Bukkit.getOnlineMode()) {
 				if (config.get("stats." + player.getUniqueId().toString() + ".played") == null) {
@@ -173,7 +173,7 @@ public class Stats {
 	}
     
     private static void setValue(String statname, Player p, int value) {    
-        if (!pl.usestats) {
+        if (!pl.useStats()) {
         	return;
         }
         
@@ -187,7 +187,7 @@ public class Stats {
     }
     
     public static void getLeaderboard(Player player, int entries) {
-    	if (pl.file) {
+    	if (pl.isFile()) {
     		FileConfiguration config = YamlConfiguration.loadConfiguration(file);
     		ConfigurationSection stats = config.getConfigurationSection("stats");
     		if (stats != null) {

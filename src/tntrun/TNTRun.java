@@ -54,15 +54,15 @@ public class TNTRun extends JavaPlugin {
 
 	private Logger log;
 	private boolean headsplus = false;
+	private boolean usestats = false;
+	private boolean needupdate = false;
+	private boolean file = false;
 
 	public PlayerDataStore pdata;
 	public ArenasManager amanager;
 	public GlobalLobby globallobby;
 	public SignEditor signEditor;
 	public Kits kitmanager;
-	public boolean file = false;
-	public boolean usestats = false;
-	public boolean needUpdate = false;
 	public String[] version = {"Nothing", "Nothing"};
 	public Sounds sound;
 	
@@ -81,74 +81,31 @@ public class TNTRun extends JavaPlugin {
 		pdata = new PlayerDataStore();
 		amanager = new ArenasManager();
 		
-		getCommand("tntrun").setExecutor(new GameCommands(this));
-		getCommand("tntrunsetup").setExecutor(new SetupCommandsHandler(this));
-		getCommand("tntrunconsole").setExecutor(new ConsoleCommands(this));
-		getCommand("tntrun").setTabCompleter(new AutoTabCompleter());
-		getCommand("tntrunsetup").setTabCompleter(new SetupTabCompleter());
+		//register commands and events
+		setupPlugin();
 
-		getServer().getPluginManager().registerEvents(new PlayerStatusHandler(this), this);
-		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
-		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
-		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
-		getServer().getPluginManager().registerEvents(new Shop(this), this);
-
-		Plugin HeadsPlus = getServer().getPluginManager().getPlugin("HeadsPlus");
-		if (HeadsPlus != null && HeadsPlus.isEnabled()) {
-			getServer().getPluginManager().registerEvents(new HeadsPlusHandler(this), this);
-			headsplus = true;
-			log.info("Successfully linked with HeadsPlus, version " + HeadsPlus.getDescription().getVersion());
-		}
-
+		// save config
 		saveDefaultConfig();
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 
 		// load arenas
-		final File arenasfolder = new File(getDataFolder() + File.separator + "arenas");
-		arenasfolder.mkdirs();
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				// load global lobby
-				globallobby.loadFromConfig();
-				// load kits
-				kitmanager.loadFromConfig();
-				// load arenas
-				for (String file : arenasfolder.list()) {
-					Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
-					arena.getStructureManager().loadFromConfig();
-					arena.getStatusManager().enableArena();
-					amanager.registerArena(arena);
-					Bars.createBar(arena.getArenaName());
-				}
-				// load signs
-				signEditor.loadConfiguration();
-			}
-		}.runTaskLater(this, 20L);
-
+		loadArenas();
+		
 		//check for update
 		checkUpdate();
 		
-		/* Version 1.9 and above should use new_Sounds_1_9 */
+		// enable sounds
 		sound = new Sounds_1_9();
 		
+		// start metrics
 		log.info("Starting Metrics...");
 		new Metrics(this);
 	     
-		if (this.getConfig().getString("database").equals("file")) {
-			file = true;
-			usestats = true;
-		} else if (this.getConfig().getString("database").equals("sql")) {
-			this.connectToMySQL();
-			usestats = true;
-			file = false;
-		} else {
-			log.info("This database is not supported, supported database: sql, file");
-			usestats = false;
-			file = false;
-			log.info("Disabling stats...");
-		}
+		// set storage type
+		setStorage();
+		
+		//enable stats
 		new Stats(this);
 	}
 
@@ -163,12 +120,7 @@ public class TNTRun extends JavaPlugin {
 			mysql.close();
 		}
 		// save arenas
-		for (Arena arena : amanager.getArenas()) {
-			arena.getStructureManager().getGameZone().regenNow();
-			arena.getStatusManager().disableArena();
-			arena.getStructureManager().saveToConfig();
-			Bars.removeAll(arena.getArenaName());
-		}
+		saveArenas();
 		// save lobby
 		globallobby.saveToConfig();
 		globallobby = null;
@@ -184,12 +136,33 @@ public class TNTRun extends JavaPlugin {
 		log = null;
 	}
 
+	private void saveArenas() {
+		for (Arena arena : amanager.getArenas()) {
+			arena.getStructureManager().getGameZone().regenNow();
+			arena.getStatusManager().disableArena();
+			arena.getStructureManager().saveToConfig();
+			Bars.removeAll(arena.getArenaName());
+		}
+	}
+
 	public void logSevere(String message) {
 		log.severe(message);
 	}
 	
 	public boolean isHeadsPlus() {
 		return headsplus;
+	}
+
+	public boolean useStats() {
+		return usestats;
+	}
+
+	public boolean needUpdate() {
+		return needupdate;
+	}
+
+	public boolean isFile() {
+		return file;
 	}
 
 	private void checkUpdate() {
@@ -205,23 +178,21 @@ public class TNTRun extends JavaPlugin {
 				version = VersionChecker.get().getVersion().split(";");
 				if (version[0].equalsIgnoreCase("error")) {
 					throw new NullPointerException("An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun_reloaded.303586/");
+				} else if (version[0].equalsIgnoreCase(getDescription().getVersion())) {
+					log.info("You are running the most recent version");
+					needupdate = false;
 				} else {
-					if (version[0].equalsIgnoreCase(getDescription().getVersion())) {
-						log.info("You are running the most recent version");
-						needUpdate = false;
-					} else {
-						log.info("Your version: " + getDescription().getVersion());
-						log.info("New version : " + version[0]);
-						log.info("New version available! Download now: https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
-						needUpdate = true;
-						for (Player p : Bukkit.getOnlinePlayers()) {
-							if (p.hasPermission("tntrun.version.check")) {
-								p.sendMessage(" ");
-								p.sendMessage("§7[§6TNTRun§7] §6New update available!");
-								p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + getDescription().getVersion());
-								p.sendMessage("§7[§6TNTRun§7] §7New version : §6" + version[0]);
-								p.sendMessage("§7[§6TNTRun§7] §7New version available! Download now: §6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
-							}
+					log.info("Your version: " + getDescription().getVersion());
+					log.info("New version : " + version[0]);
+					log.info("New version available! Download now: https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
+					needupdate = true;
+					for (Player p : Bukkit.getOnlinePlayers()) {
+						if (p.hasPermission("tntrun.version.check")) {
+							p.sendMessage(" ");
+							p.sendMessage("§7[§6TNTRun§7] §6New update available!");
+							p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + getDescription().getVersion());
+							p.sendMessage("§7[§6TNTRun§7] §7New version : §6" + version[0]);
+							p.sendMessage("§7[§6TNTRun§7] §7New version available! Download now: §6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 						}
 					}
 				}
@@ -247,5 +218,66 @@ public class TNTRun extends JavaPlugin {
 				+ "UNIQUE KEY `username` (`username`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 
 		log.info("Connected to MySQL database!");
+	}
+
+	private void setupPlugin() {
+		getCommand("tntrun").setExecutor(new GameCommands(this));
+		getCommand("tntrunsetup").setExecutor(new SetupCommandsHandler(this));
+		getCommand("tntrunconsole").setExecutor(new ConsoleCommands(this));
+		getCommand("tntrun").setTabCompleter(new AutoTabCompleter());
+		getCommand("tntrunsetup").setTabCompleter(new SetupTabCompleter());
+
+		getServer().getPluginManager().registerEvents(new PlayerStatusHandler(this), this);
+		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
+		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
+		getServer().getPluginManager().registerEvents(new Shop(this), this);
+
+		Plugin HeadsPlus = getServer().getPluginManager().getPlugin("HeadsPlus");
+		if (HeadsPlus != null && HeadsPlus.isEnabled()) {
+			getServer().getPluginManager().registerEvents(new HeadsPlusHandler(this), this);
+			headsplus = true;
+			log.info("Successfully linked with HeadsPlus, version " + HeadsPlus.getDescription().getVersion());
+		}
+	}
+
+	private void loadArenas() {
+		final File arenasfolder = new File(getDataFolder() + File.separator + "arenas");
+		arenasfolder.mkdirs();
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				// load global lobby
+				globallobby.loadFromConfig();
+				// load kits
+				kitmanager.loadFromConfig();
+				// load arenas
+				for (String file : arenasfolder.list()) {
+					Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
+					arena.getStructureManager().loadFromConfig();
+					arena.getStatusManager().enableArena();
+					amanager.registerArena(arena);
+					Bars.createBar(arena.getArenaName());
+				}
+				// load signs
+				signEditor.loadConfiguration();
+			}
+		}.runTaskLater(this, 20L);
+	}
+	
+	private void setStorage() {
+		if (this.getConfig().getString("database").equals("file")) {
+			file = true;
+			usestats = true;
+		} else if (this.getConfig().getString("database").equals("sql")) {
+			this.connectToMySQL();
+			usestats = true;
+			file = false;
+		} else {
+			log.info("This database is not supported, supported database: sql, file");
+			usestats = false;
+			file = false;
+			log.info("Disabling stats...");
+		}
 	}
 }

@@ -270,7 +270,7 @@ public class RestrictionHandler implements Listener {
 		final Player p = e.getPlayer();
 		
 		if (p.hasPermission("tntrun.version.check")) {
-			if (TNTRun.getInstance().needUpdate) {
+			if (plugin.needUpdate()) {
 				new BukkitRunnable() {
 					@Override
 					public void run() {
@@ -284,11 +284,11 @@ public class RestrictionHandler implements Listener {
 			}
 		}
 		
-		if (!plugin.usestats) {
+		if (!plugin.useStats()) {
 			return;
 		}
 		
-		if (plugin.file) {
+		if (plugin.isFile()) {
 			return;
 		}
 		
