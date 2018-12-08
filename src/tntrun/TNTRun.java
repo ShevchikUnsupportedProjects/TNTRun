@@ -27,10 +27,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import tntrun.arena.Arena;
+import tntrun.arena.handlers.SoundHandler;
 import tntrun.utils.Bars;
 import tntrun.utils.Shop;
 import tntrun.utils.Sounds;
-import tntrun.utils.Sounds_1_9;
 import tntrun.utils.Stats;
 import tntrun.utils.TitleMsg;
 import tntrun.commands.AutoTabCompleter;
@@ -96,7 +96,8 @@ public class TNTRun extends JavaPlugin {
 		checkUpdate();
 		
 		// enable sounds
-		sound = new Sounds_1_9();
+		//sound = new Sounds_1_9();
+		sound = new SoundHandler(this);
 		
 		// start metrics
 		log.info("Starting Metrics...");

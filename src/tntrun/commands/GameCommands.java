@@ -226,7 +226,7 @@ public class GameCommands implements CommandExecutor {
 			Messages.sendMessage(player, "§6/trsetup setteleport {arena} {previous/lobby} §f- §c" + Messages.setupteleport);
 			Messages.sendMessage(player, "§6/trsetup enablekits {arena} §f- §c" + Messages.setupenablekits);
 			Messages.sendMessage(player, "§6/trsetup disablekits {arena} §f- §c" + Messages.setupdisablekits);
-			Messages.sendMessage(player, "§6/trsetup setdamage {arena} {on/off/zero} §f- §c" + Messages.setupdamage);
+			Messages.sendMessage(player, "§6/trsetup setdamage {arena} {yes/no/zero} §f- §c" + Messages.setupdamage);
 			Messages.sendMessage(player, "§6/trsetup setbarcolor §f- §c" + Messages.setupbarcolor);
 			Messages.sendMessage(player, "§6/trsetup reloadbars §f- §c" + Messages.setupreloadbars);
 			Messages.sendMessage(player, "§6/trsetup reloadtitles §f- §c" + Messages.setupreloadtitles);

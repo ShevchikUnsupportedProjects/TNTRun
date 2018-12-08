@@ -76,6 +76,7 @@ public class Messages {
 	public static String gameswon = "&bWins &f: ";
 	public static String gameslost = "&bLosses &f: ";
 	public static String statsdisabled = "&7[&6TNTRun&7] &cStats are currently disabled";
+	public static String leaderhead = "§7======[§6TNTRun Leaderboard§7]======";
 	public static String leaderboard = "{POSITION}) &b{PLAYER} &f: Wins &3{WINS}";
 	
 	public static String helplobby = "Teleport to lobby";
@@ -174,6 +175,8 @@ public class Messages {
 		gamesplayed = config.getString("gamesplayed", gamesplayed);
 		gameswon = config.getString("gameswon", gameswon);
 		gameslost = config.getString("gameslost", gameslost);
+		leaderhead = config.getString("leaderhead", leaderhead);
+		leaderboard = config.getString("leaderboard", leaderboard);
 		statsdisabled = config.getString("statsdisabled", statsdisabled);
 		helplobby = config.getString("helplobby", helplobby);
 		helplist = config.getString("helplist", helplist);
@@ -260,6 +263,8 @@ public class Messages {
 		config.set("gamesplayed", gamesplayed);
 		config.set("gameswon", gameswon);
 		config.set("gameslost", gameslost);
+		config.set("leaderhead", leaderhead);
+		config.set("leaderboard", leaderboard);
 		config.set("statsdisabled", statsdisabled);
 		config.set("helplobby", helplobby);
 		config.set("helplist", helplist);

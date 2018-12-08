@@ -6,79 +6,90 @@
 # TNTRun_reloaded author steve4744       #
 #                                        #
 special:
-   FancyBlockBreak: true
-   UseBossBar: true
-   BossBarColor: RANDOM
-   UseTitle: true
-   UseScoreboard: true
-   CheckForNewVersion: true
+  FancyBlockBreak: true
+  UseBossBar: true
+  BossBarColor: RANDOM
+  UseTitle: true
+  UseScoreboard: true
+  CheckForNewVersion: true
 shop:
-   name: '&6&lTNTRun &f&lSHOP'
-   size: 27
-   doublejump:
-      maxdoublejumps: 10
+  name: '&6&lTNTRun &f&lSHOP'
+  size: 27
+  doublejump:
+    maxdoublejumps: 10
 commandsonwin:
 - say {PLAYER} won TNTRun
 - say Congratulations...
 fireworksonwin:
-   enabled: true
-   duration: 4
+  enabled: true
+  duration: 4
 broadcastwinlevel: 2
+sounds:
+  arenastart:
+    enabled: true
+    sound: ENTITY_EVOKER_PREPARE_WOLOLO
+    volume: 10
+    pitch: 1.0
+  itemselect:
+    enabled: true
+    sound: UI_BUTTON_CLICK
+    volume: 10
+    pitch: 1.0
 items:
-   vote:
-      use: true
-      material: DIAMOND
-      name: '&2&lVote'
-   info:
-      use: true
-      material: EMERALD
-      name: '&2&lInfo'
-   shop:
-      use: true
-      material: NETHER_STAR
-      name: '&2&lShop'
-   stats:
-      use: true
-      material: REDSTONE
-      name: '&2&lStats'
-   leave:
-      material: GREEN_BED
-      name: '&2&lLeave'
-   heads:
-      use: true
-      material: GLOWSTONE_DUST
-      name: '&e&lHeadsPlus'
+  vote:
+    use: true
+    material: DIAMOND
+    name: '&2&lVote'
+  info:
+    use: true
+    material: EMERALD
+    name: '&2&lInfo'
+  shop:
+    use: true
+    material: NETHER_STAR
+    name: '&2&lShop'
+  stats:
+    use: true
+    material: REDSTONE
+    name: '&2&lStats'
+  leave:
+    material: GREEN_BED
+    name: '&2&lLeave'
+  heads:
+    use: true
+    material: GLOWSTONE_DUST
+    name: '&e&lHeadsPlus'
 scoreboard:
-   waiting:
-   - '&fWelcome to TNTRun'
-   - '&a '
-   - '&fArena: &6&l{ARENA}'
-   - '&b '
-   - '&fPlayers: &a&l{PS}&7&l/&c&l{MPS}'
-   - '&c '
-   - '&fVotes needed: &6&l{VOTES}'
-   - '&d '
-   - '&fStarting in: &6&l{COUNT}'
-   playing:
-   - '&fPlaying TNTRun'
-   - '&fon arena: &6&l{ARENA}'
-   - '&b '
-   - '&fPlayers: &a&l{PS}&7&l/&c&l{MPS}'
-   - '&c '
-   - '&fLost Players: &a&l{LOST}'
-   - '&2 '
-   - '&fEnd in: &c&l{LIMIT}'
+  waiting:
+  - '&fWelcome to TNTRun'
+  - '&a '
+  - '&fArena: &6&l{ARENA}'
+  - '&b '
+  - '&fPlayers: &a&l{PS}&7&l/&c&l{MPS}'
+  - '&c '
+  - '&fVotes needed: &6&l{VOTES}'
+  - '&d '
+  - '&fStarting in: &6&l{COUNT}'
+  playing:
+  - '&fPlaying TNTRun'
+  - '&fon arena: &6&l{ARENA}'
+  - '&b '
+  - '&fPlayers: &a&l{PS}&7&l/&c&l{MPS}'
+  - '&c '
+  - '&fLost Players: &a&l{LOST}'
+  - '&2 '
+  - '&fEnd in: &c&l{LIMIT}'
 database: file
 MySQL:
-   host: host
-   port: 12345
-   name: tntrun
-   user: root
-   pass: password
+  host: host
+  port: 12345
+  name: tntrun
+  user: root
+  pass: password
 signs:
-   prefix: '&6&lTNTRun'
-   status:
-      disabled: '&cDisabled'
-      ingame: '&c&l{PS}&8/&c&l{MPS}'
-      regenerating: '&6&lRegen...'
-      waiting: '&a&l{PS}&8/&a&l{MPS}'
+  prefix: '&6&lTNTRun'
+  status:
+    disabled: '&cDisabled'
+    ingame: '&c&l{PS}&8/&c&l{MPS}'
+    regenerating: '&6&lRegen...'
+    waiting: '&a&l{PS}&8/&a&l{MPS}'

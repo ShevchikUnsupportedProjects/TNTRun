@@ -201,7 +201,7 @@ public class Shop implements Listener{
 	    			
 	    			if (bought.contains(p)) {
 	    				p.sendMessage(Messages.alreadyboughtitem.replace("&", "§"));
-	    				TNTRun.getInstance().sound.WITHER_HURT(p, 5, 999);
+	    				TNTRun.getInstance().sound.ITEM_SELECT(p);
 	    				return;
 	    			}
 	    			if (p.hasPermission(permission) || p.hasPermission("tntrun.shop")) {
@@ -211,7 +211,7 @@ public class Shop implements Listener{
 	    				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
 	    					if (pl.getConfig().getInt("shop.doublejump.maxdoublejumps") <= pl.getConfig().getInt("doublejumps." + p.getName())) {
 	    						p.sendMessage(Messages.alreadyboughtitem.replace("&", "§"));
-	    						TNTRun.getInstance().sound.WITHER_HURT(p, 5, 999);
+	    						TNTRun.getInstance().sound.ITEM_SELECT(p);
 	    						return;
 	    					}
 	    				}
@@ -222,7 +222,7 @@ public class Shop implements Listener{
 	    					TNTRun.getInstance().sound.NOTE_PLING(p, 5, 10);
 	    				} else {
 	    					p.sendMessage(Messages.notenoughtmoney.replace("&", "§").replace("{MONEY}", cost + ""));
-	    					TNTRun.getInstance().sound.WITHER_HURT(p, 5, 999);
+	    					TNTRun.getInstance().sound.ITEM_SELECT(p);
 	    					return;
 	    				}
 	    				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
@@ -238,7 +238,7 @@ public class Shop implements Listener{
 	    			} else {
 	    				p.closeInventory();
 	    				p.sendMessage(Messages.nopermission.replace("&", "§"));
-	    				TNTRun.getInstance().sound.WITHER_HURT(p, 5, 999);
+	    				TNTRun.getInstance().sound.ITEM_SELECT(p);
 	    			}
 	    		}
 	    	}

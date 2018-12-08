@@ -182,8 +182,9 @@ public class GameHandler {
 			player.closeInventory();
 			Stats.addPlayedGames(player, 1);
 			player.setAllowFlight(true);
+
 			Messages.sendMessage(player, message);
-			TNTRun.getInstance().sound.ENDER_DRAGON(player, 1, 999);
+			TNTRun.getInstance().sound.ARENA_START(player);
 			
 			setGameInventory(player);
 			TitleMsg.sendFullTitle(player, TitleMsg.start, TitleMsg.substart, 20, 20, 20, plugin);
@@ -395,7 +396,7 @@ public class GameHandler {
 		}
 		
 		for(Player p : arena.getPlayersManager().getAllParticipantsCopy()) {
-			TNTRun.getInstance().sound.ENDER_DRAGON(p, 5, 999);
+			TNTRun.getInstance().sound.ARENA_START(p); //, 5, 999);
 			p.setAllowFlight(true);
 			p.setFlying(true);
 			p.teleport(arena.getStructureManager().getSpawnPoint());

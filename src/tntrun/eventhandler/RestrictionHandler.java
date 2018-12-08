@@ -125,7 +125,7 @@ public class RestrictionHandler implements Listener {
 		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 	        if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.leave.material"))) {
 				if (arena != null) {
-					TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
+					TNTRun.getInstance().sound.ITEM_SELECT(player);
 					e.setCancelled(true);
 					arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 				}
@@ -134,7 +134,7 @@ public class RestrictionHandler implements Listener {
 		
         if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.shop.material"))) {
     		if (arena != null) {
-    			TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
+    			TNTRun.getInstance().sound.ITEM_SELECT(player);
     			Inventory inv = Bukkit.createInventory(null, Shop.invsize, Shop.invname);
     			Shop.setItems(inv);
     			player.openInventory(inv);
@@ -149,7 +149,7 @@ public class RestrictionHandler implements Listener {
     			}
        			u.add(player);
        			coolDown(player);
-            	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
+            	TNTRun.getInstance().sound.ITEM_SELECT(player);
             	Utils.displayInfo(player);
         	}
         }
@@ -160,7 +160,7 @@ public class RestrictionHandler implements Listener {
     				TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
     				return;
     			}
-            	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
+            	TNTRun.getInstance().sound.ITEM_SELECT(player);
             	u.add(player);
             	coolDown(player);
             	
@@ -185,7 +185,7 @@ public class RestrictionHandler implements Listener {
     			}
        			u.add(player);
   			    coolDown(player);
-            	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
+            	TNTRun.getInstance().sound.ITEM_SELECT(player);
          	   	player.chat("/tntrun stats");
         	}
         }
@@ -198,7 +198,7 @@ public class RestrictionHandler implements Listener {
     			}
        			u.add(player);
        			coolDown(player);
-            	TNTRun.getInstance().sound.WITHER_HURT(player, 5, 999);
+            	TNTRun.getInstance().sound.ITEM_SELECT(player);
          	   	player.chat("/headsplus:heads");
         	}
         }
