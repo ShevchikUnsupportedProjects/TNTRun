@@ -27,13 +27,13 @@ broadcastwinlevel: 2
 sounds:
   arenastart:
     enabled: true
-    sound: ENTITY_EVOKER_PREPARE_WOLOLO
+    sound: ENTITY_PLAYER_LEVELUP
     volume: 10
     pitch: 1.0
   itemselect:
     enabled: true
     sound: UI_BUTTON_CLICK
-    volume: 10
+    volume: 1
     pitch: 1.0
 items:
   vote:

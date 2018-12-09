@@ -96,7 +96,6 @@ public class TNTRun extends JavaPlugin {
 		checkUpdate();
 		
 		// enable sounds
-		//sound = new Sounds_1_9();
 		sound = new SoundHandler(this);
 		
 		// start metrics

@@ -396,7 +396,7 @@ public class GameHandler {
 		}
 		
 		for(Player p : arena.getPlayersManager().getAllParticipantsCopy()) {
-			TNTRun.getInstance().sound.ARENA_START(p); //, 5, 999);
+			TNTRun.getInstance().sound.ARENA_START(p);
 			p.setAllowFlight(true);
 			p.setFlying(true);
 			p.teleport(arena.getStructureManager().getSpawnPoint());
@@ -412,7 +412,8 @@ public class GameHandler {
 				int i = 0;
 				@Override
 				public void run() {
-					if (i >= getFireworkDuration()) {
+					//cancel on duration-1 to avoid firework overrun
+					if (i >= (getFireworkDuration() - 1)) {
 						this.cancel();
 					}
 					Firework f = player.getWorld().spawn(arena.getStructureManager().getSpawnPoint(), Firework.class);
