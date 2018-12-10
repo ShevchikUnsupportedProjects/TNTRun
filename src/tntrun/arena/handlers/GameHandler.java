@@ -109,44 +109,33 @@ public class GameHandler {
 					if (count == 0) {
 						stopArenaCountdown();
 						startArena();
+
 					} else if(count == 5) {
 						String message = Messages.arenacountdown;
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
+
 						for (Player player : arena.getPlayersManager().getPlayers()) {
-							player.teleport(arena.getStructureManager().getSpawnPoint());
-							TNTRun.getInstance().sound.NOTE_PLING(player, 1, 999);
-							if (!plugin.getConfig().getBoolean("special.UseTitle")) {
-								Messages.sendMessage(player, message);
-							} 
-							TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
+							if (isAntiCamping()) {
+								player.teleport(arena.getStructureManager().getSpawnPoint());
+							}
+							displayCountdown(player, count, message);
 						}
+
 					} else if (count < 11) {
 						String message = Messages.arenacountdown;
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
 						for (Player player : arena.getPlayersManager().getPlayers()) {
-							TNTRun.getInstance().sound.NOTE_PLING(player, 1, 999);
-							if (!plugin.getConfig().getBoolean("special.UseTitle")) {
-								Messages.sendMessage(player, message);
-							} 
-							TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
+							displayCountdown(player, count, message);
 						}
+
 					} else if (count % 10 == 0) {
 						String message = Messages.arenacountdown;
 						message = message.replace("{COUNTDOWN}", String.valueOf(count));
 				        for (Player all : arena.getPlayersManager().getPlayers()) {
-				        	TNTRun.getInstance().sound.NOTE_PLING(all, 1, 999);
-				        	if (!plugin.getConfig().getBoolean("special.UseTitle")) {
-				        		Messages.sendMessage(all, message);
-				        	} 
-				        	TitleMsg.sendFullTitle(all, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
+				        	displayCountdown(all, count, message);
 				        }
 				    }
-					if(count == 5) {
-						for (Player player : arena.getPlayersManager().getPlayers()) {
-							player.teleport(arena.getStructureManager().getSpawnPoint());
-							TNTRun.getInstance().sound.NOTE_PLING(player, 1, 999);
-						}
-					}
+
 					// scoreboard
 					createWaitingScoreBoard();
 					// update bar
@@ -158,9 +147,7 @@ public class GameHandler {
 				    }
 					count--;
 				}
-			},
-			0, 20
-		);
+			}, 0, 20);
 	}
 
 	public void stopArenaCountdown() {
@@ -465,13 +452,40 @@ public class GameHandler {
 		int duration = plugin.getConfig().getInt("fireworksonwin.duration", 4);
 		return (duration > 0 && duration < 5) ? duration * 2 : 8;
 	}
-	
+
+	/**
+	 * Is anti-camping enabled. If true players are teleported to arena spawn when
+	 * countdown hits 5 seconds.
+	 * @return anti-camping
+	 */
+	private boolean isAntiCamping() {
+		return plugin.getConfig().getBoolean("anticamping.enabled", true);
+	}
+	/**
+	 * Displays the current value of countdown on the screeen.
+	 * @param player
+	 * @param count
+	 * @param message
+	 */
+	private void displayCountdown(Player player, int count, String message) {
+		plugin.sound.NOTE_PLING(player, 1, 999);
+		if (!plugin.getConfig().getBoolean("special.UseTitle")) {
+			Messages.sendMessage(player, message);
+		} 
+		TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
+	}
+
+	/**
+	 * Remove the hotbar items and give the player any items bought in the shop
+	 * @param player
+	 */
 	private void setGameInventory(Player player) {
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.shop.material")));
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.vote.material")));
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.info.material")));
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
-		
+		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.heads.material")));
+
         if (Shop.pitems.containsKey(player)) {
         	ArrayList<ItemStack> items = Shop.pitems.get(player);
             Shop.pitems.remove(player);
@@ -495,7 +509,12 @@ public class GameHandler {
         	Shop.removePotionEffects(player);
         }
 	}
-	
+
+	/**
+	 * Validate itemstack is an item of armour
+	 * @param item
+	 * @return
+	 */
 	private boolean isArmor(ItemStack item) {
 		String[] armor = new String[] {"HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS"};
 		for (String s : armor) {
@@ -505,7 +524,12 @@ public class GameHandler {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Equip the armour item
+	 * @param player
+	 * @param item
+	 */
 	private void setArmorItem(Player player, ItemStack item) {
 		if (item.toString().contains("BOOTS")) {
 			player.getInventory().setBoots(item);

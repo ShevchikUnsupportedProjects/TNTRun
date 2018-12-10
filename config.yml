@@ -35,6 +35,8 @@ sounds:
     sound: UI_BUTTON_CLICK
     volume: 1
     pitch: 1.0
+anticamping:
+  enabled: true
 items:
   vote:
     use: true
