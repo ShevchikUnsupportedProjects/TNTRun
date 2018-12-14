@@ -35,7 +35,7 @@ public class VoteSign implements SignType {
 
 	@Override
 	public void handleCreation(SignChangeEvent e) {
-		e.setLine(0, "§7[§6TNTRun§7]");
+		e.setLine(0, plugin.getConfig().getString("signs.prefix").replace("&", "§"));
 		e.getPlayer().sendMessage("Sign succesfully created");
 	}
 

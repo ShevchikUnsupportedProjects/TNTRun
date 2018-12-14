@@ -19,8 +19,12 @@ package tntrun.signs.editor;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -30,11 +34,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.utils.Stats;
 
 public class SignEditor {
 
 	private TNTRun plugin;
 	private HashMap<String, HashSet<SignInfo>> signs = new HashMap<String, HashSet<SignInfo>>();
+	private List<SignInfo> lbsigns = new ArrayList<SignInfo>();
+	private static int position;
 
 	private File configfile;
 
@@ -60,6 +67,38 @@ public class SignEditor {
 		SignInfo signinfo = new SignInfo(block);
 		addArena(arena);
 		getSigns(arena).add(signinfo);
+	}
+
+	public void addLeaderBoardSign(Block block) {
+		//get loc of sign
+		SignInfo signinfo = new SignInfo(block);
+		getLBSigns().add(signinfo);
+	}
+	
+	public List<SignInfo> getLBSigns() {
+		return lbsigns;
+	}
+	
+	public void modifyLeaderBoardSign(Block block) {
+		HashMap<String, Integer> statsMap = Stats.getStatsFromFile();
+		
+		if (block.getState() instanceof Sign) {
+			Sign sign = (Sign) block.getState();
+			position = 0;
+			statsMap.entrySet().stream()
+				.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
+				.limit(3)
+				.forEach(e -> {position++;
+	      			sign.setLine(position, e.getKey() + " " + String.valueOf(e.getValue()));	
+				});
+			sign.update();
+		}
+	}
+	
+	public void removeLeaderBoardSign(Block block) {
+		if (block.getState() instanceof Sign) {
+			getLBSigns().remove(getLBSignInfo(block));
+		}
 	}
 
 	public void removeSign(Block block, String arena) {
@@ -88,6 +127,15 @@ public class SignEditor {
 
 	private SignInfo getSignInfo(Block block, String arena) {
 		for (SignInfo si : getSigns(arena)) {
+			if (si.getBlock().equals(block)) {
+				return si;
+			}
+		}
+		return new SignInfo(block);
+	}
+	
+	private SignInfo getLBSignInfo(Block block) {
+		for (SignInfo si : getLBSigns()) {
 			if (si.getBlock().equals(block)) {
 				return si;
 			}

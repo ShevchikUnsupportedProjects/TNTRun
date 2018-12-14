@@ -190,7 +190,7 @@ public class GameCommands implements CommandExecutor {
 			if (args.length > 1 && Utils.isNumber(args[1]) && Integer.parseInt(args[1]) > 0) {
 				entries = Integer.parseInt(args[1]);
 			}
-			player.sendMessage("§7======[§6TNTRun Leaderboard§7]§7======");
+			Messages.sendMessage(player, Messages.leaderhead);
 			Stats.getLeaderboard(player, entries);
 		}
 		// leave arena

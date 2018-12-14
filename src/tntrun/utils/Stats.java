@@ -188,6 +188,7 @@ public class Stats {
     
     public static void getLeaderboard(Player player, int entries) {
     	if (pl.isFile()) {
+    		/*
     		FileConfiguration config = YamlConfiguration.loadConfiguration(file);
     		ConfigurationSection stats = config.getConfigurationSection("stats");
     		if (stats != null) {
@@ -211,18 +212,18 @@ public class Stats {
     						statsMap.put(playerName, getWins(Bukkit.getPlayer(playerName)));
     					}
     				}
-    			}
-    			position = 0;
-    			statsMap.entrySet().stream()
-    			        .sorted(Entry.comparingByValue(Comparator.reverseOrder()))
-    			        .limit(entries)
-    			        .forEach(e -> {position++;
-    			            Messages.sendMessage(player, Messages.leaderboard
-    			            		.replace("{POSITION}", String.valueOf(position))
-    			            		.replace("{PLAYER}", e.getKey())
-    			            		.replace("{WINS}", String.valueOf(e.getValue())));
-    			        });
-    		}
+    			}*/
+    		HashMap<String, Integer> statsMap = getStatsFromFile();
+    		position = 0;
+    		statsMap.entrySet().stream()
+    			      .sorted(Entry.comparingByValue(Comparator.reverseOrder()))
+    			      .limit(entries)
+    			      .forEach(e -> {position++;
+    			          Messages.sendMessage(player, Messages.leaderboard
+    			        		  .replace("{POSITION}", String.valueOf(position))
+    			        		  .replace("{PLAYER}", e.getKey())
+    			        		  .replace("{WINS}", String.valueOf(e.getValue())));
+    			      });
     		return;
     	} 
     	getLeaderboardFromDB(player);
@@ -266,6 +267,36 @@ public class Stats {
 			return false;
 		}
     	return true;
+    }
+    
+    public static HashMap<String, Integer> getStatsFromFile() {
+    	FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+		ConfigurationSection stats = config.getConfigurationSection("stats");
+		
+		final HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
+
+		if (stats != null) {
+			if (Bukkit.getOnlineMode()) {
+				for (String uuid : stats.getKeys(false)) {
+					// validate UUID as file could contain player names if its been in offline mode
+					if (!isValidUuid(uuid)) {
+						continue;
+					}
+					
+					OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(uuid));
+					if (offlinePlayer.getName() != null) {
+						statsMap.put(offlinePlayer.getName(), getWins(offlinePlayer));
+					} 				
+				}
+			} else {
+				for (String playerName : stats.getKeys(false)) {
+					if (Bukkit.getPlayer(playerName) != null) {
+						statsMap.put(playerName, getWins(Bukkit.getPlayer(playerName)));
+					}
+				}
+			}
+		}
+		return statsMap;
     }
 	
 }
