@@ -42,12 +42,12 @@ public class LeaderboardSign implements SignType {
 			return;
 		}
 		e.setLine(0, plugin.getConfig().getString("signs.prefix").replace("&", "§"));
-		plugin.signEditor.addLeaderBoardSign(e.getBlock());
+		plugin.signEditor.addLeaderboardSign(e.getBlock());
 		e.getPlayer().sendMessage("Sign succesfully created");
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				plugin.signEditor.modifyLeaderBoardSign(e.getBlock());
+				plugin.signEditor.modifyLeaderboardSign(e.getBlock());
 			}
 		}.runTask(plugin);
 	}
@@ -59,7 +59,7 @@ public class LeaderboardSign implements SignType {
 
 	@Override
 	public void handleDestroy(BlockBreakEvent e) {
-		plugin.signEditor.removeLeaderBoardSign(e.getBlock());
+		plugin.signEditor.removeLeaderboardSign(e.getBlock());
 		e.getPlayer().sendMessage("Sign succesfully removed");
 	}
 }

@@ -69,7 +69,7 @@ public class SignEditor {
 		getSigns(arena).add(signinfo);
 	}
 
-	public void addLeaderBoardSign(Block block) {
+	public void addLeaderboardSign(Block block) {
 		//get loc of sign
 		SignInfo signinfo = new SignInfo(block);
 		getLBSigns().add(signinfo);
@@ -79,7 +79,7 @@ public class SignEditor {
 		return lbsigns;
 	}
 	
-	public void modifyLeaderBoardSign(Block block) {
+	public void modifyLeaderboardSign(Block block) {
 		HashMap<String, Integer> statsMap = Stats.getStatsFromFile();
 		
 		if (block.getState() instanceof Sign) {
@@ -89,13 +89,14 @@ public class SignEditor {
 				.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
 				.limit(3)
 				.forEach(e -> {position++;
-	      			sign.setLine(position, e.getKey() + " " + String.valueOf(e.getValue()));	
+					String line = "§1" + e.getKey().substring(0, Math.min(e.getKey().length(), 11)) + " §4" + e.getValue();
+	      			sign.setLine(position, line);	
 				});
 			sign.update();
 		}
 	}
 	
-	public void removeLeaderBoardSign(Block block) {
+	public void removeLeaderboardSign(Block block) {
 		if (block.getState() instanceof Sign) {
 			getLBSigns().remove(getLBSignInfo(block));
 		}
