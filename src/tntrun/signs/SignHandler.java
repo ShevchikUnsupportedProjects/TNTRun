@@ -102,6 +102,9 @@ public class SignHandler implements Listener {
 			String line = sign.getLine(1).toLowerCase();
 			if (signs.containsKey(line)) {
 				signs.get(line).handleDestroy(e);
+			} else {
+				// at this point it must be a TNTRun leaderboard sign
+				signs.get("[leaderboard]").handleDestroy(e);
 			}
 		}
 	}

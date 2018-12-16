@@ -70,7 +70,6 @@ public class SignEditor {
 	}
 
 	public void addLeaderboardSign(Block block) {
-		//get loc of sign
 		SignInfo signinfo = new SignInfo(block);
 		getLBSigns().add(signinfo);
 	}
@@ -80,7 +79,13 @@ public class SignEditor {
 	}
 	
 	public void modifyLeaderboardSign(Block block) {
-		HashMap<String, Integer> statsMap = Stats.getStatsFromFile();
+		HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
+    	
+    	if (plugin.isFile()) {
+    		statsMap = Stats.getStatsFromFile();
+    	} else {
+    		statsMap = Stats.getStatsFromDB(3);
+    	}
 		
 		if (block.getState() instanceof Sign) {
 			Sign sign = (Sign) block.getState();
@@ -149,6 +154,9 @@ public class SignEditor {
 		getSigns(arena).add(si);
 	}
 
+	private void addLBSignInfo(SignInfo si) {
+		getLBSigns().add(si);
+	}
 	private HashSet<SignInfo> getSigns(String arena) {
 		addArena(arena);
 		return signs.get(arena);
@@ -198,14 +206,35 @@ public class SignEditor {
 	public void loadConfiguration() {
 		FileConfiguration file = YamlConfiguration.loadConfiguration(configfile);
 
-		for (String arena : file.getKeys(false)) {
-			ConfigurationSection section = file.getConfigurationSection(arena);
+		if (!file.isConfigurationSection("arenas")) {
+			for (String arena : file.getKeys(false)) {
+				ConfigurationSection section = file.getConfigurationSection(arena);
+				for (String block : section.getKeys(false)) {
+					ConfigurationSection blockSection = section.getConfigurationSection(block);
+					SignInfo si = new SignInfo(blockSection.getString("world"), blockSection.getInt("x"), blockSection.getInt("y"), blockSection.getInt("z"));
+					addSignInfo(si, arena);
+				}
+				modifySigns(arena);
+			}
+		} else {
+			ConfigurationSection arenaSection = file.getConfigurationSection("arenas");
+			for (String arena : arenaSection.getKeys(false)) {
+				ConfigurationSection section = arenaSection.getConfigurationSection(arena);
+				for (String block : section.getKeys(false)) {
+					ConfigurationSection blockSection = section.getConfigurationSection(block);
+					SignInfo si = new SignInfo(blockSection.getString("world"), blockSection.getInt("x"), blockSection.getInt("y"), blockSection.getInt("z"));
+					addSignInfo(si, arena);
+				}
+				modifySigns(arena);
+			}
+		}
+		if (file.isConfigurationSection("leaderboards")) {
+			ConfigurationSection section = file.getConfigurationSection("leaderboards");
 			for (String block : section.getKeys(false)) {
 				ConfigurationSection blockSection = section.getConfigurationSection(block);
 				SignInfo si = new SignInfo(blockSection.getString("world"), blockSection.getInt("x"), blockSection.getInt("y"), blockSection.getInt("z"));
-				addSignInfo(si, arena);
+				addLBSignInfo(si);
 			}
-			modifySigns(arena);
 		}
 	}
 
@@ -213,7 +242,8 @@ public class SignEditor {
 		FileConfiguration file = new YamlConfiguration();
 
 		for (String arena : signs.keySet()) {
-			ConfigurationSection section = file.createSection(arena);
+			//ConfigurationSection section = file.createSection(arena);
+			ConfigurationSection section = file.createSection("arenas." + arena);
 			int i = 0;
 			for (SignInfo si : getSigns(arena)) {
 				ConfigurationSection blockSection = section.createSection(Integer.toString(i++));
@@ -222,6 +252,15 @@ public class SignEditor {
 				blockSection.set("z", si.getZ());
 				blockSection.set("world", si.getWorldName());
 			}
+		}
+		ConfigurationSection section = file.createSection("leaderboards");
+		int i = 0;
+		for (SignInfo si : lbsigns) {
+			ConfigurationSection blockSection = section.createSection(Integer.toString(i++));
+			blockSection.set("x", si.getX());
+			blockSection.set("y", si.getY());
+			blockSection.set("z", si.getZ());
+			blockSection.set("world", si.getWorldName());
 		}
 
 		try {

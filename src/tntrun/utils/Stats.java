@@ -187,77 +187,25 @@ public class Stats {
     }
     
     public static void getLeaderboard(Player player, int entries) {
+    	HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
+    	
     	if (pl.isFile()) {
-    		/*
-    		FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-    		ConfigurationSection stats = config.getConfigurationSection("stats");
-    		if (stats != null) {
-    			final HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
-    			
-    			if (Bukkit.getOnlineMode()) {
-    				for (String uuid : stats.getKeys(false)) {
-    					// validate UUID as file could contain player names if its been in offline mode
-    					if (!isValidUuid(uuid)) {
-    						continue;
-    					}
-    					
-    					OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(uuid));
-    					if (offlinePlayer.getName() != null) {
-    						statsMap.put(offlinePlayer.getName(), getWins(offlinePlayer));
-    					} 				
-    				}
-    			} else {
-    				for (String playerName : stats.getKeys(false)) {
-    					if (Bukkit.getPlayer(playerName) != null) {
-    						statsMap.put(playerName, getWins(Bukkit.getPlayer(playerName)));
-    					}
-    				}
-    			}*/
-    		HashMap<String, Integer> statsMap = getStatsFromFile();
-    		position = 0;
-    		statsMap.entrySet().stream()
-    			      .sorted(Entry.comparingByValue(Comparator.reverseOrder()))
-    			      .limit(entries)
-    			      .forEach(e -> {position++;
-    			          Messages.sendMessage(player, Messages.leaderboard
-    			        		  .replace("{POSITION}", String.valueOf(position))
-    			        		  .replace("{PLAYER}", e.getKey())
-    			        		  .replace("{WINS}", String.valueOf(e.getValue())));
-    			      });
-    		return;
-    	} 
-    	getLeaderboardFromDB(player);
-    }
-    
-    private static void getLeaderboardFromDB(Player player) {
-    	try {
-            int position = 0;
-            ResultSet rs;
-            
-            rs = pl.mysql.query("SELECT * FROM `stats` ORDER BY wins DESC LIMIT 10").getResultSet();
-           
-            while (rs.next()) {
-            	String playerName = rs.getString("username");
-            	
-            	if (Bukkit.getOnlineMode()) {
-            		if (isValidUuid(playerName)) {
-            			OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(playerName));
-                		playerName = offlinePlayer.getName();
-            		}
-            	} 
-            	
-            	position++;
-            	Messages.sendMessage(player, Messages.leaderboard
-            			.replace("{POSITION}", String.valueOf(position))
-            			.replace("{PLAYER}", playerName)
-            			.replace("{WINS}", String.valueOf(rs.getInt("wins"))));
-            }
-
-            return;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return;
+    		statsMap = getStatsFromFile();
+    	} else {
+    		statsMap = getStatsFromDB(entries);
+    	}
+    	position = 0;
+    	statsMap.entrySet().stream()
+    		.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
+    		.limit(entries)
+    		.forEach(e -> {position++;
+    			   Messages.sendMessage(player, Messages.leaderboard
+    					   .replace("{POSITION}", String.valueOf(position))
+    					   .replace("{PLAYER}", e.getKey())
+    					   .replace("{WINS}", String.valueOf(e.getValue())));
+    		});
+    			   
+    	return; 
     }
     
     private static boolean isValidUuid(String uuid) {
@@ -298,5 +246,29 @@ public class Stats {
 		}
 		return statsMap;
     }
-	
+    
+    public static HashMap<String, Integer> getStatsFromDB(int limit) {
+    	final HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
+    	try {
+            ResultSet rs;
+            
+            rs = pl.mysql.query("SELECT * FROM `stats` ORDER BY wins DESC LIMIT " + limit).getResultSet();
+           
+            while (rs.next()) {
+            	String playerName = rs.getString("username");
+            	
+            	if (Bukkit.getOnlineMode()) {
+            		if (isValidUuid(playerName)) {
+            			OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(playerName));
+                		playerName = offlinePlayer.getName();
+            		}
+            	}
+            	statsMap.put(playerName, rs.getInt("wins"));
+            }
+            //return statsMap;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return statsMap;
+    }	
 }
