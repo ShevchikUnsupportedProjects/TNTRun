@@ -282,6 +282,7 @@ public class PlayerHandler {
 		Messages.sendMessage(player, msgtoplayer);
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
+		plugin.signEditor.refreshLeaderBoards();
 	}
 	
 	private void removePlayerFromArenaAndRestoreState(Player player, boolean winner) {

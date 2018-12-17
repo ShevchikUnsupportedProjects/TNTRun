@@ -50,7 +50,7 @@ public class SignEditor {
 		configfile = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "signs.yml");
 	}
 
-	public void addArena(String arena) {
+	private void addArena(String arena) {
 		if (!signs.containsKey(arena)) {
 			signs.put(arena, new HashSet<SignInfo>());
 		}
@@ -74,7 +74,7 @@ public class SignEditor {
 		getLBSigns().add(signinfo);
 	}
 	
-	public List<SignInfo> getLBSigns() {
+	private List<SignInfo> getLBSigns() {
 		return lbsigns;
 	}
 	
@@ -100,6 +100,15 @@ public class SignEditor {
 			sign.update();
 		}
 	}
+
+	public void refreshLeaderBoards() {
+		for (SignInfo signinfo : getLBSigns()) {
+			Block block = signinfo.getBlock();
+			if (block != null) {
+				modifyLeaderboardSign(block);
+			}
+		}
+	}
 	
 	public void removeLeaderboardSign(Block block) {
 		if (block.getState() instanceof Sign) {
@@ -120,7 +129,7 @@ public class SignEditor {
 		getSigns(arena).remove(getSignInfo(block, arena));
 	}
 
-	public HashSet<Block> getSignsBlocks(String arena) {
+	private HashSet<Block> getSignsBlocks(String arena) {
 		HashSet<Block> signs = new HashSet<Block>();
 		for (SignInfo signinfo : getSigns(arena)) {
 			Block block = signinfo.getBlock();
@@ -208,6 +217,7 @@ public class SignEditor {
 
 		if (!file.isConfigurationSection("arenas")) {
 			for (String arena : file.getKeys(false)) {
+				if (arena.equalsIgnoreCase("leaderboards")) continue;
 				ConfigurationSection section = file.getConfigurationSection(arena);
 				for (String block : section.getKeys(false)) {
 					ConfigurationSection blockSection = section.getConfigurationSection(block);
@@ -242,7 +252,6 @@ public class SignEditor {
 		FileConfiguration file = new YamlConfiguration();
 
 		for (String arena : signs.keySet()) {
-			//ConfigurationSection section = file.createSection(arena);
 			ConfigurationSection section = file.createSection("arenas." + arena);
 			int i = 0;
 			for (SignInfo si : getSigns(arena)) {
