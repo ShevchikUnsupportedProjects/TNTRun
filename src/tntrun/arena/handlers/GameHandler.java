@@ -72,7 +72,7 @@ public class GameHandler {
 							if (arena.getStatusManager().isArenaStarting()) {
 								arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 							} else {
-								arena.getPlayerHandler().spectatePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+								arena.getPlayerHandler().dispatchPlayer(player);
 							}
 						}
 					}
@@ -254,12 +254,7 @@ public class GameHandler {
 		}
 		// check for lose
 		if (arena.getStructureManager().getLoseLevel().isLooseLocation(plloc)) {
-			// if we have the spectator spawn then we will move player to spectators, otherwise we will remove him from arena
-			if (arena.getStructureManager().getSpectatorSpawnVector() != null) {
-				arena.getPlayerHandler().spectatePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
-			} else {
-				arena.getPlayerHandler().leavePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
-			}
+			arena.getPlayerHandler().dispatchPlayer(player);
 			return;
 		}
 	}

@@ -229,6 +229,15 @@ public class PlayerHandler {
 			}
 		}.runTaskLater(plugin, 5L);
 	}
+	
+	// if we have the spectator spawn then we will move player to spectators, otherwise we will remove player from arena
+	public void dispatchPlayer(Player player) {
+		if (arena.getStructureManager().getSpectatorSpawnVector() != null) {
+			spectatePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
+		} else {
+			leavePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
+		}
+	}
 
 	// remove player from arena
 	public void leavePlayer(Player player, String msgtoplayer, String msgtoarenaplayers) {
