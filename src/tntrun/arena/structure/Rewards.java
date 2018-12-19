@@ -97,7 +97,7 @@ public class Rewards {
 
 	public void rewardPlayer(Player player) {
 		String rewardmessage = "";
-		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+		final ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 		
 		for (int i=0; i < materialrewards.size(); i++) {
 			if (isValidReward(materialrewards.get(i), materialamounts.get(i))) {

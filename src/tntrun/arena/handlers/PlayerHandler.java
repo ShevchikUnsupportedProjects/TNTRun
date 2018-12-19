@@ -177,6 +177,11 @@ public class PlayerHandler {
 
 	// move to spectators
 	public void spectatePlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
+		// if existing spectator leaves bounds, send back to spectator spawn
+		if (arena.getPlayersManager().isSpectator(player.getName())) {
+			player.teleport(arena.getStructureManager().getSpectatorSpawn());
+			return;
+		}
 		// remove form players
 		arena.getPlayersManager().remove(player);
 		// add to lostPlayers

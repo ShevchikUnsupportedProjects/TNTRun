@@ -68,12 +68,17 @@ public class GameHandler {
 				public void run() {
 					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 						if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
-							arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+							//remove player during countdown, otherwise spectate
+							if (arena.getStatusManager().isArenaStarting()) {
+								arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+							} else {
+								arena.getPlayerHandler().spectatePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+							}
 						}
 					}
 					for (Player player : arena.getPlayersManager().getSpectatorsCopy()) {
 						if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
-							arena.getPlayerHandler().leavePlayer(player, "", "");
+							arena.getPlayerHandler().spectatePlayer(player, "", "");
 						}
 					}
 				}
@@ -336,7 +341,7 @@ public class GameHandler {
 	}
 
 	private void startArenaRegen() {
-		if(arena.getStatusManager().isArenaRegenerating()){
+		if (arena.getStatusManager().isArenaRegenerating()) {
 			return;
 		}
 		// set arena is regenerating status
