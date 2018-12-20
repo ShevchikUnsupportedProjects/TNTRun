@@ -1,6 +1,6 @@
 # TNTRun_reloaded
 
-This was forked from the original (now unsupported) TNTRun by Shevchik (for Minecraft pre-1.9) and has been improved and updated as new versions of Minecraft have been released, so that it supports all Minecraft versions from 1.8 through to 1.13.2.
+This was originally forked from the (now unsupported) TNTRun by Shevchik for Minecraft v1.9 and has been improved and updated as new versions of Minecraft have been released, so that it supports all Minecraft versions from 1.8 through to 1.13.2.
 
 However, as a result of the huge number of changes brought in by Mojang in Minecraft v1.13, begining with version 7.0 of TNTRun\_reloaded, the plugin will only run on Minecraft versions 1.13 and later. All future development work will be done on this version and not back-ported to the legacy version.
 
@@ -35,14 +35,17 @@ Note that there is a legacy bug fix release (version 6.8.1) only available from 
     Signs
     Configurable per-arena time limit
     Configurable per-arena countdown
+    Configurable sounds
     In-game scoreboard
     Titles and bossbars
     Spectator system
     Player stats
     Leader board
+    Auto updating leader board signs
     Arena leave checker
     Customizable shop
     Kits
+    Heads - interfaces with HeadsPlus plugin by Thatsmusic99
     PVP can be enabled/disabled per arena
     Player rewards
     Placeholder support - https://www.spigotmc.org/resources/tntrun_reloaded-expansion.53945/
@@ -50,4 +53,4 @@ Note that there is a legacy bug fix release (version 6.8.1) only available from 
 <br />
 <br />
 <br />
-Updated steve4744 - 8th Nov 2018
+Updated steve4744 - 20th Dec 2018

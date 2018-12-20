@@ -384,8 +384,8 @@ public class GameHandler {
 		
 		for(Player p : arena.getPlayersManager().getAllParticipantsCopy()) {
 			TNTRun.getInstance().sound.ARENA_START(p);
-			p.setAllowFlight(true);
-			p.setFlying(true);
+			p.setAllowFlight(false);
+			p.setFlying(false);
 			p.teleport(arena.getStructureManager().getSpawnPoint());
 			p.getInventory().clear();
 		}
