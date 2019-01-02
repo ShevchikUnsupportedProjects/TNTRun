@@ -37,6 +37,8 @@ sounds:
     pitch: 1.0
 anticamping:
   enabled: true
+leaderboard:
+  maxentries: 10
 items:
   vote:
     use: true

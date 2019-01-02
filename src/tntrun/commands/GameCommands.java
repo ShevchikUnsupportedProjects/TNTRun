@@ -186,9 +186,11 @@ public class GameCommands implements CommandExecutor {
 				Messages.sendMessage(player, Messages.statsdisabled);
 				return true;
 			}
-			int entries = 10;
-			if (args.length > 1 && Utils.isNumber(args[1]) && Integer.parseInt(args[1]) > 0) {
-				entries = Integer.parseInt(args[1]);
+			int entries = plugin.getConfig().getInt("leaderboard.maxentries", 10);
+			if (args.length > 1) {
+				if (Utils.isNumber(args[1]) && Integer.parseInt(args[1]) > 0 && Integer.parseInt(args[1]) <= entries) {
+					entries = Integer.parseInt(args[1]);
+				}
 			}
 			Messages.sendMessage(player, Messages.leaderhead);
 			Stats.getLeaderboard(player, entries);
