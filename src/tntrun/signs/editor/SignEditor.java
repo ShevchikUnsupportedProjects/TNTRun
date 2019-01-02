@@ -34,6 +34,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.messages.Messages;
 import tntrun.utils.Stats;
 
 public class SignEditor {
@@ -94,7 +95,7 @@ public class SignEditor {
 				.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
 				.limit(3)
 				.forEach(e -> {position++;
-					String line = "§1" + e.getKey().substring(0, Math.min(e.getKey().length(), 11)) + " §4" + e.getValue();
+					String line = Messages.leadersign.replaceAll("&", "§").replace("{PLAYER}", e.getKey().substring(0, Math.min(e.getKey().length(), 11))).replace("{WINS}", String.valueOf(e.getValue()));
 	      			sign.setLine(position, line);	
 				});
 			sign.update();
