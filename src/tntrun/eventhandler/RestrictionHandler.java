@@ -43,6 +43,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 import tntrun.utils.Shop;
+import tntrun.utils.Stats;
 import tntrun.utils.Utils;
 
 public class RestrictionHandler implements Listener {
@@ -292,16 +293,28 @@ public class RestrictionHandler implements Listener {
 			return;
 		}
 		
-		if (Bukkit.getOnlineMode()) {
-	        plugin.mysql.query("INSERT IGNORE INTO `stats` (`username`, `played`, "
-	                + "`wins`, `looses`) VALUES " 
-	        		+ "('" + p.getUniqueId().toString()
-	                + "', '0', '0', '0');");
-		} else {
-	        plugin.mysql.query("INSERT IGNORE INTO `stats` (`username`, `played`, "
-	                + "`wins`, `looses`) VALUES " 
-	        		+ "('" + p.getName()
-	                + "', '0', '0', '0');");
-		}
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				if (Bukkit.getOnlineMode()) {
+			        plugin.mysql.query("INSERT IGNORE INTO `stats` (`username`, `played`, "
+			                + "`wins`, `looses`) VALUES " 
+			        		+ "('" + p.getUniqueId().toString()
+			                + "', '0', '0', '0');");
+				} else {
+			        plugin.mysql.query("INSERT IGNORE INTO `stats` (`username`, `played`, "
+			                + "`wins`, `looses`) VALUES " 
+			        		+ "('" + p.getName()
+			                + "', '0', '0', '0');");
+				}
+				// update DB cache on main thread
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						Stats.cacheDBStats(p);
+					}
+				}.runTask(plugin);
+			}
+		}.runTaskAsynchronously(plugin);
 	}
 }

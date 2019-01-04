@@ -211,13 +211,19 @@ public class TNTRun extends JavaPlugin {
 		String user = this.getConfig().getString("MySQL.user");
 		String pass = this.getConfig().getString("MySQL.pass");
 		mysql = new MySQL(host, port, name, user, pass, this);
+		
+		new BukkitRunnable() {
+			@Override
+			public void run() {
 
-		mysql.query("CREATE TABLE IF NOT EXISTS `stats` ( `username` varchar(50) NOT NULL, "
-				+ "`looses` int(16) NOT NULL, `wins` int(16) NOT NULL, "
-				+ "`played` int(16) NOT NULL, "
-				+ "UNIQUE KEY `username` (`username`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+				mysql.query("CREATE TABLE IF NOT EXISTS `stats` ( `username` varchar(50) NOT NULL, "
+						+ "`looses` int(16) NOT NULL, `wins` int(16) NOT NULL, "
+						+ "`played` int(16) NOT NULL, "
+						+ "UNIQUE KEY `username` (`username`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 
-		log.info("Connected to MySQL database!");
+				log.info("Connected to MySQL database!");
+			}
+		}.runTaskAsynchronously(this);
 	}
 
 	private void setupPlugin() {

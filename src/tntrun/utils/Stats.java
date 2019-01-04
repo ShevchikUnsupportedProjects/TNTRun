@@ -32,6 +32,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import tntrun.TNTRun;
 import tntrun.messages.Messages;
@@ -41,6 +42,9 @@ public class Stats {
 	public static TNTRun pl;
 	public static File file;
 	private static int position;
+	
+	private static HashMap<String, Integer> playedmap = new HashMap<String, Integer>();
+	private static HashMap<String, Integer> winmap = new HashMap<String, Integer>();
 
 	public Stats(TNTRun plugin) {
 		pl = plugin;
@@ -151,6 +155,17 @@ public class Stats {
 	}
 	
     private static int getStat(String statname, OfflinePlayer offlinePlayer) {
+    	if (statname.equals("played")) {
+    		if (playedmap.containsKey(offlinePlayer.getName())) {
+    			return playedmap.get(offlinePlayer.getName());
+    		}
+    	}
+    	if (statname.equals("wins")) {
+    		if (winmap.containsKey(offlinePlayer.getName())) {
+    			return winmap.get(offlinePlayer.getName());
+    		}
+    	}
+
         try {
             int stat = 0;
             ResultSet rs;
@@ -171,19 +186,38 @@ public class Stats {
         }
         return 999;
 	}
-    
+
+    public static void cacheDBStats(Player player) {
+    	if (!playedmap.containsKey(player.getName())) {
+    		playedmap.put(player.getName(), getStat("played", player));
+    	}
+    	if (!winmap.containsKey(player.getName())) {
+    		winmap.put(player.getName(), getStat("wins", player));
+    	}
+    }
+ 
     private static void setValue(String statname, Player p, int value) {    
         if (!pl.useStats()) {
         	return;
         }
-        
-        if (Bukkit.getOnlineMode()) {
-            pl.mysql.query("UPDATE `stats` SET `" + statname
-                    + "`='" + value + "' WHERE `username`='" + p.getUniqueId().toString() + "';");
-        } else {
-            pl.mysql.query("UPDATE `stats` SET `" + statname
-                    + "`='" + value + "' WHERE `username`='" + p.getName() + "';");
+        if (statname.equals("played")) {
+        	playedmap.put(p.getName(), value);
         }
+        if (statname.equals("wins")) {
+        	winmap.put(p.getName(), value);
+        }
+        new BukkitRunnable() {
+        	@Override
+        	public void run() {
+        		if (Bukkit.getOnlineMode()) {
+                    pl.mysql.query("UPDATE `stats` SET `" + statname
+                            + "`='" + value + "' WHERE `username`='" + p.getUniqueId().toString() + "';");
+                } else {
+                    pl.mysql.query("UPDATE `stats` SET `" + statname
+                            + "`='" + value + "' WHERE `username`='" + p.getName() + "';");
+                }
+        	}
+        }.runTaskAsynchronously(pl);
     }
     
     public static void getLeaderboard(Player player, int entries) {
@@ -249,6 +283,7 @@ public class Stats {
     
     public static HashMap<String, Integer> getStatsFromDB(int limit) {
     	final HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
+    	
     	try {
             ResultSet rs;
             
@@ -265,10 +300,11 @@ public class Stats {
             	}
             	statsMap.put(playerName, rs.getInt("wins"));
             }
-            //return statsMap;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+
         return statsMap;
-    }	
+    }
+    
 }

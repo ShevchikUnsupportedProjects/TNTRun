@@ -421,20 +421,20 @@ public class GameHandler {
 				
 		new BukkitRunnable() {
 			@Override
-			public void run(){
-				try{
+			public void run() {
+				try {
 					arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
 					stopArena();
 						
 					final ConsoleCommandSender console = Bukkit.getConsoleSender();
 						
-					if(plugin.getConfig().getStringList("commandsonwin") == null){
+					if(plugin.getConfig().getStringList("commandsonwin") == null) {
 						return;
 					}
-					for(String commands : plugin.getConfig().getStringList("commandsonwin")){
+					for(String commands : plugin.getConfig().getStringList("commandsonwin")) {
 						Bukkit.dispatchCommand(console, commands.replace("{PLAYER}", player.getName()));
 					}
-				}catch (NullPointerException ex){
+				} catch (NullPointerException ex) {
 							
 				}
 			}
