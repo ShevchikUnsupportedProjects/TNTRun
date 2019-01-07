@@ -200,7 +200,7 @@ public class Shop implements Listener{
 	    			String permission = cfg.getString(kit + ".permission");
 	    			
 	    			if (bought.contains(p)) {
-	    				p.sendMessage(Messages.alreadyboughtitem.replace("&", "§"));
+	    				Messages.sendMessage(p, Messages.alreadyboughtitem);
 	    				TNTRun.getInstance().sound.ITEM_SELECT(p);
 	    				return;
 	    			}
@@ -210,18 +210,18 @@ public class Shop implements Listener{
 	        	  
 	    				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
 	    					if (pl.getConfig().getInt("shop.doublejump.maxdoublejumps") <= pl.getConfig().getInt("doublejumps." + p.getName())) {
-	    						p.sendMessage(Messages.alreadyboughtitem.replace("&", "§"));
+	    						Messages.sendMessage(p, Messages.alreadyboughtitem);
 	    						TNTRun.getInstance().sound.ITEM_SELECT(p);
 	    						return;
 	    					}
 	    				}
 	        	  
 	    				if (hasMoney(cost, p)) {
-	    					p.sendMessage(Messages.playerboughtitem.replace("&", "§").replace("{ITEM}", title).replace("{MONEY}", cost + ""));
-	    					p.sendMessage(Messages.playerboughtwait.replace("&", "§"));
+	    					Messages.sendMessage(p, Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
+	    					Messages.sendMessage(p, Messages.playerboughtwait);
 	    					TNTRun.getInstance().sound.NOTE_PLING(p, 5, 10);
 	    				} else {
-	    					p.sendMessage(Messages.notenoughtmoney.replace("&", "§").replace("{MONEY}", cost + ""));
+	    					Messages.sendMessage(p, Messages.notenoughtmoney.replace("{MONEY}", cost + ""));
 	    					TNTRun.getInstance().sound.ITEM_SELECT(p);
 	    					return;
 	    				}
@@ -237,7 +237,7 @@ public class Shop implements Listener{
 	    				giveItem(e.getSlot(), p, current.getItemMeta().getDisplayName());  
 	    			} else {
 	    				p.closeInventory();
-	    				p.sendMessage(Messages.nopermission.replace("&", "§"));
+	    				Messages.sendMessage(p, Messages.nopermission);
 	    				TNTRun.getInstance().sound.ITEM_SELECT(p);
 	    			}
 	    		}

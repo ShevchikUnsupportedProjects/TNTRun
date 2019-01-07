@@ -17,7 +17,7 @@
 
 package tntrun.conversation;
 
-import org.bukkit.ChatColor;
+import static org.bukkit.ChatColor.*;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.conversations.ConversationAbandonedListener;
@@ -50,12 +50,12 @@ public class TNTRunConversation implements ConversationAbandonedListener {
     }
 
     private Prompt getEntryPrompt(ConversationType type, Player player) {
-        player.sendMessage(ChatColor.GRAY + "Enter 'cancel' anytime to quit the conversation.");
+        player.sendMessage(GRAY + "Enter 'cancel' anytime to quit the conversation.");
         switch (type){
             case ARENAPRIZE:
                 return new ArenaRewardConversation(arena);
             default:
-                player.sendMessage("§7[§6TNTRun§7] §cUnexpected conversation type: " + type);
+                player.sendMessage(GRAY + "[" + GOLD + "TNTRun" + GRAY + "]" + RED + " Unexpected conversation type: " + type);
                 return null;
         }
     }
@@ -63,11 +63,11 @@ public class TNTRunConversation implements ConversationAbandonedListener {
     @Override
     public void conversationAbandoned(ConversationAbandonedEvent event) {
         if (!event.gracefulExit())
-            event.getContext().getForWhom().sendRawMessage("§7[§6TNTRun§7] §cConversation aborted...");
+            event.getContext().getForWhom().sendRawMessage(GRAY + "[" + GOLD + "TNTRun" + GRAY + "]" + RED + "Conversation aborted...");
     }
 
     public static void sendErrorMessage(ConversationContext context, String message) {
-        context.getForWhom().sendRawMessage("§7[§6TNTRun§7] §c" + message + ". Please try again...");
+        context.getForWhom().sendRawMessage(GRAY + "[" + GOLD + "TNTRun" + GRAY + "] " + RED + message + ". Please try again...");
     }
 
     public void begin() {

@@ -18,7 +18,7 @@
 package tntrun.conversation;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import static org.bukkit.ChatColor.*;
 import org.bukkit.Material;
 import org.bukkit.conversations.BooleanPrompt;
 import org.bukkit.conversations.ConversationContext;
@@ -43,8 +43,8 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 	
 	@Override
 	public String getPromptText(ConversationContext context) {
-		return ChatColor.GOLD + " What type of reward would you like to set?\n" 
-				+ ChatColor.GREEN + formatFixedSet();
+		return GOLD + " What type of reward would you like to set?\n" 
+				+ GREEN + formatFixedSet();
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 	private class ChooseMaterial extends StringPrompt {
 		@Override
 		public String getPromptText(ConversationContext context) {
-			return ChatColor.GOLD + " What Material do you want to reward the player with?";
+			return GOLD + " What Material do you want to reward the player with?";
 		}
 
 		@Override
@@ -85,7 +85,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 
 		@Override
 		public String getPromptText(ConversationContext context) {
-			return ChatColor.GOLD + " How many would you like to reward the player with?";
+			return GOLD + " How many would you like to reward the player with?";
 		}
 
 		@Override
@@ -108,8 +108,8 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 
 	private class MaterialProcessComplete extends BooleanPrompt {
 		public String getPromptText(ConversationContext context) {
-            return ChatColor.GOLD + " Reward saved - would you like to add another Material?\n" +
-                    ChatColor.GREEN + "[yes, no]";
+            return GOLD + " Reward saved - would you like to add another Material?\n" +
+                    GREEN + "[yes, no]";
         }
 		@Override
         protected Prompt acceptValidatedInput(ConversationContext context, boolean nextMaterial) {
@@ -119,9 +119,9 @@ public class ArenaRewardConversation extends FixedSetPrompt {
                     isFirstItem);
 
 			if (isFirstItem) {
-				context.getForWhom().sendRawMessage("§7[§6TNTRun§7] Material reward for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " set to " + ChatColor.GOLD + context.getSessionData("amount") + ChatColor.GRAY + " x " + ChatColor.GOLD + context.getSessionData("material"));
+				context.getForWhom().sendRawMessage(GRAY + "[" + GOLD + "TNTRun" + GRAY + "] Material reward for " + GOLD + arena.getArenaName() + GRAY + " set to " + GOLD + context.getSessionData("amount") + GRAY + " x " + GOLD + context.getSessionData("material"));
 			} else {
-				context.getForWhom().sendRawMessage("§7[§6TNTRun§7] " + ChatColor.GOLD + context.getSessionData("amount") + ChatColor.GRAY + " x " + ChatColor.GOLD + context.getSessionData("material") + ChatColor.GRAY + " added to Material reward for " + ChatColor.GOLD + arena.getArenaName());
+				context.getForWhom().sendRawMessage(GRAY + "[" + GOLD + "TNTRun" + GRAY + "] " + GOLD + context.getSessionData("amount") + GRAY + " x " + GOLD + context.getSessionData("material") + GRAY + " added to Material reward for " + GOLD + arena.getArenaName());
 			}
 			
 			if (nextMaterial) {
@@ -138,8 +138,8 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 
 		@Override
 		public String getPromptText(ConversationContext context) {
-			context.getForWhom().sendRawMessage(ChatColor.GRAY + "Remember you can include %PLAYER% to apply it to that player.\nExample: 'perm setrank %PLAYER% vip'");
-			return ChatColor.GOLD + " What would you like the Command reward to be?";
+			context.getForWhom().sendRawMessage(GRAY + "Remember you can include %PLAYER% to apply it to that player.\nExample: 'perm setrank %PLAYER% vip'");
+			return GOLD + " What would you like the Command reward to be?";
 		}
 
 		@Override
@@ -155,8 +155,8 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 
 		@Override
 		public String getPromptText(ConversationContext arg0) {
-			return ChatColor.GOLD + " Would you like to run this command now? (to test)\n" +
-            ChatColor.GREEN + "[yes, no]";
+			return GOLD + " Would you like to run this command now? (to test)\n" +
+            GREEN + "[yes, no]";
 		}
 
 		@Override
@@ -176,7 +176,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 			arena.getStructureManager().getRewards().setCommandReward(
                     context.getSessionData("command").toString());
 
-			return "§7[§6TNTRun§7] The Command reward for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " was set to /" + ChatColor.GOLD + context.getSessionData("command");
+			return GRAY + "[" + GOLD + "TNTRun" + GRAY + "] The Command reward for " + GOLD + arena.getArenaName() + GRAY + " was set to /" + GOLD + context.getSessionData("command");
 		}
 
 		@Override
@@ -190,7 +190,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 
 		@Override
 		public String getPromptText(ConversationContext context) {
-			return ChatColor.GOLD + " How much XP would you like to reward the player with?";
+			return GOLD + " How much XP would you like to reward the player with?";
 		}
 
 		@Override
@@ -216,7 +216,7 @@ public class ArenaRewardConversation extends FixedSetPrompt {
 			arena.getStructureManager().getRewards().setXPReward(
                     Integer.parseInt(context.getSessionData("amount").toString()));
 
-			return "§7[§6TNTRun§7] The XP reward for " + ChatColor.GOLD + arena.getArenaName() + ChatColor.GRAY + " was set to " + ChatColor.GOLD + context.getSessionData("amount");
+			return GRAY + "[" + GOLD + "TNTRun" + GRAY + "] The XP reward for " + GOLD + arena.getArenaName() + GRAY + " was set to " + GOLD + context.getSessionData("amount");
 		}
 
 		@Override

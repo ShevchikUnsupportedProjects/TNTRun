@@ -30,6 +30,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.TeleportDestination;
@@ -369,7 +370,7 @@ public class PlayerHandler {
 	private void addInfo(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.info.material")));	     
 	    ItemMeta meta = item.getItemMeta();
-	    meta.setDisplayName(plugin.getConfig().getString("items.info.name").replace("&", "§"));
+	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.info.name")));
 	    item.setItemMeta(meta);
 	    
 	    p.getInventory().addItem(item);
@@ -379,7 +380,7 @@ public class PlayerHandler {
 	private void addVote(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.vote.material")));     
 	    ItemMeta meta = item.getItemMeta();
-	    meta.setDisplayName(plugin.getConfig().getString("items.vote.name").replace("&", "§"));
+	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.vote.name")));
 	    item.setItemMeta(meta);
 	    
 	    p.getInventory().addItem(item);
@@ -388,7 +389,7 @@ public class PlayerHandler {
 	private void addShop(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.shop.material"))); 
 	    ItemMeta meta = item.getItemMeta();
-	    meta.setDisplayName(plugin.getConfig().getString("items.shop.name").replace("&", "§"));
+	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.shop.name")));
 	    item.setItemMeta(meta);
 	    
 	    p.getInventory().addItem(item);
@@ -397,7 +398,7 @@ public class PlayerHandler {
 	private void addStats(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
 	    ItemMeta meta = item.getItemMeta();
-	    meta.setDisplayName(plugin.getConfig().getString("items.stats.name").replace("&", "§"));
+	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.stats.name")));
 	    item.setItemMeta(meta);
 	    
 	    p.getInventory().addItem(item);
@@ -406,7 +407,7 @@ public class PlayerHandler {
 	private void addHeads(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.heads.material")));
 	    ItemMeta meta = item.getItemMeta();
-	    meta.setDisplayName(plugin.getConfig().getString("items.heads.name").replace("&", "§"));
+	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.heads.name")));
 	    item.setItemMeta(meta);
 	    
 	    p.getInventory().addItem(item);
@@ -422,7 +423,7 @@ public class PlayerHandler {
 		}
 		ItemStack item = new ItemStack(leaveItem);
 		ItemMeta im = item.getItemMeta();
-		im.setDisplayName(plugin.getConfig().getString("items.leave.name").replace("&", "§"));
+		im.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.leave.name")));
 		item.setItemMeta(im);
 		
 		p.getInventory().setItem(8, item);

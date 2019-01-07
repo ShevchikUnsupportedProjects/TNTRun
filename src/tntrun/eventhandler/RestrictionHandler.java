@@ -166,13 +166,13 @@ public class RestrictionHandler implements Listener {
             	coolDown(player);
             	
             	if (arena.getStatusManager().isArenaStarting()) {
-            		player.sendMessage(Messages.arenastarting.replace("&", "§"));
+            		Messages.sendMessage(player, Messages.arenastarting);
             		return;
             	}
           	   	if (arena.getPlayerHandler().vote(player)) {
-          	   	     player.sendMessage(Messages.playervotedforstart.replace("&", "§"));
+          	   	     Messages.sendMessage(player, Messages.playervotedforstart);
            	   	} else {
-           	   	     player.sendMessage(Messages.playeralreadyvotedforstart.replace("&", "§"));
+           	   	     Messages.sendMessage(player, Messages.playeralreadyvotedforstart);
             	}
         	}
         }
