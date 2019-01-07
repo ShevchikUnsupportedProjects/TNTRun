@@ -275,11 +275,7 @@ public class RestrictionHandler implements Listener {
 				new BukkitRunnable() {
 					@Override
 					public void run() {
-						p.sendMessage(" ");
-						p.sendMessage("§7[§6TNTRun§7] §6New update available!");
-						p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + plugin.getDescription().getVersion());
-						p.sendMessage("§7[§6TNTRun§7] §7New version: §6" + plugin.version[0]);
-						p.sendMessage("§7[§6TNTRun§7] §7New version available! Download now: §6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
+						Utils.displayUpdate(p);
 					}
 				}.runTaskLaterAsynchronously(plugin, 30L);
 			}

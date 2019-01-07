@@ -33,6 +33,7 @@ import tntrun.utils.Shop;
 import tntrun.utils.Sounds;
 import tntrun.utils.Stats;
 import tntrun.utils.TitleMsg;
+import tntrun.utils.Utils;
 import tntrun.commands.AutoTabCompleter;
 import tntrun.commands.ConsoleCommands;
 import tntrun.commands.GameCommands;
@@ -187,13 +188,7 @@ public class TNTRun extends JavaPlugin {
 					log.info("New version available! Download now: https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 					needupdate = true;
 					for (Player p : Bukkit.getOnlinePlayers()) {
-						if (p.hasPermission("tntrun.version.check")) {
-							p.sendMessage(" ");
-							p.sendMessage("§7[§6TNTRun§7] §6New update available!");
-							p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + getDescription().getVersion());
-							p.sendMessage("§7[§6TNTRun§7] §7New version : §6" + version[0]);
-							p.sendMessage("§7[§6TNTRun§7] §7New version available! Download now: §6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
-						}
+						Utils.displayUpdate(p);
 					}
 				}
 				log.info(" ");

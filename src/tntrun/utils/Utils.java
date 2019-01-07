@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.messages.Messages;
 
 public class Utils {
 	
@@ -49,11 +50,19 @@ public class Utils {
 	}
 	
 	public static void displayInfo(Player player) {
-		player.sendMessage("§7============[§6TNTRun§7]§7============");
-		player.sendMessage("§bPlugin Version: §f" + TNTRun.getInstance().getDescription().getVersion());
-		player.sendMessage("§bWebsite: §fhttps://www.spigotmc.org/resources/tntrun_reloaded.53359/");
-		player.sendMessage("§bTNTRun_reloaded Author: §fsteve4744");
-		//player.sendMessage("§7============[§6TNTRun§7]§7============");
+		Messages.sendMessage(player, "&7============" + Messages.trprefix + "============");
+		Messages.sendMessage(player, "&bPlugin Version: &f" + TNTRun.getInstance().getDescription().getVersion());
+		Messages.sendMessage(player, "&bWebsite: &fhttps://www.spigotmc.org/resources/tntrun_reloaded.53359/");
+		Messages.sendMessage(player, "&bTNTRun_reloaded Author: &fsteve4744");
+	}
+	
+	public static void displayUpdate(Player player) {
+		if (player.hasPermission("tntrun.version.check")) {
+			Messages.sendMessage(player, Messages.trprefix + "&6New update available!");
+			Messages.sendMessage(player, Messages.trprefix + "Your version: &6" + TNTRun.getInstance().getDescription().getVersion());
+			Messages.sendMessage(player, Messages.trprefix + "New version : &6" + TNTRun.getInstance().version[0]);
+			Messages.sendMessage(player, Messages.trprefix + "New version available! Download now: &6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
+		}
 	}
 	
 	public static String getTitleCase(String input) {

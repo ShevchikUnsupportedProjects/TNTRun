@@ -23,7 +23,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
-
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.utils.Bars;
@@ -85,6 +84,7 @@ public class ConsoleCommands implements CommandExecutor {
 			sender.sendMessage("Bars reloaded");
 			return true;
 		}
+
 		return false;
 	}
 
