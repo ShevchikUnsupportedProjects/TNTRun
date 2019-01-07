@@ -19,6 +19,7 @@ package tntrun.signs;
 
 import java.util.HashMap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,6 +30,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.messages.Messages;
 import tntrun.signs.type.JoinSign;
@@ -55,7 +57,7 @@ public class SignHandler implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onTNTRunSignCreate(SignChangeEvent e) {
 		Player player = e.getPlayer();
-		if (e.getLine(0).equalsIgnoreCase("[TNTRun]") || e.getLine(0).equalsIgnoreCase("§7[§6TNTRun§7]")) {
+		if (ChatColor.stripColor(e.getLine(0)).equalsIgnoreCase("[TNTRun]")) {  
 			if (!player.hasPermission("tntrun.setup")) {
 				Messages.sendMessage(player, Messages.nopermission);
 				e.setCancelled(true);
@@ -78,7 +80,7 @@ public class SignHandler implements Listener {
 			return;
 		}
 		Sign sign = (Sign) e.getClickedBlock().getState();
-		if (sign.getLine(0).equalsIgnoreCase(pl.getConfig().getString("signs.prefix").replace("&", "§"))) {
+		if (sign.getLine(0).equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(pl.getConfig().getString("signs.prefix")))) {
 			String line = sign.getLine(1).toLowerCase();
 			if (signs.containsKey(line)) {
 				signs.get(line).handleClick(e);
@@ -93,7 +95,7 @@ public class SignHandler implements Listener {
 		}
 		Player player = e.getPlayer();
 		Sign sign = (Sign) e.getBlock().getState();
-		if (sign.getLine(0).equalsIgnoreCase(pl.getConfig().getString("signs.prefix").replace("&", "§"))) {
+		if (sign.getLine(0).equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(pl.getConfig().getString("signs.prefix")))) {
 			if (!player.hasPermission("tntrun.setup")) {
 				Messages.sendMessage(player, Messages.nopermission);
 				e.setCancelled(true);

@@ -22,6 +22,7 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.messages.Messages;
 
@@ -41,7 +42,7 @@ public class LeaderboardSign implements SignType {
 			e.getBlock().breakNaturally();
 			return;
 		}
-		e.setLine(0, plugin.getConfig().getString("signs.prefix").replace("&", "§"));
+		e.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
 		plugin.signEditor.addLeaderboardSign(e.getBlock());
 		e.getPlayer().sendMessage("Sign succesfully created");
 		new BukkitRunnable() {

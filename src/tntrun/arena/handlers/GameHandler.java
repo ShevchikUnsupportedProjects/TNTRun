@@ -19,6 +19,7 @@ package tntrun.arena.handlers;
 
 import java.util.ArrayList;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
@@ -35,6 +36,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.utils.Bars;
@@ -266,7 +268,7 @@ public class GameHandler {
 		if (TNTRun.getInstance().getConfig().getBoolean("special.UseScoreboard")) {
 			Objective o = scoreboard.registerNewObjective("TNTRun", "waiting", "TNTRun");
 			o.setDisplaySlot(DisplaySlot.SIDEBAR);
-			o.setDisplayName("§6§lTNTRUN");
+			o.setDisplayName(ChatColor.GOLD.toString() + ChatColor.BOLD + "TNTRUN");
 		}
 		return scoreboard;
 	} 
@@ -279,9 +281,9 @@ public class GameHandler {
 		Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
 		try {
 			int size = plugin.getConfig().getStringList("scoreboard.waiting").size();
-			for(String s : plugin.getConfig().getStringList("scoreboard.waiting")){
-				s = s.replace("&", "§");
-				s = s.replace("{ARENA}", arena.getArenaName());
+
+			for(String s : plugin.getConfig().getStringList("scoreboard.waiting")) {
+				s = FormattingCodesParser.parseFormattingCodes(s).replace("{ARENA}", arena.getArenaName());
 				s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
 				s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
 				s = s.replace("{COUNT}", count + "");
@@ -321,9 +323,8 @@ public class GameHandler {
 				Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
 				
 				int size = plugin.getConfig().getStringList("scoreboard.playing").size();
-				for(String s : plugin.getConfig().getStringList("scoreboard.playing")){
-					s = s.replace("&", "§");
-					s = s.replace("{ARENA}", arena.getArenaName());
+				for(String s : plugin.getConfig().getStringList("scoreboard.playing")) {
+					s = FormattingCodesParser.parseFormattingCodes(s).replace("{ARENA}", arena.getArenaName());
 					s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");		
 					s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
 					s = s.replace("{LOST}", lostPlayers + "");
@@ -374,11 +375,11 @@ public class GameHandler {
 		/* Determine who should receive notification of win (0 suppresses broadcast) */
 		if (plugin.getConfig().getInt("broadcastwinlevel") == 1) {
 			for (Player all : arena.getPlayersManager().getAllParticipantsCopy()) {
-				all.sendMessage(message.replace("&", "§"));
+				Messages.sendMessage(all, message);
 			}
 		} else if (plugin.getConfig().getInt("broadcastwinlevel") >= 2) {
 			for (Player all : Bukkit.getOnlinePlayers()){
-				all.sendMessage(message.replace("&", "§"));
+				Messages.sendMessage(all, message);
 			}
 		}
 		

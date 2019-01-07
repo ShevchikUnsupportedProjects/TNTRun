@@ -58,11 +58,13 @@ public class GlobalLobby {
 
 	public void saveToConfig() {
 		FileConfiguration config = new YamlConfiguration();
+
 		if (isLobbyLocationSet()) {
 			config.set("lobby.world", lobbyLocation.getWorldName());
 			config.set("lobby.vector", lobbyLocation.getVector());
 			config.set("lobby.yaw", lobbyLocation.getYaw());
 			config.set("lobby.pitch", lobbyLocation.getPitch());
+
 			try {
 				config.save(lobbyFile);
 			} catch (IOException e) {
@@ -72,10 +74,12 @@ public class GlobalLobby {
 
 	public void loadFromConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(lobbyFile);
+
 		String worldname = config.getString("lobby.world", null);
 		Vector vector = config.getVector("lobby.vector", null);
 		float yaw = (float) config.getDouble("lobby.yaw", 0.0);
 		float pitch = (float) config.getDouble("lobby.pitch", 0.0);
+		
 		if (worldname != null && vector != null) {
 			lobbyLocation = new LobbyLocation(worldname, vector, yaw, pitch);
 		}

@@ -32,6 +32,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
@@ -91,11 +92,12 @@ public class SignEditor {
 		if (block.getState() instanceof Sign) {
 			Sign sign = (Sign) block.getState();
 			position = 0;
+			sign.setLine(position, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
 			statsMap.entrySet().stream()
 				.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
 				.limit(3)
 				.forEach(e -> {position++;
-					String line = Messages.leadersign.replaceAll("&", "§").replace("{PLAYER}", e.getKey().substring(0, Math.min(e.getKey().length(), 11))).replace("{WINS}", String.valueOf(e.getValue()));
+					String line = FormattingCodesParser.parseFormattingCodes(Messages.leadersign).replace("{PLAYER}", e.getKey().substring(0, Math.min(e.getKey().length(), 11))).replace("{WINS}", String.valueOf(e.getValue()));
 	      			sign.setLine(position, line);	
 				});
 			sign.update();
@@ -184,24 +186,24 @@ public class SignEditor {
 			int maxPlayers = arena.getStructureManager().getMaxPlayers();
 			
 			if (!arena.getStatusManager().isArenaEnabled()) {
-				text = plugin.getConfig().getString("signs.status.disabled").replace("&", "§");
+				text = FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.status.disabled"));
 			} else
 				if (arena.getStatusManager().isArenaRunning()) {
-					text = plugin.getConfig().getString("signs.status.ingame").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
+					text = FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.status.ingame")).replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
 			} else
 				if (arena.getStatusManager().isArenaRegenerating()) {
-					text = plugin.getConfig().getString("signs.status.regenerating").replace("&", "§");
+					text = FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.status.regenerating"));
 			} else 
 				if (players == maxPlayers) {
-					text = plugin.getConfig().getString("signs.status.ingame").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
+					text = FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.status.ingame")).replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");
 			} else {
-				text = plugin.getConfig().getString("signs.status.waiting").replace("&", "§").replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");					
+				text = FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.status.waiting")).replace("{MPS}", maxPlayers + "").replace("{PS}", players + "");					
 			}
 
 			for (Block block : getSignsBlocks(arenaname)) {
 				if (block.getState() instanceof Sign) {
 					Sign sign = (Sign) block.getState();
-					sign.setLine(0, plugin.getConfig().getString("signs.prefix").replace("&", "§"));
+					sign.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
 					sign.setLine(3, text);
 					sign.update();
 				} else {
@@ -246,6 +248,7 @@ public class SignEditor {
 				SignInfo si = new SignInfo(blockSection.getString("world"), blockSection.getInt("x"), blockSection.getInt("y"), blockSection.getInt("z"));
 				addLBSignInfo(si);
 			}
+			refreshLeaderBoards();
 		}
 	}
 

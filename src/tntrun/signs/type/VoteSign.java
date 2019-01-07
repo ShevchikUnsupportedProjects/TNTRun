@@ -21,6 +21,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
@@ -35,7 +36,7 @@ public class VoteSign implements SignType {
 
 	@Override
 	public void handleCreation(SignChangeEvent e) {
-		e.setLine(0, plugin.getConfig().getString("signs.prefix").replace("&", "§"));
+		e.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
 		e.getPlayer().sendMessage("Sign succesfully created");
 	}
 
