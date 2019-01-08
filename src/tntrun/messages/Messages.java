@@ -35,7 +35,7 @@ public class Messages {
 	public static String teleporttolobby = "&7[&6TNTRun&7] Teleported to lobby";
 
 	public static String availablearenas = "&7[&6TNTRun&7] Available arenas:&r ";
-	public static String arenanotexist = "&cArena &6{ARENA}&c doesn't exist";
+	public static String arenanotexist = "&c Arena &6{ARENA}&c doesn't exist";
 	public static String availablekits = "&7[&6TNTRun&7] Available kits:&r ";
 	public static String arenawolrdna = "&7[&6TNTRun&7] Arena world is not loaded";
 	public static String arenadisabled = "&7[&6TNTRun&7] Arena is disabled";

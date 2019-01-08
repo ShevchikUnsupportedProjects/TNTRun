@@ -6,6 +6,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.DamageEnabled;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Messages;
 
 public class SetDamage implements CommandHandlerInterface {
 
@@ -31,7 +32,7 @@ public class SetDamage implements CommandHandlerInterface {
 			}
 			player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 set damage to: §6" + args[1]);
 		} else {
-			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[0]));
 		}
 		return true;
 	}

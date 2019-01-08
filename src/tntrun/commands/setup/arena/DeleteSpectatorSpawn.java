@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Messages;
 
 public class DeleteSpectatorSpawn implements CommandHandlerInterface {
 
@@ -24,7 +25,7 @@ public class DeleteSpectatorSpawn implements CommandHandlerInterface {
 			arena.getStructureManager().removeSpectatorsSpawn();
 			player.sendMessage("§7[§6TNTRun§7] §7Spectator spawn for arena §6" + args[0] + "§7 deleted");
 		} else {
-			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[0]));
 		}
 		return true;
 	}

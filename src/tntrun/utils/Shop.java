@@ -42,6 +42,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.messages.Messages;
 
@@ -55,7 +57,7 @@ public class Shop implements Listener{
 		shopFiles.setShopItems();
 		
 		invsize = pl.getConfig().getInt("shop.size");
-		invname = pl.getConfig().getString("shop.name").replace("&", "§");
+		invname = FormattingCodesParser.parseFormattingCodes(pl.getConfig().getString("shop.name"));
 	}  
 	
 	public static HashMap<Integer, Integer> itemSlot = new HashMap<Integer, Integer>();
@@ -106,7 +108,7 @@ public class Shop implements Listener{
 					continue;
 				}
 				
-				String displayname = cfg.getString(kit + ".items." + items + ".displayname").replace("&", "§");
+				String displayname = FormattingCodesParser.parseFormattingCodes(cfg.getString(kit + ".items." + items + ".displayname"));
 				List<String> lore = cfg.getStringList(kit + ".items." + items + ".lore");
 				
 				if (material.toString().equalsIgnoreCase("SPLASH_POTION")) {
@@ -271,11 +273,10 @@ public class Shop implements Listener{
 		FileConfiguration cfg = ShopFiles.getShopConfiguration();
 		int slot = 0;
 		for (String kitCounter : cfg.getConfigurationSection("").getKeys(false)) {
-		      String title = cfg.getString(kitCounter + ".name").replace("&", "§");
+		      String title = FormattingCodesParser.parseFormattingCodes(cfg.getString(kitCounter + ".name"));
 		      List<String> lore = new ArrayList<String>();
 		      for (String loreLines : cfg.getStringList(kitCounter + ".lore")) {
-		    	  loreLines = loreLines.replace("&", "§");
-		          lore.add(loreLines);
+		          lore.add(FormattingCodesParser.parseFormattingCodes(loreLines));
 		      }
 		      Material material = Material.getMaterial(cfg.getString(kitCounter + ".material"));		      
 		      int amount = cfg.getInt(kitCounter + ".amount");

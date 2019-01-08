@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Messages;
 
 public class DeleteArena implements CommandHandlerInterface {
 
@@ -36,7 +37,7 @@ public class DeleteArena implements CommandHandlerInterface {
 	public boolean handleCommand(Player player, String[] args) {
 		Arena arena = plugin.amanager.getArenaByName(args[0]);
 		if (arena == null) {
-			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[0]));
 			return true;
 		}
 		if (arena.getStatusManager().isArenaEnabled()) {

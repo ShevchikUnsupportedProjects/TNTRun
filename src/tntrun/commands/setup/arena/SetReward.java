@@ -24,6 +24,7 @@ import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 import tntrun.conversation.ConversationType;
 import tntrun.conversation.TNTRunConversation;
+import tntrun.messages.Messages;
 
 public class SetReward implements CommandHandlerInterface {
 	
@@ -44,7 +45,7 @@ public class SetReward implements CommandHandlerInterface {
 			
 			player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 set reward");
 		} else {
-			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[0]));
 		}
 		return true;
 	}

@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Messages;
 import tntrun.selectionget.PlayerCuboidSelection;
 import tntrun.selectionget.PlayerSelection;
 
@@ -50,7 +51,7 @@ public class SetArena implements CommandHandlerInterface {
 				player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c locations are wrong - use WorldEdit to select the arena bounds");
 			}
 		} else {
-			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[0]));
 		}
 		return true;
 	}
