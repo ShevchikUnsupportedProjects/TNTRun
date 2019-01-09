@@ -43,22 +43,22 @@ public class SetLoseLevel implements CommandHandlerInterface {
 			return true;
 		}
 		if (arena.getStatusManager().isArenaEnabled()) {
-			player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotdisabled.replace("{ARENA}", args[0]));
 			return true;
 		}
 		if (arena.getStructureManager().getWorldName() == null) {
-			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c bounds are wrong");
+			Messages.sendMessage(player, Messages.trprefix + "&c Arena &6" + args[0] + "&c bounds are wrong");
 			return true;
 		}
 		PlayerCuboidSelection sel = selection.getPlayerSelection(player);
 		if (sel != null) {
 			if (arena.getStructureManager().setLooseLevel(sel.getMinimumLocation(), sel.getMaximumLocation())) {
-				player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 LoseLevel set");
+				Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 LoseLevel set");
 			} else {
-				player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c Error: Loselevel is not within the bounds of the arena");
+				Messages.sendMessage(player, Messages.trprefix + "&c Arena &6" + args[0] + "&c Error: Loselevel is not within the bounds of the arena");
 			}
 		} else {
-			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c locations are wrong - use WorldEdit to select the loselevel bounds");
+			Messages.sendMessage(player, Messages.trprefix + "&c Arena &6" + args[0] + "&c locations are wrong - use WorldEdit to select the loselevel bounds");
 		}
 		return true;
 	}

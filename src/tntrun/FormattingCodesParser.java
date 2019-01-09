@@ -22,28 +22,28 @@ import org.bukkit.ChatColor;
 public class FormattingCodesParser {
 
 	public static String parseFormattingCodes(String message) {
-		message = message.replaceAll("&0", ChatColor.BLACK + "");
-		message = message.replaceAll("&1", ChatColor.DARK_BLUE + "");
-		message = message.replaceAll("&2", ChatColor.DARK_GREEN + "");
-		message = message.replaceAll("&3", ChatColor.DARK_AQUA + "");
-		message = message.replaceAll("&4", ChatColor.DARK_RED + "");
-		message = message.replaceAll("&5", ChatColor.DARK_PURPLE + "");
-		message = message.replaceAll("&6", ChatColor.GOLD + "");
-		message = message.replaceAll("&7", ChatColor.GRAY + "");
-		message = message.replaceAll("&8", ChatColor.DARK_GRAY + "");
-		message = message.replaceAll("&9", ChatColor.BLUE + "");
-		message = message.replaceAll("(?i)&a", ChatColor.GREEN + "");
-		message = message.replaceAll("(?i)&b", ChatColor.AQUA + "");
-		message = message.replaceAll("(?i)&c", ChatColor.RED + "");
-		message = message.replaceAll("(?i)&d", ChatColor.LIGHT_PURPLE + "");
-		message = message.replaceAll("(?i)&e", ChatColor.YELLOW + "");
-		message = message.replaceAll("(?i)&f", ChatColor.WHITE + "");
-		message = message.replaceAll("(?i)&l", ChatColor.BOLD + "");
-		message = message.replaceAll("(?i)&o", ChatColor.ITALIC + "");
-		message = message.replaceAll("(?i)&m", ChatColor.STRIKETHROUGH + "");
-		message = message.replaceAll("(?i)&n", ChatColor.UNDERLINE + "");
-		message = message.replaceAll("(?i)&k", ChatColor.MAGIC + "");
-		message = message.replaceAll("(?i)&r", ChatColor.RESET + "");
+		message = message.replaceAll("&0", ChatColor.BLACK.toString());
+		message = message.replaceAll("&1", ChatColor.DARK_BLUE.toString());
+		message = message.replaceAll("&2", ChatColor.DARK_GREEN.toString());
+		message = message.replaceAll("&3", ChatColor.DARK_AQUA.toString());
+		message = message.replaceAll("&4", ChatColor.DARK_RED.toString());
+		message = message.replaceAll("&5", ChatColor.DARK_PURPLE.toString());
+		message = message.replaceAll("&6", ChatColor.GOLD.toString());
+		message = message.replaceAll("&7", ChatColor.GRAY.toString());
+		message = message.replaceAll("&8", ChatColor.DARK_GRAY.toString());
+		message = message.replaceAll("&9", ChatColor.BLUE.toString());
+		message = message.replaceAll("(?i)&a", ChatColor.GREEN.toString());
+		message = message.replaceAll("(?i)&b", ChatColor.AQUA.toString());
+		message = message.replaceAll("(?i)&c", ChatColor.RED.toString());
+		message = message.replaceAll("(?i)&d", ChatColor.LIGHT_PURPLE.toString());
+		message = message.replaceAll("(?i)&e", ChatColor.YELLOW.toString());
+		message = message.replaceAll("(?i)&f", ChatColor.WHITE.toString());
+		message = message.replaceAll("(?i)&l", ChatColor.BOLD.toString());
+		message = message.replaceAll("(?i)&o", ChatColor.ITALIC.toString());
+		message = message.replaceAll("(?i)&m", ChatColor.STRIKETHROUGH.toString());
+		message = message.replaceAll("(?i)&n", ChatColor.UNDERLINE.toString());
+		message = message.replaceAll("(?i)&k", ChatColor.MAGIC.toString());
+		message = message.replaceAll("(?i)&r", ChatColor.RESET.toString());
 		return message;
 	}
 

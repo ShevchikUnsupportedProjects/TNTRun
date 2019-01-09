@@ -37,7 +37,7 @@ public class SetP2 implements CommandHandlerInterface {
 		/*
 		selection.setSelectionPoint2(player);
 		
-		Messages.sendMessage(player, Messages.trprefix + " Point &62 &7has been set to &6X: &7" + Math.round(player.getLocation().getX()) + " &6Y: &7" + Math.round(player.getLocation().getY()) + " &6Z: &7" + Math.round(player.getLocation().getZ()));
+		Messages.sendMessage(player, Messages.trprefix + "&7 Point &62 &7has been set to &6X: &7" + Math.round(player.getLocation().getX()) + " &6Y: &7" + Math.round(player.getLocation().getY()) + " &6Z: &7" + Math.round(player.getLocation().getZ()));
 		*/
 		return true;
 	}

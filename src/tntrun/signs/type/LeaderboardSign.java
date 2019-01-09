@@ -37,7 +37,7 @@ public class LeaderboardSign implements SignType {
 	@Override
 	public void handleCreation(SignChangeEvent e) {
 		if (!plugin.getConfig().getBoolean("items.stats.use")) {
-			Messages.sendMessage(e.getPlayer(), Messages.statsdisabled);
+			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.statsdisabled);
 			e.setCancelled(true);
 			e.getBlock().breakNaturally();
 			return;

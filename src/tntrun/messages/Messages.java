@@ -36,6 +36,7 @@ public class Messages {
 
 	public static String availablearenas = "&7[&6TNTRun&7] Available arenas:&r ";
 	public static String arenanotexist = "&c Arena &6{ARENA}&c doesn't exist";
+	public static String arenanotdisabled = "&c Please disable arena: &6/trsetup disable {ARENA}";
 	public static String availablekits = "&7[&6TNTRun&7] Available kits:&r ";
 	public static String arenawolrdna = "&7[&6TNTRun&7] Arena world is not loaded";
 	public static String arenadisabled = "&7[&6TNTRun&7] Arena is disabled";
@@ -76,7 +77,7 @@ public class Messages {
 	public static String gamesplayed = "&bGames played &f: ";
 	public static String gameswon = "&bWins &f: ";
 	public static String gameslost = "&bLosses &f: ";
-	public static String statsdisabled = "&7[&6TNTRun&7] &cStats are currently disabled";
+	public static String statsdisabled = "&c Stats are currently disabled";
 	public static String leaderhead = "&7======[&6TNTRun Leaderboard&7]======";
 	public static String leaderboard = "{POSITION}) &b{PLAYER} &f: Wins &3{WINS}";
 	public static String leadersign = "&1{PLAYER} &4{WINS}";
@@ -146,6 +147,7 @@ public class Messages {
 		availablearenas = config.getString("availablearenas", availablearenas);
 		availablekits = config.getString("availablekits", availablekits);
 		arenanotexist = config.getString("arenanotexist", arenanotexist);
+		arenanotdisabled = config.getString("arenanotdisabled", arenanotdisabled);
 		arenawolrdna = config.getString("arenawolrdna", arenawolrdna);
 		arenadisabled = config.getString("arenadisabled", arenadisabled);
 		arenarunning = config.getString("arenarunning", arenarunning);
@@ -235,6 +237,7 @@ public class Messages {
 		config.set("nopermission", nopermission);
 		config.set("teleporttolobby", teleporttolobby);
 		config.set("arenanotexist", arenanotexist);
+		config.set("arenanotdisabled", arenanotdisabled);
 		config.set("availablearenas", availablearenas);
 		config.set("availablekits", availablekits);
 		config.set("arenawolrdna", arenawolrdna);

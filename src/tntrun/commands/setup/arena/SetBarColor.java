@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Messages;
 
 public class SetBarColor implements CommandHandlerInterface {
 	
@@ -39,10 +40,10 @@ public class SetBarColor implements CommandHandlerInterface {
 			plugin.getConfig().set("special.BossBarColor", colour);
 			plugin.saveConfig();
 		} else {
-			player.sendMessage("§7[§6TNTRun§7] §cInvalid bar colour: §6" + args[0]);
+			Messages.sendMessage(player, Messages.trprefix + "&c Invalid bar colour: &6" + args[0]);
 			return true;
 		}
-		player.sendMessage("§7[§6TNTRun§7] Bar colour set to: §6" + colour);
+		Messages.sendMessage(player, Messages.trprefix + "&7 Bar colour set to: &6" + colour);
 
 		return true;
 	}

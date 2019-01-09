@@ -42,12 +42,12 @@ public class FinishArena implements CommandHandlerInterface {
 					plugin.amanager.registerArena(arena);
 					arena.getStatusManager().enableArena();
 					Bars.createBar(args[0]);
-					player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 saved and enabled");
+					Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 saved and enabled");
 				} else {
-					player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c isn't configured. Reason: " + arena.getStructureManager().isArenaConfiguredString());
+					Messages.sendMessage(player, Messages.trprefix + "&c Arena &6" + args[0] + "&c isn't configured. Reason: " + arena.getStructureManager().isArenaConfiguredString());
 				}
 			} else {
-				player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenanotdisabled.replace("{ARENA}", args[0]));
 			}
 		} else {
 			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[0]));

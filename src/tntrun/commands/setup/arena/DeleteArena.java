@@ -41,13 +41,13 @@ public class DeleteArena implements CommandHandlerInterface {
 			return true;
 		}
 		if (arena.getStatusManager().isArenaEnabled()) {
-			player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotdisabled.replace("{ARENA}", args[0]));
 			return true;
 		}
 		new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arena.getArenaName() + ".yml").delete();
 		plugin.signEditor.removeArena(arena.getArenaName());
 		plugin.amanager.unregisterArena(arena);
-		player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 deleted");
+		Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 deleted");
 		return true;
 	}
 

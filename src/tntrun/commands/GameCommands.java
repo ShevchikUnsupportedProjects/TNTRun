@@ -179,7 +179,7 @@ public class GameCommands implements CommandExecutor {
 		// player stats
 		else if (args[0].equalsIgnoreCase("stats")) {
 			if (!plugin.useStats()) {
-				Messages.sendMessage(player, Messages.statsdisabled);
+				Messages.sendMessage(player, Messages.trprefix + Messages.statsdisabled);
 				return true;
 			}
 			Messages.sendMessage(player, "&7============" + Messages.trprefix + "============");
@@ -191,7 +191,7 @@ public class GameCommands implements CommandExecutor {
 		// leaderboard
 		else if (args[0].equalsIgnoreCase("leaderboard")) {
 			if (!plugin.useStats()) {
-				Messages.sendMessage(player, Messages.statsdisabled);
+				Messages.sendMessage(player, Messages.trprefix + Messages.statsdisabled);
 				return true;
 			}
 			int entries = plugin.getConfig().getInt("leaderboard.maxentries", 10);
