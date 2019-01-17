@@ -53,12 +53,12 @@ public class Kits {
 	
 	public void registerKit(String name, Player player) {
 		if (kitExists(name)) {
-			Messages.sendMessage(player, Messages.kitexists.replace("{KIT}", name));
+			Messages.sendMessage(player, Messages.trprefix + Messages.kitexists.replace("{KIT}", name));
 			return;
 		}
 		Kit kit = new Kit(player.getInventory().getContents(), player.getActivePotionEffects());
 		registerKit(name, kit);
-		Messages.sendMessage(player, Messages.kitadd.replace("{KIT}", name));
+		Messages.sendMessage(player, Messages.trprefix + Messages.kitadd.replace("{KIT}", name));
 	}
 
 	private void registerKit(String name, Kit kit) {
@@ -67,19 +67,19 @@ public class Kits {
 
 	public void unregisterKit(String name, Player player) {
 		if (! kitExists(name)) {
-			Messages.sendMessage(player, Messages.kitnotexists.replace("{KIT}", name));
+			Messages.sendMessage(player, Messages.trprefix + Messages.kitnotexists.replace("{KIT}", name));
 			return;
 		}
 		kits.remove(name);
 		config.set("kits." + name, null);
 		saveKits();
-		Messages.sendMessage(player, Messages.kitdel.replace("{KIT}", name));
+		Messages.sendMessage(player, Messages.trprefix + Messages.kitdel.replace("{KIT}", name));
 	}
 
 	public void giveKit(String name, Player player) {
 		try {
 			kits.get(name).giveKit(player);
-			Messages.sendMessage(player, Messages.playerkit.replace("{KIT}", name));
+			Messages.sendMessage(player, Messages.trprefix + Messages.playerkit.replace("{KIT}", name));
 		} catch (Exception e) {
 		}
 	}
@@ -149,7 +149,7 @@ public class Kits {
 	
 	public void listKit(String name, Player player) {
 		if (!kitExists(name)) {
-			Messages.sendMessage(player, Messages.kitnotexists.replace("{KIT}", name));
+			Messages.sendMessage(player, Messages.trprefix + Messages.kitnotexists.replace("{KIT}", name));
 			return;
 		}
 		Messages.sendMessage(player, "&7============" + Messages.trprefix + "============");

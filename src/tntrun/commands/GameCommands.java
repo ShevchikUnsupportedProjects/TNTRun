@@ -71,7 +71,7 @@ public class GameCommands implements CommandExecutor {
 			if (plugin.globallobby.isLobbyLocationSet()) {
 				if (plugin.globallobby.isLobbyLocationWorldAvailable()) {
 					player.teleport(plugin.globallobby.getLobbyLocation());
-					Messages.sendMessage(player, Messages.teleporttolobby);
+					Messages.sendMessage(player, Messages.trprefix + Messages.teleporttolobby);
 				} else {
 					Messages.sendMessage(player, Messages.trprefix + "&c Lobby world is unloaded or doesn't exist");
 				}
@@ -137,7 +137,7 @@ public class GameCommands implements CommandExecutor {
 				return true;
 			}
 			StringBuilder message = new StringBuilder(200);
-			message.append(Messages.availablearenas);
+			message.append(Messages.trprefix + Messages.availablearenas);
 			if (plugin.amanager.getArenas().size() != 0) {
 				for (Arena arena : plugin.amanager.getArenas()) {
 					if (arena.getStatusManager().isArenaEnabled()) {
@@ -182,7 +182,7 @@ public class GameCommands implements CommandExecutor {
 				Messages.sendMessage(player, Messages.trprefix + Messages.statsdisabled);
 				return true;
 			}
-			Messages.sendMessage(player, "&7============" + Messages.trprefix + "============");
+			Messages.sendMessage(player, Messages.statshead);
 			Messages.sendMessage(player, Messages.gamesplayed + Stats.getPlayedGames(player));
 			Messages.sendMessage(player, Messages.gameswon + Stats.getWins(player));
 			Messages.sendMessage(player, Messages.gameslost + Stats.getLosses(player));
@@ -211,7 +211,7 @@ public class GameCommands implements CommandExecutor {
 				arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 				return true;
 			} else {
-				Messages.sendMessage(player, Messages.playernotinarena);
+				Messages.sendMessage(player, Messages.trprefix + Messages.playernotinarena);
 				return true;
 			}
 		}
@@ -256,13 +256,13 @@ public class GameCommands implements CommandExecutor {
 			Arena arena = plugin.amanager.getPlayerArena(player.getName());
 			if (arena != null) {
 				if (arena.getPlayerHandler().vote(player)) {
-					Messages.sendMessage(player, Messages.playervotedforstart);
+					Messages.sendMessage(player, Messages.trprefix + Messages.playervotedforstart);
 				} else {
-					Messages.sendMessage(player, Messages.playeralreadyvotedforstart);
+					Messages.sendMessage(player, Messages.trprefix + Messages.playeralreadyvotedforstart);
 				}
 				return true;
 			} else {
-				Messages.sendMessage(player, Messages.playernotinarena);
+				Messages.sendMessage(player, Messages.trprefix + Messages.playernotinarena);
 				return true;
 			}
 		}
@@ -275,7 +275,7 @@ public class GameCommands implements CommandExecutor {
 				return true;
 			}
 			StringBuilder message = new StringBuilder(200);
-			message.append(Messages.availablekits);
+			message.append(Messages.trprefix + Messages.availablekits);
 			if (plugin.kitmanager.getKits().size() != 0) {
 				for (String kit : plugin.kitmanager.getKits()) {
 					message.append("&a" + kit + " ; ");

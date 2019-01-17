@@ -37,7 +37,7 @@ public class VoteSign implements SignType {
 	@Override
 	public void handleCreation(SignChangeEvent e) {
 		e.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
-		e.getPlayer().sendMessage("Sign succesfully created");
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signcreate);
 	}
 
 	@Override
@@ -45,13 +45,13 @@ public class VoteSign implements SignType {
 		Arena arena = plugin.amanager.getPlayerArena(e.getPlayer().getName());
 		if (arena != null) {
 			if (arena.getPlayerHandler().vote(e.getPlayer())) {
-				Messages.sendMessage(e.getPlayer(), Messages.playervotedforstart);
+				Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.playervotedforstart);
 			} else {
-				Messages.sendMessage(e.getPlayer(), Messages.playeralreadyvotedforstart);
+				Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.playeralreadyvotedforstart);
 			}
 			e.setCancelled(true);
 		} else {
-			Messages.sendMessage(e.getPlayer(), Messages.playernotinarena);
+			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.playernotinarena);
 		}
 	}
 

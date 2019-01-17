@@ -118,7 +118,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		Player player = (Player) sender;
 		// check permissions
 		if (!player.hasPermission("tntrun.setup")) {
-			Messages.sendMessage(player, Messages.nopermission);
+			Messages.sendMessage(player, Messages.trprefix + Messages.nopermission);
 			return true;
 		}
 		// get command

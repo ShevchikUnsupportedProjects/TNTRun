@@ -64,6 +64,7 @@ items:
     material: GLOWSTONE_DUST
     name: '&e&lHeadsPlus'
 scoreboard:
+  header: '&6&lTNTRUN'
   waiting:
   - '&fWelcome to TNTRun'
   - '&a '

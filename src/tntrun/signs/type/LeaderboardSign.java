@@ -44,7 +44,7 @@ public class LeaderboardSign implements SignType {
 		}
 		e.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
 		plugin.signEditor.addLeaderboardSign(e.getBlock());
-		e.getPlayer().sendMessage("Sign succesfully created");
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signcreate);
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -61,6 +61,6 @@ public class LeaderboardSign implements SignType {
 	@Override
 	public void handleDestroy(BlockBreakEvent e) {
 		plugin.signEditor.removeLeaderboardSign(e.getBlock());
-		e.getPlayer().sendMessage("Sign succesfully removed");
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signremove);
 	}
 }

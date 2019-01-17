@@ -31,57 +31,59 @@ import tntrun.TNTRun;
 public class Messages {
 
 	public static String trprefix = "&7[&6TNTRun&7]";
-	public static String nopermission = "&7[&6TNTRun&7] &cYou don't have permission to do this";
-	public static String teleporttolobby = "&7[&6TNTRun&7] Teleported to lobby";
+	public static String nopermission = "&c You don't have permission to do this";
+	public static String teleporttolobby = "&7 Teleported to lobby";
 
-	public static String availablearenas = "&7[&6TNTRun&7] Available arenas:&r ";
+	public static String availablearenas = "&7 Available arenas:&r ";
 	public static String arenanotexist = "&c Arena &6{ARENA}&c doesn't exist";
 	public static String arenanotdisabled = "&c Please disable arena: &6/trsetup disable {ARENA}";
-	public static String availablekits = "&7[&6TNTRun&7] Available kits:&r ";
-	public static String arenawolrdna = "&7[&6TNTRun&7] Arena world is not loaded";
-	public static String arenadisabled = "&7[&6TNTRun&7] Arena is disabled";
-	public static String arenarunning = "&7[&6TNTRun&7] Arena already running";
-	public static String arenaregenerating = "&7[&6TNTRun&7] Arena is regenerating";
-	public static String arenavehicle = "&7[&6TNTRun&7] You can't join the game while sitting inside a vehicle";
-	public static String arenadisabling = "&7[&6TNTRun&7] &6Arena is disabling";
-	public static String arenastarting = "&7[&6TNTRun&7] &6Arena already starting";
+	public static String availablekits = "&7 Available kits:&r ";
+	public static String arenawolrdna = "&7 Arena world is not loaded";
+	public static String arenadisabled = "&7 Arena is disabled";
+	public static String arenarunning = "&7 Arena already running";
+	public static String arenaregenerating = "&7 Arena is regenerating";
+	public static String arenavehicle = "&7 You can't join the game while sitting inside a vehicle";
+	public static String arenadisabling = "&6 Arena is disabling";
+	public static String arenastarting = "&6 Arena already starting";
+	public static String signcreate = "&7 Sign successfully created";
+	public static String signremove = "&7 Sign successfully removed";
 	
-	public static String playerscountinarena = "&7[&6TNTRun&7] &6Current number of players in arena: {COUNT} players";
-	public static String limitreached = "&7[&6TNTRun&7] Arena is full.";
-	public static String playerjoinedtoplayer = "&7[&6TNTRun&7] You joined the arena";
-	public static String playerjoinedtoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7joined the arena";
-	public static String playerlefttoplayer = "&7[&6TNTRun&7] You left the arena";
-	public static String playerlefttoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7left the game";
-	public static String playervotedforstart = "&7[&6TNTRun&7] &fYou voted to force-start the game";
-	public static String playeralreadyvotedforstart = "&7[&6TNTRun&7] &cYou have already voted";
-	public static String arenastarted = "&7[&6TNTRun&7] Arena started. Time limit is {TIMELIMIT} seconds";
-	public static String arenacountdown = "&7[&6TNTRun&7] Arena starts in {COUNTDOWN} seconds";
-	public static String arenatimeout = "&7[&6TNTRun&7] Time is up. Ending game";
-	public static String playerwontoplayer = "&7[&6TNTRun&7] You won the game!";
-	public static String playerlosttoplayer = "&7[&6TNTRun&7] You lost the game";
-	public static String playerlosttoothers = "&7[&6TNTRun&7] Player &6{PLAYER} &7lost the game";
-	public static String playerwonbroadcast = "&7[&6TNTRun&7] &6{PLAYER}&7 won the game on arena &6{ARENA}";
-	public static String playerrewardmessage = "&7[&6TNTRun&7] You have been rewarded: &6{REWARD}";
-	public static String playerboughtitem = "&7[&6TNTRun&7] You have bought item &6{ITEM} &7for &6{MONEY} &7coins";
-	public static String playerboughtwait = "&7[&6TNTRun&7] You will get your items when the game starts";
-	public static String notenoughtmoney = "&7[&6TNTRun&7] &cYou need {MONEY} coins to buy this item";
-	public static String alreadyboughtitem = "&7[&6TNTRun&7] &cYou have already bought a shop item";
-	public static String getdoublejumpsaction = "&7&lYour double jumps: &6&l{DB}";
-	public static String playernotinarena = "&7[&6TNTRun&7] &cYou are not in a TNTRun arena";
-	public static String playerkit = "&7[&6TNTRun&7] You have been given kit &6{KIT}";
-	public static String kitadd = "&7[&6TNTRun&7] The kit &6{KIT} &7has been created";
-	public static String kitdel = "&7[&6TNTRun&7] The kit &6{KIT} &7has been deleted";
-	public static String kitexists = "&7[&6TNTRun&7] &cThe specified kit already exists : &6{KIT}";
-	public static String kitnotexists = "&7[&6TNTRun&7] &cThe specified kit does not exist : &6{KIT}";
-	
+	public static String playerscountinarena = "&6 Current number of players in arena: {COUNT} players";
+	public static String limitreached = "&7 Arena is full.";
+	public static String playerjoinedtoplayer = "&7 You joined the arena";
+	public static String playerjoinedtoothers = "&7 Player &6{PLAYER} &7joined the arena";
+	public static String playerlefttoplayer = "&7 You left the arena";
+	public static String playerlefttoothers = "&7 Player &6{PLAYER} &7left the game";
+	public static String playervotedforstart = "&f You voted to force-start the game";
+	public static String playeralreadyvotedforstart = "&c You have already voted";
+	public static String arenastarted = "&7 Arena started. Time limit is {TIMELIMIT} seconds";
+	public static String arenacountdown = "&7 Arena starts in {COUNTDOWN} seconds";
+	public static String arenatimeout = "&7 Time is up. Ending game";
+	public static String playerwontoplayer = "&7 You won the game!";
+	public static String playerlosttoplayer = "&7 You lost the game";
+	public static String playerlosttoothers = "&7 Player &6{PLAYER} &7lost the game";
+	public static String playerwonbroadcast = "&6 {PLAYER}&7 won the game on arena &6{ARENA}";
+	public static String playerrewardmessage = "&7 You have been rewarded: &6{REWARD}";
+	public static String playerboughtitem = "&7 You have bought item &6{ITEM} &7for &6{MONEY} &7coins";
+	public static String playerboughtwait = "&7 You will get your items when the game starts";
+	public static String notenoughtmoney = "&c You need {MONEY} coins to buy this item";
+	public static String alreadyboughtitem = "&c You have already bought a shop item";
+	public static String playernotinarena = "&c You are not in a TNTRun arena";
+	public static String playerkit = "&7 You have been given kit &6{KIT}";
+	public static String kitadd = "&7 The kit &6{KIT} &7has been created";
+	public static String kitdel = "&7 The kit &6{KIT} &7has been deleted";
+	public static String kitexists = "&c The specified kit already exists : &6{KIT}";
+	public static String kitnotexists = "&c The specified kit does not exist : &6{KIT}";
+
+	public static String statshead = "&7=========[&6TNTRun Stats&7]=========";
+	public static String leaderhead = "&7======[&6TNTRun Leaderboard&7]======";
 	public static String gamesplayed = "&bGames played &f: ";
 	public static String gameswon = "&bWins &f: ";
 	public static String gameslost = "&bLosses &f: ";
 	public static String statsdisabled = "&c Stats are currently disabled";
-	public static String leaderhead = "&7======[&6TNTRun Leaderboard&7]======";
 	public static String leaderboard = "{POSITION}) &b{PLAYER} &f: Wins &3{WINS}";
 	public static String leadersign = "&1{PLAYER} &4{WINS}";
-	
+
 	public static String helplobby = "Teleport to lobby";
 	public static String helplist = "List all arenas &for &cList arena details";
 	public static String helpjoin = "Join the arena";
@@ -92,7 +94,7 @@ public class Messages {
 	public static String helpstats = "View player stats";
 	public static String helplb = "Display the TNTRun leaderboard";
 	public static String helplistkit = "List all kits &for &cList kit details";
-	
+
 	public static String setuplobby = "Set lobby at your current location";
 	public static String setupcreate = "Create a new arena";
 	public static String setupbounds = "Set bounds for arena";
@@ -155,6 +157,8 @@ public class Messages {
 		arenavehicle = config.getString("arenavehicle", arenavehicle);
 		arenadisabling = config.getString("arenadisabling", arenadisabling);
 		arenastarting = config.getString("arenastarting ", arenastarting);
+		signcreate = config.getString("signcreate", signcreate);
+		signremove = config.getString("signremove", signremove);
 		playerscountinarena = config.getString("playerscountinarena", playerscountinarena);
 		limitreached = config.getString("limitreached", limitreached);
 		playerjoinedtoplayer = config.getString("playerjoinedtoplayer", playerjoinedtoplayer);
@@ -176,11 +180,11 @@ public class Messages {
 		playerkit = config.getString("playerkit", playerkit);
 		notenoughtmoney = config.getString("notenoughtmoney", notenoughtmoney);
 		alreadyboughtitem = config.getString("alreadyboughtitem", alreadyboughtitem);
-		getdoublejumpsaction = config.getString("getdoublejumpsaction", getdoublejumpsaction);
 		playernotinarena = config.getString("playernotinarena", playernotinarena);
 		gamesplayed = config.getString("gamesplayed", gamesplayed);
 		gameswon = config.getString("gameswon", gameswon);
 		gameslost = config.getString("gameslost", gameslost);
+		statshead = config.getString("statshead", statshead);
 		leaderhead = config.getString("leaderhead", leaderhead);
 		leaderboard = config.getString("leaderboard", leaderboard);
 		leadersign = config.getString("leadersign", leadersign);
@@ -247,6 +251,8 @@ public class Messages {
 		config.set("arenavehicle", arenavehicle);
 		config.set("arenadisabling", arenadisabling);
 		config.set("arenastarting", arenastarting);
+		config.set("signcreate", signcreate);
+		config.set("signremove", signremove);
 		config.set("playerscountinarena", playerscountinarena);
 		config.set("limitreached", limitreached);
 		config.set("playerjoinedtoplayer", playerjoinedtoplayer);
@@ -268,11 +274,11 @@ public class Messages {
 		config.set("playerkit", playerkit);
 		config.set("notenoughtmoney", notenoughtmoney);
 		config.set("alreadyboughtitem", alreadyboughtitem);
-		config.set("getdoublejumpsaction", getdoublejumpsaction);
 		config.set("playernotinarena", playernotinarena);
 		config.set("gamesplayed", gamesplayed);
 		config.set("gameswon", gameswon);
 		config.set("gameslost", gameslost);
+		config.set("statshead", statshead);
 		config.set("leaderhead", leaderhead);
 		config.set("leaderboard", leaderboard);
 		config.set("leadersign",  leadersign);

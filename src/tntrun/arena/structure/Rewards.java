@@ -132,7 +132,7 @@ public class Rewards {
 		if (!rewardmessage.isEmpty()) {
 			console.sendMessage("[TNTRun] " + ChatColor.AQUA + player.getName() + ChatColor.WHITE + " has been rewarded " + ChatColor.GOLD + rewardmessage);
 			rewardmessage = Messages.playerrewardmessage.replace("{REWARD}", rewardmessage);
-			Messages.sendMessage(player, rewardmessage);
+			Messages.sendMessage(player, Messages.trprefix + rewardmessage);
 		}
 	}
 

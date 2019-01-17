@@ -202,7 +202,7 @@ public class Shop implements Listener{
 	    			String permission = cfg.getString(kit + ".permission");
 	    			
 	    			if (bought.contains(p)) {
-	    				Messages.sendMessage(p, Messages.alreadyboughtitem);
+	    				Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
 	    				TNTRun.getInstance().sound.ITEM_SELECT(p);
 	    				return;
 	    			}
@@ -212,18 +212,18 @@ public class Shop implements Listener{
 	        	  
 	    				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
 	    					if (pl.getConfig().getInt("shop.doublejump.maxdoublejumps") <= pl.getConfig().getInt("doublejumps." + p.getName())) {
-	    						Messages.sendMessage(p, Messages.alreadyboughtitem);
+	    						Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
 	    						TNTRun.getInstance().sound.ITEM_SELECT(p);
 	    						return;
 	    					}
 	    				}
 	        	  
 	    				if (hasMoney(cost, p)) {
-	    					Messages.sendMessage(p, Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
-	    					Messages.sendMessage(p, Messages.playerboughtwait);
+	    					Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
+	    					Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtwait);
 	    					TNTRun.getInstance().sound.NOTE_PLING(p, 5, 10);
 	    				} else {
-	    					Messages.sendMessage(p, Messages.notenoughtmoney.replace("{MONEY}", cost + ""));
+	    					Messages.sendMessage(p, Messages.trprefix + Messages.notenoughtmoney.replace("{MONEY}", cost + ""));
 	    					TNTRun.getInstance().sound.ITEM_SELECT(p);
 	    					return;
 	    				}
@@ -239,7 +239,7 @@ public class Shop implements Listener{
 	    				giveItem(e.getSlot(), p, current.getItemMeta().getDisplayName());  
 	    			} else {
 	    				p.closeInventory();
-	    				Messages.sendMessage(p, Messages.nopermission);
+	    				Messages.sendMessage(p, Messages.trprefix + Messages.nopermission);
 	    				TNTRun.getInstance().sound.ITEM_SELECT(p);
 	    			}
 	    		}

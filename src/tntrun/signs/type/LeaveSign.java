@@ -37,7 +37,7 @@ public class LeaveSign implements SignType {
 	@Override
 	public void handleCreation(SignChangeEvent e) {
 		e.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
-		e.getPlayer().sendMessage("Sign succesfully created");
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signcreate);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class LeaveSign implements SignType {
 			arena.getPlayerHandler().leavePlayer(e.getPlayer(), Messages.playerlefttoplayer, Messages.playerlefttoothers);
 			e.setCancelled(true);
 		} else {
-			Messages.sendMessage(e.getPlayer(), Messages.playernotinarena);
+			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.playernotinarena);
 		}
 	}
 

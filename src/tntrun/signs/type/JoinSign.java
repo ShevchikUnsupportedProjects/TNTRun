@@ -42,7 +42,7 @@ public class JoinSign implements SignType {
 		final Arena arena = plugin.amanager.getArenaByName(e.getLine(2));
 		if (arena != null) {
 			e.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
-			e.getPlayer().sendMessage("Sign succesfully created");
+			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signcreate);
 			plugin.signEditor.addSign(e.getBlock(), arena.getArenaName());
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
 				new Runnable() {
@@ -78,7 +78,7 @@ public class JoinSign implements SignType {
 	public void handleDestroy(BlockBreakEvent e) {
 		Block b = e.getBlock();
 		plugin.signEditor.removeSign(b, ((Sign) b.getState()).getLine(2));
-		e.getPlayer().sendMessage("Sign succesfully removed");
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signremove);
 	}
 
 }

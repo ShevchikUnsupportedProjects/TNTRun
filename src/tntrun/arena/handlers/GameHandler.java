@@ -26,6 +26,8 @@ import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.MemorySection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -170,7 +172,7 @@ public class GameHandler {
 
 	public void startArena() {
 		arena.getStatusManager().setRunning(true);
-		String message = Messages.arenastarted;
+		String message = Messages.trprefix + Messages.arenastarted;
 		message = message.replace("{TIMELIMIT}", String.valueOf(arena.getStructureManager().getTimeLimit()));
 		for (Player player : arena.getPlayersManager().getPlayers()) {
 			player.closeInventory();
@@ -263,12 +265,15 @@ public class GameHandler {
 
 	public Scoreboard buildScoreboard() {
 		
+		FileConfiguration config = TNTRun.getInstance().getConfig();
 		Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
-		if (TNTRun.getInstance().getConfig().getBoolean("special.UseScoreboard")) {
+		if (config.getBoolean("special.UseScoreboard")) {
 			Objective o = scoreboard.registerNewObjective("TNTRun", "waiting", "TNTRun");
 			o.setDisplaySlot(DisplaySlot.SIDEBAR);
-			o.setDisplayName(ChatColor.GOLD.toString() + ChatColor.BOLD + "TNTRUN");
+			
+			String header = FormattingCodesParser.parseFormattingCodes(config.getString("scoreboard.header", ChatColor.GOLD.toString() + ChatColor.BOLD + "TNTRUN"));
+			o.setDisplayName(header);
 		}
 		return scoreboard;
 	} 
@@ -368,7 +373,7 @@ public class GameHandler {
 		// clear any potion effects the winner may have
 		arena.getPlayerHandler().clearPotionEffects(player);
 		
-		String message = Messages.playerwonbroadcast;
+		String message = Messages.trprefix + Messages.playerwonbroadcast;
 		message = message.replace("{PLAYER}", player.getName());
 		message = message.replace("{ARENA}", arena.getArenaName());
 		
@@ -471,7 +476,7 @@ public class GameHandler {
 	private void displayCountdown(Player player, int count, String message) {
 		plugin.sound.NOTE_PLING(player, 1, 999);
 		if (!plugin.getConfig().getBoolean("special.UseTitle")) {
-			Messages.sendMessage(player, message);
+			Messages.sendMessage(player, Messages.trprefix + message);
 		} 
 		TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
 	}

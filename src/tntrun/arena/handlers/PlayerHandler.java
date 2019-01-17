@@ -51,31 +51,31 @@ public class PlayerHandler {
 	// check if player can join the arena
 	public boolean checkJoin(Player player) {
 		if (!arena.getStatusManager().isArenaEnabled()) {
-			Messages.sendMessage(player, Messages.arenadisabled);
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenadisabled);
 			return false;
 		}
 		if (arena.getStructureManager().getWorld() == null) {
-			Messages.sendMessage(player, Messages.arenawolrdna);
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenawolrdna);
 			return false;
 		}
 		if (arena.getStatusManager().isArenaRunning()) {
-			Messages.sendMessage(player, Messages.arenarunning);
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenarunning);
 			return false;
 		}
 		if (arena.getStatusManager().isArenaRegenerating()) {
-			Messages.sendMessage(player, Messages.arenaregenerating);
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenaregenerating);
 			return false;
 		}
 		if (!player.hasPermission("tntrun.join")) {
-			Messages.sendMessage(player, Messages.nopermission);
+			Messages.sendMessage(player, Messages.trprefix + Messages.nopermission);
 			return false;
 		}
 		if (player.isInsideVehicle()) {
-			Messages.sendMessage(player, Messages.arenavehicle);
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenavehicle);
 			return false;
 		}
 		if (arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMaxPlayers()) {
-			Messages.sendMessage(player, Messages.limitreached);
+			Messages.sendMessage(player, Messages.trprefix + Messages.limitreached);
 			return false;
 		}
 		return true;
@@ -110,14 +110,14 @@ public class PlayerHandler {
 		}
 		// send message to player
 		if (!plugin.getConfig().getBoolean("special.UseTitle")) {
-			Messages.sendMessage(player, msgtoplayer);
+			Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
 		}	
 		// set player on arena data
 		arena.getPlayersManager().add(player);
 		// send message to other players
 		for (Player oplayer : arena.getPlayersManager().getPlayers()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
-			Messages.sendMessage(oplayer, msgtoarenaplayers);
+			Messages.sendMessage(oplayer, Messages.trprefix + msgtoarenaplayers);
 			// send title for players
 			TitleMsg.sendFullTitle(oplayer, TitleMsg.join.replace("{PLAYER}", player.getName()), TitleMsg.subjoin.replace("{PLAYER}", player.getName()), 10, 20, 20, plugin);
 		}
@@ -150,7 +150,7 @@ public class PlayerHandler {
 		if (!plugin.getConfig().getBoolean("special.UseBossBar")) {
 			String message = Messages.playerscountinarena;
 			message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
-			Messages.sendMessage(player, message);
+			Messages.sendMessage(player, Messages.trprefix + message);
 		}
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
@@ -205,13 +205,13 @@ public class PlayerHandler {
 		}
 		
 		// send message to player
-		Messages.sendMessage(player, msgtoplayer);
+		Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// send message to other players and update bars
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
-			Messages.sendMessage(oplayer, msgtoarenaplayers);
+			Messages.sendMessage(oplayer, Messages.trprefix + msgtoarenaplayers);
 		}
 		// add to spectators
 		arena.getPlayersManager().addSpectator(player);
@@ -266,7 +266,7 @@ public class PlayerHandler {
 			return;
 		}
 		// send message to player
-		Messages.sendMessage(player, msgtoplayer);
+		Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// create scoreboard
@@ -280,7 +280,7 @@ public class PlayerHandler {
 		// send message to other players and update bars
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
-			Messages.sendMessage(oplayer, msgtoarenaplayers);
+			Messages.sendMessage(oplayer, Messages.trprefix + msgtoarenaplayers);
 			if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
 				double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers();
 				Bars.setBar(arena, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
@@ -294,7 +294,7 @@ public class PlayerHandler {
 		// remove player from arena and restore his state
 		removePlayerFromArenaAndRestoreState(player, true);
 		// send message to player
-		Messages.sendMessage(player, msgtoplayer);
+		Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
 		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		plugin.signEditor.refreshLeaderBoards();
