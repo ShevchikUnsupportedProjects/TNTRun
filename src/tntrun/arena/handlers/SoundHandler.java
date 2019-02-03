@@ -19,6 +19,7 @@ package tntrun.arena.handlers;
 
 import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
@@ -27,11 +28,11 @@ import tntrun.utils.Sounds;
 public class SoundHandler extends Sounds {
 	
 	private TNTRun plugin;
-	private Sound sound;
 
 	public SoundHandler (TNTRun plugin) {
 		this.plugin = plugin;
 	}
+	
 	@Override
 	public void NOTE_PLING(Player p, float volume, float pitch) {
 		p.playSound(p.getLocation(), Sound.valueOf("BLOCK_NOTE_BLOCK_PLING"), volume, pitch);
@@ -51,17 +52,20 @@ public class SoundHandler extends Sounds {
 		}
 	}
 
+	@Override
+	public void BLOCK_BREAK(Block fblock) {
+		if (isSoundEnabled("blockbreak")) {
+			fblock.getWorld().playSound(fblock.getLocation(), getSound("blockbreak"), getVolume("blockbreak"), getPitch("blockbreak"));
+		}
+	}
 	/**
 	 * Get the sound to be played.
-	 * Check sound is valid, otherwise return null.
+	 * Will return null if invalid.
 	 * @param string path
 	 * @return sound
 	 */
 	private Sound getSound(String path) {
-		if (EnumUtils.isValidEnum(Sound.class, plugin.getConfig().getString("sounds." + path + ".sound"))) {
-			sound = Sound.valueOf(plugin.getConfig().getString("sounds." + path + ".sound"));
-		}
-		return sound;
+		return EnumUtils.getEnum(Sound.class, plugin.getConfig().getString("sounds." + path + ".sound"));
 	}
 
 	/**

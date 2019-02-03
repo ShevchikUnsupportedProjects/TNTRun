@@ -2,7 +2,7 @@ name: TNTRun_reloaded
 main: tntrun.TNTRun
 depend: [WorldEdit]
 softdepend: [Vault, HeadsPlus]
-version: 7.5
+version: 7.5.1
 api-version: 1.13
 author: [steve4744]
 commands:
@@ -25,6 +25,9 @@ permissions:
   tntrun.version.check:
     description: display new version message on player join
     default: op
+  tntrun.heads:
+    description: control who can use HeadsPlus in-game
+    default: true
   tntrun.shop:
     description: allow players to buy any shop item (if they have money)
     default: true

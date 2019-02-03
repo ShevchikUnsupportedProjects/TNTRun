@@ -71,7 +71,7 @@ public class RestrictionHandler implements Listener {
 			return;
 		}
 		// now check command
-		if (plugin.isHeadsPlus() && plugin.getConfig().getBoolean("items.heads.use")) {
+		if (plugin.isHeadsPlus() && plugin.getConfig().getBoolean("items.heads.use") && player.hasPermission("tntrun.heads")) {
 			allowedcommands.add("/headsplus:heads");
 		}
 		if (!allowedcommands.contains(e.getMessage().toLowerCase())) {
@@ -197,6 +197,10 @@ public class RestrictionHandler implements Listener {
     				TNTRun.getInstance().sound.NOTE_PLING(player, 5, 999);
     				return;
     			}
+       			if (!player.hasPermission("tntrun.heads")) {
+       				Messages.sendMessage(player, Messages.nopermission);
+       				return;
+       			}
        			u.add(player);
        			coolDown(player);
             	TNTRun.getInstance().sound.ITEM_SELECT(player);
