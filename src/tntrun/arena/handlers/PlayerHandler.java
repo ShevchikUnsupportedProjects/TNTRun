@@ -230,10 +230,15 @@ public class PlayerHandler {
 			}
 		}.runTaskLater(plugin, 5L);
 	}
-	
-	// if we have the spectator spawn then we will move player to spectators, otherwise we will remove player from arena
+	/**
+	 * If the winner attempts to leave, teleport to arena spawn.
+	 * For other players, if we have a spectator spawn then we will move player to spectators, otherwise we will remove player from arena.
+	 * @param player
+	 */
 	public void dispatchPlayer(Player player) {
-		if (arena.getStructureManager().getSpectatorSpawnVector() != null) {
+		if (arena.getPlayersManager().getPlayersCount() == 1) {
+			player.teleport(arena.getStructureManager().getSpawnPoint());
+		} else if (arena.getStructureManager().getSpectatorSpawnVector() != null) {
 			spectatePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
 		} else {
 			leavePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
@@ -249,9 +254,10 @@ public class PlayerHandler {
 			for (Player oplayer : Bukkit.getOnlinePlayers()) {
 				oplayer.showPlayer(plugin, player);
 			}
-			player.setAllowFlight(false);
-			player.setFlying(false);
 		}
+		// disable flight for winner as well as spectators
+		player.setAllowFlight(false);
+		player.setFlying(false);
 		// check if arena is running
 		if (arena.getStatusManager().isArenaRunning()) {
 			// add to lostPlayers
@@ -291,6 +297,7 @@ public class PlayerHandler {
 	protected void leaveWinner(Player player, String msgtoplayer) {
 		// remove scoreboard
 		removeScoreboard(player);
+		player.setFlying(false);
 		// remove player from arena and restore his state
 		removePlayerFromArenaAndRestoreState(player, true);
 		// send message to player

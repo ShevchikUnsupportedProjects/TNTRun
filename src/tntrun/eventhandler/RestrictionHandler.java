@@ -109,7 +109,6 @@ public class RestrictionHandler implements Listener {
 	public void onPlayerItemDrop(PlayerDropItemEvent e) {
 		Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
-		// ignore if player is not in arena
 		if (arena == null) {
 			return;
 		}

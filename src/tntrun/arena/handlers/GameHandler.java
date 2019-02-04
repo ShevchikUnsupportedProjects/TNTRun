@@ -340,6 +340,9 @@ public class GameHandler {
 		}, 0, 20);
 	}
 
+	/**
+	 * Regenerate the arena at the end of a game.
+	 */
 	private void startArenaRegen() {
 		if (arena.getStatusManager().isArenaRegenerating()) {
 			return;
@@ -366,7 +369,13 @@ public class GameHandler {
 		);
 	}
 	
-	public void startEnding(final Player player){
+	/**
+	 * Called when there is only 1 player left, to update winner stats and
+	 * teleport winner and spectators to the arena spawn point. It then
+	 * stops the arena.
+	 * @param player
+	 */
+	public void startEnding(final Player player) {
 		Stats.addWins(player, 1);
 		TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
 		// clear any potion effects the winner may have
@@ -382,15 +391,16 @@ public class GameHandler {
 				Messages.sendMessage(all, message);
 			}
 		} else if (plugin.getConfig().getInt("broadcastwinlevel") >= 2) {
-			for (Player all : Bukkit.getOnlinePlayers()){
+			for (Player all : Bukkit.getOnlinePlayers()) {
 				Messages.sendMessage(all, message);
 			}
 		}
-		
+		// allow winner to fly at arena spawn
+		player.setAllowFlight(true);
+		player.setFlying(true);
+		// teleport winner and spectators to arena spawn
 		for(Player p : arena.getPlayersManager().getAllParticipantsCopy()) {
 			TNTRun.getInstance().sound.ARENA_START(p);
-			p.setAllowFlight(false);
-			p.setFlying(false);
 			p.teleport(arena.getStructureManager().getSpawnPoint());
 			p.getInventory().clear();
 		}
