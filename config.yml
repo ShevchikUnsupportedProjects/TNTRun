@@ -6,7 +6,6 @@
 # TNTRun_reloaded author steve4744       #
 #                                        #
 special:
-  FancyBlockBreak: true
   UseBossBar: true
   BossBarColor: RANDOM
   UseTitle: true
