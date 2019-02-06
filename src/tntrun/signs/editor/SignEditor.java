@@ -36,7 +36,6 @@ import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
-import tntrun.utils.Stats;
 
 public class SignEditor {
 
@@ -83,9 +82,9 @@ public class SignEditor {
 		HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
     	
     	if (plugin.isFile()) {
-    		statsMap = Stats.getStatsFromFile();
+    		statsMap = plugin.stats.getStatsFromFile();
     	} else {
-    		statsMap = Stats.getStatsFromDB(3);
+    		statsMap = plugin.stats.getStatsFromDB(3);
     	}
 		
 		if (block.getState() instanceof Sign) {

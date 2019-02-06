@@ -7,18 +7,18 @@ import java.net.URL;
 import org.bukkit.Bukkit;
 
 public class VersionChecker {
-	
+
 	private static VersionChecker instance;
 
-	public VersionChecker(){
+	public VersionChecker() {
 		instance = this;
 	}
-	
-	public static VersionChecker get(){
+
+	public static VersionChecker get() {
 		return instance;
 	}
-	
-	public String getVersion(){
+
+	public String getVersion() {
 		try {
 			HttpURLConnection con = (HttpURLConnection) new URL("https://www.spigotmc.org/api/general.php").openConnection();
 			con.setDoOutput(true);

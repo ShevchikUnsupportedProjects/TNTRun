@@ -43,7 +43,7 @@ public class SignHandler implements Listener {
 
 	private HashMap<String, SignType> signs = new HashMap<String, SignType>();
 	
-	private TNTRun pl;
+	private TNTRun plugin;
 
 	public SignHandler(TNTRun plugin) {
 		signs.put("[join]", new JoinSign(plugin));
@@ -51,7 +51,7 @@ public class SignHandler implements Listener {
 		signs.put("[vote]", new VoteSign(plugin));
 		signs.put("[leaderboard]", new LeaderboardSign(plugin));
 		
-		pl = plugin;
+		this.plugin = plugin;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -80,7 +80,7 @@ public class SignHandler implements Listener {
 			return;
 		}
 		Sign sign = (Sign) e.getClickedBlock().getState();
-		if (sign.getLine(0).equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(pl.getConfig().getString("signs.prefix")))) {
+		if (sign.getLine(0).equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")))) {
 			String line = sign.getLine(1).toLowerCase();
 			if (signs.containsKey(line)) {
 				signs.get(line).handleClick(e);
@@ -95,7 +95,7 @@ public class SignHandler implements Listener {
 		}
 		Player player = e.getPlayer();
 		Sign sign = (Sign) e.getBlock().getState();
-		if (sign.getLine(0).equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(pl.getConfig().getString("signs.prefix")))) {
+		if (sign.getLine(0).equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")))) {
 			if (!player.hasPermission("tntrun.setup")) {
 				Messages.sendMessage(player, Messages.trprefix + Messages.nopermission);
 				e.setCancelled(true);

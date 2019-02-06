@@ -29,6 +29,7 @@ import tntrun.arena.structure.StructureManager;
 public class Arena {
 
 	public TNTRun plugin;
+	private String arenaname;
 
 	public Arena(String name, TNTRun plugin) {
 		arenaname = name;
@@ -38,7 +39,6 @@ public class Arena {
 		arenafile = new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arenaname + ".yml");
 	}
 
-	private String arenaname;
 	public String getArenaName() {
 		return arenaname;
 	}

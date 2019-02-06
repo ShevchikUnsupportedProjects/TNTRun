@@ -66,6 +66,7 @@ public class TNTRun extends JavaPlugin {
 	public Kits kitmanager;
 	public String[] version = {"Nothing", "Nothing"};
 	public Sounds sound;
+	public Stats stats;
 	
 	public static TNTRun instance;
 
@@ -107,7 +108,9 @@ public class TNTRun extends JavaPlugin {
 		setStorage();
 		
 		//enable stats
-		new Stats(this);
+		if (usestats) {
+			stats = new Stats(this);
+		}
 	}
 
 	public static TNTRun getInstance() {
@@ -135,6 +138,7 @@ public class TNTRun extends JavaPlugin {
 		pdata = null;
 		amanager = null;
 		log = null;
+		stats = null;
 	}
 
 	private void saveArenas() {

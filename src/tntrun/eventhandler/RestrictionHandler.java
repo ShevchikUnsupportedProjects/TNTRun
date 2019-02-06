@@ -44,7 +44,6 @@ import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 import tntrun.utils.Heads;
 import tntrun.utils.Shop;
-import tntrun.utils.Stats;
 import tntrun.utils.Utils;
 
 public class RestrictionHandler implements Listener {
@@ -308,7 +307,7 @@ public class RestrictionHandler implements Listener {
 				new BukkitRunnable() {
 					@Override
 					public void run() {
-						Stats.cacheDBStats(p);
+						plugin.stats.cacheDBStats(p);
 					}
 				}.runTask(plugin);
 			}

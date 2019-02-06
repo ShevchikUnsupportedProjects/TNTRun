@@ -38,17 +38,17 @@ import tntrun.TNTRun;
 import tntrun.messages.Messages;
 
 public class Stats {
-	
-	public static TNTRun pl;
-	public static File file;
-	private static int position;
-	
+
+	private TNTRun plugin;
+	private File file;
+	private int position;
+
 	private static HashMap<String, Integer> playedmap = new HashMap<String, Integer>();
 	private static HashMap<String, Integer> winmap = new HashMap<String, Integer>();
 
 	public Stats(TNTRun plugin) {
-		pl = plugin;
-		file = new File(pl.getDataFolder(), "stats.yml");
+		this.plugin = plugin;
+		file = new File(plugin.getDataFolder(), "stats.yml");
 		if (!file.exists()) {
 			try {
 				file.createNewFile();
@@ -57,9 +57,9 @@ public class Stats {
 			}
 		}
 	}
-	
-	public static void addPlayedGames(Player player, int value) {
-		if (pl.isFile()) {
+
+	public void addPlayedGames(Player player, int value) {
+		if (plugin.isFile()) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 			if (Bukkit.getOnlineMode()) {
 				if (config.get("stats." + player.getUniqueId().toString() + ".played") == null) {
@@ -83,9 +83,9 @@ public class Stats {
 			setValue("played",  player,  getStat("played", player) + 1);	
 		}
 	}
-	
-	public static void addWins(Player player, int value) {
-		if (pl.isFile()) {
+
+	public void addWins(Player player, int value) {
+		if (plugin.isFile()) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 			if (Bukkit.getOnlineMode()) {
 				if (config.get("stats." + player.getUniqueId().toString() + ".wins") == null) {
@@ -109,13 +109,13 @@ public class Stats {
 			setValue("wins",  player,  getStat("wins", player) + 1);	
 		}
 	}
-	
-	public static int getLosses(Player player) {
+
+	public int getLosses(Player player) {
 		return getPlayedGames(player) - getWins(player);
 	}
-	
-	public static int getWins(OfflinePlayer offlinePlayer) {
-		if (pl.isFile()) {
+
+	public int getWins(OfflinePlayer offlinePlayer) {
+		if (plugin.isFile()) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 			if (Bukkit.getOnlineMode()) {
 				if (config.get("stats." + offlinePlayer.getUniqueId().toString() + ".wins") == null) {
@@ -133,9 +133,9 @@ public class Stats {
 		}
 		return getStat("wins", offlinePlayer);
 	}
-	
-	public static int getPlayedGames(Player player) {
-		if (pl.isFile()) {
+
+	public int getPlayedGames(Player player) {
+		if (plugin.isFile()) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 			if (Bukkit.getOnlineMode()) {
 				if (config.get("stats." + player.getUniqueId().toString() + ".played") == null) {
@@ -153,8 +153,8 @@ public class Stats {
 		}
 		return getStat("played", player);
 	}
-	
-    private static int getStat(String statname, OfflinePlayer offlinePlayer) {
+
+    private int getStat(String statname, OfflinePlayer offlinePlayer) {
     	if (statname.equals("played")) {
     		if (playedmap.containsKey(offlinePlayer.getName())) {
     			return playedmap.get(offlinePlayer.getName());
@@ -171,9 +171,9 @@ public class Stats {
             ResultSet rs;
             
             if (Bukkit.getOnlineMode()) {
-            	rs = pl.mysql.query("SELECT * FROM `stats` WHERE `username`='" + offlinePlayer.getUniqueId().toString() + "'").getResultSet();
+            	rs = plugin.mysql.query("SELECT * FROM `stats` WHERE `username`='" + offlinePlayer.getUniqueId().toString() + "'").getResultSet();
             } else {
-            	rs = pl.mysql.query("SELECT * FROM `stats` WHERE `username`='" + offlinePlayer.getName() + "'").getResultSet();
+            	rs = plugin.mysql.query("SELECT * FROM `stats` WHERE `username`='" + offlinePlayer.getName() + "'").getResultSet();
             }
             
             while (rs.next()) {
@@ -187,7 +187,7 @@ public class Stats {
         return 999;
 	}
 
-    public static void cacheDBStats(Player player) {
+    public void cacheDBStats(Player player) {
     	if (!playedmap.containsKey(player.getName())) {
     		playedmap.put(player.getName(), getStat("played", player));
     	}
@@ -195,9 +195,9 @@ public class Stats {
     		winmap.put(player.getName(), getStat("wins", player));
     	}
     }
- 
-    private static void setValue(String statname, Player p, int value) {    
-        if (!pl.useStats()) {
+
+    private void setValue(String statname, Player p, int value) {    
+        if (!plugin.useStats()) {
         	return;
         }
         if (statname.equals("played")) {
@@ -210,20 +210,20 @@ public class Stats {
         	@Override
         	public void run() {
         		if (Bukkit.getOnlineMode()) {
-                    pl.mysql.query("UPDATE `stats` SET `" + statname
+                    plugin.mysql.query("UPDATE `stats` SET `" + statname
                             + "`='" + value + "' WHERE `username`='" + p.getUniqueId().toString() + "';");
                 } else {
-                    pl.mysql.query("UPDATE `stats` SET `" + statname
+                    plugin.mysql.query("UPDATE `stats` SET `" + statname
                             + "`='" + value + "' WHERE `username`='" + p.getName() + "';");
                 }
         	}
-        }.runTaskAsynchronously(pl);
+        }.runTaskAsynchronously(plugin);
     }
-    
-    public static void getLeaderboard(Player player, int entries) {
+
+    public void getLeaderboard(Player player, int entries) {
     	HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
     	
-    	if (pl.isFile()) {
+    	if (plugin.isFile()) {
     		statsMap = getStatsFromFile();
     	} else {
     		statsMap = getStatsFromDB(entries);
@@ -241,7 +241,7 @@ public class Stats {
     			   
     	return; 
     }
-    
+
     private static boolean isValidUuid(String uuid) {
     	try {
 			UUID.fromString(uuid);
@@ -250,11 +250,11 @@ public class Stats {
 		}
     	return true;
     }
-    
-    public static HashMap<String, Integer> getStatsFromFile() {
+
+    public HashMap<String, Integer> getStatsFromFile() {
     	FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 		ConfigurationSection stats = config.getConfigurationSection("stats");
-		
+
 		final HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
 
 		if (stats != null) {
@@ -280,18 +280,18 @@ public class Stats {
 		}
 		return statsMap;
     }
-    
-    public static HashMap<String, Integer> getStatsFromDB(int limit) {
+
+    public HashMap<String, Integer> getStatsFromDB(int limit) {
     	final HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
-    	
+
     	try {
             ResultSet rs;
-            
-            rs = pl.mysql.query("SELECT * FROM `stats` ORDER BY wins DESC LIMIT " + limit).getResultSet();
-           
+
+            rs = plugin.mysql.query("SELECT * FROM `stats` ORDER BY wins DESC LIMIT " + limit).getResultSet();
+
             while (rs.next()) {
             	String playerName = rs.getString("username");
-            	
+
             	if (Bukkit.getOnlineMode()) {
             		if (isValidUuid(playerName)) {
             			OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(playerName));
@@ -306,5 +306,5 @@ public class Stats {
 
         return statsMap;
     }
-    
+
 }

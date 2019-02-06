@@ -29,7 +29,6 @@ import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
-import tntrun.utils.Stats;
 import tntrun.utils.Utils;
 
 public class GameCommands implements CommandExecutor {
@@ -183,9 +182,9 @@ public class GameCommands implements CommandExecutor {
 				return true;
 			}
 			Messages.sendMessage(player, Messages.statshead);
-			Messages.sendMessage(player, Messages.gamesplayed + Stats.getPlayedGames(player));
-			Messages.sendMessage(player, Messages.gameswon + Stats.getWins(player));
-			Messages.sendMessage(player, Messages.gameslost + Stats.getLosses(player));
+			Messages.sendMessage(player, Messages.gamesplayed + plugin.stats.getPlayedGames(player));
+			Messages.sendMessage(player, Messages.gameswon + plugin.stats.getWins(player));
+			Messages.sendMessage(player, Messages.gameslost + plugin.stats.getLosses(player));
 		}
 
 		// leaderboard
@@ -201,7 +200,7 @@ public class GameCommands implements CommandExecutor {
 				}
 			}
 			Messages.sendMessage(player, Messages.leaderhead);
-			Stats.getLeaderboard(player, entries);
+			plugin.stats.getLeaderboard(player, entries);
 		}
 
 		// leave arena
