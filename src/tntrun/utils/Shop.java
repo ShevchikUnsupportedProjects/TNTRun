@@ -49,15 +49,15 @@ import tntrun.messages.Messages;
 
 public class Shop implements Listener{
 	
-	private static TNTRun pl;
+	private TNTRun plugin;
 	
 	public Shop(TNTRun plugin){
-		pl = plugin;
-		ShopFiles shopFiles = new ShopFiles(pl);
+		this.plugin = plugin;
+		ShopFiles shopFiles = new ShopFiles(plugin);
 		shopFiles.setShopItems();
 		
-		invsize = pl.getConfig().getInt("shop.size");
-		invname = FormattingCodesParser.parseFormattingCodes(pl.getConfig().getString("shop.name"));
+		invsize = plugin.getConfig().getInt("shop.size");
+		invname = FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("shop.name"));
 	}  
 	
 	public static HashMap<Integer, Integer> itemSlot = new HashMap<Integer, Integer>();
@@ -203,7 +203,7 @@ public class Shop implements Listener{
 	    			
 	    			if (bought.contains(p)) {
 	    				Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
-	    				TNTRun.getInstance().sound.ITEM_SELECT(p);
+	    				plugin.sound.ITEM_SELECT(p);
 	    				return;
 	    			}
 	    			if (p.hasPermission(permission) || p.hasPermission("tntrun.shop")) {
@@ -211,9 +211,9 @@ public class Shop implements Listener{
 	    				int cost = cfg.getInt(kit + ".cost");
 	        	  
 	    				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
-	    					if (pl.getConfig().getInt("shop.doublejump.maxdoublejumps") <= pl.getConfig().getInt("doublejumps." + p.getName())) {
+	    					if (plugin.getConfig().getInt("shop.doublejump.maxdoublejumps") <= plugin.getConfig().getInt("doublejumps." + p.getName())) {
 	    						Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
-	    						TNTRun.getInstance().sound.ITEM_SELECT(p);
+	    						plugin.sound.ITEM_SELECT(p);
 	    						return;
 	    					}
 	    				}
@@ -221,26 +221,26 @@ public class Shop implements Listener{
 	    				if (hasMoney(cost, p)) {
 	    					Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
 	    					Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtwait);
-	    					TNTRun.getInstance().sound.NOTE_PLING(p, 5, 10);
+	    					plugin.sound.NOTE_PLING(p, 5, 10);
 	    				} else {
 	    					Messages.sendMessage(p, Messages.trprefix + Messages.notenoughtmoney.replace("{MONEY}", cost + ""));
-	    					TNTRun.getInstance().sound.ITEM_SELECT(p);
+	    					plugin.sound.ITEM_SELECT(p);
 	    					return;
 	    				}
 	    				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
-	    					if(pl.getConfig().get("doublejumps." + p.getName()) == null){
-	    						pl.getConfig().set("doublejumps." + p.getName(), 1);
+	    					if(plugin.getConfig().get("doublejumps." + p.getName()) == null){
+	    						plugin.getConfig().set("doublejumps." + p.getName(), 1);
 	    					}else{
-	    						pl.getConfig().set("doublejumps." + p.getName(), pl.getConfig().getInt("doublejumps." + p.getName()) + 1);
+	    						plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) + 1);
 	    					}
-	    					pl.saveConfig();
+	    					plugin.saveConfig();
 	    					return;
 	    				}
 	    				giveItem(e.getSlot(), p, current.getItemMeta().getDisplayName());  
 	    			} else {
 	    				p.closeInventory();
 	    				Messages.sendMessage(p, Messages.trprefix + Messages.nopermission);
-	    				TNTRun.getInstance().sound.ITEM_SELECT(p);
+	    				plugin.sound.ITEM_SELECT(p);
 	    			}
 	    		}
 	    	}

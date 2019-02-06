@@ -167,7 +167,7 @@ public class PlayerHandler {
 			Bars.setBar(arena, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
 			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
 				// play sound
-				TNTRun.getInstance().sound.NOTE_PLING(oplayer, 5, 999);
+				plugin.sound.NOTE_PLING(oplayer, 5, 999);
 			}
 		}
 		// check for game start

@@ -179,7 +179,7 @@ public class GameHandler {
 			player.setAllowFlight(true);
 
 			Messages.sendMessage(player, message);
-			TNTRun.getInstance().sound.ARENA_START(player);
+			plugin.sound.ARENA_START(player);
 			
 			setGameInventory(player);
 			TitleMsg.sendFullTitle(player, TitleMsg.start, TitleMsg.substart, 20, 20, 20, plugin);
@@ -400,7 +400,7 @@ public class GameHandler {
 		player.setFlying(true);
 		// teleport winner and spectators to arena spawn
 		for(Player p : arena.getPlayersManager().getAllParticipantsCopy()) {
-			TNTRun.getInstance().sound.ARENA_START(p);
+			plugin.sound.ARENA_START(p);
 			p.teleport(arena.getStructureManager().getSpawnPoint());
 			p.getInventory().clear();
 		}
