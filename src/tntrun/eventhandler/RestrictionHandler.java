@@ -42,6 +42,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
+import tntrun.utils.Heads;
 import tntrun.utils.Shop;
 import tntrun.utils.Stats;
 import tntrun.utils.Utils;
@@ -57,7 +58,7 @@ public class RestrictionHandler implements Listener {
 	private HashSet<String> allowedcommands = new HashSet<String>(
 		Arrays.asList("/tntrun leave", "/tntrun vote", "/tr leave", "/tr vote", "/tr help", "/tr info", "/tr stats", "/tntrun stats", "/tr", "/tntrun"));
 
-	// player should not be able to issue any commands besides /tr leave and /tr vote while in arena
+	// player should not be able to issue any commands while in arena apart from the white list above
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
 		Player player = e.getPlayer();
@@ -69,10 +70,6 @@ public class RestrictionHandler implements Listener {
 		// allow use any command if player has permission
 		if (player.hasPermission("tntrun.cmdblockbypass")) {
 			return;
-		}
-		// now check command
-		if (plugin.isHeadsPlus() && plugin.getConfig().getBoolean("items.heads.use") && player.hasPermission("tntrun.heads")) {
-			allowedcommands.add("/headsplus:heads");
 		}
 		if (!allowedcommands.contains(e.getMessage().toLowerCase())) {
 			Messages.sendMessage(player, Messages.trprefix + Messages.nopermission);
@@ -203,7 +200,7 @@ public class RestrictionHandler implements Listener {
        			u.add(player);
        			coolDown(player);
             	TNTRun.getInstance().sound.ITEM_SELECT(player);
-         	   	player.chat("/headsplus:heads");
+            	Heads.openMenu(player);
         	}
         }
 	}
