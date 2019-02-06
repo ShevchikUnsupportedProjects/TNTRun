@@ -43,9 +43,8 @@ public class SignEditor {
 	private TNTRun plugin;
 	private HashMap<String, HashSet<SignInfo>> signs = new HashMap<String, HashSet<SignInfo>>();
 	private List<SignInfo> lbsigns = new ArrayList<SignInfo>();
-	private static int position;
-
 	private File configfile;
+	private int position;
 
 	public SignEditor(TNTRun plugin) {
 		this.plugin = plugin;
