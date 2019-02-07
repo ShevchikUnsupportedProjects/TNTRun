@@ -48,16 +48,16 @@ import tntrun.TNTRun;
 import tntrun.messages.Messages;
 
 public class Shop implements Listener{
- 
+
 	private TNTRun plugin;
 	public String invname;
 	public int invsize;
-	
+
 	public Shop(TNTRun plugin){
 		this.plugin = plugin;
 		ShopFiles shopFiles = new ShopFiles(plugin);
 		shopFiles.setShopItems();
-		
+
 		invsize = plugin.getConfig().getInt("shop.size");
 		invname = FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("shop.name"));
 	}  
@@ -86,21 +86,21 @@ public class Shop implements Listener{
 				// if the item is a potion, store the potion effect and skip to next item
 				if (material.toString().equalsIgnoreCase("POTION")) {
 					if (enchantments != null && !enchantments.isEmpty()) {
-				    	for (String peffects : enchantments) {
-				    		String[] array = peffects.split("#");
-				    		String peffect = array[0].toUpperCase();
+						for (String peffects : enchantments) {
+							String[] array = peffects.split("#");
+							String peffect = array[0].toUpperCase();
 
-				    		// get duration of effect
-				    		int duration = 30;
-				    		if (array.length > 1) {
-				    			duration = Integer.valueOf(array[1]).intValue();
-				    		}
+							// get duration of effect
+							int duration = 30;
+							if (array.length > 1) {
+								duration = Integer.valueOf(array[1]).intValue();
+							}
 
-				    		PotionEffect effect = new PotionEffect(PotionEffectType.getByName(peffect), duration * 20, 1);
-				    		if (effect != null) {
-				    			pelist.add(effect);
-				    		}
-				    	}
+							PotionEffect effect = new PotionEffect(PotionEffectType.getByName(peffect), duration * 20, 1);
+							if (effect != null) {
+								pelist.add(effect);
+							}
+						}
 					}
 					player.updateInventory();
 					player.closeInventory();
@@ -128,31 +128,31 @@ public class Shop implements Listener{
 	private ItemStack getItem(Material material, int amount, String displayname, List<String> lore, List<String> enchantments){
 
 		ItemStack item = new ItemStack(material, amount);
-	    ItemMeta meta = item.getItemMeta();
-	    meta.setDisplayName(displayname);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(displayname);
 
-	    if (lore != null && !lore.isEmpty()) {
-	      meta.setLore(lore);
-	    }
+		if (lore != null && !lore.isEmpty()) {
+			meta.setLore(lore);
+		}
 
-	    if (enchantments != null && !enchantments.isEmpty()) {
-	    	for (String enchs : enchantments) {
-	    		String[] array = enchs.split("#");
-	    		String ench = array[0].toUpperCase();
-	    		
-	    		// get the enchantment level
-	    		int level = 1;
-	    		if (array.length > 1) {
-	    			level = Integer.valueOf(array[1]).intValue();
-	    		}
-	    		Enchantment realEnch = getEnchantmentFromString(ench);
-	    		if (realEnch != null) {
-	    			meta.addEnchant(realEnch, level, true);
-	    		}
-	    	}
-	    }
-	    item.setItemMeta(meta);
-	    return item;
+		if (enchantments != null && !enchantments.isEmpty()) {
+			for (String enchs : enchantments) {
+				String[] array = enchs.split("#");
+				String ench = array[0].toUpperCase();
+
+				// get the enchantment level
+				int level = 1;
+				if (array.length > 1) {
+					level = Integer.valueOf(array[1]).intValue();
+				}
+				Enchantment realEnch = getEnchantmentFromString(ench);
+				if (realEnch != null) {
+					meta.addEnchant(realEnch, level, true);
+				}
+			}
+		}
+		item.setItemMeta(meta);
+		return item;
 	}
 
 	private ItemStack getPotionItem(Material material, int amount, String displayname, List<String> lore, List<String> enchantments) {
@@ -162,89 +162,89 @@ public class Shop implements Listener{
 		potionmeta.setDisplayName(displayname);
 		potionmeta.setColor(Color.RED);
 
-	    if (lore != null && !lore.isEmpty()) {
-	      potionmeta.setLore(lore);
-	    }
+		if (lore != null && !lore.isEmpty()) {
+			potionmeta.setLore(lore);
+		}
 
-	    if (enchantments != null && !enchantments.isEmpty()) {
-	    	for (String peffects : enchantments) {
-	    		String[] array = peffects.split("#");
-	    		String peffect = array[0].toUpperCase();
+		if (enchantments != null && !enchantments.isEmpty()) {
+			for (String peffects : enchantments) {
+				String[] array = peffects.split("#");
+				String peffect = array[0].toUpperCase();
 
-	    		// get duration of effect
-	    		int duration = 30;
-	    		if (array.length > 1) {
-	    			duration = Integer.valueOf(array[1]).intValue();
-	    		}
+				// get duration of effect
+				int duration = 30;
+				if (array.length > 1) {
+					duration = Integer.valueOf(array[1]).intValue();
+				}
 
-	    		PotionEffect effect = new PotionEffect(PotionEffectType.getByName(peffect), duration * 20, 1);
-	    		if (effect != null) {
-	    			potionmeta.addCustomEffect(effect, true);
-	    		}
-	    	}
-	    }
-	    item.setItemMeta(potionmeta);
-	    return item;
+				PotionEffect effect = new PotionEffect(PotionEffectType.getByName(peffect), duration * 20, 1);
+				if (effect != null) {
+					potionmeta.addCustomEffect(effect, true);
+				}
+			}
+		}
+		item.setItemMeta(potionmeta);
+		return item;
 	}
 
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
-	    Player p = (Player)e.getWhoClicked();
+		Player p = (Player)e.getWhoClicked();
 
-	    if (e.getInventory().getName().equals(invname)) { 	
-	    	e.setCancelled(true);
-	    	if (e.getSlot() == e.getRawSlot() && e.getCurrentItem() != null) {
-	    		ItemStack current = e.getCurrentItem();
-	    		if (current.hasItemMeta() && current.getItemMeta().hasDisplayName()) {
-	    			int kit = ((Integer)itemSlot.get(Integer.valueOf(e.getSlot()))).intValue();
+		if (e.getView().getTitle().equals(invname)) {	
+			e.setCancelled(true);
+			if (e.getSlot() == e.getRawSlot() && e.getCurrentItem() != null) {
+				ItemStack current = e.getCurrentItem();
+				if (current.hasItemMeta() && current.getItemMeta().hasDisplayName()) {
+					int kit = ((Integer)itemSlot.get(Integer.valueOf(e.getSlot()))).intValue();
 
-	    			FileConfiguration cfg = ShopFiles.getShopConfiguration();
-	    			String permission = cfg.getString(kit + ".permission");
+					FileConfiguration cfg = ShopFiles.getShopConfiguration();
+					String permission = cfg.getString(kit + ".permission");
 
-	    			if (bought.contains(p)) {
-	    				Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
-	    				plugin.sound.ITEM_SELECT(p);
-	    				return;
-	    			}
-	    			if (p.hasPermission(permission) || p.hasPermission("tntrun.shop")) {
-	    				String title = current.getItemMeta().getDisplayName();
-	    				int cost = cfg.getInt(kit + ".cost");
+					if (bought.contains(p)) {
+						Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
+						plugin.sound.ITEM_SELECT(p);
+						return;
+					}
+					if (p.hasPermission(permission) || p.hasPermission("tntrun.shop")) {
+						String title = current.getItemMeta().getDisplayName();
+						int cost = cfg.getInt(kit + ".cost");
 
-	    				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
-	    					if (plugin.getConfig().getInt("shop.doublejump.maxdoublejumps") <= plugin.getConfig().getInt("doublejumps." + p.getName())) {
-	    						Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
-	    						plugin.sound.ITEM_SELECT(p);
-	    						return;
-	    					}
-	    				}
+						if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
+							if (plugin.getConfig().getInt("shop.doublejump.maxdoublejumps") <= plugin.getConfig().getInt("doublejumps." + p.getName())) {
+								Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
+								plugin.sound.ITEM_SELECT(p);
+								return;
+							}
+						}
 
-	    				if (hasMoney(cost, p)) {
-	    					Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
-	    					Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtwait);
-	    					plugin.sound.NOTE_PLING(p, 5, 10);
-	    				} else {
-	    					Messages.sendMessage(p, Messages.trprefix + Messages.notenoughtmoney.replace("{MONEY}", cost + ""));
-	    					plugin.sound.ITEM_SELECT(p);
-	    					return;
-	    				}
-	    				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
-	    					if(plugin.getConfig().get("doublejumps." + p.getName()) == null){
-	    						plugin.getConfig().set("doublejumps." + p.getName(), 1);
-	    					}else{
-	    						plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) + 1);
-	    					}
-	    					plugin.saveConfig();
-	    					return;
-	    				}
-	    				giveItem(e.getSlot(), p, current.getItemMeta().getDisplayName());  
-	    			} else {
-	    				p.closeInventory();
-	    				Messages.sendMessage(p, Messages.trprefix + Messages.nopermission);
-	    				plugin.sound.ITEM_SELECT(p);
-	    			}
-	    		}
-	    	}
-	    }
+						if (hasMoney(cost, p)) {
+							Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
+							Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtwait);
+							plugin.sound.NOTE_PLING(p, 5, 10);
+						} else {
+							Messages.sendMessage(p, Messages.trprefix + Messages.notenoughtmoney.replace("{MONEY}", cost + ""));
+							plugin.sound.ITEM_SELECT(p);
+							return;
+						}
+						if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
+							if(plugin.getConfig().get("doublejumps." + p.getName()) == null){
+								plugin.getConfig().set("doublejumps." + p.getName(), 1);
+							} else {
+								plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) + 1);
+							}
+							plugin.saveConfig();
+							return;
+						}
+						giveItem(e.getSlot(), p, current.getItemMeta().getDisplayName());  
+					} else {
+						p.closeInventory();
+						Messages.sendMessage(p, Messages.trprefix + Messages.nopermission);
+						plugin.sound.ITEM_SELECT(p);
+					}
+				}
+			}
+		}
 	}
 
 	private Object economy = null;
@@ -256,7 +256,7 @@ public class Shop implements Listener{
 				economy = economyProvider.getProvider();
 			}
 		}
-	 
+
 		if (economy != null) {
 			OfflinePlayer offplayer = player.getPlayer();
 			Economy econ = (Economy) economy;
@@ -268,26 +268,26 @@ public class Shop implements Listener{
 		}
 		return false;
 	}
-	
+
 	public void setItems(Inventory inventory){
 		FileConfiguration cfg = ShopFiles.getShopConfiguration();
 		int slot = 0;
 		for (String kitCounter : cfg.getConfigurationSection("").getKeys(false)) {
-		      String title = FormattingCodesParser.parseFormattingCodes(cfg.getString(kitCounter + ".name"));
-		      List<String> lore = new ArrayList<String>();
-		      for (String loreLines : cfg.getStringList(kitCounter + ".lore")) {
-		          lore.add(FormattingCodesParser.parseFormattingCodes(loreLines));
-		      }
-		      Material material = Material.getMaterial(cfg.getString(kitCounter + ".material"));		      
-		      int amount = cfg.getInt(kitCounter + ".amount");
+			String title = FormattingCodesParser.parseFormattingCodes(cfg.getString(kitCounter + ".name"));
+			List<String> lore = new ArrayList<String>();
+			for (String loreLines : cfg.getStringList(kitCounter + ".lore")) {
+				lore.add(FormattingCodesParser.parseFormattingCodes(loreLines));
+			}
+			Material material = Material.getMaterial(cfg.getString(kitCounter + ".material"));		      
+			int amount = cfg.getInt(kitCounter + ".amount");
 
-		      if (material.toString().equalsIgnoreCase("POTION") || material.toString().equalsIgnoreCase("SPLASH_POTION")) {
-		    	  inventory.setItem(slot, getShopPotionItem(material, title, lore, amount));
-		      } else {
-		    	  inventory.setItem(slot, getShopItem(material, title, lore, amount));
-		      }
-		      itemSlot.put(Integer.valueOf(slot), Integer.valueOf(kitCounter));
-		      slot++;
+			if (material.toString().equalsIgnoreCase("POTION") || material.toString().equalsIgnoreCase("SPLASH_POTION")) {
+				inventory.setItem(slot, getShopPotionItem(material, title, lore, amount));
+			} else {
+				inventory.setItem(slot, getShopItem(material, title, lore, amount));
+			}
+			itemSlot.put(Integer.valueOf(slot), Integer.valueOf(kitCounter));
+			slot++;
 		}
 	}
 
@@ -321,7 +321,7 @@ public class Shop implements Listener{
 	}
 
 	private Enchantment getEnchantmentFromString(String enchantment) {		
-	    return Enchantment.getByKey(NamespacedKey.minecraft(enchantment.toLowerCase()));
+		return Enchantment.getByKey(NamespacedKey.minecraft(enchantment.toLowerCase()));
 	}
 
 	public List<PotionEffect> getPotionEffects(Player player) {
