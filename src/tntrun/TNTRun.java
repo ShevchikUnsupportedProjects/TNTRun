@@ -67,6 +67,7 @@ public class TNTRun extends JavaPlugin {
 	public String[] version = {"Nothing", "Nothing"};
 	public Sounds sound;
 	public Stats stats;
+	public Shop shop;
 	
 	public static TNTRun instance;
 
@@ -82,6 +83,7 @@ public class TNTRun extends JavaPlugin {
 		TitleMsg.loadTitles(this);
 		pdata = new PlayerDataStore();
 		amanager = new ArenasManager();
+		shop = new Shop(this);
 		
 		//register commands and events
 		setupPlugin();
@@ -236,7 +238,7 @@ public class TNTRun extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
 		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
-		getServer().getPluginManager().registerEvents(new Shop(this), this);
+		getServer().getPluginManager().registerEvents(this.shop, this);
 
 		Plugin HeadsPlus = getServer().getPluginManager().getPlugin("HeadsPlus");
 		if (HeadsPlus != null && HeadsPlus.isEnabled()) {

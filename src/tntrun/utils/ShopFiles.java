@@ -28,12 +28,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import tntrun.TNTRun;
 
 public class ShopFiles {
+
 	private static TNTRun pl;
+
 	public ShopFiles(TNTRun plugin) {
 		pl = plugin;
 	}
 
-	public static File getShopFile(){
+	public static File getShopFile() {
 	   return new File(pl.getDataFolder(), "shop.yml");
 	}
 

@@ -41,7 +41,6 @@ import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.utils.Bars;
-import tntrun.utils.Shop;
 import tntrun.utils.TitleMsg;
 import tntrun.messages.Messages;
 
@@ -500,10 +499,10 @@ public class GameHandler {
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.heads.material")));
 
-        if (Shop.pitems.containsKey(player)) {
-        	ArrayList<ItemStack> items = Shop.pitems.get(player);
-            Shop.pitems.remove(player);
-            Shop.bought.remove(player);
+        if (plugin.shop.pitems.containsKey(player)) {
+        	ArrayList<ItemStack> items = plugin.shop.pitems.get(player);
+            plugin.shop.pitems.remove(player);
+            plugin.shop.bought.remove(player);
 
             if (items != null) {
                 for (ItemStack item : items) {
@@ -516,11 +515,11 @@ public class GameHandler {
             }
             player.updateInventory();
         }
-        if (Shop.getPotionEffects(player) != null) {
-        	for (PotionEffect pe : Shop.getPotionEffects(player)) {
+        if (plugin.shop.getPotionEffects(player) != null) {
+        	for (PotionEffect pe : plugin.shop.getPotionEffects(player)) {
         		player.addPotionEffect(pe);
         	}
-        	Shop.removePotionEffects(player);
+        	plugin.shop.removePotionEffects(player);
         }
 	}
 

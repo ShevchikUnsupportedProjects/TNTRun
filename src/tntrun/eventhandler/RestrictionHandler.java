@@ -43,7 +43,6 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 import tntrun.utils.Heads;
-import tntrun.utils.Shop;
 import tntrun.utils.Utils;
 
 public class RestrictionHandler implements Listener {
@@ -131,8 +130,8 @@ public class RestrictionHandler implements Listener {
         if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.shop.material"))) {
     		if (arena != null) {
     			plugin.sound.ITEM_SELECT(player);
-    			Inventory inv = Bukkit.createInventory(null, Shop.invsize, Shop.invname);
-    			Shop.setItems(inv);
+    			Inventory inv = Bukkit.createInventory(null, plugin.shop.invsize, plugin.shop.invname);
+    			plugin.shop.setItems(inv);
     			player.openInventory(inv);
         	}
 		}
