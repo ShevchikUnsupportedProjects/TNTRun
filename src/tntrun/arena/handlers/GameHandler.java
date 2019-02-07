@@ -499,10 +499,10 @@ public class GameHandler {
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.heads.material")));
 
-        if (plugin.shop.pitems.containsKey(player)) {
-        	ArrayList<ItemStack> items = plugin.shop.pitems.get(player);
-            plugin.shop.pitems.remove(player);
-            plugin.shop.bought.remove(player);
+        if (plugin.shop.getPlayersItems().containsKey(player)) {
+        	ArrayList<ItemStack> items = plugin.shop.getPlayersItems().get(player);
+            plugin.shop.getPlayersItems().remove(player);
+            plugin.shop.getBuyers().remove(player);
 
             if (items != null) {
                 for (ItemStack item : items) {

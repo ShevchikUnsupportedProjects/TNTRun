@@ -50,8 +50,8 @@ import tntrun.messages.Messages;
 public class Shop implements Listener{
 
 	private TNTRun plugin;
-	public String invname;
-	public int invsize;
+	private String invname;
+	private int invsize;
 
 	public Shop(TNTRun plugin){
 		this.plugin = plugin;
@@ -62,9 +62,9 @@ public class Shop implements Listener{
 		invname = FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("shop.name"));
 	}  
 
-	public HashMap<Integer, Integer> itemSlot = new HashMap<Integer, Integer>();
-	public HashMap<Player, ArrayList<ItemStack>> pitems = new HashMap<Player, ArrayList<ItemStack>>();
-	public List<Player> bought = new ArrayList<Player>();
+	private HashMap<Integer, Integer> itemSlot = new HashMap<Integer, Integer>();
+	private HashMap<Player, ArrayList<ItemStack>> pitems = new HashMap<Player, ArrayList<ItemStack>>();
+	private List<Player> bought = new ArrayList<Player>();
 	private HashMap<Player, List<PotionEffect>> potionMap = new HashMap<Player, List<PotionEffect>>();
 
 	private void giveItem(int slot, Player player, String title) {
@@ -330,5 +330,21 @@ public class Shop implements Listener{
 
 	public void removePotionEffects(Player player) {
 		potionMap.remove(player);
+	}
+
+	public String getInvname() {
+		return invname;
+	}
+
+	public int getInvsize() {
+		return invsize;
+	}
+	
+	public HashMap<Player, ArrayList<ItemStack>> getPlayersItems() {
+		return pitems;
+	}
+	
+	public List<Player> getBuyers() {
+		return bought;
 	}
 }
