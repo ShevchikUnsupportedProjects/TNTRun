@@ -69,7 +69,7 @@ public class TNTRun extends JavaPlugin {
 	public Stats stats;
 	public Shop shop;
 	
-	public static TNTRun instance;
+	private static TNTRun instance;
 
 	@Override
 	public void onEnable() {
