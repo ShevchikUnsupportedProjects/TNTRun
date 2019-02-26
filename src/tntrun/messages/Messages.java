@@ -39,6 +39,7 @@ public class Messages {
 	public static String arenanotdisabled = "&c Please disable arena: &6/trsetup disable {ARENA}";
 	public static String availablekits = "&7 Available kits:&r ";
 	public static String arenawolrdna = "&7 Arena world is not loaded";
+	public static String arenanobounds = "&7 Arena bounds not set";
 	public static String arenadisabled = "&7 Arena is disabled";
 	public static String arenarunning = "&7 Arena already running";
 	public static String arenaregenerating = "&7 Arena is regenerating";
@@ -151,6 +152,7 @@ public class Messages {
 		arenanotexist = config.getString("arenanotexist", arenanotexist);
 		arenanotdisabled = config.getString("arenanotdisabled", arenanotdisabled);
 		arenawolrdna = config.getString("arenawolrdna", arenawolrdna);
+		arenanobounds = config.getString("arenanobounds", arenanobounds);
 		arenadisabled = config.getString("arenadisabled", arenadisabled);
 		arenarunning = config.getString("arenarunning", arenarunning);
 		arenaregenerating = config.getString("arenaregenerating", arenaregenerating);
@@ -245,6 +247,7 @@ public class Messages {
 		config.set("availablearenas", availablearenas);
 		config.set("availablekits", availablekits);
 		config.set("arenawolrdna", arenawolrdna);
+		config.set("arenanobounds", arenanobounds);
 		config.set("arenadisabled", arenadisabled);
 		config.set("arenarunning", arenarunning);
 		config.set("arenaregenerating", arenaregenerating);

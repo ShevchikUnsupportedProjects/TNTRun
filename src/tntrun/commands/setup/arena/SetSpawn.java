@@ -39,6 +39,10 @@ public class SetSpawn implements CommandHandlerInterface {
 				Messages.sendMessage(player, Messages.trprefix + Messages.arenanotdisabled.replace("{ARENA}", args[0]));
 				return true;
 			}
+			if (!arena.getStructureManager().isArenaBoundsSet()) {
+				Messages.sendMessage(player,  Messages.trprefix + Messages.arenanobounds);
+				return true;
+			}
 			if (arena.getStructureManager().setSpawnPoint(player.getLocation())) {
 				Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 SpawnPoint set to &6X: &7" + Math.round(player.getLocation().getX()) + " &6Y: &7" + Math.round(player.getLocation().getY()) + " &6Z: &7" + Math.round(player.getLocation().getZ()));
 			} else {
