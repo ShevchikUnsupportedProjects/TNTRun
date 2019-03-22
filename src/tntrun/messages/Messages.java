@@ -21,10 +21,9 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-
 import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 
@@ -129,9 +128,9 @@ public class Messages {
 	public static String setupdelkit = "Delete a TNTRun kit";
 	
 	
-	public static void sendMessage(Player player, String message) {
+	public static void sendMessage(CommandSender sender, String message) {
 		if (!message.equals("")) {
-			player.sendMessage(FormattingCodesParser.parseFormattingCodes(message));
+			sender.sendMessage(FormattingCodesParser.parseFormattingCodes(message));
 		}
 	}
 

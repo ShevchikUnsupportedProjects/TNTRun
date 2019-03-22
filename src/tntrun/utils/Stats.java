@@ -28,6 +28,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -220,7 +221,7 @@ public class Stats {
         }.runTaskAsynchronously(plugin);
     }
 
-    public void getLeaderboard(Player player, int entries) {
+    public void getLeaderboard(CommandSender sender, int entries) {
     	HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
     	
     	if (plugin.isFile()) {
@@ -233,7 +234,7 @@ public class Stats {
     		.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
     		.limit(entries)
     		.forEach(e -> {position++;
-    			   Messages.sendMessage(player, Messages.leaderboard
+    			   Messages.sendMessage(sender, Messages.leaderboard
     					   .replace("{POSITION}", String.valueOf(position))
     					   .replace("{PLAYER}", e.getKey())
     					   .replace("{WINS}", String.valueOf(e.getValue())));
