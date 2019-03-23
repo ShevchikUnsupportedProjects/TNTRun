@@ -43,7 +43,7 @@ public class ConsoleCommands implements CommandExecutor {
 			sender.sendMessage("Console is expected");
 			return true;
 		}
-		if (args.length < 1) {
+		if (args.length == 0) {
 			Messages.sendMessage(sender, Messages.trprefix + "&c Please use &6trconsole help");
 			return true;
 		}
@@ -92,25 +92,63 @@ public class ConsoleCommands implements CommandExecutor {
 			plugin.stats.getLeaderboard(sender, entries);
 			return true;
 		}
-		//info
+		// info
 		else if (args[0].equalsIgnoreCase("info")) {
 			Utils.displayInfo(sender);
 			return true;
 		}
+		// list
+		else if (args[0].equalsIgnoreCase("list")) {
+			StringBuilder message = new StringBuilder(200);
+			message.append(Messages.trprefix + Messages.availablearenas);
+			if (plugin.amanager.getArenas().size() != 0) {
+				for (Arena arena : plugin.amanager.getArenas()) {
+					if (arena.getStatusManager().isArenaEnabled()) {
+						message.append("&a" + arena.getArenaName() + " ; ");
+					} else {
+						message.append("&c" + arena.getArenaName() + " ; ");
+					}
+				}
+				message.setLength(message.length() - 2);
+			}
+			Messages.sendMessage(sender, message.toString());
+		}
+		// help
+		if (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("cmds")) {
+			displayConsoleCommands(sender);
+		}
+		// reload config
+		else if (args[0].equalsIgnoreCase("reloadconfig")) {
+			plugin.reloadConfig();
+			plugin.signEditor.loadConfiguration();
+			sender.sendMessage("Config reloaded");
+			return true;
+		}
 		// reload messages
-		else if (args.length == 1 && args[0].equalsIgnoreCase("reloadmsg")) {
+		else if (args[0].equalsIgnoreCase("reloadmsg")) {
 			Messages.loadMessages(plugin);
 			sender.sendMessage("Messages reloaded");
 			return true;
 		}
 		// reload bars
-		else if (args.length == 1 && args[0].equalsIgnoreCase("reloadbars")) {
+		else if (args[0].equalsIgnoreCase("reloadbars")) {
 			Bars.loadBars(plugin);
 			sender.sendMessage("Bars reloaded");
 			return true;
 		}
 
 		return false;
+	}
+	private void displayConsoleCommands(CommandSender sender) {
+		Messages.sendMessage(sender, Messages.trprefix + "trconsole help");
+		Messages.sendMessage(sender, Messages.trprefix + "trconsole list");
+		Messages.sendMessage(sender, Messages.trprefix + "trconsole info");
+		Messages.sendMessage(sender, Messages.trprefix + "trconsole enable {arena}");
+		Messages.sendMessage(sender, Messages.trprefix + "trconsole disable {arena}");
+		Messages.sendMessage(sender, Messages.trprefix + "trconsole reloadconfig");
+		Messages.sendMessage(sender, Messages.trprefix + "trconsole reloadmessages");
+		Messages.sendMessage(sender, Messages.trprefix + "trconsole reloadbars");
+		Messages.sendMessage(sender, Messages.trprefix + "trconsole leaderboard");
 	}
 
 }
