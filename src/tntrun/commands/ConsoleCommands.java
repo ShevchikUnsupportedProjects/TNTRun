@@ -43,8 +43,8 @@ public class ConsoleCommands implements CommandExecutor {
 			sender.sendMessage("Console is expected");
 			return true;
 		}
-		if (args.length == 0) {
-			Messages.sendMessage(sender, Messages.trprefix + "&c Please use &6trconsole help");
+		if (args.length == 0 || args[0].equalsIgnoreCase("info")) {
+			Utils.displayInfo(sender);
 			return true;
 		}
 		// disable arena
@@ -90,11 +90,6 @@ public class ConsoleCommands implements CommandExecutor {
 			}
 			Messages.sendMessage(sender, Messages.leaderhead);
 			plugin.stats.getLeaderboard(sender, entries);
-			return true;
-		}
-		// info
-		else if (args[0].equalsIgnoreCase("info")) {
-			Utils.displayInfo(sender);
 			return true;
 		}
 		// list
