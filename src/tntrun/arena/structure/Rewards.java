@@ -123,14 +123,14 @@ public class Rewards {
 		}
 		if (commandreward != null && commandreward.length() != 0) {
 			Bukkit.getServer().dispatchCommand(console, commandreward.replace("%PLAYER%", player.getName()));
-			console.sendMessage("[TNTRun] Command " + ChatColor.GOLD + commandreward + ChatColor.WHITE + " has been executed for " + ChatColor.AQUA + player.getName());
+			console.sendMessage("[TNTRun_reloaded] Command " + ChatColor.GOLD + commandreward + ChatColor.WHITE + " has been executed for " + ChatColor.AQUA + player.getName());
 		}
 		
 		if (rewardmessage.endsWith(", ")) {
 			rewardmessage = rewardmessage.substring(0, rewardmessage.length() - 2);
 		}
 		if (!rewardmessage.isEmpty()) {
-			console.sendMessage("[TNTRun] " + ChatColor.AQUA + player.getName() + ChatColor.WHITE + " has been rewarded " + ChatColor.GOLD + rewardmessage);
+			console.sendMessage("[TNTRun_reloaded] " + ChatColor.AQUA + player.getName() + ChatColor.WHITE + " has been rewarded " + ChatColor.GOLD + rewardmessage);
 			rewardmessage = Messages.playerrewardmessage.replace("{REWARD}", rewardmessage);
 			Messages.sendMessage(player, Messages.trprefix + rewardmessage);
 		}
@@ -140,7 +140,10 @@ public class Rewards {
 		if (economy != null) {
 			Economy econ = (Economy) economy;
 			econ.depositPlayer(offplayer, money);
+			return;
 		}
+		//TODO not needed after refactor of economy
+		Bukkit.getLogger().info("[TNTRun_reloaded] Money reward cannot be given as economy is disabled");
 	}
 
 	public void saveToConfig(FileConfiguration config) {

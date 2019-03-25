@@ -273,8 +273,11 @@ public class Stats {
 				}
 			} else {
 				for (String playerName : stats.getKeys(false)) {
-					if (Bukkit.getPlayer(playerName) != null) {
-						statsMap.put(playerName, getWins(Bukkit.getPlayer(playerName)));
+					if (isValidUuid(playerName)) {
+						continue;
+					}
+					if (Bukkit.getOfflinePlayer(playerName) != null) {
+						statsMap.put(playerName, getWins(Bukkit.getOfflinePlayer(playerName)));
 					}
 				}
 			}
