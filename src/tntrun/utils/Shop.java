@@ -23,7 +23,6 @@ import java.util.List;
 
 import net.milkbowl.vault.economy.Economy;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -39,7 +38,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -247,24 +245,16 @@ public class Shop implements Listener{
 		}
 	}
 
-	private Object economy = null;
-
 	private boolean hasMoney(int moneyneed, Player player) {
-		if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
-			RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-			if (economyProvider != null) {
-				economy = economyProvider.getProvider();
-			}
+		Economy econ = TNTRun.getInstance().getVaultHandler().getEconomy();
+		if(econ == null) {
+			return false;
 		}
-
-		if (economy != null) {
-			OfflinePlayer offplayer = player.getPlayer();
-			Economy econ = (Economy) economy;
-			double pmoney = econ.getBalance(offplayer);
-			if(pmoney >= moneyneed){
-				econ.withdrawPlayer(offplayer, moneyneed);
-				return true;
-			}
+		OfflinePlayer offplayer = player.getPlayer();
+		double pmoney = econ.getBalance(offplayer);
+		if(pmoney >= moneyneed) {
+			econ.withdrawPlayer(offplayer, moneyneed);
+			return true;
 		}
 		return false;
 	}

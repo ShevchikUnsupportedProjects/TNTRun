@@ -28,6 +28,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import tntrun.arena.Arena;
 import tntrun.arena.handlers.SoundHandler;
+import tntrun.arena.handlers.VaultHandler;
 import tntrun.utils.Bars;
 import tntrun.utils.Shop;
 import tntrun.utils.Sounds;
@@ -58,6 +59,7 @@ public class TNTRun extends JavaPlugin {
 	private boolean usestats = false;
 	private boolean needupdate = false;
 	private boolean file = false;
+	private VaultHandler vaultHandler;
 
 	public PlayerDataStore pdata;
 	public ArenasManager amanager;
@@ -179,7 +181,6 @@ public class TNTRun extends JavaPlugin {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				log.info(" ");
 				log.info("Checking plugin version...");
 				new VersionChecker();
 				version = VersionChecker.get().getVersion().split(";");
@@ -197,7 +198,6 @@ public class TNTRun extends JavaPlugin {
 						Utils.displayUpdate(p);
 					}
 				}
-				log.info(" ");
 			}
 		}.runTaskLaterAsynchronously(this, 30L);
 	}
@@ -246,8 +246,19 @@ public class TNTRun extends JavaPlugin {
 			headsplus = true;
 			log.info("Successfully linked with HeadsPlus, version " + HeadsPlus.getDescription().getVersion());
 		}
+		
+		Plugin Vault = getServer().getPluginManager().getPlugin("Vault");
+		if (Vault != null) {
+			log.info("Successfully linked with Vault, version " + Vault.getDescription().getVersion());
+			vaultHandler = new VaultHandler(this);
+		} else {
+			log.info("Vault plugin not found, economy disabled");
+		}
 	}
 
+	public VaultHandler getVaultHandler() {
+		return vaultHandler;
+	}
 	private void loadArenas() {
 		final File arenasfolder = new File(getDataFolder() + File.separator + "arenas");
 		arenasfolder.mkdirs();
