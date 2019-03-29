@@ -70,7 +70,7 @@ public class TNTRun extends JavaPlugin {
 	public Sounds sound;
 	public Stats stats;
 	public Shop shop;
-	
+
 	private static TNTRun instance;
 
 	@Override
@@ -86,7 +86,7 @@ public class TNTRun extends JavaPlugin {
 		pdata = new PlayerDataStore();
 		amanager = new ArenasManager();
 		shop = new Shop(this);
-		
+
 		//register commands and events
 		setupPlugin();
 
@@ -97,20 +97,22 @@ public class TNTRun extends JavaPlugin {
 
 		// load arenas
 		loadArenas();
-		
+
 		//check for update
 		checkUpdate();
-		
+
 		// enable sounds
 		sound = new SoundHandler(this);
-		
+
 		// start metrics
-		log.info("Starting Metrics...");
-		new Metrics(this);
-	     
+		if (getConfig().getBoolean("special.Metrics", true)) {
+			log.info("Attempting to start metrics (bStats)...");
+			new Metrics(this);
+		}
+
 		// set storage type
 		setStorage();
-		
+
 		//enable stats
 		if (usestats) {
 			stats = new Stats(this);

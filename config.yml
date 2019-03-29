@@ -1,7 +1,7 @@
 # TNTRun_reloaded configuration file     #
 #                                        #
-# The TNTRun plugin                      #
-# Original author Shevchikden            #
+# The TNTRun_reloaded plugin             #
+# Based on TNTRun by Shevchikden         #
 #                                        #
 # TNTRun_reloaded author steve4744       #
 #                                        #
@@ -11,6 +11,7 @@ special:
   UseTitle: true
   UseScoreboard: true
   CheckForNewVersion: true
+  Metrics: true
 shop:
   name: '&6&lTNTRun &f&lSHOP'
   size: 27

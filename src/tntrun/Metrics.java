@@ -109,6 +109,7 @@ public class Metrics {
         serverUUID = config.getString("serverUuid");
         logFailedRequests = config.getBoolean("logFailedRequests", false);
         if (config.getBoolean("enabled", true)) {
+            plugin.getLogger().info("Metrics is enabled on this server - metrics started");
             boolean found = false;
             // Search for all other bStats Metrics classes to see if we are the first one
             for (Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
@@ -124,6 +125,8 @@ public class Metrics {
                 // We are the first!
                 startSubmitting();
             }
+        } else {
+            plugin.getLogger().info("Metrics is disabled on this server - exiting");
         }
     }
 
