@@ -43,6 +43,7 @@ import tntrun.commands.setup.arena.SetLoseLevel;
 import tntrun.commands.setup.arena.SetMaxPlayers;
 import tntrun.commands.setup.arena.SetMinPlayers;
 import tntrun.commands.setup.arena.SetMoneyRewards;
+import tntrun.commands.setup.arena.SetRegenerationDelay;
 import tntrun.commands.setup.arena.SetReward;
 import tntrun.commands.setup.arena.SetSpawn;
 import tntrun.commands.setup.arena.SetSpectatorSpawn;
@@ -84,6 +85,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("delete", new DeleteArena(plugin));
 		commandHandlers.put("setarena", new SetArena(plugin, plselection));
 		commandHandlers.put("setgameleveldestroydelay", new SetGameLevelDestroyDelay(plugin));
+		commandHandlers.put("setregenerationdelay", new SetRegenerationDelay(plugin));
 		commandHandlers.put("setloselevel", new SetLoseLevel(plugin, plselection));
 		commandHandlers.put("setspawn", new SetSpawn(plugin));
 		commandHandlers.put("setspectate", new SetSpectatorSpawn(plugin));

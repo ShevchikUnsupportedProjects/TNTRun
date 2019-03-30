@@ -25,10 +25,11 @@ import tntrun.commands.setup.CommandHandlerInterface;
 import tntrun.messages.Messages;
 import tntrun.utils.Utils;
 
-public class SetGameLevelDestroyDelay implements CommandHandlerInterface {
+public class SetRegenerationDelay implements CommandHandlerInterface {
+	
+	private final TNTRun plugin;
 
-	private TNTRun plugin;
-	public SetGameLevelDestroyDelay(TNTRun plugin) {
+	public SetRegenerationDelay(TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
@@ -40,12 +41,13 @@ public class SetGameLevelDestroyDelay implements CommandHandlerInterface {
 				Messages.sendMessage(player, Messages.trprefix + Messages.arenanotdisabled.replace("{ARENA}", args[0]));
 				return true;
 			}
-			if (Utils.isNumber(args[1])) {
-				arena.getStructureManager().setGameLevelDestroyDelay(Integer.parseInt(args[1]));
-				Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 GameLevelDestroyDelay set to &6" + args[1] + "&7 ticks");
-			} else {
-				Messages.sendMessage(player, Messages.trprefix + "&c DestroyDelay amount must be an integer");
+			if (!Utils.isNumber(args[1]) || Integer.parseInt(args[1]) <= 0) {
+				Messages.sendMessage(player, Messages.trprefix + "&c RegenerationDelay must be a positive integer");
+				return true;
 			}
+			arena.getStructureManager().setRegenerationDelay(Integer.parseInt(args[1]));
+			Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 RegenerationDelay set to &6" + args[1] + "&7 ticks");
+			
 		} else {
 			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[0]));
 		}

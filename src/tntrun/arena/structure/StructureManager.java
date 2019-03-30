@@ -53,6 +53,7 @@ public class StructureManager {
 	private TeleportDestination teleportDest = TeleportDestination.PREVIOUS;
 	private DamageEnabled damageEnabled = DamageEnabled.NO;
 	private boolean kitsEnabled = false;
+	private int regenerationdelay = 60;
 
 	public String getWorldName() {
 		return world;
@@ -144,6 +145,10 @@ public class StructureManager {
 
 	public boolean isKitsEnabled() {
 		return kitsEnabled;
+	}
+
+	public int getRegenerationDelay() {
+		return regenerationdelay;
 	}
 	
 	public boolean isInArenaBounds(Location loc) {
@@ -247,6 +252,10 @@ public class StructureManager {
 		this.kitsEnabled = kitsEnabled;
 	}
 
+	public void setRegenerationDelay(int regendelay) {
+		this.regenerationdelay = regendelay;
+	}
+
 	public void saveToConfig() {
 		FileConfiguration config = new YamlConfiguration();
 		// save arena bounds
@@ -289,6 +298,7 @@ public class StructureManager {
 		config.set("damageenabled", damageEnabled.toString());
 		// save kits enabled
 		config.set("enableKits", kitsEnabled);
+		config.set("regenerationdelay", regenerationdelay);
 		// save rewards
 		rewards.saveToConfig(config);
 		try {
@@ -331,6 +341,7 @@ public class StructureManager {
 		rewards.loadFromConfig(config);
 		// kits enabled
 		kitsEnabled = config.getBoolean("enableKits");
+		regenerationdelay = config.getInt("regenerationdelay", regenerationdelay);
 	}
 
 }

@@ -53,6 +53,7 @@ public class SetupTabCompleter implements TabCompleter {
 		arenacommands.add("finish");
 		arenacommands.add("delspectate");
 		arenacommands.add("setgameleveldestroydelay");
+		arenacommands.add("setregenerationdelay");
 		arenacommands.add("setmaxplayers");
 		arenacommands.add("setminplayers");
 		arenacommands.add("setvotepercent");

@@ -21,13 +21,13 @@ public class GameZone {
 
 	private HashSet<Block> blockstodestroy = new HashSet<Block>();
 	private LinkedList<BlockState> blocks = new LinkedList<BlockState>();
-	
+
 	public Arena arena;
-	
+
 	public GameZone(Arena arena){
 		this.arena = arena;
 	}
-	
+
 	private final int SCAN_DEPTH = 2;
 	public void destroyBlock(Location loc) {
 		int y = loc.getBlockY() + 1;
@@ -68,7 +68,7 @@ public class GameZone {
 			bsi.remove();
 		}
 	}
-	
+
 	private void removeGLBlocks(Block block) {
 		blocks.add(block.getState());
 		saveBlock(block);
@@ -76,9 +76,9 @@ public class GameZone {
 		blocks.add(block.getState());
 		saveBlock(block);
 	}
-	
+
 	private static double PLAYER_BOUNDINGBOX_ADD = 0.3;
-	
+
 	private Block getBlockUnderPlayer(int y, Location location) {
 		PlayerPosition loc = new PlayerPosition(location.getX(), y, location.getZ());
 		Block b11 = loc.getBlock(location.getWorld(), +PLAYER_BOUNDINGBOX_ADD, -PLAYER_BOUNDINGBOX_ADD);
@@ -101,34 +101,34 @@ public class GameZone {
 	}
 
 	private final int MAX_BLOCKS_PER_TICK = 10;
-	
-	public void saveBlock(Block b){
+
+	public void saveBlock(Block b) {
 		b.setType(Material.AIR);
 	}
-	
-	public int regen(){
+
+	public int regen() {
 		final Iterator<BlockState> bsit = blocks.iterator();
 		new BukkitRunnable() {
             @Override
             public void run() {
             	for(int i = MAX_BLOCKS_PER_TICK; i >= 0;i--){
             		if(bsit.hasNext()){
-            			try{
+            			try {
             				BlockState bs = bsit.next();
                 			bs.update(true);
                 			bsit.remove();
-            			}catch(ConcurrentModificationException ex){
+            			} catch(ConcurrentModificationException ex) {
             				
             			}
-            		}else{
+            		} else {
             			cancel();
             		}
             	}
             }
         }.runTaskTimer(TNTRun.getInstance(), 0L, 1L);
-		return 60;
+		return arena.getStructureManager().getRegenerationDelay();
 	}
-	
+
 	private static class PlayerPosition {
 
 		private double x;
