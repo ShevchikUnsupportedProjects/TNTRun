@@ -2,7 +2,7 @@
 
 This was originally forked from the (now unsupported) TNTRun by Shevchik for Minecraft v1.9 and has been improved and updated as new versions of Minecraft have been released, so that it supports all Minecraft versions from 1.8 through to 1.13.2.
 
-However, as a result of the huge number of changes brought in by Mojang in Minecraft v1.13, begining with version 7.0 of TNTRun\_reloaded, the plugin will only run on Minecraft versions 1.13 and later. All future development work will be done on this version and not back-ported to the legacy version.
+However, as a result of the huge number of changes brought in by Mojang in Minecraft v1.13, beginning with version 7.0 of TNTRun\_reloaded, the plugin will only run on Minecraft versions 1.13 and later. All future development work will be done on this version and not back-ported to the legacy version.
 
 The legacy version of TNTRun\_reloaded is the final release to support all Minecraft versions from 1.8 through to 1.12.2. This version is still available for download and will still be supported where possible.
 
@@ -28,7 +28,7 @@ Note that there is a legacy bug fix release (version 6.8.1) only available from 
     Automatic arena regeneration
     Configurable block destroy delay
     Force-start voting system
-    Anti-camping system
+    Configurable anti-camping system
     Custom messages
     Formatting codes support
     Full tab completion based on permissions
@@ -44,7 +44,7 @@ Note that there is a legacy bug fix release (version 6.8.1) only available from 
     Auto updating leader board signs
     Arena leave checker
     Customizable shop
-    Kits
+    Kits - can be enabled per arena
     Heads - interfaces with HeadsPlus plugin by Thatsmusic99
     PVP can be enabled/disabled per arena
     Player rewards
@@ -53,4 +53,4 @@ Note that there is a legacy bug fix release (version 6.8.1) only available from 
 <br />
 <br />
 <br />
-Updated steve4744 - 20th Dec 2018
+Updated steve4744 - 2nd April 2019
