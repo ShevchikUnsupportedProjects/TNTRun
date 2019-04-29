@@ -18,9 +18,9 @@
 package tntrun.commands.setup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.boss.BarColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -89,7 +89,7 @@ public class SetupTabCompleter implements TabCompleter {
 					list.add(arena.getArenaName());
 				}
 			} else if (args[0].equalsIgnoreCase("setbarcolor") || args[0].equalsIgnoreCase("setbarcolour")) {
-				for (BarColor color : EnumUtils.getEnumList(BarColor.class)) {
+				for (BarColor color : Arrays.asList(BarColor.class.getEnumConstants())) {
 					list.add(color.toString());
 				}
 				list.add("RANDOM");

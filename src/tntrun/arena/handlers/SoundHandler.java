@@ -17,10 +17,10 @@
 
 package tntrun.arena.handlers;
 
-import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import com.google.common.base.Enums;
 
 import tntrun.TNTRun;
 import tntrun.utils.Sounds;
@@ -65,7 +65,7 @@ public class SoundHandler extends Sounds {
 	 * @return sound
 	 */
 	private Sound getSound(String path) {
-		return EnumUtils.getEnum(Sound.class, plugin.getConfig().getString("sounds." + path + ".sound"));
+		return Enums.getIfPresent(Sound.class, plugin.getConfig().getString("sounds." + path + ".sound")).orNull();
 	}
 
 	/**

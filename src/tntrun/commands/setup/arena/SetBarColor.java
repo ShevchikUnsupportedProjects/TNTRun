@@ -17,9 +17,10 @@
 
 package tntrun.commands.setup.arena;
 
-import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.boss.BarColor;
 import org.bukkit.entity.Player;
+
+import com.google.common.base.Enums;
 
 import tntrun.TNTRun;
 import tntrun.commands.setup.CommandHandlerInterface;
@@ -36,7 +37,7 @@ public class SetBarColor implements CommandHandlerInterface {
 	public boolean handleCommand(Player player, String[] args) {
 
 		String colour = args[0].toUpperCase();
-		if (colour.equals("RANDOM") || EnumUtils.isValidEnum(BarColor.class, colour)) {
+		if (colour.equals("RANDOM") || Enums.getIfPresent(BarColor.class, colour).orNull() != null) {
 			plugin.getConfig().set("special.BossBarColor", colour);
 			plugin.saveConfig();
 		} else {

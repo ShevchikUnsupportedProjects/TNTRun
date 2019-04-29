@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -32,6 +31,8 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+
+import com.google.common.base.Enums;
 
 import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
@@ -54,7 +55,7 @@ public class Bars {
 		int index = 0;
 		String col = TNTRun.getInstance().getConfig().getString("special.BossBarColor");
 		
-		if (col == null || col.equalsIgnoreCase("RANDOM") || !EnumUtils.isValidEnum(BarColor.class, col)) {
+		if (col == null || col.equalsIgnoreCase("RANDOM") || Enums.getIfPresent(BarColor.class, col).orNull() == null) {
 			Random random = ThreadLocalRandom.current();
 			index = random.nextInt(BarColor.values().length);
 		} else {
