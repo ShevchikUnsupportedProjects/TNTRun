@@ -103,7 +103,8 @@ public class Messages {
 	public static String setupspectate = "Set spectator spawn point";
 	public static String setupfinish = "Finish arena and save";
 	public static String setupdelspectate = "Delete spectator spawn for arena";
-	public static String setupdelay = "Set a delay for removing blocks when player steps on it";
+	public static String setupdelay = "Set delay for removing block when player steps on it";
+	public static String setupregendelay = "Set delay before players can re-join arena (Default: 60)";
 	public static String setupmax = "Set maximum players for arena (Default: 15)";
 	public static String setupmin = "Set minimum players for arena (Default: 2)";
 	public static String setupvote = "Set vote percentage to force-start arena (Default: 0.75)";
@@ -208,6 +209,7 @@ public class Messages {
 		setupfinish = config.getString("setupfinish", setupfinish);
 		setupdelspectate = config.getString("setupdelspectate", setupdelspectate);
 		setupdelay = config.getString("setupdelay", setupdelay);
+		setupregendelay = config.getString("setupregendelay", setupregendelay);
 		setupmax = config.getString("setupmax", setupmax);
 		setupmin = config.getString("setupmin", setupmin);
 		setupvote = config.getString("setupvote", setupvote);
@@ -303,6 +305,7 @@ public class Messages {
 		config.set("setupfinish", setupfinish);
 		config.set("setupdelspectate", setupdelspectate);
 		config.set("setupdelay", setupdelay);
+		config.set("setupregendelay", setupregendelay);
 		config.set("setupmax", setupmax);
 		config.set("setupmin", setupmin);
 		config.set("setupvote", setupvote);
