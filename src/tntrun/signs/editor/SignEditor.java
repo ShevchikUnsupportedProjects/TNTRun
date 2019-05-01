@@ -182,7 +182,7 @@ public class SignEditor {
 			String text = null;
 			int players = arena.getPlayersManager().getPlayersCount();
 			int maxPlayers = arena.getStructureManager().getMaxPlayers();
-			
+
 			if (!arena.getStatusManager().isArenaEnabled()) {
 				text = FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.status.disabled"));
 			} else
