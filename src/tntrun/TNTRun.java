@@ -90,30 +90,20 @@ public class TNTRun extends JavaPlugin {
 		//register commands and events
 		setupPlugin();
 
-		// save config
 		saveDefaultConfig();
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 
-		// load arenas
 		loadArenas();
-
-		//check for update
 		checkUpdate();
-
-		// enable sounds
 		sound = new SoundHandler(this);
 
-		// start metrics
 		if (getConfig().getBoolean("special.Metrics", true)) {
 			log.info("Attempting to start metrics (bStats)...");
 			new Metrics(this);
 		}
 
-		// set storage type
 		setStorage();
-
-		//enable stats
 		if (usestats) {
 			stats = new Stats(this);
 		}
@@ -248,14 +238,8 @@ public class TNTRun extends JavaPlugin {
 			headsplus = true;
 			log.info("Successfully linked with HeadsPlus, version " + HeadsPlus.getDescription().getVersion());
 		}
-		
-		Plugin Vault = getServer().getPluginManager().getPlugin("Vault");
-		if (Vault != null) {
-			log.info("Successfully linked with Vault, version " + Vault.getDescription().getVersion());
-			vaultHandler = new VaultHandler(this);
-		} else {
-			log.info("Vault plugin not found, economy disabled");
-		}
+
+		vaultHandler = new VaultHandler(this);
 	}
 
 	public VaultHandler getVaultHandler() {

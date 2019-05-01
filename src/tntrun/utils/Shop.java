@@ -246,7 +246,7 @@ public class Shop implements Listener{
 	}
 
 	private boolean hasMoney(int moneyneed, Player player) {
-		Economy econ = TNTRun.getInstance().getVaultHandler().getEconomy();
+		Economy econ = plugin.getVaultHandler().getEconomy();
 		if(econ == null) {
 			return false;
 		}

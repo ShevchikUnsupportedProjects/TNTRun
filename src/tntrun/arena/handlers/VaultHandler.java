@@ -18,6 +18,7 @@
 package tntrun.arena.handlers;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import net.milkbowl.vault.economy.Economy;
@@ -34,6 +35,15 @@ public class VaultHandler {
 	}
 
 	private void setupVaultEconomy() {
+		Plugin Vault = plugin.getServer().getPluginManager().getPlugin("Vault");
+		if (Vault != null) {
+			plugin.getLogger().info("Successfully linked with Vault, version " + Vault.getDescription().getVersion());
+		} else {
+			plugin.getLogger().info("Vault plugin not found, economy disabled");
+			economy = null;
+			return;
+		}
+		
 		final RegisteredServiceProvider<Economy> rsp = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if (rsp != null) {
             plugin.getLogger().info("Vault economy enabled.");
