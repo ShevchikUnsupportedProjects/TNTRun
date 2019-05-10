@@ -43,6 +43,7 @@ import tntrun.commands.setup.SetupTabCompleter;
 import tntrun.datahandler.ArenasManager;
 import tntrun.datahandler.PlayerDataStore;
 import tntrun.eventhandler.HeadsPlusHandler;
+import tntrun.eventhandler.MenuHandler;
 import tntrun.eventhandler.PlayerLeaveArenaChecker;
 import tntrun.eventhandler.PlayerStatusHandler;
 import tntrun.eventhandler.RestrictionHandler;
@@ -230,6 +231,7 @@ public class TNTRun extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
 		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
+		getServer().getPluginManager().registerEvents(new MenuHandler(this), this);
 		getServer().getPluginManager().registerEvents(this.shop, this);
 
 		Plugin HeadsPlus = getServer().getPluginManager().getPlugin("HeadsPlus");

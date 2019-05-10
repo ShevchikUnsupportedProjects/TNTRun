@@ -31,3 +31,6 @@ permissions:
   tntrun.shop:
     description: allow players to buy any shop item (if they have money)
     default: true
+  tntrun.joinmenu:
+    description: allow players to use the join menu
+    default: true

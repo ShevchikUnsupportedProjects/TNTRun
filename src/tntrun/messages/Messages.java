@@ -30,6 +30,7 @@ import tntrun.TNTRun;
 public class Messages {
 
 	public static String trprefix = "&7[&6TNTRun_reloaded&7]";
+	public static String menutitle = "&6TNTRun_reloaded Arenas";
 	public static String nopermission = "&c You don't have permission to do this";
 	public static String teleporttolobby = "&7 Teleported to lobby";
 
@@ -145,6 +146,7 @@ public class Messages {
 		File messageconfig = new File(plugin.getDataFolder(), "messages.yml");
 		FileConfiguration config = YamlConfiguration.loadConfiguration(messageconfig);
 		trprefix = config.getString("tntrunprefix", trprefix);
+		menutitle = config.getString("menutitle", menutitle);
 		nopermission = config.getString("nopermission", nopermission);
 		teleporttolobby = config.getString("teleporttolobby", teleporttolobby);
 		availablearenas = config.getString("availablearenas", availablearenas);
@@ -241,6 +243,7 @@ public class Messages {
 		FileConfiguration config = new YamlConfiguration();
 		
 		config.set("trprefix", trprefix);
+		config.set("menutitle",  menutitle);
 		config.set("nopermission", nopermission);
 		config.set("teleporttolobby", teleporttolobby);
 		config.set("arenanotexist", arenanotexist);

@@ -29,11 +29,13 @@ import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
+import tntrun.utils.Menu;
 import tntrun.utils.Utils;
 
 public class GameCommands implements CommandExecutor {
 
 	private TNTRun plugin;
+	private Menu menu;
 
 	public GameCommands(TNTRun plugin) {
 		this.plugin = plugin;
@@ -153,6 +155,12 @@ public class GameCommands implements CommandExecutor {
 
 		// join arena
 		else if (args[0].equalsIgnoreCase("join")) {
+			if (args.length == 1 && player.hasPermission("tntrun.joinmenu")) {
+				//TODO load gui menu
+				menu = new Menu(plugin);
+				menu.buildMenu(player);
+				return false;
+			}
 			if (args.length != 2) {
 				Messages.sendMessage(player, Messages.trprefix + "&c Invalid number of arguments supplied");
 				return false;

@@ -24,6 +24,9 @@ fireworksonwin:
   enabled: true
   duration: 4
 broadcastwinlevel: 2
+menu:
+  item: TNT
+  panecolor: LIGHT_BLUE
 sounds:
   arenastart:
     enabled: true
