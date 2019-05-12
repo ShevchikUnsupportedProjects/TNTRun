@@ -19,6 +19,7 @@ package tntrun.commands;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -307,8 +308,13 @@ public class GameCommands implements CommandExecutor {
 			}
 			Arena arena = plugin.amanager.getArenaByName(args[1]);
 			if (arena != null) {
-				if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() > 1) {
-					arena.getGameHandler().runArenaCountdown();
+				if (arena.getPlayersManager().getPlayersCount() <= 1) {
+					Messages.sendMessage(player, Messages.trprefix + Messages.playersrequiredtostart);
+					return true;
+				}
+				if (!arena.getStatusManager().isArenaStarting()) {
+					Bukkit.getServer().getConsoleSender().sendMessage("[TNTRun] Arena " + ChatColor.GOLD + arena.getArenaName() + ChatColor.WHITE + " force-started by " + ChatColor.AQUA + player.getName());
+					arena.getGameHandler().forceStartByCommand();
 					return false;
 				}
 			} else {

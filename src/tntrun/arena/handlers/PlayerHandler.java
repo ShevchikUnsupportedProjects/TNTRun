@@ -371,6 +371,9 @@ public class PlayerHandler {
 		if (arena.getPlayersManager().getPlayersCount() > 1 && votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getStructureManager().getVotePercent()) {
 			return true;
 		}
+		if (arena.getGameHandler().isForceStartByCommand()) {
+			return true;
+		}
 		return false;
 	}
 	

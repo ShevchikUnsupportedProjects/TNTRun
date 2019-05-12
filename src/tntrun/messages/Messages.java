@@ -50,6 +50,7 @@ public class Messages {
 	public static String signremove = "&7 Sign successfully removed";
 	
 	public static String playerscountinarena = "&6 Current number of players in arena: {COUNT} players";
+	public static String playersrequiredtostart = "&c There must be at least 2 players in the arena to force-start";
 	public static String limitreached = "&7 Arena is full.";
 	public static String playerjoinedtoplayer = "&7 You joined the arena";
 	public static String playerjoinedtoothers = "&7 Player &6{PLAYER} &7joined the arena";
@@ -172,6 +173,7 @@ public class Messages {
 		playerlefttoothers = config.getString("playerlefttoothers", playerlefttoothers);
 		playervotedforstart = config.getString("playervotedforstart", playervotedforstart);
 		playeralreadyvotedforstart = config.getString("playeralreadyvotedforstart", playeralreadyvotedforstart);
+		playersrequiredtostart = config.getString("playersrequiredtostart", playersrequiredtostart);
 		arenastarted = config.getString("arenastarted", arenastarted);
 		arenacountdown = config.getString("arenacountdown", arenacountdown);
 		arenatimeout = config.getString("arenatimeout", arenatimeout);
@@ -281,6 +283,7 @@ public class Messages {
 		config.set("playerboughtitem", playerboughtitem);
 		config.set("playerboughtwait", playerboughtwait);
 		config.set("playerkit", playerkit);
+		config.set("playersrequiredtostart", playersrequiredtostart);
 		config.set("notenoughtmoney", notenoughtmoney);
 		config.set("alreadyboughtitem", alreadyboughtitem);
 		config.set("playernotinarena", playernotinarena);

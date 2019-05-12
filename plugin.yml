@@ -34,6 +34,6 @@ permissions:
   tntrun.joinmenu:
     description: allow players to use the join menu
     default: true
-  tntrun.start
+  tntrun.start:
     description: allow players to start an arena before the minimum players is reached
-    default op
+    default: op

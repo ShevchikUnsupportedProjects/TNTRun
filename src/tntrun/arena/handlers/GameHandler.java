@@ -166,6 +166,7 @@ public class GameHandler {
 	private int timelimit;
 	private int arenahandler;
 	private int playingtask;
+	private boolean forceStartByCmd;
 
 	public void startArena() {
 		arena.getStatusManager().setRunning(true);
@@ -553,5 +554,14 @@ public class GameHandler {
 		} else if (item.toString().contains("HELMET")) {
 			player.getInventory().setHelmet(item);
 		}
+	}
+
+	public void forceStartByCommand() {
+		forceStartByCmd = true;
+		runArenaCountdown();
+	}
+	
+	public boolean isForceStartByCommand() {
+		return forceStartByCmd;
 	}
 }
