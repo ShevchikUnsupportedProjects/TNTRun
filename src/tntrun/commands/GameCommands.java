@@ -58,13 +58,14 @@ public class GameCommands implements CommandExecutor {
 			Messages.sendMessage(player, "&7============" + Messages.trprefix + "============");
 			Messages.sendMessage(player, "&6/tr lobby &f- &c" + Messages.helplobby);
 			Messages.sendMessage(player, "&6/tr list [arena] &f- &c" + Messages.helplist);
-			Messages.sendMessage(player, "&6/tr join {arena} &f- &c" + Messages.helpjoin);
+			Messages.sendMessage(player, "&6/tr join [arena] &f- &c" + Messages.helpjoin);
 			Messages.sendMessage(player, "&6/tr leave &f- &c" + Messages.helpleave);
 			Messages.sendMessage(player, "&6/tr vote &f- &c" + Messages.helpvote);
 			Messages.sendMessage(player, "&6/tr info &f- &c" + Messages.helpinfo);
 			Messages.sendMessage(player, "&6/tr stats &f- &c" + Messages.helpstats);
 			Messages.sendMessage(player, "&6/tr leaderboard [size] &f- &c" + Messages.helplb);
 			Messages.sendMessage(player, "&6/tr listkit [kit] &f- &c" + Messages.helplistkit);
+			Messages.sendMessage(player, "&6/tr start {arena} &f- &c" + Messages.helpstart);
 			Messages.sendMessage(player, "&6/tr cmds &f- &c" + Messages.helpcmds);
 			return true;
 	
@@ -292,6 +293,28 @@ public class GameCommands implements CommandExecutor {
 			}
 			Messages.sendMessage(player, message.toString());
 			return true;
+		}
+		
+		// start
+		else if (args[0].equalsIgnoreCase("start")) {
+			if (!player.hasPermission("tntrun.start")) {
+				Messages.sendMessage(player, Messages.nopermission);
+				return true;
+			}
+			if (args.length != 2) {
+				Messages.sendMessage(player, Messages.trprefix + "&c Invalid number of arguments supplied");
+				return true;
+			}
+			Arena arena = plugin.amanager.getArenaByName(args[1]);
+			if (arena != null) {
+				if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() > 1) {
+					arena.getGameHandler().runArenaCountdown();
+					return false;
+				}
+			} else {
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[1]));
+				return true;
+			}
 		}
 		
 		else {
