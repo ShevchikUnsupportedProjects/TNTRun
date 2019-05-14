@@ -147,7 +147,7 @@ public class Messages {
 	public static void loadMessages(TNTRun plugin) {
 		File messageconfig = new File(plugin.getDataFolder(), "messages.yml");
 		FileConfiguration config = YamlConfiguration.loadConfiguration(messageconfig);
-		trprefix = config.getString("tntrunprefix", trprefix);
+		trprefix = config.getString("trprefix", trprefix);
 		menutitle = config.getString("menutitle", menutitle);
 		nopermission = config.getString("nopermission", nopermission);
 		teleporttolobby = config.getString("teleporttolobby", teleporttolobby);
