@@ -109,7 +109,7 @@ public class RestrictionHandler implements Listener {
 		}
 		e.setCancelled(true);
 	}
-	
+
 	//check interact
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
@@ -126,7 +126,7 @@ public class RestrictionHandler implements Listener {
 				}
 	        }
 		}
-		
+
         if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.shop.material"))) {
     		if (arena != null) {
     			plugin.sound.ITEM_SELECT(player);
@@ -135,7 +135,7 @@ public class RestrictionHandler implements Listener {
     			player.openInventory(inv);
         	}
 		}
-		
+
         if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.info.material"))) {
             if (arena != null) {
        			if (u.contains(player)) {
@@ -148,7 +148,7 @@ public class RestrictionHandler implements Listener {
             	Utils.displayInfo(player);
         	}
         }
-        
+
         if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.vote.material"))) {
             if (arena != null) {
     			if (u.contains(player)) {
@@ -158,7 +158,7 @@ public class RestrictionHandler implements Listener {
             	plugin.sound.ITEM_SELECT(player);
             	u.add(player);
             	coolDown(player);
-            	
+
             	if (arena.getStatusManager().isArenaStarting()) {
             		Messages.sendMessage(player, Messages.trprefix + Messages.arenastarting);
             		return;
@@ -170,7 +170,7 @@ public class RestrictionHandler implements Listener {
             	}
         	}
         }
-        
+
         if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.stats.material"))) {
             if (arena != null) {
             	e.setCancelled(true);
@@ -184,7 +184,7 @@ public class RestrictionHandler implements Listener {
          	   	player.chat("/tntrun stats");
         	}
         }
-        
+
         if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.heads.material"))) {
             if (arena != null) {
        			if (u.contains(player)) {
@@ -202,7 +202,7 @@ public class RestrictionHandler implements Listener {
         	}
         }
 	}
-	
+
 	private void coolDown(Player player) {
 		new BukkitRunnable() {
 			@Override
@@ -211,64 +211,69 @@ public class RestrictionHandler implements Listener {
 			}
 		}.runTaskLater(plugin, 40);
 	}
-	
+
 	public ArrayList<Player> u = new ArrayList<Player>();
-	
+
 	@EventHandler
 	public void onFly(PlayerToggleFlightEvent e) {
 		final Player p = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(p.getName());
-		
+
 		if (arena == null) {
 			return;
 		}
-		if (p.getGameMode() != GameMode.CREATIVE) {
-			if (arena.getPlayersManager().isSpectator(p.getName())) {
-				e.setCancelled(false);
-				p.setFlying(true);
-				return;
-			}
-			if (!arena.getStatusManager().isArenaRunning()) {
+		if (p.getGameMode() == GameMode.CREATIVE) {
+			p.setAllowFlight(true);
+			return;
+		}
+		if (arena.getPlayersManager().isSpectator(p.getName())) {
+			e.setCancelled(false);
+			p.setFlying(true);
+			return;
+		}
+		if (!arena.getStatusManager().isArenaRunning()) {
+			e.setCancelled(true);
+			return;
+		}
+		if (u.contains(p)) {
+			e.setCancelled(true);
+			return;
+		}
+		if (!plugin.getConfig().getBoolean("infinitedoublejumps.enabled")) {
+			if (plugin.getConfig().get("doublejumps." + p.getName()) == null) {
 				e.setCancelled(true);
+				p.setAllowFlight(false);
 				return;
 			}
-			if (u.contains(p)) {
-				e.setCancelled(true);
-				return;
-			}
-			if (plugin.getConfig().get("doublejumps." + p.getName()) == null || plugin.getConfig().getInt("doublejumps." + p.getName()) == 0) {
+			if (plugin.getConfig().getInt("doublejumps." + p.getName()) == 0) {
 				e.setCancelled(true);
 				p.setAllowFlight(false);
 				plugin.getConfig().set("doublejumps." + p.getName(), null);
 				plugin.saveConfig();
 				return;
-			} else {
-				plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) - 1);
-			}
-			e.setCancelled(true);
-			p.setFlying(false);
-			p.setVelocity(p.getLocation().getDirection().multiply(1.5D).setY(0.7D));
-			plugin
-			.sound.NOTE_PLING(p, 5, 999);
+			} 
+			plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) - 1);
 			plugin.saveConfig();
-			u.add(p);
-			      
-			new BukkitRunnable() {
-				@Override
-			    public void run() {
-			    	u.remove(p);
-			    	p.setAllowFlight(true);
-			    }
-			}.runTaskLater(plugin, 20);
-		} else {
-			p.setAllowFlight(true);
 		}
+		e.setCancelled(true);
+		p.setFlying(false);
+		p.setVelocity(p.getLocation().getDirection().multiply(1.5D).setY(0.7D));
+		plugin.sound.NOTE_PLING(p, 5, 999);
+		u.add(p);
+      
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				u.remove(p);
+				p.setAllowFlight(true);
+			}
+		}.runTaskLater(plugin, 20);
 	}
-	
+
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		final Player p = e.getPlayer();
-		
+
 		if (p.hasPermission("tntrun.version.check")) {
 			if (plugin.needUpdate()) {
 				new BukkitRunnable() {
@@ -279,15 +284,12 @@ public class RestrictionHandler implements Listener {
 				}.runTaskLaterAsynchronously(plugin, 30L);
 			}
 		}
-		
 		if (!plugin.useStats()) {
 			return;
 		}
-		
 		if (plugin.isFile()) {
 			return;
 		}
-		
 		new BukkitRunnable() {
 			@Override
 			public void run() {
