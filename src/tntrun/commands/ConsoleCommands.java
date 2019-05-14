@@ -107,6 +107,22 @@ public class ConsoleCommands implements CommandExecutor {
 				message.setLength(message.length() - 2);
 			}
 			Messages.sendMessage(sender, message.toString());
+			return true;
+		}
+		// start
+		else if (args.length == 2 && args[0].equalsIgnoreCase("start")) {
+			Arena arena = plugin.amanager.getArenaByName(args[1]);
+			if (arena != null) {
+				if (arena.getPlayersManager().getPlayersCount() <= 1) {
+					Messages.sendMessage(sender, Messages.trprefix + Messages.playersrequiredtostart);
+					return true;
+				}
+				if (!arena.getStatusManager().isArenaStarting()) {
+					Messages.sendMessage(sender, Messages.trprefix + "Arena " + arena.getArenaName() + " force-started by console");
+					arena.getGameHandler().forceStartByCommand();
+					return true;
+				}
+			}
 		}
 		// help
 		if (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("cmds")) {

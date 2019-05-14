@@ -313,7 +313,7 @@ public class GameCommands implements CommandExecutor {
 					return true;
 				}
 				if (!arena.getStatusManager().isArenaStarting()) {
-					Bukkit.getServer().getConsoleSender().sendMessage("[TNTRun] Arena " + ChatColor.GOLD + arena.getArenaName() + ChatColor.WHITE + " force-started by " + ChatColor.AQUA + player.getName());
+					plugin.getServer().getConsoleSender().sendMessage("[TNTRun] Arena " + ChatColor.GOLD + arena.getArenaName() + ChatColor.WHITE + " force-started by " + ChatColor.AQUA + player.getName());
 					arena.getGameHandler().forceStartByCommand();
 					return false;
 				}
