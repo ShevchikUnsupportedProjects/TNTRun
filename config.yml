@@ -17,8 +17,9 @@ shop:
   size: 27
   doublejump:
     maxdoublejumps: 10
-infinitedoublejumps:
+freedoublejumps:
   enabled: false
+  amount: 10
 commandsonwin:
 - say {PLAYER} won TNTRun
 - say Congratulations...

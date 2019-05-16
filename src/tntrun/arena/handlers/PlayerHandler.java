@@ -17,7 +17,9 @@
 
 package tntrun.arena.handlers;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -42,13 +44,13 @@ public class PlayerHandler {
 
 	private TNTRun plugin;
 	private Arena arena;
+	private Map<String, Integer> doublejumps = new HashMap<String, Integer>();   // playername -> number_of_doublejumps
 
 	public PlayerHandler(TNTRun plugin, Arena arena) {
 		this.plugin = plugin;
 		this.arena = arena;
 	}
 
-	// check if player can join the arena
 	public boolean checkJoin(Player player) {
 		if (!arena.getStatusManager().isArenaEnabled()) {
 			Messages.sendMessage(player, Messages.trprefix + Messages.arenadisabled);
@@ -100,15 +102,14 @@ public class PlayerHandler {
 		plugin.pdata.storePlayerArmor(player);
 		plugin.pdata.storePlayerPotionEffects(player);
 		plugin.pdata.storePlayerHunger(player);
-		
-		// update inventory
+
 		player.updateInventory();
-		
+
 		//set full countdown
 		if (!arena.getStatusManager().isArenaStarting()) {
 			arena.getGameHandler().count = arena.getStructureManager().getCountdown();
 		}
-		// send message to player
+
 		if (!plugin.getConfig().getBoolean("special.UseTitle")) {
 			Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
 		}	
@@ -121,7 +122,7 @@ public class PlayerHandler {
 			// send title for players
 			TitleMsg.sendFullTitle(oplayer, TitleMsg.join.replace("{PLAYER}", player.getName()), TitleMsg.subjoin.replace("{PLAYER}", player.getName()), 10, 20, 20, plugin);
 		}
-		
+
 		// start cooldown and add leave item
 		new BukkitRunnable() {
 			@Override
@@ -145,28 +146,34 @@ public class PlayerHandler {
 				}
 			}
 		}.runTaskLater(plugin, 5L);
-		
-		// send message about arena player count
+
+		if (plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
+			int amount = plugin.getConfig().getInt("freedoublejumps.amount", 0);
+			if (amount > 0) {
+				doublejumps.put(player.getName(), amount);
+			}
+		} else {
+			if (plugin.shop.hasDoubleJumps(player)) {
+				doublejumps.put(player.getName(), plugin.getConfig().getInt("doublejumps." + player.getName()));
+			}
+		}
+
 		if (!plugin.getConfig().getBoolean("special.UseBossBar")) {
 			String message = Messages.playerscountinarena;
 			message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
 			Messages.sendMessage(player, Messages.trprefix + message);
 		}
-		// modify signs
+
 		plugin.signEditor.modifySigns(arena.getArenaName());
-		// create scoreboard
 		arena.getGameHandler().createWaitingScoreBoard();
-		
-		// add player to bar
 		Bars.addPlayerToBar(player, arena.getArenaName());
-		
+
 		// modify bars
 		if (!arena.getStatusManager().isArenaStarting()) {
 			double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers(); 
 			
 			Bars.setBar(arena, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
 			for (Player oplayer : arena.getPlayersManager().getPlayers()) {
-				// play sound
 				plugin.sound.NOTE_PLING(oplayer, 5, 999);
 			}
 		}
@@ -176,7 +183,6 @@ public class PlayerHandler {
 		}
 	} 
 
-	// move to spectators
 	public void spectatePlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
 		// if existing spectator leaves bounds, send back to spectator spawn
 		if (arena.getPlayersManager().isSpectator(player.getName())) {
@@ -198,29 +204,25 @@ public class PlayerHandler {
 		// allow flight
 		player.setAllowFlight(true);
 		player.setFlying(true);
-		
-		// hide from others
+
 		for (Player oplayer : Bukkit.getOnlinePlayers()) {
 			oplayer.hidePlayer(plugin, player);
 		}
 		
-		// send message to player
 		Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
-		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// send message to other players and update bars
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
 			Messages.sendMessage(oplayer, Messages.trprefix + msgtoarenaplayers);
 		}
-		// add to spectators
 		arena.getPlayersManager().addSpectator(player);
 		// start cooldown and add leave item
 		new BukkitRunnable() {
 			@Override
 			public void run(){
 				addLeaveItem(player);
-				
+
 				if (plugin.getConfig().getBoolean("items.info.use")) {
 					addInfo(player);
 				}
@@ -260,30 +262,22 @@ public class PlayerHandler {
 		player.setFlying(false);
 		// check if arena is running
 		if (arena.getStatusManager().isArenaRunning()) {
-			// add to lostPlayers
 			arena.getGameHandler().lostPlayers++;
 		}
-		// remove scoreboard
 		removeScoreboard(player);
-		// remove player from arena and restore his state
 		removePlayerFromArenaAndRestoreState(player, false);
 		// should not send messages and other things when player is a spectator
 		if (spectator) {
 			return;
 		}
-		// send message to player
 		Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
-		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
-		// create scoreboard
 		if (!arena.getStatusManager().isArenaRunning()) {
 			arena.getGameHandler().createWaitingScoreBoard();
 		}
-		
-		// remove player from bar
+
 		Bars.removeBar(player, arena.getArenaName());
-		
-		// send message to other players and update bars
+
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
 			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
 			Messages.sendMessage(oplayer, Messages.trprefix + msgtoarenaplayers);
@@ -295,28 +289,21 @@ public class PlayerHandler {
 	}
 
 	protected void leaveWinner(Player player, String msgtoplayer) {
-		// remove scoreboard
 		removeScoreboard(player);
 		player.setFlying(false);
-		// remove player from arena and restore his state
 		removePlayerFromArenaAndRestoreState(player, true);
-		// send message to player
 		Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
-		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		plugin.signEditor.refreshLeaderBoards();
 	}
-	
+
 	private void removePlayerFromArenaAndRestoreState(Player player, boolean winner) {
-		// remove vote
 		votes.remove(player.getName());
-		// remove bar
 		Bars.removeBar(player, arena.getArenaName());
-		// remove player on arena data
+		resetDoubleJumps(player);
 		arena.getPlayersManager().remove(player);
-		// remove all potion effects
 		clearPotionEffects(player);
-		// restore player status
+
 		plugin.pdata.restorePlayerHunger(player);
 		plugin.pdata.restorePlayerPotionEffects(player);
 		plugin.pdata.restorePlayerArmor(player);
@@ -336,16 +323,13 @@ public class PlayerHandler {
 			arena.getStructureManager().getRewards().rewardPlayer(player);
 		}
 		plugin.pdata.restorePlayerGameMode(player);
-		// update inventory
 		player.updateInventory();
-		
 		plugin.pdata.restorePlayerFlight(player);
-		
+
 		if (player.getGameMode() == GameMode.CREATIVE) {
 			player.setAllowFlight(true);
 		}		
-		
-		// check if arena has 0 players
+
 		if (arena.getStatusManager().isArenaRunning() && arena.getPlayersManager().getPlayersCount() == 0) {
 			arena.getGameHandler().stopArena();
 		}
@@ -357,7 +341,7 @@ public class PlayerHandler {
 	public boolean vote(Player player) {
 		if (!votes.contains(player.getName())) {
 			votes.add(player.getName());
-			//update scoreboard
+
 			arena.getGameHandler().createWaitingScoreBoard();
 			if (!arena.getStatusManager().isArenaStarting() && forceStart()) {
 				arena.getGameHandler().runArenaCountdown();
@@ -366,7 +350,7 @@ public class PlayerHandler {
 		}
 		return false;
 	}
-	
+
 	public boolean forceStart() {
 		if (arena.getPlayersManager().getPlayersCount() > 1 && votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getStructureManager().getVotePercent()) {
 			return true;
@@ -376,26 +360,25 @@ public class PlayerHandler {
 		}
 		return false;
 	}
-	
+
 	private void addInfo(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.info.material")));	     
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.info.name")));
 	    item.setItemMeta(meta);
-	    
+
 	    p.getInventory().addItem(item);
-	    
 	}
-	
+
 	private void addVote(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.vote.material")));     
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.vote.name")));
 	    item.setItemMeta(meta);
-	    
+
 	    p.getInventory().addItem(item);
 	}
-	
+
 	private void addShop(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.shop.material"))); 
 	    ItemMeta meta = item.getItemMeta();
@@ -404,25 +387,25 @@ public class PlayerHandler {
 	    
 	    p.getInventory().addItem(item);
 	}
-	
+
 	private void addStats(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.stats.name")));
 	    item.setItemMeta(meta);
-	    
+
 	    p.getInventory().addItem(item);
 	}
-	
+
 	private void addHeads(Player p) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.heads.material")));
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.heads.name")));
 	    item.setItemMeta(meta);
-	    
+
 	    p.getInventory().addItem(item);
 	}
-	
+
 	private void addLeaveItem(Player p) {
 		// Old config files will have BED as leave item which is no longer valid on 1.13. Update any invalid material to valid one.
 		Material leaveItem = Material.getMaterial(plugin.getConfig().getString("items.leave.material"));
@@ -435,24 +418,24 @@ public class PlayerHandler {
 		ItemMeta im = item.getItemMeta();
 		im.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.leave.name")));
 		item.setItemMeta(im);
-		
+
 		p.getInventory().setItem(8, item);
 	}
-	
+
 	private void removeScoreboard(Player player) {
 		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 	}
-	
+
 	public int getVotesCast() {
 		return votes.size();
 	}
-	
+
 	public void clearPotionEffects(Player player) {
 		for (PotionEffect effect : player.getActivePotionEffects()) {
 			player.removePotionEffect(effect.getType());
 		}
 	}
-	
+
 	public void allocateKits() {
 		Random rnd = new Random();
 		HashSet<String> kits = plugin.kitmanager.getKits();
@@ -464,6 +447,36 @@ public class PlayerHandler {
 				addLeaveItem(player);
 			}
 		}
+	}
+
+	public boolean hasDoubleJumps(Player player) {
+		return getDoubleJumps(player) > 0;
+	}
+
+	public int getDoubleJumps(Player player) {
+		return doublejumps.get(player.getName()) != null ? doublejumps.get(player.getName()) : 0;
+	}
+
+	public void decrementDoubleJumps(Player player) {
+		if (getDoubleJumps(player) > 0) {
+			doublejumps.put(player.getName(), getDoubleJumps(player) - 1);
+		}
+	}
+
+	public void incrementDoubleJumps(Player player, Integer amount) {
+		doublejumps.put(player.getName(), getDoubleJumps(player) + amount);
+	}
+
+	private void resetDoubleJumps(Player player) {
+		if (!plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
+			if (hasDoubleJumps(player)) {
+				plugin.getConfig().set("doublejumps." + player.getName(), getDoubleJumps(player));
+			} else {
+				plugin.getConfig().set("doublejumps." + player.getName(), null);
+			}
+			plugin.saveConfig();
+		}
+		doublejumps.remove(player.getName());
 	}
 
 }

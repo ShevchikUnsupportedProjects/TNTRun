@@ -43,6 +43,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
+import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 
 public class Shop implements Listener{
@@ -188,6 +189,7 @@ public class Shop implements Listener{
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
 		Player p = (Player)e.getWhoClicked();
+		Arena arena = plugin.amanager.getPlayerArena(p.getName());
 
 		if (e.getView().getTitle().equals(invname)) {	
 			e.setCancelled(true);
@@ -209,16 +211,28 @@ public class Shop implements Listener{
 						int cost = cfg.getInt(kit + ".cost");
 
 						if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
-							if (plugin.getConfig().getInt("shop.doublejump.maxdoublejumps") <= plugin.getConfig().getInt("doublejumps." + p.getName())) {
-								Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
-								plugin.sound.ITEM_SELECT(p);
-								return;
+							int maxjumps = plugin.getConfig().getInt("shop.doublejump.maxdoublejumps", 10);
+							int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
+
+							if (plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
+								if (maxjumps <= plugin.getConfig().getInt("doublejumps." + p.getName()) || maxjumps < (plugin.getConfig().getInt("doublejumps." + p.getName()) + quantity)) {
+									Messages.sendMessage(p, Messages.trprefix + Messages.maxdoublejumpsexceeded);
+									plugin.sound.ITEM_SELECT(p);
+									return;
+								}
+							} else {
+								if (maxjumps <= arena.getPlayerHandler().getDoubleJumps(p) || maxjumps < (arena.getPlayerHandler().getDoubleJumps(p) + quantity)) {
+									Messages.sendMessage(p, Messages.trprefix + Messages.maxdoublejumpsexceeded);
+									plugin.sound.ITEM_SELECT(p);
+									return;
+								}
 							}
 						}
-
 						if (hasMoney(cost, p)) {
 							Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
-							Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtwait);
+							if (!plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
+								Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtwait);
+							}
 							plugin.sound.NOTE_PLING(p, 5, 10);
 						} else {
 							Messages.sendMessage(p, Messages.trprefix + Messages.notenoughtmoney.replace("{MONEY}", cost + ""));
@@ -226,15 +240,21 @@ public class Shop implements Listener{
 							return;
 						}
 						if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
-							if(plugin.getConfig().get("doublejumps." + p.getName()) == null){
-								plugin.getConfig().set("doublejumps." + p.getName(), 1);
+							int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
+							if (plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
+								if(plugin.getConfig().get("doublejumps." + p.getName()) == null) {
+									plugin.getConfig().set("doublejumps." + p.getName(), quantity);
+								} else {
+									plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) + quantity);
+								}
+								plugin.saveConfig();
+
 							} else {
-								plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) + 1);
+								arena.getPlayerHandler().incrementDoubleJumps(p, quantity);
 							}
-							plugin.saveConfig();
 							return;
 						}
-						giveItem(e.getSlot(), p, current.getItemMeta().getDisplayName());  
+						giveItem(e.getSlot(), p, title);  
 					} else {
 						p.closeInventory();
 						Messages.sendMessage(p, Messages.trprefix + Messages.nopermission);
@@ -329,12 +349,16 @@ public class Shop implements Listener{
 	public int getInvsize() {
 		return invsize;
 	}
-	
+
 	public HashMap<Player, ArrayList<ItemStack>> getPlayersItems() {
 		return pitems;
 	}
-	
+
 	public List<Player> getBuyers() {
 		return bought;
+	}
+
+	public boolean hasDoubleJumps(Player player) {
+		return plugin.getConfig().getInt("doublejumps." + player.getName(), 0) > 0;
 	}
 }

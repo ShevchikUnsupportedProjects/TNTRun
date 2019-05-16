@@ -141,13 +141,10 @@ public class GameHandler {
 				        	displayCountdown(all, count, message);
 				        }
 				    }
-
-					// scoreboard
 					createWaitingScoreBoard();
-					// update bar
 					double progressbar = (double) count / arena.getStructureManager().getCountdown();
 					Bars.setBar(arena, Bars.starting, 0, count, progressbar, plugin);
-					
+
 					for (Player player : arena.getPlayersManager().getPlayers()) {
 						player.setLevel(count);
 				    }
@@ -199,7 +196,6 @@ public class GameHandler {
 				public void run() {
 					// stop arena if player count is 0
 					if (arena.getPlayersManager().getPlayersCount() == 0) {
-						// stop arena
 						stopArena();
 						return;
 					}
@@ -216,10 +212,8 @@ public class GameHandler {
 					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 						// Xp level
 						player.setLevel(timelimit/20);
-						// handle player
 						handlePlayer(player);
 					}
-					// decrease timelimit
 					timelimit--;
 				}
 			},
@@ -262,7 +256,6 @@ public class GameHandler {
 	}
 
 	public Scoreboard buildScoreboard() {
-		
 		FileConfiguration config = TNTRun.getInstance().getConfig();
 		Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
@@ -275,7 +268,7 @@ public class GameHandler {
 		}
 		return scoreboard;
 	} 
-	
+
 	public void createWaitingScoreBoard() {
 		if(!plugin.getConfig().getBoolean("special.UseScoreboard")) {
 			return;
@@ -298,10 +291,10 @@ public class GameHandler {
 				p.setScoreboard(scoreboard);
 			}
 		} catch (NullPointerException ex) {
-			
+	
 		}
 	}
-	
+
 	private Integer getVotesRequired(Arena arena) {
 		int minPlayers = arena.getStructureManager().getMinPlayers();
 		double votePercent = arena.getStructureManager().getVotePercent();
@@ -324,7 +317,7 @@ public class GameHandler {
 			public void run() {
 				resetScoreboard();
 				Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
-				
+
 				int size = plugin.getConfig().getStringList("scoreboard.playing").size();
 				for(String s : plugin.getConfig().getStringList("scoreboard.playing")) {
 					s = FormattingCodesParser.parseFormattingCodes(s).replace("{ARENA}", arena.getArenaName());
@@ -346,28 +339,25 @@ public class GameHandler {
 		if (arena.getStatusManager().isArenaRegenerating()) {
 			return;
 		}
-		// set arena is regenerating status
 		arena.getStatusManager().setRegenerating(true);
-		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
-		// schedule gamezone regen
+
 		int delay = arena.getStructureManager().getGameZone().regen();
-		// regen finished
+
 		Bukkit.getScheduler().scheduleSyncDelayedTask(
 			arena.plugin,
 			new Runnable() {
 				@Override
 				public void run() {
-					// set not regenerating status
 					arena.getStatusManager().setRegenerating(false);
-					// modify signs
+
 					plugin.signEditor.modifySigns(arena.getArenaName());
 				}
 			},
 			delay
 		);
 	}
-	
+
 	/**
 	 * Called when there is only 1 player left, to update winner stats and
 	 * teleport winner and spectators to the arena spawn point. It then
@@ -377,13 +367,12 @@ public class GameHandler {
 	public void startEnding(final Player player) {
 		plugin.stats.addWins(player, 1);
 		TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
-		// clear any potion effects the winner may have
 		arena.getPlayerHandler().clearPotionEffects(player);
-		
+
 		String message = Messages.trprefix + Messages.playerwonbroadcast;
 		message = message.replace("{PLAYER}", player.getName());
 		message = message.replace("{ARENA}", arena.getArenaName());
-		
+
 		/* Determine who should receive notification of win (0 suppresses broadcast) */
 		if (plugin.getConfig().getInt("broadcastwinlevel") == 1) {
 			for (Player all : arena.getPlayersManager().getAllParticipantsCopy()) {
@@ -403,12 +392,12 @@ public class GameHandler {
 			p.teleport(arena.getStructureManager().getSpawnPoint());
 			p.getInventory().clear();
 		}
-				
+
 		Bukkit.getScheduler().cancelTask(arenahandler);
 		Bukkit.getScheduler().cancelTask(playingtask);
-		
+
 		if (plugin.getConfig().getBoolean("fireworksonwin.enabled")) {
-				
+	
 			new BukkitRunnable() {
 				int i = 0;
 				@Override
@@ -428,11 +417,10 @@ public class GameHandler {
 					fm.setPower(1);
 					f.setFireworkMeta(fm);
 					i++;
-				}
-					
+				}	
 			}.runTaskTimer(plugin, 0, 10);
 		}
-				
+
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -449,13 +437,12 @@ public class GameHandler {
 						Bukkit.dispatchCommand(console, commands.replace("{PLAYER}", player.getName()));
 					}
 				} catch (NullPointerException ex) {
-							
+		
 				}
 			}
-			
 		}.runTaskLater(plugin, 120);
 	}
-	
+
 	/**
 	 * Get the number of seconds to run the fireworks for from config.
 	 * The fireworks task repeats every 10 ticks so return double this number.
@@ -560,7 +547,7 @@ public class GameHandler {
 		forceStartByCmd = true;
 		runArenaCountdown();
 	}
-	
+
 	public boolean isForceStartByCommand() {
 		return forceStartByCmd;
 	}
