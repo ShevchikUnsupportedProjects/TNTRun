@@ -30,7 +30,7 @@ import tntrun.TNTRun;
 public class Messages {
 
 	public static String trprefix = "&7[&6TNTRun_reloaded&7]";
-	public static String menutitle = "&6TNTRun_reloaded Arenas";
+	public static String menutitle = "&1TNTRun_reloaded Arenas";
 	public static String nopermission = "&c You don't have permission to do this";
 	public static String teleporttolobby = "&7 Teleported to lobby";
 
