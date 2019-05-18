@@ -352,7 +352,7 @@ public class PlayerHandler {
 	}
 
 	public boolean forceStart() {
-		if (arena.getPlayersManager().getPlayersCount() > 1 && votes.size() >= arena.getPlayersManager().getPlayersCount() * arena.getStructureManager().getVotePercent()) {
+		if (arena.getPlayersManager().getPlayersCount() > 1 && votes.size() >= arena.getStructureManager().getMinPlayers() * arena.getStructureManager().getVotePercent()) {
 			return true;
 		}
 		if (arena.getGameHandler().isForceStartByCommand()) {
