@@ -86,16 +86,7 @@ public class Shop implements Listener{
 				if (material.toString().equalsIgnoreCase("POTION")) {
 					if (enchantments != null && !enchantments.isEmpty()) {
 						for (String peffects : enchantments) {
-							String[] array = peffects.split("#");
-							String peffect = array[0].toUpperCase();
-
-							// get duration of effect
-							int duration = 30;
-							if (array.length > 1) {
-								duration = Integer.valueOf(array[1]).intValue();
-							}
-
-							PotionEffect effect = new PotionEffect(PotionEffectType.getByName(peffect), duration * 20, 1);
+							PotionEffect effect = createPotionEffect(peffects);
 							if (effect != null) {
 								pelist.add(effect);
 							}
@@ -125,7 +116,6 @@ public class Shop implements Listener{
 	}
 
 	private ItemStack getItem(Material material, int amount, String displayname, List<String> lore, List<String> enchantments){
-
 		ItemStack item = new ItemStack(material, amount);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(displayname);
@@ -133,7 +123,6 @@ public class Shop implements Listener{
 		if (lore != null && !lore.isEmpty()) {
 			meta.setLore(lore);
 		}
-
 		if (enchantments != null && !enchantments.isEmpty()) {
 			for (String enchs : enchantments) {
 				String[] array = enchs.split("#");
@@ -164,19 +153,9 @@ public class Shop implements Listener{
 		if (lore != null && !lore.isEmpty()) {
 			potionmeta.setLore(lore);
 		}
-
 		if (enchantments != null && !enchantments.isEmpty()) {
 			for (String peffects : enchantments) {
-				String[] array = peffects.split("#");
-				String peffect = array[0].toUpperCase();
-
-				// get duration of effect
-				int duration = 30;
-				if (array.length > 1) {
-					duration = Integer.valueOf(array[1]).intValue();
-				}
-
-				PotionEffect effect = new PotionEffect(PotionEffectType.getByName(peffect), duration * 20, 1);
+				PotionEffect effect = createPotionEffect(peffects);
 				if (effect != null) {
 					potionmeta.addCustomEffect(effect, true);
 				}
@@ -186,81 +165,98 @@ public class Shop implements Listener{
 		return item;
 	}
 
+	private PotionEffect createPotionEffect(String effect) {
+		String[] array = effect.split("#");
+		String name = array[0].toUpperCase();
+		int duration = 30;
+		if (array.length > 1 && Utils.isNumber(array[1])) {
+			duration = Integer.valueOf(array[1]).intValue();
+		}
+		int amplifier = 1;
+		if (array.length > 2 && Utils.isNumber(array[2])) {
+			amplifier = Integer.valueOf(array[2]).intValue();
+		}
+		PotionEffect peffect = new PotionEffect(PotionEffectType.getByName(name), duration * 20, amplifier);
+		return peffect;
+	}
+
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
+		if (!e.getView().getTitle().equals(invname)) {
+			return;
+		}
+		e.setCancelled(true);
 		Player p = (Player)e.getWhoClicked();
 		Arena arena = plugin.amanager.getPlayerArena(p.getName());
+		if (e.getSlot() == e.getRawSlot() && e.getCurrentItem() != null) {
+			ItemStack current = e.getCurrentItem();
+			if (current.hasItemMeta() && current.getItemMeta().hasDisplayName()) {
+				int kit = ((Integer)itemSlot.get(Integer.valueOf(e.getSlot()))).intValue();
 
-		if (e.getView().getTitle().equals(invname)) {	
-			e.setCancelled(true);
-			if (e.getSlot() == e.getRawSlot() && e.getCurrentItem() != null) {
-				ItemStack current = e.getCurrentItem();
-				if (current.hasItemMeta() && current.getItemMeta().hasDisplayName()) {
-					int kit = ((Integer)itemSlot.get(Integer.valueOf(e.getSlot()))).intValue();
+				FileConfiguration cfg = ShopFiles.getShopConfiguration();
+				String permission = cfg.getString(kit + ".permission");
 
-					FileConfiguration cfg = ShopFiles.getShopConfiguration();
-					String permission = cfg.getString(kit + ".permission");
+				if (bought.contains(p)) {
+					Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
+					plugin.sound.ITEM_SELECT(p);
+					p.closeInventory();
+					return;
+				}
+				if (!p.hasPermission(permission) && !p.hasPermission("tntrun.shop")) {
+					p.closeInventory();
+					Messages.sendMessage(p, Messages.trprefix + Messages.nopermission);
+					plugin.sound.ITEM_SELECT(p);
+					return;
+				}
+				String title = current.getItemMeta().getDisplayName();
+				int cost = cfg.getInt(kit + ".cost");
 
-					if (bought.contains(p)) {
-						Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
-						plugin.sound.ITEM_SELECT(p);
-						return;
-					}
-					if (p.hasPermission(permission) || p.hasPermission("tntrun.shop")) {
-						String title = current.getItemMeta().getDisplayName();
-						int cost = cfg.getInt(kit + ".cost");
+				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
+					int maxjumps = plugin.getConfig().getInt("shop.doublejump.maxdoublejumps", 10);
+					int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
 
-						if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
-							int maxjumps = plugin.getConfig().getInt("shop.doublejump.maxdoublejumps", 10);
-							int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
-
-							if (plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
-								if (maxjumps <= plugin.getConfig().getInt("doublejumps." + p.getName()) || maxjumps < (plugin.getConfig().getInt("doublejumps." + p.getName()) + quantity)) {
-									Messages.sendMessage(p, Messages.trprefix + Messages.maxdoublejumpsexceeded);
-									plugin.sound.ITEM_SELECT(p);
-									return;
-								}
-							} else {
-								if (maxjumps <= arena.getPlayerHandler().getDoubleJumps(p) || maxjumps < (arena.getPlayerHandler().getDoubleJumps(p) + quantity)) {
-									Messages.sendMessage(p, Messages.trprefix + Messages.maxdoublejumpsexceeded);
-									plugin.sound.ITEM_SELECT(p);
-									return;
-								}
-							}
-						}
-						if (hasMoney(cost, p)) {
-							Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
-							if (!plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
-								Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtwait);
-							}
-							plugin.sound.NOTE_PLING(p, 5, 10);
-						} else {
-							Messages.sendMessage(p, Messages.trprefix + Messages.notenoughtmoney.replace("{MONEY}", cost + ""));
+					if (plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
+						if (maxjumps <= plugin.getConfig().getInt("doublejumps." + p.getName()) || maxjumps < (plugin.getConfig().getInt("doublejumps." + p.getName()) + quantity)) {
+							Messages.sendMessage(p, Messages.trprefix + Messages.maxdoublejumpsexceeded);
 							plugin.sound.ITEM_SELECT(p);
+							p.closeInventory();
 							return;
 						}
-						if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
-							int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
-							if (plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
-								if(plugin.getConfig().get("doublejumps." + p.getName()) == null) {
-									plugin.getConfig().set("doublejumps." + p.getName(), quantity);
-								} else {
-									plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) + quantity);
-								}
-								plugin.saveConfig();
-
-							} else {
-								arena.getPlayerHandler().incrementDoubleJumps(p, quantity);
-							}
-							return;
-						}
-						giveItem(e.getSlot(), p, title);  
 					} else {
-						p.closeInventory();
-						Messages.sendMessage(p, Messages.trprefix + Messages.nopermission);
-						plugin.sound.ITEM_SELECT(p);
+						if (maxjumps <= arena.getPlayerHandler().getDoubleJumps(p) || maxjumps < (arena.getPlayerHandler().getDoubleJumps(p) + quantity)) {
+							Messages.sendMessage(p, Messages.trprefix + Messages.maxdoublejumpsexceeded);
+							plugin.sound.ITEM_SELECT(p);
+							p.closeInventory();
+							return;
+						}
 					}
 				}
+				if (hasMoney(cost, p)) {
+					Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
+					if (!plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
+						Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtwait);
+					}
+					plugin.sound.NOTE_PLING(p, 5, 10);
+				} else {
+					Messages.sendMessage(p, Messages.trprefix + Messages.notenoughtmoney.replace("{MONEY}", cost + ""));
+					plugin.sound.ITEM_SELECT(p);
+					return;
+				}
+				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
+					int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
+					if (plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
+						if(plugin.getConfig().get("doublejumps." + p.getName()) == null) {
+							plugin.getConfig().set("doublejumps." + p.getName(), quantity);
+						} else {
+							plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) + quantity);
+						}
+						plugin.saveConfig();
+					} else {
+						arena.getPlayerHandler().incrementDoubleJumps(p, quantity);
+					}
+					return;
+				}
+				giveItem(e.getSlot(), p, title);  
 			}
 		}
 	}

@@ -17,6 +17,7 @@ shop:
   size: 27
   doublejump:
     maxdoublejumps: 10
+  logpurchases: false
 freedoublejumps:
   enabled: false
   amount: 10
