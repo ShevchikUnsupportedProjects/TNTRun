@@ -23,10 +23,12 @@ import java.util.List;
 
 import net.milkbowl.vault.economy.Economy;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -115,6 +117,13 @@ public class Shop implements Listener{
 		potionMap.put(player, pelist);
 	}
 
+	private void logPurchase(Player player, String item, int cost) {
+		final ConsoleCommandSender console = plugin.getServer().getConsoleSender();
+		if (plugin.getConfig().getBoolean("shop.logpurchases")) {
+			console.sendMessage("[TNTRun_reloaded] " + ChatColor.AQUA + player.getName() + ChatColor.WHITE + " has bought a " + ChatColor.RED + item + ChatColor.WHITE + " for " + ChatColor.RED + cost + ChatColor.WHITE + " coins");
+		}
+	}
+	
 	private ItemStack getItem(Material material, int amount, String displayname, List<String> lore, List<String> enchantments){
 		ItemStack item = new ItemStack(material, amount);
 		ItemMeta meta = item.getItemMeta();
@@ -233,6 +242,7 @@ public class Shop implements Listener{
 				}
 				if (hasMoney(cost, p)) {
 					Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
+					logPurchase(p, title, cost);
 					if (!plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
 						Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtwait);
 					}

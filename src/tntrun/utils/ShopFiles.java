@@ -163,7 +163,7 @@ public class ShopFiles {
 	   /*
 	    * sixth item
 	    */
-	   cfg.addDefault("6.name", "&fPotion");
+	   cfg.addDefault("6.name", "&fSpeed Potion");
 	   cfg.addDefault("6.cost", Integer.valueOf(50));
 	   cfg.addDefault("6.material", "POTION");
 	   cfg.addDefault("6.amount", Integer.valueOf(1));
@@ -180,7 +180,7 @@ public class ShopFiles {
 	   /*
 	    * seventh item
 	    */
-	   cfg.addDefault("7.name", "&fPotion");
+	   cfg.addDefault("7.name", "&fJump Potion");
 	   cfg.addDefault("7.cost", Integer.valueOf(50));
 	   cfg.addDefault("7.material", "POTION");
 	   cfg.addDefault("7.amount", Integer.valueOf(1));
@@ -197,7 +197,7 @@ public class ShopFiles {
 	   /*
 	    * eighth item
 	    */
-	   cfg.addDefault("8.name", "&fPotion");
+	   cfg.addDefault("8.name", "&fNight Vision Potion");
 	   cfg.addDefault("8.cost", Integer.valueOf(50));
 	   cfg.addDefault("8.material", "POTION");
 	   cfg.addDefault("8.amount", Integer.valueOf(1));
@@ -214,7 +214,7 @@ public class ShopFiles {
 	   /*
 	    * ninth item
 	    */
-	   cfg.addDefault("9.name", "&fPotion");
+	   cfg.addDefault("9.name", "&fInvisibility Potion");
 	   cfg.addDefault("9.cost", Integer.valueOf(50));
 	   cfg.addDefault("9.material", "POTION");
 	   cfg.addDefault("9.amount", Integer.valueOf(1));
@@ -231,7 +231,7 @@ public class ShopFiles {
 	   /*
 	    * tenth item
 	    */
-	   cfg.addDefault("10.name", "&fSplash Potion");
+	   cfg.addDefault("10.name", "&fSplash Potion of Slowness");
 	   cfg.addDefault("10.cost", Integer.valueOf(50));
 	   cfg.addDefault("10.material", "SPLASH_POTION");
 	   cfg.addDefault("10.amount", Integer.valueOf(1));
@@ -252,7 +252,7 @@ public class ShopFiles {
 	   /*
 	    * eleventh item
 	    */
-	   cfg.addDefault("11.name", "&fSplash Potion");
+	   cfg.addDefault("11.name", "&fSplash Potion of Confusion");
 	   cfg.addDefault("11.cost", Integer.valueOf(50));
 	   cfg.addDefault("11.material", "SPLASH_POTION");
 	   cfg.addDefault("11.amount", Integer.valueOf(1));
@@ -273,7 +273,7 @@ public class ShopFiles {
 	   /*
 	    * twelfth item
 	    */
-	   cfg.addDefault("12.name", "&fSplash Potion");
+	   cfg.addDefault("12.name", "&fSplash Potion of Blindness");
 	   cfg.addDefault("12.cost", Integer.valueOf(50));
 	   cfg.addDefault("12.material", "SPLASH_POTION");
 	   cfg.addDefault("12.amount", Integer.valueOf(1));
