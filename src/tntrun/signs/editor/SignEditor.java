@@ -77,16 +77,30 @@ public class SignEditor {
 	private List<SignInfo> getLBSigns() {
 		return lbsigns;
 	}
-	
+
+	private SignInfo getLBSignInfo(Block block) {
+		for (SignInfo si : getLBSigns()) {
+			if (si.getBlock().equals(block)) {
+				return si;
+			}
+		}
+		return new SignInfo(block);
+	}
+
+	private void addLBSignInfo(SignInfo si) {
+		if (!getLBSigns().contains(si)) {
+			getLBSigns().add(si);
+		}
+	}
+
 	public void modifyLeaderboardSign(Block block) {
 		HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
-    	
-    	if (plugin.isFile()) {
-    		statsMap = plugin.stats.getStatsFromFile();
-    	} else {
-    		statsMap = plugin.stats.getStatsFromDB(3);
-    	}
-		
+		if (plugin.isFile()) {
+			statsMap = plugin.stats.getStatsFromFile();
+		} else {
+			statsMap = plugin.stats.getStatsFromDB(3);
+		}
+
 		if (block.getState() instanceof Sign) {
 			Sign sign = (Sign) block.getState();
 			position = 0;
@@ -149,24 +163,12 @@ public class SignEditor {
 		}
 		return new SignInfo(block);
 	}
-	
-	private SignInfo getLBSignInfo(Block block) {
-		for (SignInfo si : getLBSigns()) {
-			if (si.getBlock().equals(block)) {
-				return si;
-			}
-		}
-		return new SignInfo(block);
-	}
 
 	private void addSignInfo(SignInfo si, String arena) {
 		addArena(arena);
 		getSigns(arena).add(si);
 	}
 
-	private void addLBSignInfo(SignInfo si) {
-		getLBSigns().add(si);
-	}
 	private HashSet<SignInfo> getSigns(String arena) {
 		addArena(arena);
 		return signs.get(arena);

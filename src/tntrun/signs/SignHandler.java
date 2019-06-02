@@ -42,7 +42,7 @@ import tntrun.signs.type.VoteSign;
 public class SignHandler implements Listener {
 
 	private HashMap<String, SignType> signs = new HashMap<String, SignType>();
-	
+
 	private TNTRun plugin;
 
 	public SignHandler(TNTRun plugin) {
@@ -50,7 +50,7 @@ public class SignHandler implements Listener {
 		signs.put("[leave]", new LeaveSign(plugin));
 		signs.put("[vote]", new VoteSign(plugin));
 		signs.put("[leaderboard]", new LeaderboardSign(plugin));
-		
+
 		this.plugin = plugin;
 	}
 
