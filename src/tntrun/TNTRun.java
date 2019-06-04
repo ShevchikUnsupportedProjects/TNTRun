@@ -56,6 +56,7 @@ import tntrun.signs.editor.SignEditor;
 public class TNTRun extends JavaPlugin {
 
 	private Logger log;
+	private boolean mcMMO = false;
 	private boolean headsplus = false;
 	private boolean usestats = false;
 	private boolean needupdate = false;
@@ -150,9 +151,13 @@ public class TNTRun extends JavaPlugin {
 	public void logSevere(String message) {
 		log.severe(message);
 	}
-	
+
 	public boolean isHeadsPlus() {
 		return headsplus;
+	}
+
+	public boolean isMCMMO() {
+		return mcMMO;
 	}
 
 	public boolean useStats() {
@@ -239,6 +244,11 @@ public class TNTRun extends JavaPlugin {
 			getServer().getPluginManager().registerEvents(new HeadsPlusHandler(this), this);
 			headsplus = true;
 			log.info("Successfully linked with HeadsPlus, version " + HeadsPlus.getDescription().getVersion());
+		}
+		Plugin MCMMO = getServer().getPluginManager().getPlugin("mcMMO");
+		if (MCMMO != null && MCMMO.isEnabled()) {
+			mcMMO = true;
+			log.info("Successfully linked with mcMMO, version " + MCMMO.getDescription().getVersion());
 		}
 
 		vaultHandler = new VaultHandler(this);

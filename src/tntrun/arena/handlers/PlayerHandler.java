@@ -17,8 +17,10 @@
 
 package tntrun.arena.handlers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -32,9 +34,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.gmail.nossr50.api.PartyAPI;
+
 import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.arena.structure.StructureManager.DamageEnabled;
 import tntrun.arena.structure.StructureManager.TeleportDestination;
 import tntrun.utils.Bars;
 import tntrun.utils.TitleMsg;
@@ -45,6 +50,7 @@ public class PlayerHandler {
 	private TNTRun plugin;
 	private Arena arena;
 	private Map<String, Integer> doublejumps = new HashMap<String, Integer>();   // playername -> number_of_doublejumps
+	private List<String> pparty = new ArrayList<String>();
 
 	public PlayerHandler(TNTRun plugin, Arena arena) {
 		this.plugin = plugin;
@@ -102,6 +108,10 @@ public class PlayerHandler {
 		plugin.pdata.storePlayerArmor(player);
 		plugin.pdata.storePlayerPotionEffects(player);
 		plugin.pdata.storePlayerHunger(player);
+		
+		if (plugin.isMCMMO() && arena.getStructureManager().getDamageEnabled().equals(DamageEnabled.YES)) {
+			allowFriendlyFire(player);
+		}
 
 		player.updateInventory();
 
@@ -325,6 +335,7 @@ public class PlayerHandler {
 		plugin.pdata.restorePlayerGameMode(player);
 		player.updateInventory();
 		plugin.pdata.restorePlayerFlight(player);
+		removeFriendlyFire(player);
 
 		if (player.getGameMode() == GameMode.CREATIVE) {
 			player.setAllowFlight(true);
@@ -479,4 +490,34 @@ public class PlayerHandler {
 		doublejumps.remove(player.getName());
 	}
 
+	/**
+	 * Allow players in mcMMO parties to PVP.
+	 * If vault has detected a permissions plugin, then give the player the mcMMO friendly fire permission.
+	 * @param player
+	 */
+	private void allowFriendlyFire(Player player) {
+		if (!plugin.getVaultHandler().isPermissions()) {
+			return;
+		}
+		if (!PartyAPI.inParty(player)) {
+			return;
+		}
+		if (!plugin.getVaultHandler().getPermissions().playerHas(player, "mcmmo.party.friendlyfire")) {
+			plugin.getVaultHandler().getPermissions().playerAdd(player, "mcmmo.party.friendlyfire");
+			if (!pparty.contains(player.getName())) {
+				pparty.add(player.getName());
+			}
+		}
+	}
+
+	/**
+	 * Restore the player's mcMMO friendly fire permission.
+	 * @param player
+	 */
+	private void removeFriendlyFire(Player player) {
+		if (pparty.contains(player.getName())) {
+			pparty.remove(player.getName());
+			plugin.getVaultHandler().getPermissions().playerRemove(player, "mcmmo.party.friendlyfire");
+		}
+	}
 }

@@ -22,34 +22,38 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import tntrun.TNTRun;
 
 public class VaultHandler {
 
 	private Economy economy;
+	private Permission permission;
 	private final TNTRun plugin;
 
 	public VaultHandler(TNTRun plugin) {
 		this.plugin = plugin;
-		setupVaultEconomy();
-	}
 
-	private void setupVaultEconomy() {
 		Plugin Vault = plugin.getServer().getPluginManager().getPlugin("Vault");
 		if (Vault != null) {
 			plugin.getLogger().info("Successfully linked with Vault, version " + Vault.getDescription().getVersion());
 		} else {
 			plugin.getLogger().info("Vault plugin not found, economy disabled");
 			economy = null;
+			permission = null;
 			return;
 		}
-		
+		setupVaultEconomy();
+		setupVaultPermissions();
+	}
+
+	private void setupVaultEconomy() {
 		final RegisteredServiceProvider<Economy> rsp = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if (rsp != null) {
-            plugin.getLogger().info("Vault economy enabled.");
+            plugin.getLogger().info("Vault: economy enabled.");
             economy = rsp.getProvider();
         } else {
-            plugin.getLogger().info("Vault economy not detected.");
+            plugin.getLogger().info("Vault: economy not detected.");
             economy = null;
         }
 	}
@@ -61,4 +65,23 @@ public class VaultHandler {
 	public Economy getEconomy() {
 		return economy;
 	}
+
+	private void setupVaultPermissions() {
+		final RegisteredServiceProvider<Permission> rsp = plugin.getServer().getServicesManager().getRegistration(Permission.class);
+		if (rsp.getProvider() != null) {
+			permission = rsp.getProvider();
+		} else {
+			plugin.getLogger().info("Vault: permission plugin not detected.");
+			permission = null;
+		}
+	}
+
+	public Permission getPermissions() {
+		return permission;
+	}
+
+	public boolean isPermissions() {
+		return permission != null;
+	}
+
 }

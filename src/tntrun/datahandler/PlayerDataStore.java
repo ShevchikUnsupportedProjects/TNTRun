@@ -19,7 +19,6 @@ package tntrun.datahandler;
 
 import java.util.Collection;
 import java.util.HashMap;
-
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -43,7 +42,7 @@ public class PlayerDataStore {
 		plinv.put(player.getName(), pinv.getContents());
 		pinv.clear();
 	}
-	
+
 	public void storePlayerFlight(Player player) {
 		plflight.put(player.getName(), player.getAllowFlight());
 	}
