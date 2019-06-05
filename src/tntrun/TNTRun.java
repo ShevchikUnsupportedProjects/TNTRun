@@ -179,13 +179,17 @@ public class TNTRun extends JavaPlugin {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
+				String thisVersion = getDescription().getVersion();
 				log.info("Checking plugin version...");
 				new VersionChecker();
 				version = VersionChecker.get().getVersion().split(";");
 				if (version[0].equalsIgnoreCase("error")) {
 					throw new NullPointerException("An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun_reloaded.303586/");
-				} else if (version[0].equalsIgnoreCase(getDescription().getVersion())) {
+				} else if (version[0].equalsIgnoreCase(thisVersion)) {
 					log.info("You are running the most recent version");
+					needupdate = false;
+				} else if (thisVersion.toLowerCase().contains("beta") || thisVersion.toLowerCase().contains("snapshot")) {
+					log.info("You are running a dev release");
 					needupdate = false;
 				} else {
 					log.info("Your version: " + getDescription().getVersion());
