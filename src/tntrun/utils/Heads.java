@@ -24,15 +24,8 @@ import io.github.thatsmusic99.headsplus.util.InventoryManager;
 public class Heads {
 
 	public static void openMenu(Player player) {
-		InventoryManager im2 = new InventoryManager("heads");
- 	   	InventoryManager.pls.put(player, im2);
- 	   	InventoryManager im = InventoryManager.getIM(player);
- 	   	im.setSection("Menu");
- 	   	try {
-			player.openInventory(im.changePage(true, true, player, "Menu"));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		InventoryManager im2 = InventoryManager.getOrCreate(player);
+		im2.showScreen(InventoryManager.Type.LIST_MENU);
 	}
 
 }
