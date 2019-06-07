@@ -171,7 +171,9 @@ public class GameHandler {
 		message = message.replace("{TIMELIMIT}", String.valueOf(arena.getStructureManager().getTimeLimit()));
 		for (Player player : arena.getPlayersManager().getPlayers()) {
 			player.closeInventory();
-			plugin.stats.addPlayedGames(player, 1);
+			if (plugin.useStats()) {
+				plugin.stats.addPlayedGames(player, 1);
+			}
 			player.setAllowFlight(true);
 
 			Messages.sendMessage(player, message);
@@ -365,7 +367,9 @@ public class GameHandler {
 	 * @param player
 	 */
 	public void startEnding(final Player player) {
-		plugin.stats.addWins(player, 1);
+		if (plugin.useStats()) {
+			plugin.stats.addWins(player, 1);
+		}
 		TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
 		arena.getPlayerHandler().clearPotionEffects(player);
 

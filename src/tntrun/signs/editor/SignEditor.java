@@ -94,6 +94,9 @@ public class SignEditor {
 	}
 
 	public void modifyLeaderboardSign(Block block) {
+		if (!plugin.useStats()) {
+			return;
+		}
 		HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
 		if (plugin.isFile()) {
 			statsMap = plugin.stats.getStatsFromFile();
