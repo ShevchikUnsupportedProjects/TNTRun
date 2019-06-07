@@ -109,7 +109,7 @@ public class PlayerHandler {
 		plugin.pdata.storePlayerPotionEffects(player);
 		plugin.pdata.storePlayerHunger(player);
 		
-		if (plugin.isMCMMO() && arena.getStructureManager().getDamageEnabled().equals(DamageEnabled.YES)) {
+		if (plugin.isMCMMO() && !arena.getStructureManager().getDamageEnabled().equals(DamageEnabled.NO)) {
 			allowFriendlyFire(player);
 		}
 
