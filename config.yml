@@ -105,6 +105,7 @@ MySQL:
   pass: password
 signs:
   prefix: '&6&lTNTRun'
+  join: '[Join]'
   status:
     disabled: '&cDisabled'
     ingame: '&c&l{PS}&8/&c&l{MPS}'

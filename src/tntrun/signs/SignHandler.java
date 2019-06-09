@@ -82,6 +82,9 @@ public class SignHandler implements Listener {
 		Sign sign = (Sign) e.getClickedBlock().getState();
 		if (sign.getLine(0).equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")))) {
 			String line = sign.getLine(1).toLowerCase();
+			if (line.equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.join")))) {
+				line = "[join]";
+			}
 			if (signs.containsKey(line)) {
 				signs.get(line).handleClick(e);
 			}
@@ -102,6 +105,9 @@ public class SignHandler implements Listener {
 				return;
 			}
 			String line = sign.getLine(1).toLowerCase();
+			if (line.equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.join")))) {
+				line = "[join]";
+			}
 			if (signs.containsKey(line)) {
 				signs.get(line).handleDestroy(e);
 			} else {

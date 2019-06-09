@@ -42,6 +42,7 @@ public class JoinSign implements SignType {
 		final Arena arena = plugin.amanager.getArenaByName(e.getLine(2));
 		if (arena != null) {
 			e.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
+			e.setLine(1, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.join")));
 			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signcreate);
 			plugin.signEditor.addSign(e.getBlock(), arena.getArenaName());
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,

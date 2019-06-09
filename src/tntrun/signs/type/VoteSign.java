@@ -57,6 +57,7 @@ public class VoteSign implements SignType {
 
 	@Override
 	public void handleDestroy(BlockBreakEvent e) {
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signremove);
 	}
 
 }
