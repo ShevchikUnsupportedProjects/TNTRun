@@ -111,91 +111,76 @@ public class RestrictionHandler implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		final Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
-
-		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-	        if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.leave.material"))) {
-				if (arena != null) {
-					plugin.sound.ITEM_SELECT(player);
-					e.setCancelled(true);
-					arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
-				}
-	        }
+		if (arena == null) {
+			return;
 		}
-
-        if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.shop.material"))) {
-    		if (arena != null) {
-    			plugin.sound.ITEM_SELECT(player);
-    			Inventory inv = Bukkit.createInventory(null, plugin.shop.getInvsize(), plugin.shop.getInvname());
-    			plugin.shop.setItems(inv);
-    			player.openInventory(inv);
-        	}
+		if (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
 		}
+		e.setCancelled(true);
+		if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.leave.material"))) {
+			plugin.sound.ITEM_SELECT(player);
+			arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 
-        if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.info.material"))) {
-            if (arena != null) {
-       			if (u.contains(player)) {
-    				plugin.sound.NOTE_PLING(player, 5, 999);
-    				return;
-    			}
-       			u.add(player);
-       			coolDown(player);
-            	plugin.sound.ITEM_SELECT(player);
-            	Utils.displayInfo(player);
-        	}
-        }
+		} else if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.shop.material"))) {
+    		plugin.sound.ITEM_SELECT(player);
+    		Inventory inv = Bukkit.createInventory(null, plugin.shop.getInvsize(), plugin.shop.getInvname());
+    		plugin.shop.setItems(inv);
+    		player.openInventory(inv);
 
-        if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.vote.material"))) {
-            if (arena != null) {
-    			if (u.contains(player)) {
-    				plugin.sound.NOTE_PLING(player, 5, 999);
-    				return;
-    			}
-            	plugin.sound.ITEM_SELECT(player);
-            	u.add(player);
-            	coolDown(player);
+		} else if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.info.material"))) {
+			if (u.contains(player)) {
+				plugin.sound.NOTE_PLING(player, 5, 999);
+				return;
+			}
+			u.add(player);
+			coolDown(player);
+			plugin.sound.ITEM_SELECT(player);
+			Utils.displayInfo(player);
 
-            	if (arena.getStatusManager().isArenaStarting()) {
-            		Messages.sendMessage(player, Messages.trprefix + Messages.arenastarting);
-            		return;
-            	}
-          	   	if (arena.getPlayerHandler().vote(player)) {
-          	   	     Messages.sendMessage(player, Messages.trprefix + Messages.playervotedforstart);
-           	   	} else {
-           	   	     Messages.sendMessage(player, Messages.trprefix + Messages.playeralreadyvotedforstart);
-            	}
-        	}
-        }
+		} else if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.vote.material"))) {
+			if (u.contains(player)) {
+				plugin.sound.NOTE_PLING(player, 5, 999);
+				return;
+			}
+			plugin.sound.ITEM_SELECT(player);
+			u.add(player);
+			coolDown(player);
 
-        if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.stats.material"))) {
-            if (arena != null) {
-            	e.setCancelled(true);
-       			if (u.contains(player)) {
-    				plugin.sound.NOTE_PLING(player, 5, 999);
-    				return;
-    			}
-       			u.add(player);
-  			    coolDown(player);
-            	plugin.sound.ITEM_SELECT(player);
-         	   	player.chat("/tntrun stats");
-        	}
-        }
+			if (arena.getStatusManager().isArenaStarting()) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenastarting);
+				return;
+			}
+			if (arena.getPlayerHandler().vote(player)) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.playervotedforstart);
+			} else {
+				Messages.sendMessage(player, Messages.trprefix + Messages.playeralreadyvotedforstart);
+			}
 
-        if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.heads.material"))) {
-            if (arena != null) {
-       			if (u.contains(player)) {
-    				plugin.sound.NOTE_PLING(player, 5, 999);
-    				return;
-    			}
-       			if (!player.hasPermission("tntrun.heads")) {
-       				Messages.sendMessage(player, Messages.nopermission);
-       				return;
-       			}
-       			u.add(player);
-       			coolDown(player);
-            	plugin.sound.ITEM_SELECT(player);
-            	Heads.openMenu(player);
-        	}
-        }
+		} else if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.stats.material"))) {
+			if (u.contains(player)) {
+				plugin.sound.NOTE_PLING(player, 5, 999);
+				return;
+			}
+			u.add(player);
+			coolDown(player);
+			plugin.sound.ITEM_SELECT(player);
+			player.chat("/tntrun stats");
+
+		} else if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.heads.material"))) {
+			if (u.contains(player)) {
+				plugin.sound.NOTE_PLING(player, 5, 999);
+				return;
+			}
+			if (!player.hasPermission("tntrun.heads")) {
+				Messages.sendMessage(player, Messages.nopermission);
+				return;
+			}
+			u.add(player);
+			coolDown(player);
+			plugin.sound.ITEM_SELECT(player);
+			Heads.openMenu(player);
+		}
 	}
 
 	private void coolDown(Player player) {
@@ -226,22 +211,19 @@ public class RestrictionHandler implements Listener {
 			p.setFlying(true);
 			return;
 		}
+		e.setCancelled(true);
 		if (!arena.getStatusManager().isArenaRunning()) {
-			e.setCancelled(true);
 			return;
 		}
 		if (u.contains(p)) {
-			e.setCancelled(true);
 			return;
 		}
 		if (!arena.getPlayerHandler().hasDoubleJumps(p)) {
-			e.setCancelled(true);
 			p.setAllowFlight(false);
 			return;
 		}
 
 		arena.getPlayerHandler().decrementDoubleJumps(p);
-		e.setCancelled(true);
 		p.setFlying(false);
 		p.setVelocity(p.getLocation().getDirection().multiply(1.5D).setY(0.7D));
 		plugin.sound.NOTE_PLING(p, 5, 999);
