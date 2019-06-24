@@ -64,8 +64,8 @@ public class Shop implements Listener{
 	}  
 
 	private HashMap<Integer, Integer> itemSlot = new HashMap<Integer, Integer>();
-	private HashMap<Player, ArrayList<ItemStack>> pitems = new HashMap<Player, ArrayList<ItemStack>>();
-	private List<Player> bought = new ArrayList<Player>();
+	private HashMap<String, ArrayList<ItemStack>> pitems = new HashMap<String, ArrayList<ItemStack>>(); // player-name -> items
+	private List<String> buyers = new ArrayList<String>();
 	private HashMap<Player, List<PotionEffect>> potionMap = new HashMap<Player, List<PotionEffect>>();
 
 	private void giveItem(int slot, Player player, String title) {
@@ -81,8 +81,8 @@ public class Shop implements Listener{
 
 				List<String> enchantments = cfg.getStringList(kit + ".items." + items + ".enchantments");
 
-				if(!bought.contains(player)) {
-					bought.add(player);
+				if(!buyers.contains(player.getName())) {
+					buyers.add(player.getName());
 				}
 				// if the item is a potion, store the potion effect and skip to next item
 				if (material.toString().equalsIgnoreCase("POTION")) {
@@ -113,7 +113,7 @@ public class Shop implements Listener{
 				e.printStackTrace();
 			}
 		}
-		pitems.put(player, item);
+		pitems.put(player.getName(), item);
 		potionMap.put(player, pelist);
 	}
 
@@ -205,7 +205,7 @@ public class Shop implements Listener{
 				FileConfiguration cfg = ShopFiles.getShopConfiguration();
 				String permission = cfg.getString(kit + ".permission");
 
-				if (bought.contains(p)) {
+				if (buyers.contains(p.getName())) {
 					Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
 					plugin.sound.ITEM_SELECT(p);
 					p.closeInventory();
@@ -356,12 +356,12 @@ public class Shop implements Listener{
 		return invsize;
 	}
 
-	public HashMap<Player, ArrayList<ItemStack>> getPlayersItems() {
+	public HashMap<String, ArrayList<ItemStack>> getPlayersItems() {
 		return pitems;
 	}
 
-	public List<Player> getBuyers() {
-		return bought;
+	public List<String> getBuyers() {
+		return buyers;
 	}
 
 	public boolean hasDoubleJumps(Player player) {

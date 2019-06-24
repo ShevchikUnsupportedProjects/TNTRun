@@ -491,28 +491,28 @@ public class GameHandler {
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.heads.material")));
 
-        if (plugin.shop.getPlayersItems().containsKey(player)) {
-        	ArrayList<ItemStack> items = plugin.shop.getPlayersItems().get(player);
-            plugin.shop.getPlayersItems().remove(player);
-            plugin.shop.getBuyers().remove(player);
+		if (plugin.shop.getPlayersItems().containsKey(player.getName())) {
+			ArrayList<ItemStack> items = plugin.shop.getPlayersItems().get(player.getName());
+			plugin.shop.getPlayersItems().remove(player.getName());
+			plugin.shop.getBuyers().remove(player.getName());
 
-            if (items != null) {
-                for (ItemStack item : items) {
-                	if (isArmor(item)) {
-                		setArmorItem(player,item);
-                	} else {
-                		player.getInventory().addItem(item);
-                	}
-                }	
-            }
-            player.updateInventory();
-        }
-        if (plugin.shop.getPotionEffects(player) != null) {
-        	for (PotionEffect pe : plugin.shop.getPotionEffects(player)) {
-        		player.addPotionEffect(pe);
-        	}
-        	plugin.shop.removePotionEffects(player);
-        }
+			if (items != null) {
+				for (ItemStack item : items) {
+					if (isArmor(item)) {
+						setArmorItem(player,item);
+					} else {
+						player.getInventory().addItem(item);
+					}
+				}
+			}
+			player.updateInventory();
+		}
+		if (plugin.shop.getPotionEffects(player) != null) {
+			for (PotionEffect pe : plugin.shop.getPotionEffects(player)) {
+				player.addPotionEffect(pe);
+			}
+			plugin.shop.removePotionEffects(player);
+		}
 	}
 
 	/**
