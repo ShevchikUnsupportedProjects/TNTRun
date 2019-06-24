@@ -123,10 +123,10 @@ public class RestrictionHandler implements Listener {
 			arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 
 		} else if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.shop.material"))) {
-    		plugin.sound.ITEM_SELECT(player);
-    		Inventory inv = Bukkit.createInventory(null, plugin.shop.getInvsize(), plugin.shop.getInvname());
-    		plugin.shop.setItems(inv);
-    		player.openInventory(inv);
+			plugin.sound.ITEM_SELECT(player);
+			Inventory inv = Bukkit.createInventory(null, plugin.shop.getInvsize(), plugin.shop.getInvname());
+			plugin.shop.setItems(inv);
+			player.openInventory(inv);
 
 		} else if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.info.material"))) {
 			if (u.contains(player)) {

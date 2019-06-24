@@ -337,6 +337,10 @@ public class PlayerHandler {
 		plugin.pdata.restorePlayerFlight(player);
 		removeFriendlyFire(player);
 
+		if (plugin.getConfig().getBoolean("shop.onleave.removepurchase")) {
+			removePurchase(player);
+		}
+
 		if (player.getGameMode() == GameMode.CREATIVE) {
 			player.setAllowFlight(true);
 		}		
@@ -518,6 +522,21 @@ public class PlayerHandler {
 		if (pparty.contains(player.getName())) {
 			pparty.remove(player.getName());
 			plugin.getVaultHandler().getPermissions().playerRemove(player, "mcmmo.party.friendlyfire");
+		}
+	}
+
+	/**
+	 * Remove the cached purchase for the player. This can be when the game starts and the
+	 * player receives the item, or if the player leaves the arena before the game starts.
+	 * @param player
+	 */
+	public void removePurchase(Player player ) {
+		if (plugin.shop.getPlayersItems().containsKey(player.getName())) {
+			plugin.shop.getPlayersItems().remove(player.getName());
+			plugin.shop.getBuyers().remove(player.getName());
+		}
+		if (plugin.shop.getPotionEffects(player) != null) {
+			plugin.shop.removePotionEffects(player);
 		}
 	}
 }

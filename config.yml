@@ -18,6 +18,8 @@ shop:
   doublejump:
     maxdoublejumps: 10
   logpurchases: false
+  onleave:
+    removepurchase: false
 freedoublejumps:
   enabled: false
   amount: 10

@@ -493,9 +493,6 @@ public class GameHandler {
 
 		if (plugin.shop.getPlayersItems().containsKey(player.getName())) {
 			ArrayList<ItemStack> items = plugin.shop.getPlayersItems().get(player.getName());
-			plugin.shop.getPlayersItems().remove(player.getName());
-			plugin.shop.getBuyers().remove(player.getName());
-
 			if (items != null) {
 				for (ItemStack item : items) {
 					if (isArmor(item)) {
@@ -511,8 +508,8 @@ public class GameHandler {
 			for (PotionEffect pe : plugin.shop.getPotionEffects(player)) {
 				player.addPotionEffect(pe);
 			}
-			plugin.shop.removePotionEffects(player);
 		}
+		arena.getPlayerHandler().removePurchase(player);
 	}
 
 	/**

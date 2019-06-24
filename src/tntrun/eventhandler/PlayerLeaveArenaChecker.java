@@ -41,7 +41,6 @@ public class PlayerLeaveArenaChecker implements Listener {
 	public void onPlayerQuitEvent(PlayerQuitEvent e) {
 		Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
-		// ignore if player is not in arena
 		if (arena == null) {
 			return;
 		}
@@ -57,7 +56,6 @@ public class PlayerLeaveArenaChecker implements Listener {
 	public void onPlayerDeathEvent(PlayerDeathEvent e) {
 		Player player = e.getEntity();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
-		// ignore if player is not in arena
 		if (arena == null) {
 			return;
 		}
