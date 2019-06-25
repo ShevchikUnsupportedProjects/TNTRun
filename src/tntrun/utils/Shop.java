@@ -66,7 +66,7 @@ public class Shop implements Listener{
 	private HashMap<Integer, Integer> itemSlot = new HashMap<Integer, Integer>();
 	private HashMap<String, ArrayList<ItemStack>> pitems = new HashMap<String, ArrayList<ItemStack>>(); // player-name -> items
 	private List<String> buyers = new ArrayList<String>();
-	private HashMap<Player, List<PotionEffect>> potionMap = new HashMap<Player, List<PotionEffect>>();
+	private HashMap<String, List<PotionEffect>> potionMap = new HashMap<String, List<PotionEffect>>();  // player-name -> effects
 
 	private void giveItem(int slot, Player player, String title) {
 		int kit = itemSlot.get(slot);		
@@ -114,7 +114,7 @@ public class Shop implements Listener{
 			}
 		}
 		pitems.put(player.getName(), item);
-		potionMap.put(player, pelist);
+		potionMap.put(player.getName(), pelist);
 	}
 
 	private void logPurchase(Player player, String item, int cost) {
@@ -341,11 +341,11 @@ public class Shop implements Listener{
 	}
 
 	public List<PotionEffect> getPotionEffects(Player player) {
-		return potionMap.get(player);
+		return potionMap.get(player.getName());
 	}
 
 	public void removePotionEffects(Player player) {
-		potionMap.remove(player);
+		potionMap.remove(player.getName());
 	}
 
 	public String getInvname() {
