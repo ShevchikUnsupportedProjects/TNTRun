@@ -53,6 +53,7 @@ public class Shop implements Listener{
 	private TNTRun plugin;
 	private String invname;
 	private int invsize;
+	private int knockback;
 
 	public Shop(TNTRun plugin){
 		this.plugin = plugin;
@@ -145,6 +146,9 @@ public class Shop implements Listener{
 				Enchantment realEnch = getEnchantmentFromString(ench);
 				if (realEnch != null) {
 					meta.addEnchant(realEnch, level, true);
+				}
+				if (material == Material.SNOWBALL && ench.equalsIgnoreCase("knockback")) {
+					knockback = level;
 				}
 			}
 		}
@@ -366,5 +370,9 @@ public class Shop implements Listener{
 
 	public boolean hasDoubleJumps(Player player) {
 		return plugin.getConfig().getInt("doublejumps." + player.getName(), 0) > 0;
+	}
+
+	public double getKnockback() {
+		return Math.min(Math.max(knockback, 0), 5) * 0.4;
 	}
 }

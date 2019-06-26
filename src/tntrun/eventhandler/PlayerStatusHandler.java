@@ -113,7 +113,7 @@ public class PlayerStatusHandler implements Listener {
 			return;
 		}
 		player.damage(0.5, projectile);
-		player.setVelocity(projectile.getVelocity().multiply(1.5));
+		player.setVelocity(projectile.getVelocity().multiply(plugin.shop.getKnockback()));
 	}
 
 }

@@ -117,18 +117,20 @@ public class RestrictionHandler implements Listener {
 		if (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
-		e.setCancelled(true);
 		if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.leave.material"))) {
+			e.setCancelled(true);
 			plugin.sound.ITEM_SELECT(player);
 			arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
 
 		} else if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.shop.material"))) {
+			e.setCancelled(true);
 			plugin.sound.ITEM_SELECT(player);
 			Inventory inv = Bukkit.createInventory(null, plugin.shop.getInvsize(), plugin.shop.getInvname());
 			plugin.shop.setItems(inv);
 			player.openInventory(inv);
 
 		} else if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.info.material"))) {
+			e.setCancelled(true);
 			if (u.contains(player)) {
 				plugin.sound.NOTE_PLING(player, 5, 999);
 				return;
@@ -139,6 +141,7 @@ public class RestrictionHandler implements Listener {
 			Utils.displayInfo(player);
 
 		} else if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.vote.material"))) {
+			e.setCancelled(true);
 			if (u.contains(player)) {
 				plugin.sound.NOTE_PLING(player, 5, 999);
 				return;
@@ -158,6 +161,7 @@ public class RestrictionHandler implements Listener {
 			}
 
 		} else if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.stats.material"))) {
+			e.setCancelled(true);
 			if (u.contains(player)) {
 				plugin.sound.NOTE_PLING(player, 5, 999);
 				return;
@@ -168,6 +172,7 @@ public class RestrictionHandler implements Listener {
 			player.chat("/tntrun stats");
 
 		} else if (e.getMaterial() == Material.getMaterial(plugin.getConfig().getString("items.heads.material"))) {
+			e.setCancelled(true);
 			if (u.contains(player)) {
 				plugin.sound.NOTE_PLING(player, 5, 999);
 				return;
