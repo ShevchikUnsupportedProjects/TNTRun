@@ -78,7 +78,7 @@ public class Shop implements Listener{
 		for(String items : cfg.getConfigurationSection(kit + ".items").getKeys(false)) {
 			try {				
 				Material material = Material.getMaterial(cfg.getString(kit + ".items." + items + ".material"));
-				int amount = Integer.valueOf(cfg.getInt(kit + ".items." + items + ".amount"));
+				int amount = cfg.getInt(kit + ".items." + items + ".amount");
 
 				List<String> enchantments = cfg.getStringList(kit + ".items." + items + ".enchantments");
 
@@ -140,7 +140,7 @@ public class Shop implements Listener{
 
 				// get the enchantment level
 				int level = 1;
-				if (array.length > 1) {
+				if (array.length > 1 && Utils.isNumber(array[1])) {
 					level = Integer.valueOf(array[1]).intValue();
 				}
 				Enchantment realEnch = getEnchantmentFromString(ench);
@@ -204,7 +204,8 @@ public class Shop implements Listener{
 		if (e.getSlot() == e.getRawSlot() && e.getCurrentItem() != null) {
 			ItemStack current = e.getCurrentItem();
 			if (current.hasItemMeta() && current.getItemMeta().hasDisplayName()) {
-				int kit = ((Integer)itemSlot.get(Integer.valueOf(e.getSlot()))).intValue();
+				//int kit = ((Integer)itemSlot.get(Integer.valueOf(e.getSlot()))).intValue();
+				int kit = itemSlot.get(e.getSlot());
 
 				FileConfiguration cfg = ShopFiles.getShopConfiguration();
 				String permission = cfg.getString(kit + ".permission");
