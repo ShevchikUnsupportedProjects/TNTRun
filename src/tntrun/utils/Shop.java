@@ -76,12 +76,19 @@ public class Shop implements Listener{
 		List<PotionEffect> pelist = new ArrayList<PotionEffect>();
 
 		for(String items : cfg.getConfigurationSection(kit + ".items").getKeys(false)) {
+			// if the item is double jumps, store them and skip to next item
+			if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
+				int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
+				giveDoubleJumps(player, quantity);
+				continue;
+			}
 			try {				
 				Material material = Material.getMaterial(cfg.getString(kit + ".items." + items + ".material"));
 				int amount = cfg.getInt(kit + ".items." + items + ".amount");
 
 				List<String> enchantments = cfg.getStringList(kit + ".items." + items + ".enchantments");
 
+				//TODO move this to top of method
 				if(!buyers.contains(player.getName())) {
 					buyers.add(player.getName());
 				}
@@ -95,11 +102,8 @@ public class Shop implements Listener{
 							}
 						}
 					}
-					player.updateInventory();
-					player.closeInventory();
 					continue;
 				}
-
 				String displayname = FormattingCodesParser.parseFormattingCodes(cfg.getString(kit + ".items." + items + ".displayname"));
 				List<String> lore = cfg.getStringList(kit + ".items." + items + ".lore");
 
@@ -108,14 +112,28 @@ public class Shop implements Listener{
 				} else {
 					item.add(getItem(material, amount, displayname, lore, enchantments));
 				}
-				player.updateInventory();
-				player.closeInventory();
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
+		player.updateInventory();
+		player.closeInventory();
 		pitems.put(player.getName(), item);
 		potionMap.put(player.getName(), pelist);
+	}
+
+	private void giveDoubleJumps(Player player, int quantity) {
+		if (plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
+			if(plugin.getConfig().get("doublejumps." + player.getName()) == null) {
+				plugin.getConfig().set("doublejumps." + player.getName(), quantity);
+			} else {
+				plugin.getConfig().set("doublejumps." + player.getName(), plugin.getConfig().getInt("doublejumps." + player.getName()) + quantity);
+			}
+			plugin.saveConfig();
+		} else {
+			Arena arena = plugin.amanager.getPlayerArena(player.getName());
+			arena.getPlayerHandler().incrementDoubleJumps(player, quantity);
+		}
 	}
 
 	private void logPurchase(Player player, String item, int cost) {
@@ -124,7 +142,7 @@ public class Shop implements Listener{
 			console.sendMessage("[TNTRun_reloaded] " + ChatColor.AQUA + player.getName() + ChatColor.WHITE + " has bought a " + ChatColor.RED + item + ChatColor.WHITE + " for " + ChatColor.RED + cost + ChatColor.WHITE + " coins");
 		}
 	}
-	
+
 	private ItemStack getItem(Material material, int amount, String displayname, List<String> lore, List<String> enchantments){
 		ItemStack item = new ItemStack(material, amount);
 		ItemMeta meta = item.getItemMeta();
@@ -200,11 +218,9 @@ public class Shop implements Listener{
 		}
 		e.setCancelled(true);
 		Player p = (Player)e.getWhoClicked();
-		Arena arena = plugin.amanager.getPlayerArena(p.getName());
 		if (e.getSlot() == e.getRawSlot() && e.getCurrentItem() != null) {
 			ItemStack current = e.getCurrentItem();
 			if (current.hasItemMeta() && current.getItemMeta().hasDisplayName()) {
-				//int kit = ((Integer)itemSlot.get(Integer.valueOf(e.getSlot()))).intValue();
 				int kit = itemSlot.get(e.getSlot());
 
 				FileConfiguration cfg = ShopFiles.getShopConfiguration();
@@ -225,29 +241,16 @@ public class Shop implements Listener{
 				String title = current.getItemMeta().getDisplayName();
 				int cost = cfg.getInt(kit + ".cost");
 
-				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
-					int maxjumps = plugin.getConfig().getInt("shop.doublejump.maxdoublejumps", 10);
-					int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
-
-					if (plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
-						if (maxjumps <= plugin.getConfig().getInt("doublejumps." + p.getName()) || maxjumps < (plugin.getConfig().getInt("doublejumps." + p.getName()) + quantity)) {
-							Messages.sendMessage(p, Messages.trprefix + Messages.maxdoublejumpsexceeded);
-							plugin.sound.ITEM_SELECT(p);
-							p.closeInventory();
-							return;
-						}
-					} else {
-						if (maxjumps <= arena.getPlayerHandler().getDoubleJumps(p) || maxjumps < (arena.getPlayerHandler().getDoubleJumps(p) + quantity)) {
-							Messages.sendMessage(p, Messages.trprefix + Messages.maxdoublejumpsexceeded);
-							plugin.sound.ITEM_SELECT(p);
-							p.closeInventory();
-							return;
-						}
-					}
+				if (!canBuyDoubleJumps(cfg, p, kit)) {
+					Messages.sendMessage(p, Messages.trprefix + Messages.maxdoublejumpsexceeded);
+					plugin.sound.ITEM_SELECT(p);
+					p.closeInventory();
+					return;
 				}
 				if (hasMoney(cost, p)) {
 					Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
 					logPurchase(p, title, cost);
+					// purchased double jumps are not given until free ones are disabled
 					if (!plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
 						Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtwait);
 					}
@@ -257,23 +260,24 @@ public class Shop implements Listener{
 					plugin.sound.ITEM_SELECT(p);
 					return;
 				}
-				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
-					int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
-					if (plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
-						if(plugin.getConfig().get("doublejumps." + p.getName()) == null) {
-							plugin.getConfig().set("doublejumps." + p.getName(), quantity);
-						} else {
-							plugin.getConfig().set("doublejumps." + p.getName(), plugin.getConfig().getInt("doublejumps." + p.getName()) + quantity);
-						}
-						plugin.saveConfig();
-					} else {
-						arena.getPlayerHandler().incrementDoubleJumps(p, quantity);
-					}
-					return;
-				}
 				giveItem(e.getSlot(), p, title);  
 			}
 		}
+	}
+
+	private boolean canBuyDoubleJumps(FileConfiguration cfg, Player p, int kit) {
+		Arena arena = plugin.amanager.getPlayerArena(p.getName());
+		int maxjumps = plugin.getConfig().getInt("shop.doublejump.maxdoublejumps", 10);
+		int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
+
+		if (plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
+			if (maxjumps <= plugin.getConfig().getInt("doublejumps." + p.getName()) || maxjumps < (plugin.getConfig().getInt("doublejumps." + p.getName()) + quantity)) {
+				return false;
+			}
+		} else if (maxjumps <= arena.getPlayerHandler().getDoubleJumps(p) || maxjumps < (arena.getPlayerHandler().getDoubleJumps(p) + quantity)) {
+			return false;
+		}
+		return true;
 	}
 
 	private boolean hasMoney(int moneyneed, Player player) {
