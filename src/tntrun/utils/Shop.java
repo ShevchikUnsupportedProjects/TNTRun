@@ -75,6 +75,9 @@ public class Shop implements Listener{
 		FileConfiguration cfg = ShopFiles.getShopConfiguration();
 		List<PotionEffect> pelist = new ArrayList<PotionEffect>();
 
+		if(!buyers.contains(player.getName())) {
+			buyers.add(player.getName());
+		}
 		for(String items : cfg.getConfigurationSection(kit + ".items").getKeys(false)) {
 			// if the item is double jumps, store them and skip to next item
 			if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
@@ -85,13 +88,8 @@ public class Shop implements Listener{
 			try {				
 				Material material = Material.getMaterial(cfg.getString(kit + ".items." + items + ".material"));
 				int amount = cfg.getInt(kit + ".items." + items + ".amount");
-
 				List<String> enchantments = cfg.getStringList(kit + ".items." + items + ".enchantments");
 
-				//TODO move this to top of method
-				if(!buyers.contains(player.getName())) {
-					buyers.add(player.getName());
-				}
 				// if the item is a potion, store the potion effect and skip to next item
 				if (material.toString().equalsIgnoreCase("POTION")) {
 					if (enchantments != null && !enchantments.isEmpty()) {
