@@ -19,25 +19,18 @@ package tntrun.arena.handlers;
 
 import java.util.ArrayList;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-
-import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.utils.Bars;
@@ -55,8 +48,6 @@ public class GameHandler {
 		this.arena = arena;
 		count = arena.getStructureManager().getCountdown();
 	}
-
-	private Scoreboard scoreboard = buildScoreboard();
 
 	// arena leave handler
 	private int leavetaskid;
@@ -108,7 +99,7 @@ public class GameHandler {
 					if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers() && !arena.getPlayerHandler().forceStart()) {
 						double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers();
 						Bars.setBar(arena, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
-						createWaitingScoreBoard();
+						arena.getScoreboardHandler().createWaitingScoreBoard();
 						stopArenaCountdown();
 					} else
 					// start arena if countdown is 0
@@ -141,7 +132,7 @@ public class GameHandler {
 				        	displayCountdown(all, count, message);
 				        }
 				    }
-					createWaitingScoreBoard();
+					arena.getScoreboardHandler().createWaitingScoreBoard();
 					double progressbar = (double) count / arena.getStructureManager().getCountdown();
 					Bars.setBar(arena, Bars.starting, 0, count, progressbar, plugin);
 
@@ -162,7 +153,6 @@ public class GameHandler {
 	// main arena handler
 	private int timelimit;
 	private int arenahandler;
-	private int playingtask;
 	private boolean forceStartByCmd;
 
 	public void startArena() {
@@ -188,9 +178,8 @@ public class GameHandler {
 		if (arena.getStructureManager().isKitsEnabled()) {
 			arena.getPlayerHandler().allocateKits();
 		}
-		resetScoreboard();
-		createPlayingScoreBoard();
-		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
+		arena.getScoreboardHandler().createPlayingScoreBoard();
+		timelimit = arena.getStructureManager().getTimeLimit() * 20;
 		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(
 			plugin,
 			new Runnable() {
@@ -224,14 +213,14 @@ public class GameHandler {
 	}
 
 	public void stopArena() {
-		resetScoreboard();
 		for (Player player : arena.getPlayersManager().getAllParticipantsCopy()) {
+			arena.getScoreboardHandler().removeScoreboard(player);
 			arena.getPlayerHandler().leavePlayer(player, "", "");
 		}
 		lostPlayers = 0;
 		arena.getStatusManager().setRunning(false);
 		Bukkit.getScheduler().cancelTask(arenahandler);
-		Bukkit.getScheduler().cancelTask(playingtask);
+		Bukkit.getScheduler().cancelTask(arena.getScoreboardHandler().getPlayingTask());
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		if (arena.getStatusManager().isArenaEnabled()) {
 			startArenaRegen();
@@ -255,83 +244,6 @@ public class GameHandler {
 			arena.getPlayerHandler().dispatchPlayer(player);
 			return;
 		}
-	}
-
-	public Scoreboard buildScoreboard() {
-		FileConfiguration config = TNTRun.getInstance().getConfig();
-		Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-
-		if (config.getBoolean("special.UseScoreboard")) {
-			Objective o = scoreboard.registerNewObjective("TNTRun", "waiting", "TNTRun");
-			o.setDisplaySlot(DisplaySlot.SIDEBAR);
-			
-			String header = FormattingCodesParser.parseFormattingCodes(config.getString("scoreboard.header", ChatColor.GOLD.toString() + ChatColor.BOLD + "TNTRUN"));
-			o.setDisplayName(header);
-		}
-		return scoreboard;
-	} 
-
-	public void createWaitingScoreBoard() {
-		if(!plugin.getConfig().getBoolean("special.UseScoreboard")) {
-			return;
-		}
-		resetScoreboard();
-		Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
-		try {
-			int size = plugin.getConfig().getStringList("scoreboard.waiting").size();
-
-			for(String s : plugin.getConfig().getStringList("scoreboard.waiting")) {
-				s = FormattingCodesParser.parseFormattingCodes(s).replace("{ARENA}", arena.getArenaName());
-				s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
-				s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
-				s = s.replace("{COUNT}", count + "");
-				s = s.replace("{VOTES}", getVotesRequired(arena) + "");
-				o.getScore(s).setScore(size);
-				size--;
-			}
-			for (Player p : arena.getPlayersManager().getPlayers()) {
-				p.setScoreboard(scoreboard);
-			}
-		} catch (NullPointerException ex) {
-	
-		}
-	}
-
-	private Integer getVotesRequired(Arena arena) {
-		int minPlayers = arena.getStructureManager().getMinPlayers();
-		double votePercent = arena.getStructureManager().getVotePercent();
-		int votesCast = arena.getPlayerHandler().getVotesCast();
-
-		return (int) (Math.ceil(minPlayers * votePercent) - votesCast);
-	}
-
-	private void resetScoreboard() {
-		for (String entry : new ArrayList<String>(scoreboard.getEntries())) {
-			scoreboard.resetScores(entry);
-		}
-	}
-
-	public void createPlayingScoreBoard() {
-		if(!plugin.getConfig().getBoolean("special.UseScoreboard")){
-			return;	
-		}
-		playingtask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-			public void run() {
-				resetScoreboard();
-				Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
-
-				int size = plugin.getConfig().getStringList("scoreboard.playing").size();
-				for(String s : plugin.getConfig().getStringList("scoreboard.playing")) {
-					s = FormattingCodesParser.parseFormattingCodes(s).replace("{ARENA}", arena.getArenaName());
-					s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");		
-					s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
-					s = s.replace("{LOST}", lostPlayers + "");
-					s = s.replace("{LIMIT}", timelimit/20 + "");
-					o.getScore(s).setScore(size);
-					size--;
-				}
-			}
-		}, 0, 20);
 	}
 
 	/**
@@ -398,7 +310,7 @@ public class GameHandler {
 		}
 
 		Bukkit.getScheduler().cancelTask(arenahandler);
-		Bukkit.getScheduler().cancelTask(playingtask);
+		Bukkit.getScheduler().cancelTask(arena.getScoreboardHandler().getPlayingTask());
 
 		if (plugin.getConfig().getBoolean("fireworksonwin.enabled")) {
 	
@@ -552,4 +464,9 @@ public class GameHandler {
 	public boolean isForceStartByCommand() {
 		return forceStartByCmd;
 	}
+
+	public int getTimeLimit() {
+		return timelimit;
+	}
+
 }

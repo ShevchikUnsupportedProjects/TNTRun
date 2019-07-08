@@ -175,7 +175,7 @@ public class PlayerHandler {
 		}
 
 		plugin.signEditor.modifySigns(arena.getArenaName());
-		arena.getGameHandler().createWaitingScoreBoard();
+		arena.getScoreboardHandler().createWaitingScoreBoard();
 		Bars.addPlayerToBar(player, arena.getArenaName());
 
 		// modify bars
@@ -201,24 +201,20 @@ public class PlayerHandler {
 		}
 		// remove form players
 		arena.getPlayersManager().remove(player);
-		// add to lostPlayers
 		arena.getGameHandler().lostPlayers++;
-		// remove scoreboard
-		removeScoreboard(player);
-		// teleport to spectators spawn
+		arena.getScoreboardHandler().removeScoreboard(player);
 		player.teleport(arena.getStructureManager().getSpectatorSpawn());
 		// clear inventory and potion effects
 		player.getInventory().clear();
 		player.getInventory().setArmorContents(new ItemStack[4]);
 		clearPotionEffects(player);
-		// allow flight
 		player.setAllowFlight(true);
 		player.setFlying(true);
 
 		for (Player oplayer : Bukkit.getOnlinePlayers()) {
 			oplayer.hidePlayer(plugin, player);
 		}
-		
+
 		Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		// send message to other players and update bars
@@ -274,7 +270,7 @@ public class PlayerHandler {
 		if (arena.getStatusManager().isArenaRunning()) {
 			arena.getGameHandler().lostPlayers++;
 		}
-		removeScoreboard(player);
+		arena.getScoreboardHandler().removeScoreboard(player);
 		removePlayerFromArenaAndRestoreState(player, false);
 		// should not send messages and other things when player is a spectator
 		if (spectator) {
@@ -283,7 +279,7 @@ public class PlayerHandler {
 		Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		if (!arena.getStatusManager().isArenaRunning()) {
-			arena.getGameHandler().createWaitingScoreBoard();
+			arena.getScoreboardHandler().createWaitingScoreBoard();
 		}
 
 		Bars.removeBar(player, arena.getArenaName());
@@ -299,7 +295,7 @@ public class PlayerHandler {
 	}
 
 	protected void leaveWinner(Player player, String msgtoplayer) {
-		removeScoreboard(player);
+		arena.getScoreboardHandler().removeScoreboard(player);
 		player.setFlying(false);
 		removePlayerFromArenaAndRestoreState(player, true);
 		Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
@@ -357,7 +353,7 @@ public class PlayerHandler {
 		if (!votes.contains(player.getName())) {
 			votes.add(player.getName());
 
-			arena.getGameHandler().createWaitingScoreBoard();
+			arena.getScoreboardHandler().createWaitingScoreBoard();
 			if (!arena.getStatusManager().isArenaStarting() && forceStart()) {
 				arena.getGameHandler().runArenaCountdown();
 			}
@@ -435,10 +431,6 @@ public class PlayerHandler {
 		item.setItemMeta(im);
 
 		p.getInventory().setItem(8, item);
-	}
-
-	private void removeScoreboard(Player player) {
-		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 	}
 
 	public int getVotesCast() {
