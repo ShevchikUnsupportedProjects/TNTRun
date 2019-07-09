@@ -58,12 +58,13 @@ public class ScoreboardHandler {
 			try {
 				int size = plugin.getConfig().getStringList("scoreboard.waiting").size();
 
-				for(String s : plugin.getConfig().getStringList("scoreboard.waiting")) {
+				for (String s : plugin.getConfig().getStringList("scoreboard.waiting")) {
 					s = FormattingCodesParser.parseFormattingCodes(s).replace("{ARENA}", arena.getArenaName());
 					s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
 					s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
 					s = s.replace("{COUNT}", arena.getGameHandler().count + "");
 					s = s.replace("{VOTES}", getVotesRequired(arena) + "");
+					s = s.replace("{DJ}", arena.getPlayerHandler().getDoubleJumps(player) + "");
 					o.getScore(s).setScore(size);
 					size--;
 				}
@@ -106,12 +107,13 @@ public class ScoreboardHandler {
 					Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
 
 					int size = plugin.getConfig().getStringList("scoreboard.playing").size();
-					for(String s : plugin.getConfig().getStringList("scoreboard.playing")) {
+					for (String s : plugin.getConfig().getStringList("scoreboard.playing")) {
 						s = FormattingCodesParser.parseFormattingCodes(s).replace("{ARENA}", arena.getArenaName());
 						s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");		
 						s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
 						s = s.replace("{LOST}", arena.getGameHandler().lostPlayers + "");
 						s = s.replace("{LIMIT}", arena.getGameHandler().getTimeLimit()/20 + "");
+						s = s.replace("{DJ}", arena.getPlayerHandler().getDoubleJumps(player) + "");
 						o.getScore(s).setScore(size);
 						size--;
 					}

@@ -18,6 +18,7 @@
 package tntrun;
 
 import java.io.File;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -94,6 +95,7 @@ public class TNTRun extends JavaPlugin {
 
 		saveDefaultConfig();
 		getConfig().options().copyDefaults(true);
+		updateScoreboardList();
 		saveConfig();
 
 		loadArenas();
@@ -298,6 +300,24 @@ public class TNTRun extends JavaPlugin {
 			usestats = false;
 			file = false;
 			log.info("Disabling stats...");
+		}
+	}
+
+	private void updateScoreboardList() {
+		if (!getConfig().getBoolean("scoreboard.displaydoublejumps")) {
+			return;
+		}
+		List<String> ps = getConfig().getStringList("scoreboard.playing");
+		if (!ps.contains("{DJ}")) {
+			ps.add("&e ");
+			ps.add("&fDouble Jumps: &6&l{DJ}");
+			getConfig().set("scoreboard.playing", ps);
+		}
+		List<String> ws = getConfig().getStringList("scoreboard.waiting");
+		if (!ws.contains("{DJ}")) {
+			ws.add("&e ");
+			ws.add("&fDouble Jumps: &6&l{DJ}");
+			getConfig().set("scoreboard.waiting", ws);
 		}
 	}
 }
