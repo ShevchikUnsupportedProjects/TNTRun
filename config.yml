@@ -79,7 +79,7 @@ items:
     name: '&e&lHeadsPlus'
 scoreboard:
   header: '&6&lTNTRUN'
-  displaydoublejumps: true
+  displaydoublejumps: false
   waiting:
   - '&fWelcome to TNTRun'
   - '&a '
@@ -89,8 +89,6 @@ scoreboard:
   - '&c '
   - '&fVotes needed: &6&l{VOTES}'
   - '&d '
-  - '&fDouble Jumps: &6&l{DJ}'
-  - '&e '
   - '&fStarting in: &6&l{COUNT}'
   playing:
   - '&fPlaying TNTRun'
@@ -99,9 +97,7 @@ scoreboard:
   - '&fPlayers: &a&l{PS}&7&l/&c&l{MPS}'
   - '&c '
   - '&fLost Players: &a&l{LOST}'
-  - '&2 '
-  - '&fDouble Jumps: &6&l{DJ}'
-  - '&e '
+  - '&d '
   - '&fEnd in: &c&l{LIMIT}'
 database: file
 MySQL:

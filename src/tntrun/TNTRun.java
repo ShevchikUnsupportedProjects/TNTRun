@@ -95,9 +95,9 @@ public class TNTRun extends JavaPlugin {
 
 		saveDefaultConfig();
 		getConfig().options().copyDefaults(true);
-		updateScoreboardList();
 		saveConfig();
 
+		updateScoreboardList();
 		loadArenas();
 		checkUpdate();
 		sound = new SoundHandler(this);
@@ -303,21 +303,23 @@ public class TNTRun extends JavaPlugin {
 		}
 	}
 
-	private void updateScoreboardList() {
+	public void updateScoreboardList() {
 		if (!getConfig().getBoolean("scoreboard.displaydoublejumps")) {
 			return;
 		}
 		List<String> ps = getConfig().getStringList("scoreboard.playing");
-		if (!ps.contains("{DJ}")) {
+		if (ps.stream().noneMatch(s -> s.contains("{DJ}"))) {
 			ps.add("&e ");
 			ps.add("&fDouble Jumps: &6&l{DJ}");
 			getConfig().set("scoreboard.playing", ps);
+			saveConfig();
 		}
 		List<String> ws = getConfig().getStringList("scoreboard.waiting");
-		if (!ws.contains("{DJ}")) {
+		if (ws.stream().noneMatch(s -> s.contains("{DJ}"))) {
 			ws.add("&e ");
 			ws.add("&fDouble Jumps: &6&l{DJ}");
 			getConfig().set("scoreboard.waiting", ws);
+			saveConfig();
 		}
 	}
 }

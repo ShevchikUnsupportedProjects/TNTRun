@@ -33,6 +33,7 @@ public class ReloadConfig  implements CommandHandlerInterface {
 	public boolean handleCommand(Player player, String[] args) {
 		plugin.reloadConfig();
 		plugin.signEditor.loadConfiguration();
+		plugin.updateScoreboardList();
 		player.sendMessage("Config reloaded");
 		return true;
 	}
