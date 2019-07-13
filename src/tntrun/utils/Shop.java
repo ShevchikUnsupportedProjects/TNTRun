@@ -215,6 +215,9 @@ public class Shop implements Listener{
 			return;
 		}
 		e.setCancelled(true);
+		if (e.getRawSlot() == getInvsize() -1) {
+			return;
+		}
 		Player p = (Player)e.getWhoClicked();
 		if (e.getSlot() == e.getRawSlot() && e.getCurrentItem() != null) {
 			ItemStack current = e.getCurrentItem();
@@ -292,7 +295,16 @@ public class Shop implements Listener{
 		return false;
 	}
 
-	public void setItems(Inventory inventory){
+	private double getPlayerBalance(Player player) {
+		Economy econ = plugin.getVaultHandler().getEconomy();
+		if(econ == null) {
+			return 0.0;
+		}
+		OfflinePlayer offplayer = player.getPlayer();
+		return econ.getBalance(offplayer);
+	}
+
+	public void setItems(Inventory inventory, Player player){
 		FileConfiguration cfg = ShopFiles.getShopConfiguration();
 		int slot = 0;
 		for (String kitCounter : cfg.getConfigurationSection("").getKeys(false)) {
@@ -312,6 +324,15 @@ public class Shop implements Listener{
 			itemSlot.put(Integer.valueOf(slot), Integer.valueOf(kitCounter));
 			slot++;
 		}
+		inventory.setItem(getInvsize() -1, setMoneyItem(inventory, player));
+	}
+
+	private ItemStack setMoneyItem(Inventory inv, Player player) {
+		Material material = Material.getMaterial(plugin.getConfig().getString("shop.showmoneyitem", "GOLD_INGOT"));
+		String title = FormattingCodesParser.parseFormattingCodes(Messages.shopmoneyheader);
+		List<String> lore = new ArrayList<String>();
+		lore.add(FormattingCodesParser.parseFormattingCodes(Messages.shopmoneybalance).replace("{BAL}", String.valueOf(getPlayerBalance(player))));
+		return getShopItem(material, title, lore, 1);
 	}
 
 	private ItemStack getShopItem(Material material, String title, List<String> lore, int amount){

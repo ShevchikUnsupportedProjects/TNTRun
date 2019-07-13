@@ -20,6 +20,7 @@ shop:
   logpurchases: false
   onleave:
     removepurchase: false
+  showmoneyitem: GOLD_INGOT
 freedoublejumps:
   enabled: false
   amount: 10

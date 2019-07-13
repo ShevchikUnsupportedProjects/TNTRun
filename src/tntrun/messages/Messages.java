@@ -86,6 +86,8 @@ public class Messages {
 	public static String statsdisabled = "&c Stats are currently disabled";
 	public static String leaderboard = "{POSITION}) &b{PLAYER} &f: Wins &3{WINS}";
 	public static String leadersign = "&1{PLAYER} &4{WINS}";
+	public static String shopmoneyheader = "&fTNTRun Shop Account";
+	public static String shopmoneybalance = "&5Your balance is &6{BAL} &5coins";
 
 	public static String helplobby = "Teleport to lobby";
 	public static String helplist = "List all arenas &for &cList arena details";
@@ -197,6 +199,8 @@ public class Messages {
 		leaderhead = config.getString("leaderhead", leaderhead);
 		leaderboard = config.getString("leaderboard", leaderboard);
 		leadersign = config.getString("leadersign", leadersign);
+		shopmoneyheader = config.getString("shopmoneyheader", shopmoneyheader);
+		shopmoneybalance = config.getString("shopmoneybalance", shopmoneybalance);
 		statsdisabled = config.getString("statsdisabled", statsdisabled);
 		helplobby = config.getString("helplobby", helplobby);
 		helplist = config.getString("helplist", helplist);
@@ -297,6 +301,8 @@ public class Messages {
 		config.set("leaderhead", leaderhead);
 		config.set("leaderboard", leaderboard);
 		config.set("leadersign",  leadersign);
+		config.set("shopmoneyheader", shopmoneyheader);
+		config.set("shopmoneybalance", shopmoneybalance);
 		config.set("statsdisabled", statsdisabled);
 		config.set("helplobby", helplobby);
 		config.set("helplist", helplist);
