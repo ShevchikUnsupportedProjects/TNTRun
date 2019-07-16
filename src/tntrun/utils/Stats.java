@@ -62,18 +62,12 @@ public class Stats {
 	public void addPlayedGames(Player player, int value) {
 		if (plugin.isFile()) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+			String path = "stats." + player.getUniqueId().toString() + ".played";
 			if (Bukkit.getOnlineMode()) {
-				if (config.get("stats." + player.getUniqueId().toString() + ".played") == null) {
-					config.set("stats." + player.getUniqueId().toString() + ".played", value);
-				} else {
-					config.set("stats." + player.getUniqueId().toString() + ".played", config.getInt("stats." + player.getUniqueId().toString() + ".played") + value);
-				}
+				config.set(path, config.getInt(path, 0) + value);
 			} else {
-				if (config.get("stats." + player.getName() + ".played") == null) {
-					config.set("stats." + player.getName() + ".played", value);
-				} else {
-					config.set("stats." + player.getName() + ".played", config.getInt("stats." + player.getName() + ".played") + value);
-				}
+				path = "stats." + player.getName() + ".played";
+				config.set(path, config.getInt(path, 0) + value);
 			}
 			try {
 				config.save(file);
@@ -88,18 +82,12 @@ public class Stats {
 	public void addWins(Player player, int value) {
 		if (plugin.isFile()) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+			String path = "stats." + player.getUniqueId().toString() + ".wins";
 			if (Bukkit.getOnlineMode()) {
-				if (config.get("stats." + player.getUniqueId().toString() + ".wins") == null) {
-					config.set("stats." + player.getUniqueId().toString() + ".wins", value);
-				} else {
-					config.set("stats." + player.getUniqueId().toString() + ".wins", config.getInt("stats." + player.getUniqueId().toString() + ".wins") + value);
-				}
+				config.set(path, config.getInt(path, 0) + value);
 			} else {
-				if (config.get("stats." + player.getName() + ".wins") == null) {
-					config.set("stats." + player.getName() + ".wins", value);
-				} else {
-					config.set("stats." + player.getName() + ".wins", config.getInt("stats." + player.getName() + ".wins") + value);
-				}
+				path = "stats." + player.getName() + ".wins";
+				config.set(path, config.getInt(path, 0) + value);
 			}
 			try {
 				config.save(file);
@@ -119,17 +107,9 @@ public class Stats {
 		if (plugin.isFile()) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 			if (Bukkit.getOnlineMode()) {
-				if (config.get("stats." + offlinePlayer.getUniqueId().toString() + ".wins") == null) {
-					return 0;
-				} else {
-					return config.getInt("stats." + offlinePlayer.getUniqueId().toString() + ".wins");
-				}
+				return config.getInt("stats." + offlinePlayer.getUniqueId().toString() + ".wins", 0);
 			} else {
-				if (config.get("stats." + offlinePlayer.getName() + ".wins") == null) {
-					return 0;
-				} else {
-					return config.getInt("stats." + offlinePlayer.getName() + ".wins");
-				}
+				return config.getInt("stats." + offlinePlayer.getName() + ".wins", 0);
 			}
 		}
 		return getStat("wins", offlinePlayer);
@@ -139,17 +119,9 @@ public class Stats {
 		if (plugin.isFile()) {
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 			if (Bukkit.getOnlineMode()) {
-				if (config.get("stats." + player.getUniqueId().toString() + ".played") == null) {
-					return 0;
-				} else {
-					return config.getInt("stats." + player.getUniqueId().toString() + ".played");
-				}
+				return config.getInt("stats." + player.getUniqueId().toString() + ".played", 0);
 			} else {
-				if (config.get("stats." + player.getName() + ".played") == null) {
-					return 0;
-				} else {
-					return config.getInt("stats." + player.getName() + ".played");
-				}
+				return config.getInt("stats." + player.getName() + ".played", 0);
 			}
 		}
 		return getStat("played", player);
@@ -170,13 +142,13 @@ public class Stats {
         try {
             int stat = 0;
             ResultSet rs;
-            
+
             if (Bukkit.getOnlineMode()) {
             	rs = plugin.mysql.query("SELECT * FROM `stats` WHERE `username`='" + offlinePlayer.getUniqueId().toString() + "'").getResultSet();
             } else {
             	rs = plugin.mysql.query("SELECT * FROM `stats` WHERE `username`='" + offlinePlayer.getName() + "'").getResultSet();
             }
-            
+
             while (rs.next()) {
                	stat = rs.getInt(statname);
             }
@@ -276,9 +248,7 @@ public class Stats {
 					if (isValidUuid(playerName)) {
 						continue;
 					}
-					if (Bukkit.getOfflinePlayer(playerName) != null) {
-						statsMap.put(playerName, getWins(Bukkit.getOfflinePlayer(playerName)));
-					}
+					statsMap.put(playerName, config.getInt("stats." + playerName + ".wins", 0));
 				}
 			}
 		}

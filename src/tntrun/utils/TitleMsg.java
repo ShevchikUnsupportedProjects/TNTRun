@@ -87,7 +87,7 @@ public class TitleMsg {
 			Object e;
 			Object chatTitle;
 			Object chatSubtitle;
-			Constructor subtitleConstructor;
+			Constructor<?> subtitleConstructor;
 			Object titlePacket;
 			Object subtitlePacket;
 
