@@ -262,14 +262,13 @@ public class PlayerHandler {
 			for (Player oplayer : Bukkit.getOnlinePlayers()) {
 				oplayer.showPlayer(plugin, player);
 			}
+		} else if (arena.getStatusManager().isArenaRunning()) {
+			arena.getGameHandler().lostPlayers++;
 		}
 		// disable flight for winner as well as spectators
 		player.setAllowFlight(false);
 		player.setFlying(false);
-		// check if arena is running
-		if (arena.getStatusManager().isArenaRunning()) {
-			arena.getGameHandler().lostPlayers++;
-		}
+
 		arena.getScoreboardHandler().removeScoreboard(player);
 		removePlayerFromArenaAndRestoreState(player, false);
 		// should not send messages and other things when player is a spectator
