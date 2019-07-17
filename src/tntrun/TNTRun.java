@@ -61,6 +61,7 @@ public class TNTRun extends JavaPlugin {
 	private boolean headsplus = false;
 	private boolean usestats = false;
 	private boolean needupdate = false;
+	private boolean placeholderapi = false;
 	private boolean file = false;
 	private VaultHandler vaultHandler;
 
@@ -71,6 +72,7 @@ public class TNTRun extends JavaPlugin {
 	public Kits kitmanager;
 	public String[] version = {"Nothing", "Nothing"};
 	public Sounds sound;
+	public MySQL mysql;
 	public Stats stats;
 	public Shop shop;
 
@@ -162,6 +164,9 @@ public class TNTRun extends JavaPlugin {
 		return mcMMO;
 	}
 
+	public boolean isPlaceholderAPI() {
+		return placeholderapi;
+	}
 	public boolean useStats() {
 		return usestats;
 	}
@@ -205,8 +210,6 @@ public class TNTRun extends JavaPlugin {
 			}
 		}.runTaskLaterAsynchronously(this, 30L);
 	}
-
-	public MySQL mysql;
 
 	private void connectToMySQL() {
 		log.info("Connecting to MySQL database...");
@@ -255,6 +258,12 @@ public class TNTRun extends JavaPlugin {
 		if (MCMMO != null && MCMMO.isEnabled()) {
 			mcMMO = true;
 			log.info("Successfully linked with mcMMO, version " + MCMMO.getDescription().getVersion());
+		}
+		Plugin PlaceholderAPI = getServer().getPluginManager().getPlugin("PlaceholderAPI");
+		if (PlaceholderAPI != null && PlaceholderAPI.isEnabled()) {
+			placeholderapi = true;
+			log.info("Successfully linked with PlaceholderAPI, version " + PlaceholderAPI.getDescription().getVersion());
+			new TNTRunPlaceholders(this);
 		}
 
 		vaultHandler = new VaultHandler(this);
