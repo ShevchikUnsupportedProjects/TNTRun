@@ -34,7 +34,6 @@ import org.bukkit.entity.Player;
 
 import com.google.common.base.Enums;
 
-import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 

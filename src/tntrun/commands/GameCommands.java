@@ -25,10 +25,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
+import tntrun.utils.FormattingCodesParser;
 import tntrun.utils.Menu;
 import tntrun.utils.Utils;
 

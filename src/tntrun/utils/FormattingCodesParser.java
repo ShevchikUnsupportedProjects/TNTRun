@@ -15,7 +15,7 @@
  *
  */
 
-package tntrun;
+package tntrun.utils;
 
 import org.bukkit.ChatColor;
 

@@ -22,9 +22,9 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.messages.Messages;
+import tntrun.utils.FormattingCodesParser;
 
 public class LeaderboardSign implements SignType {
 

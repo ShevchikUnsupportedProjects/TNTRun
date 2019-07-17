@@ -24,8 +24,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import tntrun.FormattingCodesParser;
+
 import tntrun.TNTRun;
+import tntrun.utils.FormattingCodesParser;
 
 public class Messages {
 

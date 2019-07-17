@@ -31,7 +31,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.google.common.base.Enums;
 
-import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;

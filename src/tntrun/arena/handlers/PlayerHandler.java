@@ -36,12 +36,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.gmail.nossr50.api.PartyAPI;
 
-import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.DamageEnabled;
 import tntrun.arena.structure.StructureManager.TeleportDestination;
 import tntrun.utils.Bars;
+import tntrun.utils.FormattingCodesParser;
 import tntrun.utils.TitleMsg;
 import tntrun.messages.Messages;
 

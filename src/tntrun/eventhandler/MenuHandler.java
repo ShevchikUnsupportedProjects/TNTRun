@@ -29,9 +29,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import tntrun.FormattingCodesParser;
 import tntrun.TNTRun;
 import tntrun.messages.Messages;
+import tntrun.utils.FormattingCodesParser;
 
 public class MenuHandler implements Listener {
 
