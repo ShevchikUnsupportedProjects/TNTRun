@@ -263,7 +263,7 @@ public class TNTRun extends JavaPlugin {
 		if (PlaceholderAPI != null && PlaceholderAPI.isEnabled()) {
 			placeholderapi = true;
 			log.info("Successfully linked with PlaceholderAPI, version " + PlaceholderAPI.getDescription().getVersion());
-			new TNTRunPlaceholders(this);
+			new TNTRunPlaceholders(this).register();
 		}
 
 		vaultHandler = new VaultHandler(this);
