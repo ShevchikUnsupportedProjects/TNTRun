@@ -24,8 +24,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
@@ -97,22 +99,20 @@ public class SignEditor {
 		if (!plugin.useStats()) {
 			return;
 		}
-		HashMap<String, Integer> statsMap = new HashMap<String, Integer>();
-		if (plugin.isFile()) {
-			statsMap = plugin.stats.getStatsFromFile();
-		} else {
-			statsMap = plugin.stats.getStatsFromDB(3);
-		}
 
 		if (block.getState() instanceof Sign) {
 			Sign sign = (Sign) block.getState();
 			position = 0;
 			sign.setLine(position, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
-			statsMap.entrySet().stream()
+			plugin.stats.getWinMap().entrySet().stream()
 				.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
 				.limit(3)
 				.forEach(e -> {position++;
-					String line = FormattingCodesParser.parseFormattingCodes(Messages.leadersign).replace("{PLAYER}", e.getKey().substring(0, Math.min(e.getKey().length(), 11))).replace("{WINS}", String.valueOf(e.getValue()));
+					String player = Bukkit.getOfflinePlayer(UUID.fromString(e.getKey())).getName();
+					if (!Bukkit.getOnlineMode()) {
+						player = e.getKey();
+					}
+					String line = FormattingCodesParser.parseFormattingCodes(Messages.leadersign).replace("{PLAYER}", player.substring(0, Math.min(player.length(), 11))).replace("{WINS}", String.valueOf(e.getValue()));
 	      			sign.setLine(position, line);	
 				});
 			sign.update();

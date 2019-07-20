@@ -277,13 +277,6 @@ public class RestrictionHandler implements Listener {
 			        		+ "('" + p.getName()
 			                + "', '0', '0', '0');");
 				}
-				// update DB cache on main thread
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						plugin.stats.cacheDBStats(p);
-					}
-				}.runTask(plugin);
 			}
 		}.runTaskAsynchronously(plugin);
 	}

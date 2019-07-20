@@ -127,6 +127,7 @@ public class TNTRun extends JavaPlugin {
 		}
 		// save arenas
 		saveArenas();
+		stats.saveStats();
 		// save lobby
 		globallobby.saveToConfig();
 		globallobby = null;
@@ -139,8 +140,8 @@ public class TNTRun extends JavaPlugin {
 		// unload other things
 		pdata = null;
 		amanager = null;
-		log = null;
 		stats = null;
+		log = null;
 	}
 
 	private void saveArenas() {
