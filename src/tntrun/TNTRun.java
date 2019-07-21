@@ -121,13 +121,13 @@ public class TNTRun extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		stats.saveStats();
 		//Close mysql connection
 		if(!file){
 			mysql.close();
 		}
 		// save arenas
 		saveArenas();
-		stats.saveStats();
 		// save lobby
 		globallobby.saveToConfig();
 		globallobby = null;
@@ -138,9 +138,8 @@ public class TNTRun extends JavaPlugin {
 		signEditor.saveConfiguration();
 		signEditor = null;
 		// unload other things
-		pdata = null;
 		amanager = null;
-		stats = null;
+		pdata = null;
 		log = null;
 	}
 

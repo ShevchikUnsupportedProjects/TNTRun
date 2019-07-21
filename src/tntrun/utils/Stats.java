@@ -85,6 +85,7 @@ public class Stats {
 			return;
 		}
 		wmap.put(uuid, value);
+		saveStats();
 	}
 
 	public int getLosses(Player player) {
@@ -128,7 +129,7 @@ public class Stats {
     	return true;
     }
 
-    public void getStatsFromFile() {
+    private void getStatsFromFile() {
     	FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 		ConfigurationSection stats = config.getConfigurationSection("stats");
 
@@ -154,7 +155,7 @@ public class Stats {
 		}
     }
 
-    public void getWinsFromDB() {
+    private void getWinsFromDB() {
     	try {
             ResultSet rs;
 
@@ -178,7 +179,7 @@ public class Stats {
         }
     }
 
-    public void getPlayedFromDB() {
+    private void getPlayedFromDB() {
     	try {
             ResultSet rs;
 
@@ -222,7 +223,12 @@ public class Stats {
     	}
     	for (String name : wmap.keySet()) {
     		config.set("stats." + name + ".wins", pmap.get(name));
-    	}	
+    	}
+    	try {
+			config.save(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     private void saveStatsToDB() {
