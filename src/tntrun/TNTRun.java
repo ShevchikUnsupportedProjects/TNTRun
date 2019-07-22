@@ -121,9 +121,8 @@ public class TNTRun extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		stats.saveStats();
 		//Close mysql connection
-		if(!file){
+		if (!file) {
 			mysql.close();
 		}
 		// save arenas
@@ -140,6 +139,7 @@ public class TNTRun extends JavaPlugin {
 		// unload other things
 		amanager = null;
 		pdata = null;
+		stats = null;
 		log = null;
 	}
 

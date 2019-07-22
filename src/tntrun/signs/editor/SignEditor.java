@@ -46,6 +46,7 @@ public class SignEditor {
 	private List<SignInfo> lbsigns = new ArrayList<SignInfo>();
 	private File configfile;
 	private int position;
+	private String lbentry;
 
 	public SignEditor(TNTRun plugin) {
 		this.plugin = plugin;
@@ -99,7 +100,6 @@ public class SignEditor {
 		if (!plugin.useStats()) {
 			return;
 		}
-
 		if (block.getState() instanceof Sign) {
 			Sign sign = (Sign) block.getState();
 			position = 0;
@@ -108,11 +108,12 @@ public class SignEditor {
 				.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
 				.limit(3)
 				.forEach(e -> {position++;
-					String player = Bukkit.getOfflinePlayer(UUID.fromString(e.getKey())).getName();
-					if (!Bukkit.getOnlineMode()) {
-						player = e.getKey();
+					if (Bukkit.getOnlineMode()) {
+						lbentry = Bukkit.getOfflinePlayer(UUID.fromString(e.getKey())).getName();
+					} else {
+						lbentry = e.getKey();
 					}
-					String line = FormattingCodesParser.parseFormattingCodes(Messages.leadersign).replace("{PLAYER}", player.substring(0, Math.min(player.length(), 11))).replace("{WINS}", String.valueOf(e.getValue()));
+					String line = FormattingCodesParser.parseFormattingCodes(Messages.leadersign).replace("{PLAYER}", lbentry.substring(0, Math.min(lbentry.length(), 11))).replace("{WINS}", String.valueOf(e.getValue()));
 	      			sign.setLine(position, line);	
 				});
 			sign.update();
