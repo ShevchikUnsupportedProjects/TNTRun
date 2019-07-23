@@ -28,6 +28,7 @@ import java.util.UUID;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
@@ -96,6 +97,11 @@ public class SignEditor {
 		}
 	}
 
+	/**
+	 * Sets the first 3 leaderboard positions. getOfflinePlayer#getName() will return null if
+	 * the player has not played on the server, so need to validate player#hasPlayedBefore().
+	 * @param block
+	 */
 	public void modifyLeaderboardSign(Block block) {
 		if (!plugin.useStats()) {
 			return;
@@ -107,12 +113,19 @@ public class SignEditor {
 			plugin.stats.getWinMap().entrySet().stream()
 				.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
 				.limit(3)
-				.forEach(e -> {position++;
+				.forEach(e -> {
 					if (Bukkit.getOnlineMode()) {
-						lbentry = Bukkit.getOfflinePlayer(UUID.fromString(e.getKey())).getName();
+						OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(e.getKey()));
+						if (!p.hasPlayedBefore()) {
+							plugin.getLogger().info("Invalid player data found for " + e.getKey());
+							// continue to next entry
+							return;
+						}
+						lbentry = p.getName();
 					} else {
 						lbentry = e.getKey();
 					}
+					position++;
 					String line = FormattingCodesParser.parseFormattingCodes(Messages.leadersign).replace("{PLAYER}", lbentry.substring(0, Math.min(lbentry.length(), 11))).replace("{WINS}", String.valueOf(e.getValue()));
 	      			sign.setLine(position, line);	
 				});

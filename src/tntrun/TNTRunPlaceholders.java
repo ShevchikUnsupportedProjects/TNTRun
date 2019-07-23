@@ -28,50 +28,64 @@ public class TNTRunPlaceholders extends PlaceholderExpansion {
 	public TNTRunPlaceholders(TNTRun plugin) {
 		this.plugin = plugin;
 	}
-    @Override
-    public boolean canRegister() {
-        return true;
-    }
+	@Override
+	public boolean canRegister() {
+		return true;
+	}
     
-    public String getAuthor() {
-        return plugin.getDescription().getAuthors().toString();
-    }
+	public String getAuthor() {
+		return plugin.getDescription().getAuthors().toString();
+	}
 
-    @Override
-    public String getVersion() {
-        return plugin.getDescription().getVersion();
-    }
+	@Override
+	public String getVersion() {
+		return plugin.getDescription().getVersion();
+	}
 
-    @Override
-    public String getIdentifier() {
-        return "tntrun";
-    }
+	@Override
+	public String getIdentifier() {
+		return "tntrun";
+	}
 
-    @Override
-    public String onPlaceholderRequest(Player p, String identifier) {
+	@Override
+	public String onPlaceholderRequest(Player p, String identifier) {
 
-        if (p == null) {
-        	return "";
-        }
-    	if (identifier.equals("version")) {
-        	return String.valueOf(plugin.getDescription().getVersion());
-        	
-    	} else if (identifier.equals("arena_count")) {
-        	return String.valueOf(plugin.amanager.getArenas().size());
-        	
-    	} else if (identifier.equals("played")) {
-        	return String.valueOf(plugin.stats.getPlayedGames(p));
-        	
-        } else if (identifier.equals("wins")) {
-            return String.valueOf(plugin.stats.getWins(p));
-            
-        } else if (identifier.equals("losses")) {
-            return String.valueOf(plugin.stats.getLosses(p));
-        	
-        } else if (identifier.equals("player_count")) {
-        	return String.valueOf(Utils.playerCount());      	
-        }
-        return null;
-    }
+		if (p == null) {
+			return "";
+		}
+		if (identifier.equals("version")) {
+			return String.valueOf(plugin.getDescription().getVersion());
+
+		} else if (identifier.equals("arena_count")) {
+			return String.valueOf(plugin.amanager.getArenas().size());
+
+		} else if (identifier.equals("played")) {
+			return String.valueOf(plugin.stats.getPlayedGames(p));
+
+		} else if (identifier.equals("wins")) {
+			return String.valueOf(plugin.stats.getWins(p));
+
+		} else if (identifier.equals("losses")) {
+			return String.valueOf(plugin.stats.getLosses(p));
+
+		} else if (identifier.equals("player_count")) {
+			return String.valueOf(Utils.playerCount());
+
+		} else if (identifier.startsWith("leaderboard")) {
+			String[] temp = identifier.split("_");
+			if (temp.length != 2) {
+				return null;
+			}
+			if (!Utils.isNumber(temp[1])) {
+				return null;
+			}
+			int pos = Integer.parseInt(temp[1]);
+			if (pos < 1 || pos > 10) {
+				return null;
+			}
+			return plugin.stats.getLeaderboardPosition(pos);
+		}
+		return null;
+	}
 
 }

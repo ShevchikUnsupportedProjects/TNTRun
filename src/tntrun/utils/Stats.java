@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -35,6 +36,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.google.common.collect.Streams;
+
 import tntrun.TNTRun;
 import tntrun.messages.Messages;
 
@@ -44,6 +47,8 @@ public class Stats {
 	private File file;
 	private int position;
 	private String lbentry;
+	private String lbplaceholdername;
+	private String lbplaceholdervalue;
 
 	private static HashMap<String, Integer> pmap = new HashMap<String, Integer>();
 	private static HashMap<String, Integer> wmap = new HashMap<String, Integer>();
@@ -82,7 +87,7 @@ public class Stats {
 		String uuid = getPlayerUUID(player);
 		if (pmap.containsKey(uuid)) {
 			pmap.put(uuid, pmap.get(uuid) + value);
-			
+
 		} else {
 			pmap.put(uuid, value);
 		}
@@ -98,7 +103,7 @@ public class Stats {
 		String uuid = getPlayerUUID(player);
 		if (wmap.containsKey(uuid)) {
 			wmap.put(uuid, wmap.get(uuid) + value);
-			
+	
 		} else {
 			wmap.put(uuid, value);
 		}
@@ -119,36 +124,42 @@ public class Stats {
 		return wmap.containsKey(uuid) ? wmap.get(uuid) : 0;
 	}
 
-    public void getLeaderboard(CommandSender sender, int entries) {
-    	position = 0;
-    	wmap.entrySet().stream()
-    		.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
-    		.limit(entries)
-    		.forEach(e -> {position++;
-    			if (Bukkit.getOnlineMode()) {
-    				lbentry = Bukkit.getOfflinePlayer(UUID.fromString(e.getKey())).getName();
-    			} else {
-    				lbentry = e.getKey();
-    			}
-    			Messages.sendMessage(sender, Messages.leaderboard
-    					   .replace("{POSITION}", String.valueOf(position))
-    					   .replace("{PLAYER}", lbentry)
-    					   .replace("{WINS}", String.valueOf(e.getValue())));
-    		});	   
-    	return; 
-    }
+	public void getLeaderboard(CommandSender sender, int entries) {
+		position = 0;
+		wmap.entrySet().stream()
+			.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
+			.limit(entries)
+			.forEach(e -> {
+			if (Bukkit.getOnlineMode()) {
+				OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(e.getKey()));
+				if (!p.hasPlayedBefore()) {
+					// continue to next entry
+					return;
+				}
+				lbentry = p.getName();
+			} else {
+				lbentry = e.getKey();
+			}
+			position++;
+			Messages.sendMessage(sender, Messages.leaderboard
+					.replace("{POSITION}", String.valueOf(position))
+					.replace("{PLAYER}", lbentry)
+					.replace("{WINS}", String.valueOf(e.getValue())));
+			});	   
+		return; 
+	}
 
-    private static boolean isValidUuid(String uuid) {
-    	try {
+	private static boolean isValidUuid(String uuid) {
+		try {
 			UUID.fromString(uuid);
 		} catch (IllegalArgumentException ex){
 			return false;
 		}
-    	return true;
-    }
+		return true;
+	}
 
-    private void getStatsFromFile() {
-    	FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+	private void getStatsFromFile() {
+		FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 		ConfigurationSection stats = config.getConfigurationSection("stats");
 
 		if (stats != null) {
@@ -171,108 +182,134 @@ public class Stats {
 				}
 			}
 		}
-    }
+	}
 
-    private void getWinsFromDB() {
-    	try {
-            ResultSet rs;
+	private void getWinsFromDB() {
+		try {
+			ResultSet rs;
 
-            rs = plugin.mysql.query("SELECT * FROM `stats` ORDER BY wins DESC LIMIT 99999").getResultSet();
+			rs = plugin.mysql.query("SELECT * FROM `stats` ORDER BY wins DESC LIMIT 99999").getResultSet();
 
-            while (rs.next()) {
-            	String playerName = rs.getString("username");
+			while (rs.next()) {
+				String playerName = rs.getString("username");
 
-            	// check if valid uuid
-            	if (Bukkit.getOnlineMode()) {
-            		if (!isValidUuid(playerName)) {
-            			continue;
-            		}
-            	} else if (isValidUuid(playerName)) {
-            		continue;
-            	}
-            	wmap.put(playerName, rs.getInt("wins"));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
+				// check if valid uuid
+				if (Bukkit.getOnlineMode()) {
+					if (!isValidUuid(playerName)) {
+						continue;
+					}
+				} else if (isValidUuid(playerName)) {
+					continue;
+				}
+				wmap.put(playerName, rs.getInt("wins"));
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
 
-    private void getPlayedFromDB() {
-    	try {
-            ResultSet rs;
+	private void getPlayedFromDB() {
+		try {
+			ResultSet rs;
 
-            rs = plugin.mysql.query("SELECT * FROM `stats` ORDER BY played DESC LIMIT 99999").getResultSet();
+			rs = plugin.mysql.query("SELECT * FROM `stats` ORDER BY played DESC LIMIT 99999").getResultSet();
 
-            while (rs.next()) {
-            	String playerName = rs.getString("username");
+			while (rs.next()) {
+				String playerName = rs.getString("username");
 
-            	// check if valid uuid
-            	if (Bukkit.getOnlineMode()) {
-            		if (!isValidUuid(playerName)) {
-            			continue;
-            		}
-            	} else if (isValidUuid(playerName)) {
-            		continue;
-            	}
-            	pmap.put(playerName, rs.getInt("played"));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
+				// check if valid uuid
+				if (Bukkit.getOnlineMode()) {
+					if (!isValidUuid(playerName)) {
+						continue;
+					}
+				} else if (isValidUuid(playerName)) {
+					continue;
+				}
+				pmap.put(playerName, rs.getInt("played"));
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
 
-    public HashMap<String, Integer> getWinMap() {
-    	return wmap;
-    }
+	public HashMap<String, Integer> getWinMap() {
+		return wmap;
+	}
 
-    private void saveStats(Player player, String statname) {
-    	if (plugin.isFile()) {
+	private void saveStats(Player player, String statname) {
+		if (plugin.isFile()) {
 			saveStatsToFile(player, statname);
 			return;
 		}
-    	saveStatsToDB(player, statname);
-    }
+		saveStatsToDB(player, statname);
+	}
 
-    private void saveStatsToFile(Player player, String statname) {
-    	FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+	private void saveStatsToFile(Player player, String statname) {
+		FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
-    	String uuid = getPlayerUUID(player);
+		String uuid = getPlayerUUID(player);
 
-    	if (statname.equalsIgnoreCase("played")) {
-    		config.set("stats." + uuid + ".played", pmap.get(uuid));
+		if (statname.equalsIgnoreCase("played")) {
+			config.set("stats." + uuid + ".played", pmap.get(uuid));
 
-    	} else if (statname.equalsIgnoreCase("wins")) {
-    		config.set("stats." + uuid + ".wins", wmap.get(uuid));
-    	}
-    	try {
+		} else if (statname.equalsIgnoreCase("wins")) {
+			config.set("stats." + uuid + ".wins", wmap.get(uuid));
+		}
+		try {
 			config.save(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    }
+	}
 
-    private void saveStatsToDB(Player player, String statname) {
-    	String uuid = getPlayerUUID(player);
+	private void saveStatsToDB(Player player, String statname) {
+		String uuid = getPlayerUUID(player);
 
-    	if (statname.equalsIgnoreCase("played")) {
-    		updateDB("played", uuid, pmap.get(uuid));
-	
-    	} else if (statname.equalsIgnoreCase("wins")) {
-    		updateDB("wins", uuid, wmap.get(uuid));
-    	}
-    }
+		if (statname.equalsIgnoreCase("played")) {
+			updateDB("played", uuid, pmap.get(uuid));
 
-    private void updateDB(String statname, String player, Integer value) {
-    	new BukkitRunnable() {
-    		@Override
-    		public void run() {
-    			plugin.mysql.query("UPDATE `stats` SET `" + statname
-    					+ "`='" + value + "' WHERE `username`='" + player + "';");
-    		}
-        }.runTaskAsynchronously(plugin);
-    }
+		} else if (statname.equalsIgnoreCase("wins")) {
+			updateDB("wins", uuid, wmap.get(uuid));
+		}
+	}
 
-    private String getPlayerUUID(OfflinePlayer player) {
+	private void updateDB(String statname, String player, Integer value) {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				plugin.mysql.query("UPDATE `stats` SET `" + statname
+						+ "`='" + value + "' WHERE `username`='" + player + "';");
+			}
+		}.runTaskAsynchronously(plugin);
+	}
+
+	private String getPlayerUUID(OfflinePlayer player) {
 		return Bukkit.getOnlineMode() ? player.getUniqueId().toString() : player.getName();
-    }
+	}
+
+	/**
+	 * Returns the player (and wins) occupying the requested leaderboard position.
+	 * @param rank
+	 * @return "[player] : [wins]"
+	 */
+	public String getLeaderboardPosition(Integer rank) {
+		if (rank > wmap.size()) {
+			return null;
+		}
+		Optional<Entry<String, Integer>> opt = Streams.findLast(
+				wmap.entrySet().stream()
+				.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
+				.limit(rank));
+		opt.ifPresent(x -> {
+			lbplaceholdername = opt.get().getKey();
+			if (Bukkit.getOnlineMode()) {
+				OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(opt.get().getKey()));
+				if (p.hasPlayedBefore()) {
+					lbplaceholdername = p.getName();
+				}
+			}
+			lbplaceholdervalue = String.valueOf(opt.get().getValue());
+		});
+		return lbplaceholdername + " : " + lbplaceholdervalue;
+	}
 }
