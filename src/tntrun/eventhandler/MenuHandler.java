@@ -74,7 +74,7 @@ public class MenuHandler implements Listener {
 
 		ItemMeta im = is.getItemMeta();
 		String arenaname = im.getDisplayName();
-		String cmd = "tr join " + ChatColor.stripColor(arenaname);
+		String cmd = "tntrun join " + ChatColor.stripColor(arenaname);
 	
 		Bukkit.dispatchCommand(player, cmd);
 		player.closeInventory();

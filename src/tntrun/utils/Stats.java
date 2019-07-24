@@ -145,8 +145,8 @@ public class Stats {
 					.replace("{POSITION}", String.valueOf(position))
 					.replace("{PLAYER}", lbentry)
 					.replace("{WINS}", String.valueOf(e.getValue())));
-			});	   
-		return; 
+			});
+		return;
 	}
 
 	private static boolean isValidUuid(String uuid) {
