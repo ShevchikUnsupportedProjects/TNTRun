@@ -1,6 +1,6 @@
 # TNTRun_reloaded
 
-This was originally forked from the (now unsupported) TNTRun by Shevchik for Minecraft v1.9 and has been improved and updated as new versions of Minecraft have been released, so that it supports all Minecraft versions from 1.8 through to 1.14.3.
+This was originally forked from the (now unsupported) TNTRun by Shevchik for Minecraft v1.9 and has been improved and updated as new versions of Minecraft have been released, so that it supports all Minecraft versions from 1.8 through to 1.14.4.
 
 However, as a result of the huge number of changes brought in by Mojang in Minecraft v1.13, beginning with version 7.0 of TNTRun\_reloaded, the plugin will only run on Minecraft versions 1.13 and later. All future development work will be done on this version and not back-ported to the legacy version.
 
@@ -55,4 +55,4 @@ Note that there is a legacy bug fix release (version 6.8.1) only available from 
 <br />
 <br />
 <br />
-Updated steve4744 - 7th July 2019
+Updated steve4744 - 14th August 2019
