@@ -32,6 +32,7 @@ public class Messages {
 
 	public static String trprefix = "&7[&6TNTRun_reloaded&7]";
 	public static String menutitle = "&1TNTRun_reloaded Arenas";
+	public static String menutext = "&5Players:";
 	public static String nopermission = "&c You don't have permission to do this";
 	public static String teleporttolobby = "&7 Teleported to lobby";
 
@@ -153,6 +154,7 @@ public class Messages {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(messageconfig);
 		trprefix = config.getString("trprefix", trprefix);
 		menutitle = config.getString("menutitle", menutitle);
+		menutext = config.getString("menutext", menutext);
 		nopermission = config.getString("nopermission", nopermission);
 		teleporttolobby = config.getString("teleporttolobby", teleporttolobby);
 		availablearenas = config.getString("availablearenas", availablearenas);
@@ -255,6 +257,7 @@ public class Messages {
 		
 		config.set("trprefix", trprefix);
 		config.set("menutitle",  menutitle);
+		config.set("menutext",  menutext);
 		config.set("nopermission", nopermission);
 		config.set("teleporttolobby", teleporttolobby);
 		config.set("arenanotexist", arenanotexist);

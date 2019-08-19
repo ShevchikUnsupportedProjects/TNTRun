@@ -68,7 +68,7 @@ public class Menu {
 			lores = new ArrayList<String>();
 			im.setDisplayName(ChatColor.GREEN + arena.getArenaName());
 
-			lores.add("Players: " + getArenaCount(arena));
+			lores.add(FormattingCodesParser.parseFormattingCodes(Messages.menutext) + " " + getArenaCount(arena));
 			im.setLore(lores);
 			is.setItemMeta(im);
 
