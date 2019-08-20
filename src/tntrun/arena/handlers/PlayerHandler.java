@@ -168,7 +168,9 @@ public class PlayerHandler {
 			}
 		}
 
-		if (!plugin.getConfig().getBoolean("special.UseBossBar")) {
+		if (plugin.getConfig().getBoolean("special.UseBossBar")) {
+			Bars.addPlayerToBar(player, arena.getArenaName());
+		} else {
 			String message = Messages.playerscountinarena;
 			message = message.replace("{COUNT}", String.valueOf(arena.getPlayersManager().getPlayersCount()));
 			Messages.sendMessage(player, Messages.trprefix + message);
@@ -176,7 +178,6 @@ public class PlayerHandler {
 
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		arena.getScoreboardHandler().createWaitingScoreBoard();
-		Bars.addPlayerToBar(player, arena.getArenaName());
 
 		// modify bars
 		if (!arena.getStatusManager().isArenaStarting()) {
