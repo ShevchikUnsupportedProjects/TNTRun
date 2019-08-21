@@ -75,16 +75,14 @@ public class Shop implements Listener{
 		FileConfiguration cfg = ShopFiles.getShopConfiguration();
 		List<PotionEffect> pelist = new ArrayList<PotionEffect>();
 
-		if (!doublejumpPurchase) {
-			buyers.add(player.getName());
+		if (doublejumpPurchase) {
+			int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
+			giveDoubleJumps(player, quantity);
+			return;
 		}
+
+		buyers.add(player.getName());
 		for(String items : cfg.getConfigurationSection(kit + ".items").getKeys(false)) {
-			// if the item is double jumps, store them and return as double jumps cannot be included in a kit
-			if (doublejumpPurchase) {
-				int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
-				giveDoubleJumps(player, quantity);
-				return;
-			}
 			try {				
 				Material material = Material.getMaterial(cfg.getString(kit + ".items." + items + ".material"));
 				int amount = cfg.getInt(kit + ".items." + items + ".amount");
@@ -137,6 +135,9 @@ public class Shop implements Listener{
 		} else {
 			Arena arena = plugin.amanager.getPlayerArena(player.getName());
 			arena.getPlayerHandler().incrementDoubleJumps(player, quantity);
+			if (!arena.getStatusManager().isArenaStarting() && plugin.getConfig().getBoolean("scoreboard.displaydoublejumps")) {
+				arena.getScoreboardHandler().createWaitingScoreBoard();
+			}
 		}
 	}
 
@@ -264,8 +265,7 @@ public class Shop implements Listener{
 				if (hasMoney(cost, p)) {
 					Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
 					logPurchase(p, title, cost);
-					// purchased double jumps are not given until free ones are disabled
-					if (!plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
+					if (!doublejumpPurchase) {
 						Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtwait);
 					}
 					plugin.sound.NOTE_PLING(p, 5, 10);
