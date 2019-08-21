@@ -67,6 +67,7 @@ public class Shop implements Listener{
 	private HashMap<String, ArrayList<ItemStack>> pitems = new HashMap<String, ArrayList<ItemStack>>(); // player-name -> items
 	private List<String> buyers = new ArrayList<String>();
 	private HashMap<String, List<PotionEffect>> potionMap = new HashMap<String, List<PotionEffect>>();  // player-name -> effects
+	private boolean doublejumpPurchase;
 
 	private void giveItem(int slot, Player player, String title) {
 		int kit = itemSlot.get(slot);		
@@ -74,15 +75,15 @@ public class Shop implements Listener{
 		FileConfiguration cfg = ShopFiles.getShopConfiguration();
 		List<PotionEffect> pelist = new ArrayList<PotionEffect>();
 
-		if(!buyers.contains(player.getName())) {
+		if (!doublejumpPurchase) {
 			buyers.add(player.getName());
 		}
 		for(String items : cfg.getConfigurationSection(kit + ".items").getKeys(false)) {
-			// if the item is double jumps, store them and skip to next item
-			if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
+			// if the item is double jumps, store them and return as double jumps cannot be included in a kit
+			if (doublejumpPurchase) {
 				int quantity = cfg.getInt(kit + ".items." + kit + ".amount", 1);
 				giveDoubleJumps(player, quantity);
-				continue;
+				return;
 			}
 			try {				
 				Material material = Material.getMaterial(cfg.getString(kit + ".items." + items + ".material"));
@@ -119,6 +120,12 @@ public class Shop implements Listener{
 		potionMap.put(player.getName(), pelist);
 	}
 
+	/**
+	 * Give the player shop-bought double jumps. If free double jumps are enabled 
+	 * then store the purchase for later.
+	 * @param player
+	 * @param quantity
+	 */
 	private void giveDoubleJumps(Player player, int quantity) {
 		if (plugin.getConfig().getBoolean("freedoublejumps.enabled")) {
 			if(plugin.getConfig().get("doublejumps." + player.getName()) == null) {
@@ -226,27 +233,34 @@ public class Shop implements Listener{
 				FileConfiguration cfg = ShopFiles.getShopConfiguration();
 				String permission = cfg.getString(kit + ".permission");
 
-				if (buyers.contains(p.getName())) {
-					Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
-					plugin.sound.ITEM_SELECT(p);
-					p.closeInventory();
-					return;
-				}
 				if (!p.hasPermission(permission) && !p.hasPermission("tntrun.shop")) {
 					p.closeInventory();
 					Messages.sendMessage(p, Messages.trprefix + Messages.nopermission);
 					plugin.sound.ITEM_SELECT(p);
 					return;
 				}
-				String title = current.getItemMeta().getDisplayName();
-				int cost = cfg.getInt(kit + ".cost");
 
-				if (!canBuyDoubleJumps(cfg, p, kit)) {
-					Messages.sendMessage(p, Messages.trprefix + Messages.maxdoublejumpsexceeded);
+				if (Material.getMaterial(cfg.getString(kit + ".material").toUpperCase()) == Material.FEATHER) {
+					doublejumpPurchase = true;
+				} else {
+					doublejumpPurchase = false;
+				}
+				if (!doublejumpPurchase && buyers.contains(p.getName())) {
+					Messages.sendMessage(p, Messages.trprefix + Messages.alreadyboughtitem);
 					plugin.sound.ITEM_SELECT(p);
 					p.closeInventory();
 					return;
 				}
+				if (doublejumpPurchase && !canBuyDoubleJumps(cfg, p, kit)) {
+					Messages.sendMessage(p, Messages.trprefix + Messages.maxdoublejumpsexceeded.replace("{MAXJUMPS}", plugin.getConfig().getInt("shop.doublejump.maxdoublejumps", 10) + ""));
+					plugin.sound.ITEM_SELECT(p);
+					p.closeInventory();
+					return;
+				}
+
+				String title = current.getItemMeta().getDisplayName();
+				int cost = cfg.getInt(kit + ".cost");
+
 				if (hasMoney(cost, p)) {
 					Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
 					logPurchase(p, title, cost);

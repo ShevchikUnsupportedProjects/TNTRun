@@ -72,7 +72,7 @@ public class Messages {
 	public static String playerboughtwait = "&7 You will get your items when the game starts";
 	public static String notenoughtmoney = "&c You need {MONEY} coins to buy this item";
 	public static String alreadyboughtitem = "&c You have already bought a shop item";
-	public static String maxdoublejumpsexceeded = "&c You cannot exceed the maximum doublejumps allowed";
+	public static String maxdoublejumpsexceeded = "&c You cannot exceed the maximum doublejumps allowed ({MAXJUMPS})";
 	public static String playernotinarena = "&c You are not in a TNTRun arena";
 	public static String playerkit = "&7 You have been given kit &6{KIT}";
 	public static String kitadd = "&7 The kit &6{KIT} &7has been created";
