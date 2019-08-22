@@ -142,8 +142,8 @@ public class Shop implements Listener{
 	}
 
 	private void logPurchase(Player player, String item, int cost) {
-		final ConsoleCommandSender console = plugin.getServer().getConsoleSender();
 		if (plugin.getConfig().getBoolean("shop.logpurchases")) {
+			final ConsoleCommandSender console = plugin.getServer().getConsoleSender();
 			console.sendMessage("[TNTRun_reloaded] " + ChatColor.AQUA + player.getName() + ChatColor.WHITE + " has bought a " + ChatColor.RED + item + ChatColor.WHITE + " for " + ChatColor.RED + cost + ChatColor.WHITE + " coins");
 		}
 	}
