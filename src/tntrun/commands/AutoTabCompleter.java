@@ -51,6 +51,7 @@ public class AutoTabCompleter implements TabCompleter {
 				list.add("info");
 				list.add("stats");
 				list.add("listkits");
+				list.add("autojoin");
 				list.add("leaderboard");
 				if (sender.hasPermission("tntrun.start")) {
 					list.add("start");

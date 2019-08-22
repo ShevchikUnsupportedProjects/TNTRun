@@ -38,6 +38,7 @@ public class Messages {
 
 	public static String availablearenas = "&7 Available arenas:&r ";
 	public static String arenanotexist = "&c Arena &6{ARENA}&c doesn't exist";
+	public static String noarenas = "&c There are no arenas available to join";
 	public static String arenanotdisabled = "&c Please disable arena: &6/trsetup disable {ARENA}";
 	public static String availablekits = "&7 Available kits:&r ";
 	public static String arenawolrdna = "&7 Arena world is not loaded";
@@ -93,7 +94,8 @@ public class Messages {
 
 	public static String helplobby = "Teleport to lobby";
 	public static String helplist = "List all arenas &for &cList arena details";
-	public static String helpjoin = "Join the arena";
+	public static String helpjoin = "Open join menu &for &cJoin the arena";
+	public static String helpautojoin = "Automatically join the first available arena";
 	public static String helpleave = "Leave the current arena";
 	public static String helpvote = "Vote to force-start current arena";
 	public static String helpcmds = "View all TNTRun commands";
@@ -160,6 +162,7 @@ public class Messages {
 		availablearenas = config.getString("availablearenas", availablearenas);
 		availablekits = config.getString("availablekits", availablekits);
 		arenanotexist = config.getString("arenanotexist", arenanotexist);
+		noarenas = config.getString("noarenas", noarenas);
 		arenanotdisabled = config.getString("arenanotdisabled", arenanotdisabled);
 		arenawolrdna = config.getString("arenawolrdna", arenawolrdna);
 		arenanobounds = config.getString("arenanobounds", arenanobounds);
@@ -209,6 +212,7 @@ public class Messages {
 		helplist = config.getString("helplist", helplist);
 		helplistkit = config.getString("helplistkit", helplistkit);
 		helpjoin = config.getString("helpjoin", helpjoin);
+		helpautojoin = config.getString("helpautojoin", helpautojoin);
 		helpleave = config.getString("helpleave", helpleave);
 		helpvote = config.getString("helpvote", helpvote);
 		helpcmds = config.getString("helpcmds", helpcmds);
@@ -261,6 +265,7 @@ public class Messages {
 		config.set("nopermission", nopermission);
 		config.set("teleporttolobby", teleporttolobby);
 		config.set("arenanotexist", arenanotexist);
+		config.set("noarenas", noarenas);
 		config.set("arenanotdisabled", arenanotdisabled);
 		config.set("availablearenas", availablearenas);
 		config.set("availablekits", availablekits);
@@ -312,6 +317,7 @@ public class Messages {
 		config.set("helplist", helplist);
 		config.set("helplistkit", helplistkit);
 		config.set("helpjoin", helpjoin);
+		config.set("helpautojoin", helpautojoin);
 		config.set("helpleave", helpleave);
 		config.set("helpvote", helpvote);
 		config.set("helpcmds", helpcmds);

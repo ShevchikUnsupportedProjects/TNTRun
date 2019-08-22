@@ -59,6 +59,7 @@ public class GameCommands implements CommandExecutor {
 			Messages.sendMessage(player, "&6/tr lobby &f- &c" + Messages.helplobby);
 			Messages.sendMessage(player, "&6/tr list [arena] &f- &c" + Messages.helplist);
 			Messages.sendMessage(player, "&6/tr join [arena] &f- &c" + Messages.helpjoin);
+			Messages.sendMessage(player, "&6/tr autojoin &f- &c" + Messages.helpautojoin);
 			Messages.sendMessage(player, "&6/tr leave &f- &c" + Messages.helpleave);
 			Messages.sendMessage(player, "&6/tr vote &f- &c" + Messages.helpvote);
 			Messages.sendMessage(player, "&6/tr info &f- &c" + Messages.helpinfo);
@@ -157,7 +158,6 @@ public class GameCommands implements CommandExecutor {
 		// join arena
 		else if (args[0].equalsIgnoreCase("join")) {
 			if (args.length == 1 && player.hasPermission("tntrun.joinmenu")) {
-				//TODO load gui menu
 				menu = new Menu(plugin);
 				menu.buildMenu(player);
 				return false;
@@ -177,6 +177,23 @@ public class GameCommands implements CommandExecutor {
 				Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[1]));
 				return true;
 			}
+		}
+
+		// autojoin
+		else if (args[0].equalsIgnoreCase("autojoin")) {
+			if (plugin.amanager.getArenas().size() != 0) {
+				for (Arena arena : plugin.amanager.getArenas()) {
+					if (arena.getStatusManager().isArenaEnabled()) {
+						boolean canJoin = arena.getPlayerHandler().checkJoin(player);
+						if (canJoin) {
+							arena.getPlayerHandler().spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
+							return false;
+						}
+					}
+				}
+			}
+			Messages.sendMessage(player, Messages.trprefix + Messages.noarenas);
+			return true;
 		}
 
 		// tntrun_reloaded info
