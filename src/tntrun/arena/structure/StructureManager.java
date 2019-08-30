@@ -21,12 +21,14 @@ import java.io.IOException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.util.Vector;
 
 import tntrun.arena.Arena;
+import tntrun.utils.Utils;
 
 public class StructureManager {
 
@@ -54,6 +56,9 @@ public class StructureManager {
 	private DamageEnabled damageEnabled = DamageEnabled.NO;
 	private boolean kitsEnabled = false;
 	private int regenerationdelay = 60;
+	//private boolean currencyEnabled = false;
+	private String currency;
+	private int fee = 0;
 
 	public String getWorldName() {
 		return world;
@@ -150,7 +155,19 @@ public class StructureManager {
 	public int getRegenerationDelay() {
 		return regenerationdelay;
 	}
-	
+
+	public int getFee() {
+		return fee;
+	}
+
+	public Material getCurrency() {
+		return Material.getMaterial(currency);
+	}
+
+	public boolean isCurrencyEnabled() {
+		return Material.getMaterial(currency) != null && !Utils.isAir(Material.getMaterial(currency));
+	}
+
 	public boolean isInArenaBounds(Location loc) {
 		if (loc.toVector().isInAABB(getP1(), getP2())) {
 			return true;
@@ -256,6 +273,18 @@ public class StructureManager {
 		this.regenerationdelay = regendelay;
 	}
 
+	public void setFee(int fee) {
+		this.fee = fee;
+	}
+
+	public void setCurrency(Material currency) {
+		if (Utils.isAir(currency)) {
+			this.currency = null;
+			return;
+		}
+		this.currency = currency.toString();
+	}
+
 	public void saveToConfig() {
 		FileConfiguration config = new YamlConfiguration();
 		// save arena bounds
@@ -299,6 +328,8 @@ public class StructureManager {
 		// save kits enabled
 		config.set("enableKits", kitsEnabled);
 		config.set("regenerationdelay", regenerationdelay);
+		config.set("joinfee", fee);
+		config.set("currency", currency);
 		// save rewards
 		rewards.saveToConfig(config);
 		try {
@@ -342,6 +373,8 @@ public class StructureManager {
 		// kits enabled
 		kitsEnabled = config.getBoolean("enableKits");
 		regenerationdelay = config.getInt("regenerationdelay", regenerationdelay);
+		fee = config.getInt("joinfee", fee);
+		currency = config.getString("currency", null);
 	}
 
 }

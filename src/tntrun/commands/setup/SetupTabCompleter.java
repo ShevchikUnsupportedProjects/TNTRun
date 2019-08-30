@@ -68,6 +68,8 @@ public class SetupTabCompleter implements TabCompleter {
 		arenacommands.add("enablekits");
 		arenacommands.add("disablekits");
 		arenacommands.add("setdamage");
+		arenacommands.add("setfee");
+		arenacommands.add("setcurrency");
 		
 		if (args.length == 1) {
 			list.add("help");

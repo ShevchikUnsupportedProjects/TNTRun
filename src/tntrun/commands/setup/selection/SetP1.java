@@ -25,6 +25,7 @@ import tntrun.selectionget.PlayerSelection;
 
 public class SetP1 implements CommandHandlerInterface {
 
+	@SuppressWarnings("unused")
 	private PlayerSelection selection;
 	
 	public SetP1(PlayerSelection selection) {

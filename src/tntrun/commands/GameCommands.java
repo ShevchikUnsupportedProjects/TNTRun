@@ -69,7 +69,7 @@ public class GameCommands implements CommandExecutor {
 			Messages.sendMessage(player, "&6/tr start {arena} &f- &c" + Messages.helpstart);
 			Messages.sendMessage(player, "&6/tr cmds &f- &c" + Messages.helpcmds);
 			return true;
-	
+
 		} else if (args[0].equalsIgnoreCase("lobby")) {
 			if (plugin.globallobby.isLobbyLocationSet()) {
 				if (plugin.globallobby.isLobbyLocationWorldAvailable()) {
@@ -95,7 +95,7 @@ public class GameCommands implements CommandExecutor {
 				//list arena details
 				Messages.sendMessage(player, "&7============" + Messages.trprefix + "============");
 				Messages.sendMessage(player, "&7Arena Details: &a" + arena.getArenaName());
-				
+
 				String arenaStatus = "Enabled";
 				if (!arena.getStatusManager().isArenaEnabled()) {
 					arenaStatus = "Disabled";
@@ -122,7 +122,7 @@ public class GameCommands implements CommandExecutor {
 				}
 				List<String> materialrewards = arena.getStructureManager().getRewards().getMaterialReward();
 				List<String> materialamounts = arena.getStructureManager().getRewards().getMaterialAmount();
-						
+
 				String rewardmessage = "";
 				for (int i=0; i < materialrewards.size(); i++) {
 					if (arena.getStructureManager().getRewards().isValidReward(materialrewards.get(i), materialamounts.get(i))) {
@@ -136,7 +136,14 @@ public class GameCommands implements CommandExecutor {
 				if (arena.getStructureManager().getRewards().getCommandReward() != null) {
 					player.sendMessage(ChatColor.GOLD + "Command Reward " + ChatColor.WHITE + "- " + ChatColor.GOLD + "\"" + ChatColor.RED + arena.getStructureManager().getRewards().getCommandReward() + ChatColor.GOLD + "\"");
 				}
-				
+
+				if (arena.getStructureManager().getFee() > 0) {
+					player.sendMessage(ChatColor.GOLD + "Join Fee " + ChatColor.WHITE + "- " + ChatColor.RED + arena.getStructureManager().getFee());
+					if (arena.getStructureManager().isCurrencyEnabled()) {
+						player.sendMessage(ChatColor.GOLD + "Item Currency " + ChatColor.WHITE + "- " + ChatColor.RED + arena.getStructureManager().getCurrency().toString());
+					}
+				}
+
 				return true;
 			}
 			StringBuilder message = new StringBuilder(200);
@@ -274,9 +281,11 @@ public class GameCommands implements CommandExecutor {
 			Messages.sendMessage(player, "&6/trsetup disable {arena} &f- &c" + Messages.setupdisable);
 			Messages.sendMessage(player, "&6/trsetup delete {arena} &f- &c" + Messages.setupdelete);
 			Messages.sendMessage(player, "&6/trsetup setreward {arena} &f- &c" + Messages.setupreward);
+			Messages.sendMessage(player, "&6/trsetup setfee {arena} &f- &c" + Messages.setupfee);
+			Messages.sendMessage(player, "&6/trsetup setcurrency {arena} &f- &c" + Messages.setupcurrency);
 			Messages.sendMessage(player, "&6/trsetup help &f- &c" + Messages.setuphelp);
 		}
-		
+
 		// vote
 		else if (args[0].equalsIgnoreCase("vote")) {
 			Arena arena = plugin.amanager.getPlayerArena(player.getName());
@@ -292,7 +301,7 @@ public class GameCommands implements CommandExecutor {
 				return true;
 			}
 		}
-		
+
 		// listkits
 		else if (args[0].equalsIgnoreCase("listkit") || args[0].equalsIgnoreCase("listkits")) {
 			if (args.length >= 2) {
@@ -311,7 +320,7 @@ public class GameCommands implements CommandExecutor {
 			Messages.sendMessage(player, message.toString());
 			return true;
 		}
-		
+
 		// start
 		else if (args[0].equalsIgnoreCase("start")) {
 			if (!player.hasPermission("tntrun.start")) {
@@ -338,7 +347,7 @@ public class GameCommands implements CommandExecutor {
 				return true;
 			}
 		}
-		
+
 		else {
 			Messages.sendMessage(player, Messages.trprefix + "&c Invalid argument supplied, please use &6/tr help");
 			return true;

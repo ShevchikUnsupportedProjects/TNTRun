@@ -17,6 +17,7 @@
 
 package tntrun.utils;
 
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -25,7 +26,7 @@ import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 
 public class Utils {
-	
+
 	public static boolean isNumber(String text) {
         try {
             Integer.parseInt(text);
@@ -33,7 +34,7 @@ public class Utils {
         } catch (NumberFormatException e) {}
         return false;
     }
-	
+
 	public static boolean isDouble(String text) {
 		try {
 			Double.parseDouble(text);
@@ -41,7 +42,7 @@ public class Utils {
 		} catch (NumberFormatException e) {}
 		return false;
 	}
-	
+
 	public static int playerCount() {
 		int pCount = 0;
 		for (Arena arena : TNTRun.getInstance().amanager.getArenas()) {
@@ -49,14 +50,14 @@ public class Utils {
 		}
 		return pCount;
 	}
-	
+
 	public static void displayInfo(CommandSender sender) {
 		Messages.sendMessage(sender, "&7============" + Messages.trprefix + "============");
 		Messages.sendMessage(sender, "&bPlugin Version: &f" + TNTRun.getInstance().getDescription().getVersion());
 		Messages.sendMessage(sender, "&bWebsite: &fhttps://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 		Messages.sendMessage(sender, "&bTNTRun_reloaded Author: &fsteve4744");
 	}
-	
+
 	public static void displayUpdate(Player player) {
 		if (player.hasPermission("tntrun.version.check")) {
 			Messages.sendMessage(player, Messages.trprefix + "&6New update available!");
@@ -65,9 +66,12 @@ public class Utils {
 			Messages.sendMessage(player, Messages.trprefix + "New version available! Download now: &6https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
 		}
 	}
-	
+
 	public static String getTitleCase(String input) {
 		return input.substring(0,1).toUpperCase() + input.substring(1).toLowerCase();
 	}
 
+	public static boolean isAir(Material material) {
+		return material == Material.AIR || material == Material.CAVE_AIR || material == Material.VOID_AIR;
+	}
 }

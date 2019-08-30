@@ -37,7 +37,9 @@ import tntrun.commands.setup.arena.FinishArena;
 import tntrun.commands.setup.arena.SetArena;
 import tntrun.commands.setup.arena.SetBarColor;
 import tntrun.commands.setup.arena.SetCountdown;
+import tntrun.commands.setup.arena.SetCurrency;
 import tntrun.commands.setup.arena.SetDamage;
+import tntrun.commands.setup.arena.SetFee;
 import tntrun.commands.setup.arena.SetGameLevelDestroyDelay;
 import tntrun.commands.setup.arena.SetLoseLevel;
 import tntrun.commands.setup.arena.SetMaxPlayers;
@@ -108,6 +110,8 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("setbarcolor", new SetBarColor(plugin));
 		commandHandlers.put("setbarcolour", new SetBarColor(plugin));
 		commandHandlers.put("setreward", new SetReward(plugin));
+		commandHandlers.put("setfee", new SetFee(plugin));
+		commandHandlers.put("setcurrency", new SetCurrency(plugin));
 		commandHandlers.put("help", new SetupHelp(plugin));
 	}
 

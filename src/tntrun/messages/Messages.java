@@ -132,6 +132,8 @@ public class Messages {
 	public static String setupdisable = "Disable arena";
 	public static String setupdelete = "Delete arena";
 	public static String setupreward = "Set the rewards for the arena";
+	public static String setupfee = "Set the cost to join the arena";
+	public static String setupcurrency = "Set the currency to join the arena";
 	public static String setuphelp = "Commands required to setup a new arena";
 	public static String setupenablekits = "Enable kits for the arena";
 	public static String setupdisablekits = "Disable kits for the arena";
@@ -246,6 +248,8 @@ public class Messages {
 		setupdisable = config.getString("setupdisable", setupdisable);
 		setupdelete = config.getString("setupdelete", setupdelete);
 		setupreward = config.getString("setupreward", setupreward);
+		setupfee = config.getString("setupfee", setupfee);
+		setupcurrency = config.getString("setupcurrency", setupcurrency);
 		setuphelp = config.getString("setuphelp", setuphelp);
 		setupenablekits = config.getString("setupenablekits", setupenablekits);
 		setupdisablekits = config.getString("setupdisablekits", setupdisablekits);
@@ -351,6 +355,8 @@ public class Messages {
 		config.set("setupdisable", setupdisable);
 		config.set("setupdelete", setupdelete);
 		config.set("setupreward", setupreward);
+		config.set("setupfee", setupfee);
+		config.set("setupcurrency", setupcurrency);
 		config.set("setuphelp", setuphelp);
 		config.set("setupenablekits", setupenablekits);
 		config.set("setupdisablekits", setupdisablekits);
