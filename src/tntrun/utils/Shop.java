@@ -21,13 +21,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -262,7 +259,8 @@ public class Shop implements Listener{
 				String title = current.getItemMeta().getDisplayName();
 				int cost = cfg.getInt(kit + ".cost");
 
-				if (hasMoney(cost, p)) {
+				Arena arena = plugin.amanager.getPlayerArena(p.getName());
+				if (arena.getArenaEconomy().hasMoney(cost, p)) {
 					Messages.sendMessage(p, Messages.trprefix + Messages.playerboughtitem.replace("{ITEM}", title).replace("{MONEY}", cost + ""));
 					logPurchase(p, title, cost);
 					if (!doublejumpPurchase) {
@@ -294,29 +292,6 @@ public class Shop implements Listener{
 		return true;
 	}
 
-	private boolean hasMoney(int moneyneed, Player player) {
-		Economy econ = plugin.getVaultHandler().getEconomy();
-		if(econ == null) {
-			return false;
-		}
-		OfflinePlayer offplayer = player.getPlayer();
-		double pmoney = econ.getBalance(offplayer);
-		if(pmoney >= moneyneed) {
-			econ.withdrawPlayer(offplayer, moneyneed);
-			return true;
-		}
-		return false;
-	}
-
-	private double getPlayerBalance(Player player) {
-		Economy econ = plugin.getVaultHandler().getEconomy();
-		if(econ == null) {
-			return 0.0;
-		}
-		OfflinePlayer offplayer = player.getPlayer();
-		return econ.getBalance(offplayer);
-	}
-
 	public void setItems(Inventory inventory, Player player){
 		FileConfiguration cfg = ShopFiles.getShopConfiguration();
 		int slot = 0;
@@ -341,10 +316,11 @@ public class Shop implements Listener{
 	}
 
 	private ItemStack setMoneyItem(Inventory inv, Player player) {
+		Arena arena = plugin.amanager.getPlayerArena(player.getName());
 		Material material = Material.getMaterial(plugin.getConfig().getString("shop.showmoneyitem", "GOLD_INGOT"));
 		String title = FormattingCodesParser.parseFormattingCodes(Messages.shopmoneyheader);
 		List<String> lore = new ArrayList<String>();
-		lore.add(FormattingCodesParser.parseFormattingCodes(Messages.shopmoneybalance).replace("{BAL}", String.valueOf(getPlayerBalance(player))));
+		lore.add(FormattingCodesParser.parseFormattingCodes(Messages.shopmoneybalance).replace("{BAL}", String.valueOf(arena.getArenaEconomy().getPlayerBalance(player))));
 		return getShopItem(material, title, lore, 1);
 	}
 

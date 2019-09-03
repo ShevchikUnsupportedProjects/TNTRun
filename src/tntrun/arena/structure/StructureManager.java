@@ -33,6 +33,8 @@ import tntrun.utils.Utils;
 public class StructureManager {
 
 	private Arena arena;
+	private GameZone gamezone;
+
 	public StructureManager(Arena arena) {
 		this.arena = arena;
 		gamezone = new GameZone(arena);
@@ -41,7 +43,6 @@ public class StructureManager {
 	private String world;
 	private Vector p1 = null;
 	private Vector p2 = null;
-	private GameZone gamezone;
 	private int gameleveldestroydelay = 8;
 	private LoseLevel loselevel = new LoseLevel();
 	private Vector spectatorspawn = null;
@@ -56,7 +57,6 @@ public class StructureManager {
 	private DamageEnabled damageEnabled = DamageEnabled.NO;
 	private boolean kitsEnabled = false;
 	private int regenerationdelay = 60;
-	//private boolean currencyEnabled = false;
 	private String currency;
 	private int fee = 0;
 
@@ -162,6 +162,10 @@ public class StructureManager {
 
 	public Material getCurrency() {
 		return Material.getMaterial(currency);
+	}
+
+	public boolean hasFee() {
+		return fee > 0;
 	}
 
 	public boolean isCurrencyEnabled() {

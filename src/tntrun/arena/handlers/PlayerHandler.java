@@ -86,6 +86,16 @@ public class PlayerHandler {
 			Messages.sendMessage(player, Messages.trprefix + Messages.limitreached);
 			return false;
 		}
+
+		if (arena.getStructureManager().hasFee()) {
+			int fee = arena.getStructureManager().getFee();
+			if (arena.getArenaEconomy().hasFunds(player, fee)) {
+				Messages.sendMessage(player, "You have been charged " + fee + " to enter the arena");
+			} else {
+				Messages.sendMessage(player, "You do not have the required fee to enter the arena");
+				return false;
+			}
+		}
 		return true;
 	}
 
