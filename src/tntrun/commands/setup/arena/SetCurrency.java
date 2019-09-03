@@ -7,6 +7,7 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 import tntrun.messages.Messages;
+import tntrun.utils.Utils;
 
 public class SetCurrency implements CommandHandlerInterface {
 
@@ -25,9 +26,9 @@ public class SetCurrency implements CommandHandlerInterface {
 				return true;
 			}
 			Material itemCurrency = Material.getMaterial(args[1].toUpperCase());
-			if (itemCurrency == null) {
+			if (itemCurrency == null || Utils.isAir(itemCurrency)) {
 				itemCurrency = Material.AIR;
-				Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 Item currency has been disabled");
+				Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 Item currency has been disabled, use a valid item to re-enable");
 			} else {
 				Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 Item currency set to &6" + itemCurrency.toString());
 			}
