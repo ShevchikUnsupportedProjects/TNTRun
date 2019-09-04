@@ -88,7 +88,7 @@ public class PlayerHandler {
 		}
 
 		if (arena.getStructureManager().hasFee()) {
-			int fee = arena.getStructureManager().getFee();
+			double fee = arena.getStructureManager().getFee();
 			if (arena.getArenaEconomy().hasFunds(player, fee)) {
 				Messages.sendMessage(player, "You have been charged " + fee + " to enter the arena");
 			} else {

@@ -58,7 +58,7 @@ public class StructureManager {
 	private boolean kitsEnabled = false;
 	private int regenerationdelay = 60;
 	private String currency;
-	private int fee = 0;
+	private double fee = 0;
 
 	public String getWorldName() {
 		return world;
@@ -156,7 +156,7 @@ public class StructureManager {
 		return regenerationdelay;
 	}
 
-	public int getFee() {
+	public double getFee() {
 		return fee;
 	}
 
@@ -277,7 +277,7 @@ public class StructureManager {
 		this.regenerationdelay = regendelay;
 	}
 
-	public void setFee(int fee) {
+	public void setFee(double fee) {
 		this.fee = fee;
 	}
 
@@ -377,7 +377,7 @@ public class StructureManager {
 		// kits enabled
 		kitsEnabled = config.getBoolean("enableKits");
 		regenerationdelay = config.getInt("regenerationdelay", regenerationdelay);
-		fee = config.getInt("joinfee", fee);
+		fee = config.getDouble("joinfee", fee);
 		currency = config.getString("currency", null);
 	}
 

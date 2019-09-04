@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 import net.milkbowl.vault.economy.Economy;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.messages.Messages;
 
 public class ArenaEconomy {
 
@@ -20,7 +19,7 @@ public class ArenaEconomy {
 		this.arena = arena;
 	}
 
-	public boolean hasMoney(int moneyneed, Player player) {
+	public boolean hasMoney(double moneyneed, Player player) {
 		Economy econ = plugin.getVaultHandler().getEconomy();
 		if(econ == null) {
 			return false;
@@ -51,9 +50,9 @@ public class ArenaEconomy {
 		return true;
 	}
 
-	public boolean hasFunds(Player player, int fee) {
+	public boolean hasFunds(Player player, double fee) {
 		if (arena.getStructureManager().isCurrencyEnabled()) {
-			return hasItemCurrency(player, arena.getStructureManager().getCurrency(), fee);
+			return hasItemCurrency(player, arena.getStructureManager().getCurrency(), (int)fee);
 		}
 		if (!hasMoney(fee, player)) {
 			return false;

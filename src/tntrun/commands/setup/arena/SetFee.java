@@ -24,11 +24,11 @@ public class SetFee implements CommandHandlerInterface {
 				Messages.sendMessage(player, Messages.trprefix + Messages.arenanotdisabled.replace("{ARENA}", args[0]));
 				return true;
 			}
-			if (!Utils.isNumber(args[1]) || Integer.parseInt(args[1]) < 0) {
-				Messages.sendMessage(player, Messages.trprefix + "&c The fee to join must be a positive integer");
+			if (!Utils.isDouble(args[1]) || Double.parseDouble(args[1]) < 0) {
+				Messages.sendMessage(player, Messages.trprefix + "&c The fee to join must be a positive");
 				return true;
 			}
-			arena.getStructureManager().setFee(Integer.parseInt(args[1]));
+			arena.getStructureManager().setFee(Double.parseDouble(args[1]));
 			Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 Join fee set to &6" + args[1]);
 		} else {
 			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[0]));
