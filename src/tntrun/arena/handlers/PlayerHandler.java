@@ -90,9 +90,13 @@ public class PlayerHandler {
 		if (arena.getStructureManager().hasFee()) {
 			double fee = arena.getStructureManager().getFee();
 			if (arena.getArenaEconomy().hasFunds(player, fee)) {
-				Messages.sendMessage(player, "You have been charged " + fee + " to enter the arena");
+				String item = "";
+				if (arena.getStructureManager().isCurrencyEnabled()) {
+					item = " x " + arena.getStructureManager().getCurrency().toString();
+				}
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenafee.replace("{FEE}", new StringBuilder().append(fee).append(item)));
 			} else {
-				Messages.sendMessage(player, "You do not have the required fee to enter the arena");
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenanofee);
 				return false;
 			}
 		}
