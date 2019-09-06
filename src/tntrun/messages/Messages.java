@@ -46,7 +46,8 @@ public class Messages {
 	public static String arenadisabled = "&7 Arena is disabled";
 	public static String arenarunning = "&7 Arena already running";
 	public static String arenaregenerating = "&7 Arena is regenerating";
-	public static String arenavehicle = "&7 You can't join the game while sitting inside a vehicle";
+	public static String arenavehicle = "&c You can't join the game while sitting inside a vehicle";
+	public static String arenajoined = "&c You have already joined an arena";
 	public static String arenadisabling = "&6 Arena is disabling";
 	public static String arenastarting = "&6 Arena already starting";
 	public static String signcreate = "&7 Sign successfully created";
@@ -174,6 +175,7 @@ public class Messages {
 		arenarunning = config.getString("arenarunning", arenarunning);
 		arenaregenerating = config.getString("arenaregenerating", arenaregenerating);
 		arenavehicle = config.getString("arenavehicle", arenavehicle);
+		arenajoined = config.getString("arenajoined", arenajoined);
 		arenadisabling = config.getString("arenadisabling", arenadisabling);
 		arenastarting = config.getString("arenastarting ", arenastarting);
 		signcreate = config.getString("signcreate", signcreate);
@@ -283,6 +285,7 @@ public class Messages {
 		config.set("arenarunning", arenarunning);
 		config.set("arenaregenerating", arenaregenerating);
 		config.set("arenavehicle", arenavehicle);
+		config.set("arenajoined", arenajoined);
 		config.set("arenadisabling", arenadisabling);
 		config.set("arenastarting", arenastarting);
 		config.set("signcreate", signcreate);

@@ -188,6 +188,10 @@ public class GameCommands implements CommandExecutor {
 
 		// autojoin
 		else if (args[0].equalsIgnoreCase("autojoin")) {
+			if (plugin.amanager.getPlayerArena(player.getName()) != null) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenajoined);
+				return true;
+			}
 			if (plugin.amanager.getArenas().size() != 0) {
 				for (Arena arena : plugin.amanager.getArenas()) {
 					if (arena.getStatusManager().isArenaEnabled()) {

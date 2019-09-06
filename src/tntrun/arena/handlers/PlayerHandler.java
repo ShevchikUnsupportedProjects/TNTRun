@@ -87,6 +87,11 @@ public class PlayerHandler {
 			return false;
 		}
 
+		if (plugin.amanager.getPlayerArena(player.getName()) != null) {
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenajoined);
+			return false;
+		}
+
 		if (arena.getStructureManager().hasFee()) {
 			double fee = arena.getStructureManager().getFee();
 			if (arena.getArenaEconomy().hasFunds(player, fee)) {
