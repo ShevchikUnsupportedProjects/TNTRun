@@ -40,9 +40,9 @@ public class SetTeleport implements CommandHandlerInterface {
 				Messages.sendMessage(player, Messages.trprefix + Messages.arenanotdisabled.replace("{ARENA}", args[0]));
 				return true;
 			}
-			if (args[1].equals("previous")) {
+			if (args[1].equalsIgnoreCase("previous")) {
 				arena.getStructureManager().setTeleportDestination(TeleportDestination.PREVIOUS);
-			} else if (args[1].equals("lobby")) {
+			} else if (args[1].equalsIgnoreCase("lobby")) {
 				if (plugin.globallobby.isLobbyLocationSet()) {
 					arena.getStructureManager().setTeleportDestination(TeleportDestination.LOBBY);
 				} else {
