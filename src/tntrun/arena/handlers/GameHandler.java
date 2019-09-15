@@ -218,6 +218,7 @@ public class GameHandler {
 			arena.getPlayerHandler().leavePlayer(player, "", "");
 		}
 		lostPlayers = 0;
+		forceStartByCmd = false;
 		arena.getStatusManager().setRunning(false);
 		Bukkit.getScheduler().cancelTask(arenahandler);
 		Bukkit.getScheduler().cancelTask(arena.getScoreboardHandler().getPlayingTask());
