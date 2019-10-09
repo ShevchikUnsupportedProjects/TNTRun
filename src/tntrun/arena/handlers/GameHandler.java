@@ -33,6 +33,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
+import tntrun.events.PlayerWinArenaEvent;
 import tntrun.utils.Bars;
 import tntrun.utils.TitleMsg;
 import tntrun.messages.Messages;
@@ -312,6 +313,8 @@ public class GameHandler {
 
 		Bukkit.getScheduler().cancelTask(arenahandler);
 		Bukkit.getScheduler().cancelTask(arena.getScoreboardHandler().getPlayingTask());
+
+		plugin.getServer().getPluginManager().callEvent(new PlayerWinArenaEvent(player, arena.getArenaName()));
 
 		if (plugin.getConfig().getBoolean("fireworksonwin.enabled")) {
 	

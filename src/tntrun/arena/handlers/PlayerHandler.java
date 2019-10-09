@@ -40,6 +40,9 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.DamageEnabled;
 import tntrun.arena.structure.StructureManager.TeleportDestination;
+import tntrun.events.PlayerJoinArenaEvent;
+import tntrun.events.PlayerLeaveArenaEvent;
+import tntrun.events.PlayerSpectateArenaEvent;
 import tntrun.utils.Bars;
 import tntrun.utils.FormattingCodesParser;
 import tntrun.utils.TitleMsg;
@@ -209,6 +212,9 @@ public class PlayerHandler {
 				plugin.sound.NOTE_PLING(oplayer, 5, 999);
 			}
 		}
+		// create join event
+		plugin.getServer().getPluginManager().callEvent(new PlayerJoinArenaEvent(player, arena.getArenaName()));
+
 		// check for game start
 		if (!arena.getStatusManager().isArenaStarting() && arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMinPlayers()) {
 			arena.getGameHandler().runArenaCountdown();
@@ -259,6 +265,8 @@ public class PlayerHandler {
 				}
 			}
 		}.runTaskLater(plugin, 5L);
+
+		plugin.getServer().getPluginManager().callEvent(new PlayerSpectateArenaEvent(player, arena.getArenaName()));
 	}
 	/**
 	 * If the winner attempts to leave, teleport to arena spawn.
@@ -313,6 +321,7 @@ public class PlayerHandler {
 				Bars.setBar(arena, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
 			}
 		}
+		plugin.getServer().getPluginManager().callEvent(new PlayerLeaveArenaEvent(player, arena.getArenaName()));
 	}
 
 	protected void leaveWinner(Player player, String msgtoplayer) {
