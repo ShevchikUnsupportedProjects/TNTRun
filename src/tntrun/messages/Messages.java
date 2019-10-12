@@ -60,9 +60,9 @@ public class Messages {
 	public static String playersrequiredtostart = "&c There must be at least 2 players in the arena to force-start";
 	public static String limitreached = "&7 Arena is full.";
 	public static String playerjoinedtoplayer = "&7 You joined the arena";
-	public static String playerjoinedtoothers = "&7 Player &6{PLAYER} &7joined the arena";
+	public static String playerjoinedtoothers = "&c {RANK}&6{PLAYER} &7joined the arena";
 	public static String playerlefttoplayer = "&7 You left the arena";
-	public static String playerlefttoothers = "&7 Player &6{PLAYER} &7left the game";
+	public static String playerlefttoothers = "&c {RANK}&6{PLAYER} &7left the game";
 	public static String playervotedforstart = "&f You voted to force-start the game";
 	public static String playeralreadyvotedforstart = "&c You have already voted";
 	public static String arenastarted = "&7 Arena started. Time limit is {TIMELIMIT} seconds";
@@ -70,8 +70,8 @@ public class Messages {
 	public static String arenatimeout = "&7 Time is up. Ending game";
 	public static String playerwontoplayer = "&7 You won the game!";
 	public static String playerlosttoplayer = "&7 You lost the game";
-	public static String playerlosttoothers = "&7 Player &6{PLAYER} &7lost the game";
-	public static String playerwonbroadcast = "&6 {PLAYER}&7 won the game on arena &6{ARENA}";
+	public static String playerlosttoothers = "&c {RANK}&6{PLAYER} &7lost the game";
+	public static String playerwonbroadcast = "&c {RANK}&6{PLAYER} &7won the game on arena &6{ARENA}";
 	public static String playerrewardmessage = "&7 You have been rewarded: &6{REWARD}";
 	public static String playerboughtitem = "&7 You have bought item &6{ITEM} &7for &6{MONEY} &7coins";
 	public static String playerboughtwait = "&7 You will get your items when the game starts";

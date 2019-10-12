@@ -113,16 +113,12 @@ public class PlayerHandler {
 		return true;
 	}
 
-	// spawn player on arena
 	public void spawnPlayer(final Player player, String msgtoplayer, String msgtoarenaplayers) {
-		// teleport player to arena
 		plugin.pdata.storePlayerLocation(player);
 		player.teleport(arena.getStructureManager().getSpawnPoint());
-		// set player visible to everyone
 		for (Player aplayer : Bukkit.getOnlinePlayers()) {
 			aplayer.showPlayer(plugin, player);
 		}
-		// change player status
 		plugin.pdata.storePlayerGameMode(player);
 		plugin.pdata.storePlayerFlight(player);
 		player.setFlying(false);
@@ -139,7 +135,6 @@ public class PlayerHandler {
 
 		player.updateInventory();
 
-		//set full countdown
 		if (!arena.getStatusManager().isArenaStarting()) {
 			arena.getGameHandler().count = arena.getStructureManager().getCountdown();
 		}
@@ -147,17 +142,16 @@ public class PlayerHandler {
 		if (!plugin.getConfig().getBoolean("special.UseTitle")) {
 			Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
 		}	
-		// set player on arena data
+
 		arena.getPlayersManager().add(player);
-		// send message to other players
+
 		for (Player oplayer : arena.getPlayersManager().getPlayers()) {
-			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
+			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName()).replace("{RANK}", getDisplayName(player));
 			Messages.sendMessage(oplayer, Messages.trprefix + msgtoarenaplayers);
 			// send title for players
 			TitleMsg.sendFullTitle(oplayer, TitleMsg.join.replace("{PLAYER}", player.getName()), TitleMsg.subjoin.replace("{PLAYER}", player.getName()), 10, 20, 20, plugin);
 		}
 
-		// start cooldown and add leave item
 		new BukkitRunnable() {
 			@Override
 			public void run(){
@@ -203,7 +197,6 @@ public class PlayerHandler {
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		arena.getScoreboardHandler().createWaitingScoreBoard();
 
-		// modify bars
 		if (!arena.getStatusManager().isArenaStarting()) {
 			double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers(); 
 			
@@ -212,7 +205,7 @@ public class PlayerHandler {
 				plugin.sound.NOTE_PLING(oplayer, 5, 999);
 			}
 		}
-		// create join event
+
 		plugin.getServer().getPluginManager().callEvent(new PlayerJoinArenaEvent(player, arena.getArenaName()));
 
 		// check for game start
@@ -245,13 +238,12 @@ public class PlayerHandler {
 
 		Messages.sendMessage(player, Messages.trprefix + msgtoplayer);
 		plugin.signEditor.modifySigns(arena.getArenaName());
-		// send message to other players and update bars
+
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
-			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
+			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName()).replace("{RANK}", getDisplayName(player));
 			Messages.sendMessage(oplayer, Messages.trprefix + msgtoarenaplayers);
 		}
 		arena.getPlayersManager().addSpectator(player);
-		// start cooldown and add leave item
 		new BukkitRunnable() {
 			@Override
 			public void run(){
@@ -314,7 +306,7 @@ public class PlayerHandler {
 		Bars.removeBar(player, arena.getArenaName());
 
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
-			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName());
+			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName()).replace("{RANK}", getDisplayName(player));
 			Messages.sendMessage(oplayer, Messages.trprefix + msgtoarenaplayers);
 			if (!arena.getStatusManager().isArenaStarting() && !arena.getStatusManager().isArenaRunning()) {
 				double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers();
@@ -548,6 +540,18 @@ public class PlayerHandler {
 	}
 
 	/**
+	 * Attempt to get a player's rank.
+	 * @param player
+	 * @return rank
+	 */
+	private String getRank(Player player) {
+		if (!plugin.getVaultHandler().isPermissions() || !plugin.getConfig().getBoolean("special.UseRankInChat")) {
+			return null;
+		}
+		return plugin.getVaultHandler().getPermissions().getPrimaryGroup(player);
+	}
+
+	/**
 	 * Remove the cached purchase for the player. This can be when the game starts and the
 	 * player receives the item, or if the player leaves the arena before the game starts.
 	 * @param player
@@ -560,5 +564,9 @@ public class PlayerHandler {
 		if (plugin.shop.getPotionEffects(player) != null) {
 			plugin.shop.removePotionEffects(player);
 		}
+	}
+
+	public String getDisplayName(Player player) {
+		return getRank(player) == null ? "" : "[" + getRank(player) + "]";
 	}
 }
