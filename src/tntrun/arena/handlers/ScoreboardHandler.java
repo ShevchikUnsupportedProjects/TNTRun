@@ -27,6 +27,9 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.ScoreComponent;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.utils.FormattingCodesParser;
@@ -71,12 +74,21 @@ public class ScoreboardHandler {
 			}
 			resetScoreboard(player);
 			Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
+			
+			//ScoreComponent sc = new ScoreComponent("", "");
+			//sc.setHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, new ComponentBuilder( "Visit the Spigot website!\nIts on 2 lines!" ).create() ) );
+			
 			try {
 				int size = plugin.getConfig().getStringList("scoreboard.waiting").size();
 
 				for (String s : plugin.getConfig().getStringList("scoreboard.waiting")) {
 					s = FormattingCodesParser.parseFormattingCodes(s).replace("{ARENA}", arena.getArenaName());
-					s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
+					if (s.contains("{PS}")) {
+						s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
+						ScoreComponent sc = new ScoreComponent(s, "");
+						sc.setHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, new ComponentBuilder( "Visit the Spigot website!\nIts on 2 lines!" ).create() ) );
+						s = sc.getValue();
+					}
 					s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
 					s = s.replace("{COUNT}", arena.getGameHandler().count + "");
 					s = s.replace("{VOTES}", getVotesRequired(arena) + "");

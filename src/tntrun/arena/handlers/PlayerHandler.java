@@ -36,6 +36,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.gmail.nossr50.api.PartyAPI;
 
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.DamageEnabled;
@@ -145,9 +148,13 @@ public class PlayerHandler {
 
 		arena.getPlayersManager().add(player);
 
+		msgtoarenaplayers = FormattingCodesParser.parseFormattingCodes(msgtoarenaplayers);
+		TextComponent tc = new TextComponent(msgtoarenaplayers.replace("{PLAYER}", player.getName()).replace("{RANK}", getDisplayName(player)));
+		tc.setHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, new ComponentBuilder( "Visit the Spigot website!\nIts on 2 lines!" ).create() ) );
 		for (Player oplayer : arena.getPlayersManager().getPlayers()) {
-			msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName()).replace("{RANK}", getDisplayName(player));
-			Messages.sendMessage(oplayer, Messages.trprefix + msgtoarenaplayers);
+			//msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName()).replace("{RANK}", getDisplayName(player));
+			//Messages.sendMessage(oplayer, Messages.trprefix + msgtoarenaplayers);
+			oplayer.spigot().sendMessage(tc);
 			// send title for players
 			TitleMsg.sendFullTitle(oplayer, TitleMsg.join.replace("{PLAYER}", player.getName()), TitleMsg.subjoin.replace("{PLAYER}", player.getName()), 10, 20, 20, plugin);
 		}
