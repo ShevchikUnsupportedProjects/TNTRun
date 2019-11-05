@@ -56,18 +56,18 @@ public class GameCommands implements CommandExecutor {
 		// help command
 		if (args[0].equalsIgnoreCase("help")) {
 			Messages.sendMessage(player, "&7============" + Messages.trprefix + "============");
-			Messages.sendMessage(player, "&6/tr lobby &f- &c" + Messages.helplobby);
-			Messages.sendMessage(player, "&6/tr list [arena] &f- &c" + Messages.helplist);
-			Messages.sendMessage(player, "&6/tr join [arena] &f- &c" + Messages.helpjoin);
-			Messages.sendMessage(player, "&6/tr autojoin &f- &c" + Messages.helpautojoin);
-			Messages.sendMessage(player, "&6/tr leave &f- &c" + Messages.helpleave);
-			Messages.sendMessage(player, "&6/tr vote &f- &c" + Messages.helpvote);
-			Messages.sendMessage(player, "&6/tr info &f- &c" + Messages.helpinfo);
-			Messages.sendMessage(player, "&6/tr stats &f- &c" + Messages.helpstats);
-			Messages.sendMessage(player, "&6/tr leaderboard [size] &f- &c" + Messages.helplb);
-			Messages.sendMessage(player, "&6/tr listkit [kit] &f- &c" + Messages.helplistkit);
-			Messages.sendMessage(player, "&6/tr start {arena} &f- &c" + Messages.helpstart);
-			Messages.sendMessage(player, "&6/tr cmds &f- &c" + Messages.helpcmds);
+			player.spigot().sendMessage(Utils.getTextComponent("/tr lobby", true), Utils.getTextComponent(Messages.helplobby));
+			player.spigot().sendMessage(Utils.getTextComponent("/tr list [arena]", true), Utils.getTextComponent(Messages.helplist));
+			player.spigot().sendMessage(Utils.getTextComponent("/tr join [arena]", true), Utils.getTextComponent(Messages.helpjoin));
+			player.spigot().sendMessage(Utils.getTextComponent("/tr autojoin", true), Utils.getTextComponent(Messages.helpautojoin));
+			player.spigot().sendMessage(Utils.getTextComponent("/tr leave", true), Utils.getTextComponent(Messages.helpleave));
+			player.spigot().sendMessage(Utils.getTextComponent("/tr vote", true), Utils.getTextComponent(Messages.helpvote));
+			player.spigot().sendMessage(Utils.getTextComponent("/tr info", true), Utils.getTextComponent(Messages.helpinfo));
+			player.spigot().sendMessage(Utils.getTextComponent("/tr stats", true), Utils.getTextComponent(Messages.helpstats));
+			player.spigot().sendMessage(Utils.getTextComponent("/tr leaderboard [size]", true), Utils.getTextComponent(Messages.helplb));
+			player.spigot().sendMessage(Utils.getTextComponent("/tr listkit [kit]", true), Utils.getTextComponent(Messages.helplistkit));
+			player.spigot().sendMessage(Utils.getTextComponent("/tr start {arena}", true), Utils.getTextComponent(Messages.helpstart));
+			player.spigot().sendMessage(Utils.getTextComponent("/tr cmds", true), Utils.getTextComponent(Messages.helpcmds));
 			return true;
 
 		} else if (args[0].equalsIgnoreCase("lobby")) {
@@ -255,13 +255,7 @@ public class GameCommands implements CommandExecutor {
 		// all commands
 		else if (args[0].equalsIgnoreCase("cmds")) {
 			Messages.sendMessage(player, "&7============" + Messages.trprefix + "============");
-			Messages.sendMessage(player, "&6/trsetup setlobby &f- &c" + Messages.setuplobby);
-			Messages.sendMessage(player, "&6/trsetup create {arena} &f- &c" + Messages.setupcreate);
-			Messages.sendMessage(player, "&6/trsetup setarena {arena} &f- &c" + Messages.setupbounds);
-			Messages.sendMessage(player, "&6/trsetup setloselevel {arena} &f- &c" + Messages.setuploselevel);
-			Messages.sendMessage(player, "&6/trsetup setspawn {arena} &f- &c" + Messages.setupspawn);
-			Messages.sendMessage(player, "&6/trsetup setspectate {arena} &f- &c" + Messages.setupspectate);
-			Messages.sendMessage(player, "&6/trsetup finish {arena} &f- &c" + Messages.setupfinish);
+			Utils.displayHelp(player);
 			Messages.sendMessage(player, "&7============[&6Other commands&7]============");
 			Messages.sendMessage(player, "&6/trsetup delspectate {arena} &f- &c\n    " + Messages.setupdelspectate);
 			Messages.sendMessage(player, "&6/trsetup setgameleveldestroydelay {arena} {ticks} &f- &c\n    " + Messages.setupdelay);
