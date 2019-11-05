@@ -97,8 +97,6 @@ public class Messages {
 	public static String shopmoneybalance = "&5Your balance is &6{BAL} &5coins";
 
 	public static String helplobby = "Teleport to lobby";
-	//public static String helplist = "List all arenas &for &cList arena details";
-	//public static String helpjoin = "Open join menu &for &cJoin the arena";
 	public static String helplist = "List all arenas OR List arena details";
 	public static String helpjoin = "Open join menu OR Join the arena";
 	public static String helpautojoin = "Automatically join the first available arena";
@@ -109,7 +107,6 @@ public class Messages {
 	public static String helpstats = "View player stats";
 	public static String helplb = "Display the TNTRun leaderboard";
 	public static String helpstart = "Force-start the arena";
-	//public static String helplistkit = "List all kits &for &cList kit details";
 	public static String helplistkit = "List all kits OR List kit details";
 
 	public static String setuplobby = "Set lobby at your current location";
