@@ -26,9 +26,12 @@ Note that there is a legacy bug fix release (version 6.8.1) only available from 
 
     Supports multiple arenas
     Automatic arena regeneration
+    Custom Events
     Configurable block destroy delay
     Force-start voting system
     Permission controlled force-start command
+    Join fee can be set per arena
+    Arena currency (money or any Minecraft material)
     Arena selection GUI
     Configurable anti-camping system
     Custom messages
@@ -50,9 +53,10 @@ Note that there is a legacy bug fix release (version 6.8.1) only available from 
     Heads - interfaces with HeadsPlus plugin by Thatsmusic99
     PVP can be enabled/disabled per arena
     Player rewards
-    Placeholder support - https://www.spigotmc.org/resources/tntrun_reloaded-expansion.53945/
+    Built-in placeholder support
+    Legacy placeholder support - https://www.spigotmc.org/resources/tntrun_reloaded-expansion.53945/
 
 <br />
 <br />
 <br />
-Updated steve4744 - 14th August 2019
+Updated steve4744 - 31st October 2019
