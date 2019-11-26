@@ -82,6 +82,7 @@ public class SetupTabCompleter implements TabCompleter {
 			list.add("setbarcolor");
 			list.add("addkit");
 			list.add("deletekit");
+			list.add("deletelobby");
 			
 			list.addAll(arenacommands);
 			

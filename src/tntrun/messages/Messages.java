@@ -109,7 +109,8 @@ public class Messages {
 	public static String helpstart = "Force-start the arena";
 	public static String helplistkit = "List all kits OR List kit details";
 
-	public static String setuplobby = "Set lobby at your current location";
+	public static String setuplobby = "Set the global lobby at your current location";
+	public static String setupdellobby = "Delete the global lobby";
 	public static String setupcreate = "Create a new arena";
 	public static String setupbounds = "Set bounds for arena";
 	public static String setuploselevel = "Set loselevel bounds";
@@ -230,6 +231,7 @@ public class Messages {
 		helpstats = config.getString("helpstats", helpstats);
 		helpstart = config.getString("helpstart", helpstart);
 		setuplobby = config.getString("setuplobby", setuplobby);
+		setupdellobby = config.getString("setupdellobby", setupdellobby);
 		setupcreate = config.getString("setupcreate", setupcreate);
 		setupbounds = config.getString("setupbounds", setupbounds);
 		setuploselevel = config.getString("setuploselevel", setuploselevel);
@@ -341,6 +343,7 @@ public class Messages {
 		config.set("helpstats", helpstats);
 		config.set("helpstart",  helpstart);
 		config.set("setuplobby", setuplobby);
+		config.set("setupdellobby", setupdellobby);
 		config.set("setupcreate", setupcreate);
 		config.set("setupbounds", setupbounds);
 		config.set("setuploselevel", setuploselevel);

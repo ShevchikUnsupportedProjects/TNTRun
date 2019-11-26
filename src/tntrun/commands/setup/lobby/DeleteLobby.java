@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Messages;
 
 public class DeleteLobby implements CommandHandlerInterface {
 
@@ -32,7 +33,7 @@ public class DeleteLobby implements CommandHandlerInterface {
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
 		plugin.globallobby.setLobbyLocation(null);
-		player.sendMessage("Lobby deleted");
+		Messages.sendMessage(player, Messages.trprefix + "&7 Lobby deleted");
 		return true;
 	}
 

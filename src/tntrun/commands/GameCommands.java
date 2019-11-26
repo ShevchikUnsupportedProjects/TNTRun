@@ -79,7 +79,7 @@ public class GameCommands implements CommandExecutor {
 					Messages.sendMessage(player, Messages.trprefix + "&c Lobby world is unloaded or doesn't exist");
 				}
 			} else {
-				Messages.sendMessage(player, Messages.trprefix + "&c Lobby isn't set");
+				Messages.sendMessage(player, Messages.trprefix + "&c Global lobby isn't set, run &6/trsetup setlobby");
 			}
 			return true;
 		}
@@ -283,6 +283,8 @@ public class GameCommands implements CommandExecutor {
 			player.spigot().sendMessage(Utils.getTextComponent("/trsetup setreward {arena}", true), Utils.getTextComponent(Messages.setupreward));
 			player.spigot().sendMessage(Utils.getTextComponent("/trsetup setfee {arena} {amount}", true), Utils.getTextComponent(Messages.setupfee));
 			player.spigot().sendMessage(Utils.getTextComponent("/trsetup setcurrency {arena} {item}", true), Utils.getTextComponent(Messages.setupcurrency));
+			player.spigot().sendMessage(Utils.getTextComponent("/trsetup setlobby", true), Utils.getTextComponent(Messages.setuplobby));
+			player.spigot().sendMessage(Utils.getTextComponent("/trsetup deletelobby", true), Utils.getTextComponent(Messages.setupdellobby));
 			player.spigot().sendMessage(Utils.getTextComponent("/trsetup help", true), Utils.getTextComponent(Messages.setuphelp));
 		}
 

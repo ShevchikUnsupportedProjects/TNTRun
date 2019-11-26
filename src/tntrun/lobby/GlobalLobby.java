@@ -30,12 +30,11 @@ import tntrun.TNTRun;
 public class GlobalLobby {
 
 	private File lobbyFile;
+	private LobbyLocation lobbyLocation;
 
 	public GlobalLobby(TNTRun plugin) {
 		lobbyFile = new File(plugin.getDataFolder() + File.separator + "lobby.yml");
 	}
-
-	private LobbyLocation lobbyLocation;
 
 	public boolean isLobbyLocationWorldAvailable() {
 		if (isLobbyLocationSet()) {
@@ -53,7 +52,20 @@ public class GlobalLobby {
 	}
 
 	public void setLobbyLocation(Location location) {
-		lobbyLocation = new LobbyLocation(location.getWorld().getName(), location.toVector(), location.getYaw(), location.getPitch());
+		if (location != null) {
+			lobbyLocation = new LobbyLocation(location.getWorld().getName(), location.toVector(), location.getYaw(), location.getPitch());
+			return;
+		}
+
+		FileConfiguration config = new YamlConfiguration();
+		lobbyLocation = null;
+
+		config.set("lobby", null);
+		try {
+			config.save(lobbyFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void saveToConfig() {
@@ -79,7 +91,7 @@ public class GlobalLobby {
 		Vector vector = config.getVector("lobby.vector", null);
 		float yaw = (float) config.getDouble("lobby.yaw", 0.0);
 		float pitch = (float) config.getDouble("lobby.pitch", 0.0);
-		
+
 		if (worldname != null && vector != null) {
 			lobbyLocation = new LobbyLocation(worldname, vector, yaw, pitch);
 		}
