@@ -21,6 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import tntrun.TNTRun;
@@ -29,6 +30,7 @@ public class VaultHandler {
 
 	private Economy economy;
 	private Permission permission;
+	private Chat chat;
 	private final TNTRun plugin;
 
 	public VaultHandler(TNTRun plugin) {
@@ -45,6 +47,7 @@ public class VaultHandler {
 		}
 		setupVaultEconomy();
 		setupVaultPermissions();
+		setupVaultChat();
 	}
 
 	private void setupVaultEconomy() {
@@ -68,7 +71,7 @@ public class VaultHandler {
 
 	private void setupVaultPermissions() {
 		final RegisteredServiceProvider<Permission> rsp = plugin.getServer().getServicesManager().getRegistration(Permission.class);
-		if (rsp.getProvider() != null) {
+		if (rsp != null) {
 			permission = rsp.getProvider();
 		} else {
 			plugin.getLogger().info("Vault: permission plugin not detected.");
@@ -84,4 +87,21 @@ public class VaultHandler {
 		return permission != null;
 	}
 
+	private void setupVaultChat() {
+		final RegisteredServiceProvider<Chat> rsp = plugin.getServer().getServicesManager().getRegistration(Chat.class);
+		if (rsp != null) {
+			chat = rsp.getProvider();
+		} else {
+			plugin.getLogger().info("Vault: chat plugin not detected.");
+			chat = null;
+		}
+	}
+
+	public Chat getChat() {
+		return chat;
+	}
+
+	public boolean isChat() {
+		return chat != null;
+	}
 }

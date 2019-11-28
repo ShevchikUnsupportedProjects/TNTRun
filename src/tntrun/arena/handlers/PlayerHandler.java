@@ -540,15 +540,29 @@ public class PlayerHandler {
 	}
 
 	/**
-	 * Attempt to get a player's rank.
+	 * Attempt to get a player's rank. This can be either the player's prefix or primary group.
 	 * @param player
 	 * @return rank
 	 */
 	private String getRank(Player player) {
-		if (!plugin.getVaultHandler().isPermissions() || !plugin.getConfig().getBoolean("special.UseRankInChat")) {
+		if (!plugin.getConfig().getBoolean("UseRankInChat.enabled")) {
 			return null;
 		}
-		return plugin.getVaultHandler().getPermissions().getPrimaryGroup(player);
+		String rank = null;
+		if (plugin.getVaultHandler().isPermissions()) {
+			if (plugin.getConfig().getBoolean("UseRankInChat.usegroup")) {
+				rank = plugin.getVaultHandler().getPermissions().getPrimaryGroup(player);
+				if (rank != null) {
+					rank = "[" + rank + "]";
+				}
+			}
+		}
+		if (plugin.getVaultHandler().isChat()) {
+			if (plugin.getConfig().getBoolean("UseRankInChat.useprefix")) {
+				rank = plugin.getVaultHandler().getChat().getPlayerPrefix(player);
+			}
+		}
+		return rank;
 	}
 
 	/**
@@ -567,6 +581,6 @@ public class PlayerHandler {
 	}
 
 	public String getDisplayName(Player player) {
-		return getRank(player) == null ? "" : "[" + getRank(player) + "]";
+		return getRank(player) == null ? "" : getRank(player);
 	}
 }
