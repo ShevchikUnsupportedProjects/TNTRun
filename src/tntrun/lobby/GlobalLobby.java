@@ -23,9 +23,11 @@ import java.io.IOException;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tntrun.TNTRun;
+import tntrun.messages.Messages;
 
 public class GlobalLobby {
 
@@ -45,6 +47,19 @@ public class GlobalLobby {
 
 	public boolean isLobbyLocationSet() {
 		return lobbyLocation != null;
+	}
+
+	public void joinLobby(Player player) {
+		if (isLobbyLocationSet()) {
+			if (isLobbyLocationWorldAvailable()) {
+				player.teleport(getLobbyLocation());
+				Messages.sendMessage(player, Messages.trprefix + Messages.teleporttolobby);
+			} else {
+				Messages.sendMessage(player, Messages.trprefix + Messages.lobbyunloaded);
+			}
+		} else {
+			Messages.sendMessage(player, Messages.trprefix + Messages.nolobby);
+		}
 	}
 
 	public Location getLobbyLocation() {

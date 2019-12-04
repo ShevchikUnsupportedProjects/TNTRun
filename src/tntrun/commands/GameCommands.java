@@ -71,16 +71,7 @@ public class GameCommands implements CommandExecutor {
 			return true;
 
 		} else if (args[0].equalsIgnoreCase("lobby")) {
-			if (plugin.globallobby.isLobbyLocationSet()) {
-				if (plugin.globallobby.isLobbyLocationWorldAvailable()) {
-					player.teleport(plugin.globallobby.getLobbyLocation());
-					Messages.sendMessage(player, Messages.trprefix + Messages.teleporttolobby);
-				} else {
-					Messages.sendMessage(player, Messages.trprefix + "&c Lobby world is unloaded or doesn't exist");
-				}
-			} else {
-				Messages.sendMessage(player, Messages.trprefix + "&c Global lobby isn't set, run &6/trsetup setlobby");
-			}
+			plugin.globallobby.joinLobby(player);
 			return true;
 		}
 

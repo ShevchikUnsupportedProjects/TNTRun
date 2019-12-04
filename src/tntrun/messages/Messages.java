@@ -35,6 +35,8 @@ public class Messages {
 	public static String menutext = "&5Players:&6";
 	public static String menufee = "&5Join Fee: &6{FEE}";
 	public static String nopermission = "&c You don't have permission to do this";
+	public static String nolobby = "&c Global lobby isn't set, run &6/trsetup setlobby";
+	public static String lobbyunloaded = "&c Lobby world is unloaded or doesn't exist";
 	public static String teleporttolobby = "&7 Teleported to lobby";
 
 	public static String availablearenas = "&7 Available arenas:&r ";
@@ -166,6 +168,8 @@ public class Messages {
 		menutext = config.getString("menutext", menutext);
 		menufee = config.getString("menufee", menufee);
 		nopermission = config.getString("nopermission", nopermission);
+		nolobby = config.getString("nolobby", nolobby);
+		lobbyunloaded = config.getString("lobbyunloaded", lobbyunloaded);
 		teleporttolobby = config.getString("teleporttolobby", teleporttolobby);
 		availablearenas = config.getString("availablearenas", availablearenas);
 		availablekits = config.getString("availablekits", availablekits);
@@ -278,6 +282,8 @@ public class Messages {
 		config.set("menutext",  menutext);
 		config.set("menufee",  menufee);
 		config.set("nopermission", nopermission);
+		config.set("nolobby", nolobby);
+		config.set("lobbyunloaded", lobbyunloaded);
 		config.set("teleporttolobby", teleporttolobby);
 		config.set("arenanotexist", arenanotexist);
 		config.set("noarenas", noarenas);
