@@ -31,7 +31,7 @@ import tntrun.arena.Arena;
 import tntrun.arena.handlers.SoundHandler;
 import tntrun.arena.handlers.VaultHandler;
 import tntrun.utils.Bars;
-import tntrun.utils.Menu;
+import tntrun.utils.JoinMenu;
 import tntrun.utils.Shop;
 import tntrun.utils.Sounds;
 import tntrun.utils.Stats;
@@ -65,7 +65,7 @@ public class TNTRun extends JavaPlugin {
 	private boolean placeholderapi = false;
 	private boolean file = false;
 	private VaultHandler vaultHandler;
-	private Menu menu;
+	private JoinMenu joinMenu;
 
 	public PlayerDataStore pdata;
 	public ArenasManager amanager;
@@ -93,7 +93,7 @@ public class TNTRun extends JavaPlugin {
 		pdata = new PlayerDataStore();
 		amanager = new ArenasManager();
 		shop = new Shop(this);
-		menu = new Menu(this);
+		joinMenu = new JoinMenu(this);
 
 		//register commands and events
 		setupPlugin();
@@ -315,8 +315,8 @@ public class TNTRun extends JavaPlugin {
 		}
 	}
 
-	public Menu getMenu() {
-		return menu;
+	public JoinMenu getJoinMenu() {
+		return joinMenu;
 	}
 
 	public void updateScoreboardList() {

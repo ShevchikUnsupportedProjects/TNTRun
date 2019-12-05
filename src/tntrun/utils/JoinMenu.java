@@ -35,11 +35,11 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 
-public class Menu {
+public class JoinMenu {
 
 	private final TNTRun plugin;
 
-	public Menu(TNTRun plugin) {
+	public JoinMenu(TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
@@ -135,8 +135,7 @@ public class Menu {
 		if (plugin.amanager.getArenas().size() != 0) {
 			for (Arena arena : plugin.amanager.getArenas()) {
 				if (arena.getStatusManager().isArenaEnabled()) {
-					boolean canJoin = arena.getPlayerHandler().checkJoin(player);
-					if (canJoin) {
+					if (arena.getPlayerHandler().checkJoin(player)) {
 						arena.getPlayerHandler().spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
 						return;
 					}

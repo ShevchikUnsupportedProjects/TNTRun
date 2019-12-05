@@ -149,7 +149,7 @@ public class Stats {
 		return;
 	}
 
-	private static boolean isValidUuid(String uuid) {
+	private boolean isValidUuid(String uuid) {
 		try {
 			UUID.fromString(uuid);
 		} catch (IllegalArgumentException ex){

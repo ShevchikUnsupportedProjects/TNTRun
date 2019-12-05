@@ -17,6 +17,7 @@
 
 package tntrun.signs.type;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -42,16 +43,17 @@ public class VoteSign implements SignType {
 
 	@Override
 	public void handleClick(PlayerInteractEvent e) {
-		Arena arena = plugin.amanager.getPlayerArena(e.getPlayer().getName());
+		Player player = e.getPlayer();
+		Arena arena = plugin.amanager.getPlayerArena(player.getName());
 		if (arena != null) {
-			if (arena.getPlayerHandler().vote(e.getPlayer())) {
-				Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.playervotedforstart);
+			if (arena.getPlayerHandler().vote(player)) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.playervotedforstart);
 			} else {
-				Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.playeralreadyvotedforstart);
+				Messages.sendMessage(player, Messages.trprefix + Messages.playeralreadyvotedforstart);
 			}
 			e.setCancelled(true);
 		} else {
-			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.playernotinarena);
+			Messages.sendMessage(player, Messages.trprefix + Messages.playernotinarena);
 		}
 	}
 

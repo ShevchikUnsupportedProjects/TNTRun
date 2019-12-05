@@ -154,7 +154,7 @@ public class GameCommands implements CommandExecutor {
 		// join arena
 		else if (args[0].equalsIgnoreCase("join")) {
 			if (args.length == 1 && player.hasPermission("tntrun.joinmenu")) {
-				plugin.getMenu().buildMenu(player);
+				plugin.getJoinMenu().buildMenu(player);
 				return false;
 			}
 			if (args.length != 2) {
@@ -163,8 +163,7 @@ public class GameCommands implements CommandExecutor {
 			}
 			Arena arena = plugin.amanager.getArenaByName(args[1]);
 			if (arena != null) {
-				boolean canJoin = arena.getPlayerHandler().checkJoin(player);
-				if (canJoin) {
+				if (arena.getPlayerHandler().checkJoin(player)) {
 					arena.getPlayerHandler().spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
 				}
 				return true;
@@ -176,7 +175,7 @@ public class GameCommands implements CommandExecutor {
 
 		// autojoin
 		else if (args[0].equalsIgnoreCase("autojoin")) {
-			plugin.getMenu().autoJoin(player);
+			plugin.getJoinMenu().autoJoin(player);
 		}
 
 		// tntrun_reloaded info

@@ -20,6 +20,7 @@ package tntrun.signs.type;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -54,7 +55,7 @@ public class JoinSign implements SignType {
 				}
 			);
 		} else {
-			e.getPlayer().sendMessage("Arena does not exist");
+			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.arenanotexist);
 			e.setCancelled(true);
 			e.getBlock().breakNaturally();
 		}
@@ -62,15 +63,15 @@ public class JoinSign implements SignType {
 
 	@Override
 	public void handleClick(PlayerInteractEvent e) {
+		Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getArenaByName(((Sign) e.getClickedBlock().getState()).getLine(2));
 		if (arena != null) {
-			boolean canJoin = arena.getPlayerHandler().checkJoin(e.getPlayer());
-			if (canJoin) {
-				arena.getPlayerHandler().spawnPlayer(e.getPlayer(), Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
+			if (arena.getPlayerHandler().checkJoin(player)) {
+				arena.getPlayerHandler().spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
 			}
 			e.setCancelled(true);
 		} else {
-			e.getPlayer().sendMessage("Arena does not exist");
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist);
 			e.getClickedBlock().breakNaturally();
 		}
 	}
