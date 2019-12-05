@@ -29,13 +29,11 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 import tntrun.utils.FormattingCodesParser;
-import tntrun.utils.Menu;
 import tntrun.utils.Utils;
 
 public class GameCommands implements CommandExecutor {
 
 	private TNTRun plugin;
-	private Menu menu;
 
 	public GameCommands(TNTRun plugin) {
 		this.plugin = plugin;
@@ -156,8 +154,7 @@ public class GameCommands implements CommandExecutor {
 		// join arena
 		else if (args[0].equalsIgnoreCase("join")) {
 			if (args.length == 1 && player.hasPermission("tntrun.joinmenu")) {
-				menu = new Menu(plugin);
-				menu.buildMenu(player);
+				plugin.getMenu().buildMenu(player);
 				return false;
 			}
 			if (args.length != 2) {
@@ -179,23 +176,7 @@ public class GameCommands implements CommandExecutor {
 
 		// autojoin
 		else if (args[0].equalsIgnoreCase("autojoin")) {
-			if (plugin.amanager.getPlayerArena(player.getName()) != null) {
-				Messages.sendMessage(player, Messages.trprefix + Messages.arenajoined);
-				return true;
-			}
-			if (plugin.amanager.getArenas().size() != 0) {
-				for (Arena arena : plugin.amanager.getArenas()) {
-					if (arena.getStatusManager().isArenaEnabled()) {
-						boolean canJoin = arena.getPlayerHandler().checkJoin(player);
-						if (canJoin) {
-							arena.getPlayerHandler().spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
-							return false;
-						}
-					}
-				}
-			}
-			Messages.sendMessage(player, Messages.trprefix + Messages.noarenas);
-			return true;
+			plugin.getMenu().autoJoin(player);
 		}
 
 		// tntrun_reloaded info

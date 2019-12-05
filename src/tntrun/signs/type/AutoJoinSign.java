@@ -17,6 +17,36 @@
 
 package tntrun.signs.type;
 
-public class AutoJoinSign {
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
+import tntrun.TNTRun;
+import tntrun.messages.Messages;
+import tntrun.utils.FormattingCodesParser;
+
+public class AutoJoinSign implements SignType {
+
+	private TNTRun plugin;
+
+	public AutoJoinSign(TNTRun plugin) {
+		this.plugin = plugin;
+	}
+
+	@Override
+	public void handleCreation(SignChangeEvent e) {
+		e.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signcreate);
+	}
+
+	@Override
+	public void handleClick(PlayerInteractEvent e) {
+		plugin.getMenu().autoJoin(e.getPlayer());
+		e.setCancelled(true);
+	}
+
+	@Override
+	public void handleDestroy(BlockBreakEvent e) {
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signremove);
+	}
 }

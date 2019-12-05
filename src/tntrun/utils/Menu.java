@@ -126,4 +126,23 @@ public class Menu {
 		}
 		return new StringBuilder().append((int) fee).append(" ").append(arena.getStructureManager().getCurrency().toString()).toString();
 	}
+
+	public void autoJoin(Player player) {
+		if (plugin.amanager.getPlayerArena(player.getName()) != null) {
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenajoined);
+			return;
+		}
+		if (plugin.amanager.getArenas().size() != 0) {
+			for (Arena arena : plugin.amanager.getArenas()) {
+				if (arena.getStatusManager().isArenaEnabled()) {
+					boolean canJoin = arena.getPlayerHandler().checkJoin(player);
+					if (canJoin) {
+						arena.getPlayerHandler().spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
+						return;
+					}
+				}
+			}
+		}
+		Messages.sendMessage(player, Messages.trprefix + Messages.noarenas);
+	}
 }
