@@ -18,8 +18,7 @@ If your server is running Minecraft 1.13 or later, then the latest version of TN
 
 The legacy version of TNTRun\_reloaded, version 6.8, can also be downloaded from Spigot by visiting the "Version History" tab on the plugin pages. It can also be downloaded from the "Releases" page on GitHub.
 
-
-Note that there is a legacy bug fix release (version 6.8.1) only available from the GitHub Releases tab above, which fixes a bug with Featherboard/scoreboards. It can be [downloaded here.](https://github.com/steve4744/TNTRun/releases/download/v6.8.1/TNTRun_reloaded_6.8.1.jar "v6.8.1")
+Note that there is a legacy bug fix release (version 6.8.2) only available from the GitHub Releases tab above, which fixes a couple of bugs with Featherboard/scoreboards and with "stats". It can be [downloaded here.](https://github.com/steve4744/TNTRun/releases/download/v6.8.1/TNTRun_reloaded_6.8.2.jar "v6.8.2")
 
 
 ## Features
@@ -59,4 +58,4 @@ Note that there is a legacy bug fix release (version 6.8.1) only available from 
 <br />
 <br />
 <br />
-Updated steve4744 - 31st October 2019
+Updated steve4744 - 6th December 2019
