@@ -51,6 +51,9 @@ public class PlayerStatusHandler implements Listener {
 			if (arena == null) {
 				return;
 			}
+			if (!arena.getStatusManager().isArenaRunning()) {
+				return;
+			}
 			if (e.getCause() == DamageCause.FALL) {
 				e.setCancelled(true);
 				return;
@@ -72,7 +75,7 @@ public class PlayerStatusHandler implements Listener {
 		}
 	}
 
-	// cancel all to damage to and from spectators
+	// cancel all damage to and from spectators
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onDamageByPlayer(EntityDamageByEntityEvent e) {
 		if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
@@ -109,7 +112,11 @@ public class PlayerStatusHandler implements Listener {
 			return;
 		}
 		Player player = (Player) e.getHitEntity();
-		if (plugin.amanager.getPlayerArena(player.getName()) == null) {
+		Arena arena = plugin.amanager.getPlayerArena(player.getName());
+		if (arena == null) {
+			return;
+		}
+		if (!arena.getStatusManager().isArenaRunning()) {
 			return;
 		}
 		player.damage(0.5, projectile);
