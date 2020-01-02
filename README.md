@@ -1,10 +1,7 @@
 # TNTRun_reloaded
 
-This was originally forked from the (now unsupported) TNTRun by Shevchik for Minecraft v1.9 and has been improved and updated as new versions of Minecraft have been released, so that it supports all Minecraft versions from 1.8 through to 1.14.4.
+This was originally forked from the (now unsupported) TNTRun by Shevchik for Minecraft v1.9 and has been improved and updated as new versions of Minecraft have been released, so that it supports all Minecraft versions from 1.8 through to 1.15.
 
-However, as a result of the huge number of changes brought in by Mojang in Minecraft v1.13, beginning with version 7.0 of TNTRun\_reloaded, the plugin will only run on Minecraft versions 1.13 and later. All future development work will be done on this version and not back-ported to the legacy version.
-
-The legacy version of TNTRun\_reloaded is the final release to support all Minecraft versions from 1.8 through to 1.12.2. This version is still available for download and will still be supported where possible.
 
 ## Description
 
@@ -12,11 +9,12 @@ TNTRun is a fully automated minigame plugin that is based on the popular map TNT
 Players start on a layer of sand and every block that they step on disappears. If they fall through a hole, they continue on the layer of sand below. 
 When  a player falls through the final layer he loses the game. The last player wins the game.
 
+
 ## Download
 
 If your server is running Minecraft 1.13 or later, then the latest version of TNTRun\_reloaded can be [downloaded from Spigot.](https://www.spigotmc.org/resources/tntrun_reloaded.53359/ "TNTRun_reloaded")
 
-The legacy version of TNTRun\_reloaded, version 6.8, can also be downloaded from Spigot by visiting the "Version History" tab on the plugin pages. It can also be downloaded from the "Releases" page on GitHub.
+For Minecraft versions from 1.8 through to 1.12.2, the legacy version of TNTRun\_reloaded (version 6.8) can also be downloaded from Spigot by visiting the "Version History" tab on the plugin pages.
 
 Note that there is a legacy bug fix release (version 6.8.2) only available from the GitHub Releases tab above, which fixes a couple of bugs with Featherboard/scoreboards and with "stats". It can be [downloaded here.](https://github.com/steve4744/TNTRun/releases/download/v6.8.1/TNTRun_reloaded_6.8.2.jar "v6.8.2")
 
@@ -55,7 +53,29 @@ Note that there is a legacy bug fix release (version 6.8.2) only available from 
     Built-in placeholder support
     Legacy placeholder support - https://www.spigotmc.org/resources/tntrun_reloaded-expansion.53945/
 
+## Dependencies
+
+The following plugin dependencies are needed to compile the source code. With the exception of WorldEdit, all are optional to run TNTRun_reloaded on a Spigot server.
+Links to download each plugin are available on TNTRun_reloaded's Spigot page.
+
+For Minecraft 1.13+ the minimum version required for each plugin is listed below:
+
+    WorldEdit 7.0.0
+    Vault 1.7.2 (optional, required to use economy)
+    HeadsPlus 6.4 (optional, required to run around wearing a different head)
+    mcMMO Classic 1.6.1 (optional, will allow players in same mcMMO party to PVP in arena)
+    PlaceholderAPI 2.10.3 (optional, needed to use placeholders)
+
+FAWE is also supported, and can be used in place of the WorldEdit 7.0.0 dependency on 1.13 servers.
+
+For legacy Minecraft 1.12.2 and below:
+
+    TNTRun_reloaded 6.8.2
+    WorldEdit 6
+    Vault (optional)
+
+
 <br />
 <br />
 <br />
-Updated steve4744 - 6th December 2019
+Updated steve4744 - 2nd January 2020
