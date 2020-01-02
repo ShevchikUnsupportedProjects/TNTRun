@@ -172,6 +172,13 @@ public class StructureManager {
 		return Material.getMaterial(currency) != null && !Utils.isAir(Material.getMaterial(currency));
 	}
 
+	public String getArenaCost(Arena arena) {
+		if (!isCurrencyEnabled()) {
+			return String.valueOf(fee);
+		}
+		return new StringBuilder().append((int) fee).append(" x ").append(currency).toString();
+	}
+
 	public boolean isInArenaBounds(Location loc) {
 		if (loc.toVector().isInAABB(getP1(), getP2())) {
 			return true;

@@ -27,7 +27,7 @@ public class DisableKits implements CommandHandlerInterface {
 				return true;
 			}
 			arena.getStructureManager().enableKits(false);
-			Messages.sendMessage(player, Messages.trprefix + "&7 Kits have been &6disabled &7for arena &6" + args[0]);
+			Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 Kits have been &6disabled");
 			
 		} else {
 			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[0]));

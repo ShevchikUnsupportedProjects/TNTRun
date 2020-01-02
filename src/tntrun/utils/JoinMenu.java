@@ -70,7 +70,7 @@ public class JoinMenu {
 
 			lores.add(FormattingCodesParser.parseFormattingCodes(Messages.menutext) + " " + getArenaCount(arena));
 			if (arena.getStructureManager().hasFee()) {
-				lores.add(FormattingCodesParser.parseFormattingCodes(Messages.menufee.replace("{FEE}", getMenuJoinFee(arena))));
+				lores.add(FormattingCodesParser.parseFormattingCodes(Messages.menufee.replace("{FEE}", arena.getStructureManager().getArenaCost(arena))));
 			}
 			im.setLore(lores);
 			is.setItemMeta(im);
@@ -117,14 +117,6 @@ public class JoinMenu {
 		int maxPlayers = arena.getStructureManager().getMaxPlayers();
 		int players = arena.getPlayersManager().getPlayersCount();
 		return players + " / " + maxPlayers;
-	}
-
-	private String getMenuJoinFee(Arena arena) {
-		double fee = arena.getStructureManager().getFee();
-		if (!arena.getStructureManager().isCurrencyEnabled()) {
-			return String.valueOf(fee);
-		}
-		return new StringBuilder().append((int) fee).append(" ").append(arena.getStructureManager().getCurrency().toString()).toString();
 	}
 
 	public void autoJoin(Player player) {

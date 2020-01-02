@@ -56,7 +56,7 @@ public class Messages {
 	public static String signcreate = "&7 Sign successfully created";
 	public static String signremove = "&7 Sign successfully removed";
 	public static String arenafee = "&7 You have been charged &6{FEE} &7to enter the arena";
-	public static String arenanofee = "&c You do not have the required fee to enter the arena";
+	public static String arenanofee = "&c You require a fee of &6{FEE} &cto enter the arena";
 
 	public static String playerscountinarena = "&6 Current number of players in arena: {COUNT} players";
 	public static String playersrequiredtostart = "&c There must be at least 2 players in the arena to force-start";

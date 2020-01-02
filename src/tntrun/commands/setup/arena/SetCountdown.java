@@ -42,7 +42,7 @@ public class SetCountdown implements CommandHandlerInterface {
 			}
 			if (Utils.isNumber(args[1])) {
 				arena.getStructureManager().setCountdown(Integer.parseInt(args[1]));
-				Messages.sendMessage(player, Messages.trprefix + "&7 CountDown for arena &6" +arena.getArenaName() + "&7 set to &6"+ args[1] + "&7 seconds");
+				Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 Countdown set to &6" + args[1] + "&7 seconds");
 			} else {
 				Messages.sendMessage(player, Messages.trprefix + "&c Countdown amount must be an integer");
 			}

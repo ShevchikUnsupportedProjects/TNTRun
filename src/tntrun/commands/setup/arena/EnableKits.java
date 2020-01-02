@@ -44,7 +44,7 @@ public class EnableKits implements CommandHandlerInterface {
 				return true;
 			}
 			arena.getStructureManager().enableKits(true);
-			Messages.sendMessage(player, Messages.trprefix + "&7 Kits have been &6enabled &7for arena &6" + args[0]);
+			Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 Kits have been &6enabled");
 			
 		} else {
 			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[0]));

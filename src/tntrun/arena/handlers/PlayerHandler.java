@@ -97,18 +97,11 @@ public class PlayerHandler {
 
 		if (arena.getStructureManager().hasFee()) {
 			double fee = arena.getStructureManager().getFee();
-			if (arena.getArenaEconomy().hasFunds(player, fee)) {
-				StringBuilder cost = new StringBuilder();
-				if (arena.getStructureManager().isCurrencyEnabled()) {
-					cost.append((int) fee).append(" x ").append(arena.getStructureManager().getCurrency().toString());
-				} else {
-					cost.append(fee);
-				}
-				Messages.sendMessage(player, Messages.trprefix + Messages.arenafee.replace("{FEE}", cost));
-			} else {
-				Messages.sendMessage(player, Messages.trprefix + Messages.arenanofee);
+			if (!arena.getArenaEconomy().hasFunds(player, fee)) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenanofee.replace("{FEE}", arena.getStructureManager().getArenaCost(arena)));
 				return false;
 			}
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenafee.replace("{FEE}", arena.getStructureManager().getArenaCost(arena)));
 		}
 		return true;
 	}
