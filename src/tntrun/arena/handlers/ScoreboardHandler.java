@@ -56,40 +56,44 @@ public class ScoreboardHandler {
 			o.setDisplayName(header);
 		}
 		return scoreboard;
-	} 
+	}
 
 	public void createWaitingScoreBoard() {
-		if(!plugin.getConfig().getBoolean("special.UseScoreboard")) {
+		if (!plugin.getConfig().getBoolean("special.UseScoreboard")) {
 			return;
 		}
 		for (Player player : arena.getPlayersManager().getPlayers()) {
-			if (scoreboardMap.containsKey(player.getName())) {
-				scoreboard = scoreboardMap.get(player.getName());
-			} else {
-				scoreboard = buildScoreboard();
-				scoreboardMap.put(player.getName(), scoreboard);
+			updateWaitingScoreboard(player);
+		}
+	}
+
+	public void updateWaitingScoreboard(Player player) {
+		if (scoreboardMap.containsKey(player.getName())) {
+			scoreboard = scoreboardMap.get(player.getName());
+		} else {
+			scoreboard = buildScoreboard();
+			scoreboardMap.put(player.getName(), scoreboard);
+		}
+		resetScoreboard(player);
+		Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
+
+		try {
+			int size = plugin.getConfig().getStringList("scoreboard.waiting").size();
+
+			for (String s : plugin.getConfig().getStringList("scoreboard.waiting")) {
+				s = FormattingCodesParser.parseFormattingCodes(s).replace("{ARENA}", arena.getArenaName());
+				s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
+				s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
+				s = s.replace("{COUNT}", arena.getGameHandler().count + "");
+				s = s.replace("{VOTES}", getVotesRequired(arena) + "");
+				s = s.replace("{DJ}", arena.getPlayerHandler().getDoubleJumps(player) + "");
+				o.getScore(s).setScore(size);
+				size--;
 			}
-			resetScoreboard(player);
-			Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
+			player.setScoreboard(scoreboard);
 
-			try {
-				int size = plugin.getConfig().getStringList("scoreboard.waiting").size();
+		} catch (NullPointerException ex) {
 
-				for (String s : plugin.getConfig().getStringList("scoreboard.waiting")) {
-					s = FormattingCodesParser.parseFormattingCodes(s).replace("{ARENA}", arena.getArenaName());
-					s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
-					s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
-					s = s.replace("{COUNT}", arena.getGameHandler().count + "");
-					s = s.replace("{VOTES}", getVotesRequired(arena) + "");
-					s = s.replace("{DJ}", arena.getPlayerHandler().getDoubleJumps(player) + "");
-					o.getScore(s).setScore(size);
-					size--;
-				}
-				player.setScoreboard(scoreboard);
-
-			} catch (NullPointerException ex) {
-
-			}
 		}
 	}
 
@@ -114,29 +118,33 @@ public class ScoreboardHandler {
 	}
 
 	public void createPlayingScoreBoard() {
-		if(!plugin.getConfig().getBoolean("special.UseScoreboard")){
-			return;	
+		if (!plugin.getConfig().getBoolean("special.UseScoreboard")) {
+			return;
 		}
 		playingtask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
 				for (Player player : arena.getPlayersManager().getPlayers()) {
-					resetScoreboard(player);
-					Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
-
-					int size = plugin.getConfig().getStringList("scoreboard.playing").size();
-					for (String s : plugin.getConfig().getStringList("scoreboard.playing")) {
-						s = FormattingCodesParser.parseFormattingCodes(s).replace("{ARENA}", arena.getArenaName());
-						s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");		
-						s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
-						s = s.replace("{LOST}", arena.getGameHandler().lostPlayers + "");
-						s = s.replace("{LIMIT}", arena.getGameHandler().getTimeLimit()/20 + "");
-						s = s.replace("{DJ}", arena.getPlayerHandler().getDoubleJumps(player) + "");
-						o.getScore(s).setScore(size);
-						size--;
-					}
+					updatePlayingScoreboard(player);
 				}
 			}
 		}, 0, 20);
+	}
+
+	private void updatePlayingScoreboard(Player player) {
+		resetScoreboard(player);
+		Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
+
+		int size = plugin.getConfig().getStringList("scoreboard.playing").size();
+		for (String s : plugin.getConfig().getStringList("scoreboard.playing")) {
+			s = FormattingCodesParser.parseFormattingCodes(s).replace("{ARENA}", arena.getArenaName());
+			s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
+			s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
+			s = s.replace("{LOST}", arena.getGameHandler().lostPlayers + "");
+			s = s.replace("{LIMIT}", arena.getGameHandler().getTimeLimit()/20 + "");
+			s = s.replace("{DJ}", arena.getPlayerHandler().getDoubleJumps(player) + "");
+			o.getScore(s).setScore(size);
+			size--;
+		}
 	}
 
 	public int getPlayingTask() {

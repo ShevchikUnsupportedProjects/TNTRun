@@ -91,58 +91,56 @@ public class GameHandler {
 	public void runArenaCountdown() {
 		count = arena.getStructureManager().getCountdown();
 		arena.getStatusManager().setStarting(true);
-		runtaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(
-			plugin,
-			new Runnable() {
-				@Override
-				public void run() {
-					// check if countdown should be stopped for some various reasons
-					if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers() && !arena.getPlayerHandler().forceStart()) {
-						double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers();
-						Bars.setBar(arena, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
-						arena.getScoreboardHandler().createWaitingScoreBoard();
-						stopArenaCountdown();
-					} else
-					// start arena if countdown is 0
-					if (count == 0) {
-						stopArenaCountdown();
-						startArena();
-
-					} else if(count == 5) {
-						String message = Messages.arenacountdown;
-						message = message.replace("{COUNTDOWN}", String.valueOf(count));
-
-						for (Player player : arena.getPlayersManager().getPlayers()) {
-							if (isAntiCamping()) {
-								player.teleport(arena.getStructureManager().getSpawnPoint());
-							}
-							displayCountdown(player, count, message);
-						}
-
-					} else if (count < 11) {
-						String message = Messages.arenacountdown;
-						message = message.replace("{COUNTDOWN}", String.valueOf(count));
-						for (Player player : arena.getPlayersManager().getPlayers()) {
-							displayCountdown(player, count, message);
-						}
-
-					} else if (count % 10 == 0) {
-						String message = Messages.arenacountdown;
-						message = message.replace("{COUNTDOWN}", String.valueOf(count));
-				        for (Player all : arena.getPlayersManager().getPlayers()) {
-				        	displayCountdown(all, count, message);
-				        }
-				    }
+		runtaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+			@Override
+			public void run() {
+				// check if countdown should be stopped for some various reasons
+				if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers() && !arena.getPlayerHandler().forceStart()) {
+					double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers();
+					Bars.setBar(arena, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
 					arena.getScoreboardHandler().createWaitingScoreBoard();
-					double progressbar = (double) count / arena.getStructureManager().getCountdown();
-					Bars.setBar(arena, Bars.starting, 0, count, progressbar, plugin);
+					stopArenaCountdown();
+				} else
+				// start arena if countdown is 0
+				if (count == 0) {
+					stopArenaCountdown();
+					startArena();
+
+				} else if(count == 5) {
+					String message = Messages.arenacountdown;
+					message = message.replace("{COUNTDOWN}", String.valueOf(count));
 
 					for (Player player : arena.getPlayersManager().getPlayers()) {
-						player.setLevel(count);
-				    }
-					count--;
+						if (isAntiCamping()) {
+							player.teleport(arena.getStructureManager().getSpawnPoint());
+						}
+						displayCountdown(player, count, message);
+					}
+
+				} else if (count < 11) {
+					String message = Messages.arenacountdown;
+					message = message.replace("{COUNTDOWN}", String.valueOf(count));
+					for (Player player : arena.getPlayersManager().getPlayers()) {
+						displayCountdown(player, count, message);
+					}
+
+				} else if (count % 10 == 0) {
+					String message = Messages.arenacountdown;
+					message = message.replace("{COUNTDOWN}", String.valueOf(count));
+					for (Player all : arena.getPlayersManager().getPlayers()) {
+						displayCountdown(all, count, message);
+					}
 				}
-			}, 0, 20);
+				arena.getScoreboardHandler().createWaitingScoreBoard();
+				double progressbar = (double) count / arena.getStructureManager().getCountdown();
+				Bars.setBar(arena, Bars.starting, 0, count, progressbar, plugin);
+
+				for (Player player : arena.getPlayersManager().getPlayers()) {
+					player.setLevel(count);
+				}
+				count--;
+			}
+		}, 0, 20);
 	}
 
 	public void stopArenaCountdown() {
@@ -181,36 +179,32 @@ public class GameHandler {
 		}
 		arena.getScoreboardHandler().createPlayingScoreBoard();
 		timelimit = arena.getStructureManager().getTimeLimit() * 20;
-		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(
-			plugin,
-			new Runnable() {
-				@Override
-				public void run() {
-					// stop arena if player count is 0
-					if (arena.getPlayersManager().getPlayersCount() == 0) {
-						stopArena();
-						return;
-					}
-					// kick all players if time is out
-					if (timelimit < 0) {
-						for (Player player : arena.getPlayersManager().getPlayersCopy()) {
-							arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
-						}
-						return;
-					}
-					// handle players
-					double progress = (double) timelimit / (arena.getStructureManager().getTimeLimit() * 20);
-					Bars.setBar(arena, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, progress, plugin);
-					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
-						// Xp level
-						player.setLevel(timelimit/20);
-						handlePlayer(player);
-					}
-					timelimit--;
+		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+			@Override
+			public void run() {
+				// stop arena if player count is 0
+				if (arena.getPlayersManager().getPlayersCount() == 0) {
+					stopArena();
+					return;
 				}
-			},
-			0, 1
-		);
+				// kick all players if time is out
+				if (timelimit < 0) {
+					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
+						arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
+					}
+					return;
+				}
+				// handle players
+				double progress = (double) timelimit / (arena.getStructureManager().getTimeLimit() * 20);
+				Bars.setBar(arena, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, progress, plugin);
+				for (Player player : arena.getPlayersManager().getPlayersCopy()) {
+					// Xp level
+					player.setLevel(timelimit/20);
+					handlePlayer(player);
+				}
+				timelimit--;
+			}
+		}, 0, 1);
 	}
 
 	public void stopArena() {

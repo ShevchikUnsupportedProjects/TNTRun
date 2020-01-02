@@ -132,8 +132,11 @@ public class Shop implements Listener{
 		} else {
 			Arena arena = plugin.amanager.getPlayerArena(player.getName());
 			arena.getPlayerHandler().incrementDoubleJumps(player, quantity);
+			if(!plugin.getConfig().getBoolean("special.UseScoreboard")) {
+				return;
+			}
 			if (!arena.getStatusManager().isArenaStarting() && plugin.getConfig().getBoolean("scoreboard.displaydoublejumps")) {
-				arena.getScoreboardHandler().createWaitingScoreBoard();
+				arena.getScoreboardHandler().updateWaitingScoreboard(player);
 			}
 		}
 	}
