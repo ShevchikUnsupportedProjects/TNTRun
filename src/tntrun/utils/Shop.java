@@ -117,7 +117,7 @@ public class Shop implements Listener{
 
 	/**
 	 * Give the player shop-bought double jumps. If free double jumps are enabled 
-	 * then store the purchase for later.
+	 * then store the purchase for later. Update player's balance item.
 	 * @param player
 	 * @param quantity
 	 */
@@ -139,6 +139,8 @@ public class Shop implements Listener{
 				arena.getScoreboardHandler().updateWaitingScoreboard(player);
 			}
 		}
+		Inventory inv = player.getOpenInventory().getTopInventory();
+		inv.setItem(getInvsize() -1, setMoneyItem(inv, player));
 	}
 
 	private void logPurchase(Player player, String item, int cost) {
