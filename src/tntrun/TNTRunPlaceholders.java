@@ -20,6 +20,7 @@ package tntrun;
 import org.bukkit.entity.Player;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import tntrun.arena.Arena;
 import tntrun.utils.Utils;
 
 public class TNTRunPlaceholders extends PlaceholderExpansion {
@@ -70,6 +71,23 @@ public class TNTRunPlaceholders extends PlaceholderExpansion {
 
 		} else if (identifier.equals("player_count")) {
 			return String.valueOf(Utils.playerCount());
+
+		} else if (identifier.equals("doublejumps")) {
+			return String.valueOf(plugin.getConfig().getInt("doublejumps." + p.getName(), 0));
+
+		} else if (identifier.startsWith("joinfee") || identifier.startsWith("currency")) {
+			String[] temp = identifier.split("_");
+			if (temp.length != 2) {
+				return null;
+			}
+			Arena arena = plugin.amanager.getArenaByName(temp[1]);
+			if (arena == null) {
+				return null;
+			}
+			if (identifier.startsWith("joinfee")) {
+				return arena.getStructureManager().hasFee() ? String.valueOf(arena.getStructureManager().getFee()) : "0";
+			}
+			return arena.getStructureManager().isCurrencyEnabled() ? arena.getStructureManager().getCurrency().toString() : null;
 
 		} else if (identifier.startsWith("leaderboard")) {
 			String[] temp = identifier.split("_");
