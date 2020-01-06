@@ -20,10 +20,9 @@ public class VersionChecker {
 
 	public String getVersion() {
 		try {
-			HttpURLConnection con = (HttpURLConnection) new URL("https://www.spigotmc.org/api/general.php").openConnection();
+			HttpURLConnection con = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=53359").openConnection();
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
-			con.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=53359").getBytes("UTF-8"));
 			String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
 			if (version.length() <= 7) {
 				return version;
