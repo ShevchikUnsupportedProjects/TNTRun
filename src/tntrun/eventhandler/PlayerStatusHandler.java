@@ -52,6 +52,7 @@ public class PlayerStatusHandler implements Listener {
 				return;
 			}
 			if (!arena.getStatusManager().isArenaRunning()) {
+				e.setCancelled(true);
 				return;
 			}
 			if (e.getCause() == DamageCause.FALL) {
