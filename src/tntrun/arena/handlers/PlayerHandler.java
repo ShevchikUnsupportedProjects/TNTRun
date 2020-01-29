@@ -330,15 +330,14 @@ public class PlayerHandler {
 		plugin.pdata.restorePlayerArmor(player);
 		plugin.pdata.restorePlayerInventory(player);
 		plugin.pdata.restorePlayerLevel(player);
-		// add player damage resistance
 		player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, 80, true), true);
-		// restore location or teleport to lobby
-		if (arena.getStructureManager().getTeleportDestination() == TeleportDestination.LOBBY && plugin.globallobby.isLobbyLocationWorldAvailable()) {
-			player.teleport(plugin.globallobby.getLobbyLocation());
-			plugin.pdata.clearPlayerLocation(player);
+
+		if (plugin.isBungeecord()) {
+			plugin.getBungeeHandler().connectToHub(player);
 		} else {
-			plugin.pdata.restorePlayerLocation(player);
+			connectToLobby(player);
 		}
+
 		// reward player before restoring gamemode if player is winner
 		if (winner) {
 			arena.getStructureManager().getRewards().rewardPlayer(player);
@@ -358,6 +357,19 @@ public class PlayerHandler {
 
 		if (arena.getStatusManager().isArenaRunning() && arena.getPlayersManager().getPlayersCount() == 0) {
 			arena.getGameHandler().stopArena();
+		}
+	}
+
+	/**
+	 * On a multiworld server, return the player to the lobby or previous location.
+	 * @param player
+	 */
+	private void connectToLobby(Player player) {
+		if (arena.getStructureManager().getTeleportDestination() == TeleportDestination.LOBBY && plugin.globallobby.isLobbyLocationWorldAvailable()) {
+			player.teleport(plugin.globallobby.getLobbyLocation());
+			plugin.pdata.clearPlayerLocation(player);
+		} else {
+			plugin.pdata.restorePlayerLocation(player);
 		}
 	}
 

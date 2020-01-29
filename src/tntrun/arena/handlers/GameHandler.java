@@ -254,18 +254,22 @@ public class GameHandler {
 
 		int delay = arena.getStructureManager().getGameZone().regen();
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(
-			arena.plugin,
-			new Runnable() {
-				@Override
-				public void run() {
-					arena.getStatusManager().setRegenerating(false);
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				arena.getStatusManager().setRegenerating(false);
+				plugin.signEditor.modifySigns(arena.getArenaName());
 
-					plugin.signEditor.modifySigns(arena.getArenaName());
+				if (plugin.isBungeecord() && plugin.getConfig().getBoolean("bungeecord.stopserver")) {
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							Bukkit.shutdown();
+						}
+					}.runTaskLater(plugin, 20);
 				}
-			},
-			delay
-		);
+			}
+		}.runTaskLater(plugin, delay);
 	}
 
 	/**

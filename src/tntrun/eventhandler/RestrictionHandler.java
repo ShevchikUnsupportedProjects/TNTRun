@@ -245,14 +245,14 @@ public class RestrictionHandler implements Listener {
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
-		final Player p = e.getPlayer();
+		final Player player = e.getPlayer();
 
-		if (p.hasPermission("tntrun.version.check")) {
+		if (player.hasPermission("tntrun.version.check")) {
 			if (plugin.needUpdate()) {
 				new BukkitRunnable() {
 					@Override
 					public void run() {
-						Utils.displayUpdate(p);
+						Utils.displayUpdate(player);
 					}
 				}.runTaskLaterAsynchronously(plugin, 30L);
 			}
@@ -267,15 +267,15 @@ public class RestrictionHandler implements Listener {
 			@Override
 			public void run() {
 				if (Bukkit.getOnlineMode()) {
-			        plugin.mysql.query("INSERT IGNORE INTO `stats` (`username`, `played`, "
-			                + "`wins`, `looses`) VALUES " 
-			        		+ "('" + p.getUniqueId().toString()
-			                + "', '0', '0', '0');");
+					plugin.mysql.query("INSERT IGNORE INTO `stats` (`username`, `played`, "
+							+ "`wins`, `looses`) VALUES "
+							+ "('" + player.getUniqueId().toString()
+							+ "', '0', '0', '0');");
 				} else {
-			        plugin.mysql.query("INSERT IGNORE INTO `stats` (`username`, `played`, "
-			                + "`wins`, `looses`) VALUES " 
-			        		+ "('" + p.getName()
-			                + "', '0', '0', '0');");
+					plugin.mysql.query("INSERT IGNORE INTO `stats` (`username`, `played`, "
+							+ "`wins`, `looses`) VALUES "
+							+ "('" + player.getName()
+							+ "', '0', '0', '0');");
 				}
 			}
 		}.runTaskAsynchronously(plugin);

@@ -18,6 +18,8 @@
 package tntrun;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -28,6 +30,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import tntrun.arena.Arena;
+import tntrun.arena.handlers.BungeeHandler;
 import tntrun.arena.handlers.SoundHandler;
 import tntrun.arena.handlers.VaultHandler;
 import tntrun.utils.Bars;
@@ -65,6 +68,8 @@ public class TNTRun extends JavaPlugin {
 	private boolean placeholderapi = false;
 	private boolean file = false;
 	private VaultHandler vaultHandler;
+	private BungeeHandler bungeeHandler;
+	private Arena bungeeArena;
 	private JoinMenu joinMenu;
 
 	public PlayerDataStore pdata;
@@ -106,6 +111,10 @@ public class TNTRun extends JavaPlugin {
 		loadArenas();
 		checkUpdate();
 		sound = new SoundHandler(this);
+
+		if (isBungeecord()) {
+			bungeeHandler = new BungeeHandler(this);
+		}
 
 		if (getConfig().getBoolean("special.Metrics", true)) {
 			log.info("Attempting to start metrics (bStats)...");
@@ -180,6 +189,10 @@ public class TNTRun extends JavaPlugin {
 
 	public boolean isFile() {
 		return file;
+	}
+
+	public boolean isBungeecord() {
+		return getConfig().getBoolean("bungeecord.enabled");
 	}
 
 	private void checkUpdate() {
@@ -275,25 +288,36 @@ public class TNTRun extends JavaPlugin {
 	public VaultHandler getVaultHandler() {
 		return vaultHandler;
 	}
+
+	public BungeeHandler getBungeeHandler() {
+		return bungeeHandler;
+	}
+
 	private void loadArenas() {
 		final File arenasfolder = new File(getDataFolder() + File.separator + "arenas");
 		arenasfolder.mkdirs();
 		new BukkitRunnable() {
+
 			@Override
 			public void run() {
-				// load global lobby
 				globallobby.loadFromConfig();
-				// load kits
 				kitmanager.loadFromConfig();
-				// load arenas
-				for (String file : arenasfolder.list()) {
+
+				List<String> arenaList = Arrays.asList(arenasfolder.list());
+				Collections.shuffle(arenaList);
+				for (String file : arenaList) {
 					Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
 					arena.getStructureManager().loadFromConfig();
 					arena.getStatusManager().enableArena();
 					amanager.registerArena(arena);
 					Bars.createBar(arena.getArenaName());
+
+					if (isBungeecord()) {
+						bungeeArena = arena;
+						break;
+					}
 				}
-				// load signs
+
 				signEditor.loadConfiguration();
 			}
 		}.runTaskLater(this, 20L);
@@ -317,6 +341,10 @@ public class TNTRun extends JavaPlugin {
 
 	public JoinMenu getJoinMenu() {
 		return joinMenu;
+	}
+
+	public Arena getBungeeArena() {
+		return bungeeArena;
 	}
 
 	public void updateScoreboardList() {
