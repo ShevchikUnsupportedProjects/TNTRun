@@ -28,7 +28,7 @@ public class GameZone {
 		this.arena = arena;
 	}
 
-	private final int SCAN_DEPTH = 2;
+	private final int SCAN_DEPTH = 1;
 	public void destroyBlock(Location loc) {
 		int y = loc.getBlockY() + 1;
 		Block block = null;
