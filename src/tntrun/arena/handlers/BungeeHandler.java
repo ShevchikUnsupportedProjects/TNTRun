@@ -2,9 +2,11 @@ package tntrun.arena.handlers;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.server.ServerListPingEvent;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -38,6 +40,27 @@ public class BungeeHandler implements Listener {
 		return plugin.getConfig().getString("bungeecord.hub");
 	}
 
+	private String getMOTD() {
+		Arena arena = plugin.getBungeeArena();
+		if (arena == null) {
+			return "";
+		}
+		if (arena.getStatusManager().isArenaStarting() && (arena.getGameHandler().count <= 3)) {
+			return "In-game";
+		}
+		return arena.getStatusManager().getArenaStatus();
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onServerListPing(ServerListPingEvent event) {
+		Arena arena = plugin.getBungeeArena();
+		if (arena == null || !plugin.getConfig().getBoolean("bungeecord.useMOTD")) {
+			return;
+		}
+		event.setMaxPlayers(arena.getStructureManager().getMaxPlayers());
+		event.setMotd(this.getMOTD());
+	}
+
 	@EventHandler
 	public void onLogin(PlayerLoginEvent event) {
 		if (!plugin.isBungeecord()) {
@@ -53,6 +76,9 @@ public class BungeeHandler implements Listener {
 	public void onJoin(PlayerJoinEvent event) {
 		if (plugin.isBungeecord()) {
 			Arena arena = plugin.getBungeeArena();
+			if (arena == null) {
+				return;
+			}
 			arena.getPlayerHandler().spawnPlayer(event.getPlayer(), Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
 		}
 	}

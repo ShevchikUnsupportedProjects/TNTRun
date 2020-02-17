@@ -322,7 +322,7 @@ public class TNTRun extends JavaPlugin {
 			}
 		}.runTaskLater(this, 20L);
 	}
-	
+
 	private void setStorage() {
 		if (this.getConfig().getString("database").equals("file")) {
 			usestats = true;

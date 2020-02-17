@@ -122,4 +122,5 @@ signs:
 bungeecord:
   enabled: false
   hub: lobby
+  useMOTD: true
   stopserver: false
