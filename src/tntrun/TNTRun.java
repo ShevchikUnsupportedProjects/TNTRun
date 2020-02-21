@@ -183,6 +183,10 @@ public class TNTRun extends JavaPlugin {
 		return usestats;
 	}
 
+	public void setUseStats(boolean usestats) {
+		this.usestats = usestats;
+	}
+
 	public boolean needUpdate() {
 		return needupdate;
 	}

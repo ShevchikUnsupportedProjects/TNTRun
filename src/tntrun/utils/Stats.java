@@ -74,8 +74,23 @@ public class Stats {
 			getStatsFromFile();
 			return;
 		}
-		getWinsFromDB();
-		getPlayedFromDB();
+		if (plugin.mysql.isConnected()) {
+			getWinsFromDB();
+			getPlayedFromDB();
+			return;
+		}
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				if (plugin.mysql.isConnected()) {
+					getWinsFromDB();
+					getPlayedFromDB();
+				} else {
+					plugin.setUseStats(false);
+					plugin.getLogger().info("Failure connecting to MySQL database, disabling stats");
+				}
+			}
+		}.runTaskLaterAsynchronously(plugin, 60L);
 	}
 
 	/**
