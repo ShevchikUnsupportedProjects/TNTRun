@@ -56,6 +56,7 @@ public class StructureManager {
 	private TeleportDestination teleportDest = TeleportDestination.PREVIOUS;
 	private DamageEnabled damageEnabled = DamageEnabled.NO;
 	private boolean kitsEnabled = false;
+	private boolean testmode = false;
 	private int regenerationdelay = 60;
 	private String currency;
 	private double fee = 0;
@@ -150,6 +151,10 @@ public class StructureManager {
 
 	public boolean isKitsEnabled() {
 		return kitsEnabled;
+	}
+
+	public boolean isTestMode() {
+		return testmode;
 	}
 
 	public int getRegenerationDelay() {
@@ -298,50 +303,37 @@ public class StructureManager {
 
 	public void saveToConfig() {
 		FileConfiguration config = new YamlConfiguration();
-		// save arena bounds
 		try {
 			config.set("world", world);
 			config.set("p1", p1);
 			config.set("p2", p2);
 		} catch (Exception e) {
 		}
-		// save gamelevel destroy delay
 		config.set("gameleveldestroydelay", gameleveldestroydelay);
-		// save loselevel
 		try {
 			loselevel.saveToConfig(config);
 		} catch (Exception e) {
 		}
-		// save spawnpoint
 		try {
 			config.set("spawnpoint", spawnpoint);
 		} catch (Exception e) {
 		}
-		// save spectators spawn
 		try {
 			config.set("spectatorspawn", spectatorspawn);
 		} catch (Exception e) {
 		}
-		// save maxplayers
 		config.set("maxPlayers", maxPlayers);
-		// save minplayers
 		config.set("minPlayers", minPlayers);
-		// save vote percent
 		config.set("votePercent", votesPercent);
-		// save timelimit
 		config.set("timelimit", timelimit);
-		// save countdown
 		config.set("countdown", countdown);
-		// save teleport destination
 		config.set("teleportto", teleportDest.toString());
-		// save damage enabled
 		config.set("damageenabled", damageEnabled.toString());
-		// save kits enabled
 		config.set("enableKits", kitsEnabled);
+		config.set("testmode", testmode);
 		config.set("regenerationdelay", regenerationdelay);
 		config.set("joinfee", fee);
 		config.set("currency", currency);
-		// save rewards
 		rewards.saveToConfig(config);
 		try {
 			config.save(arena.getArenaFile());
@@ -352,37 +344,23 @@ public class StructureManager {
 
 	public void loadFromConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(arena.getArenaFile());
-		// load arena world location
 		world = config.getString("world", null);
-		// load arena bounds
 		p1 = config.getVector("p1", null);
 		p2 = config.getVector("p2", null);
-		// load gamelevel destroy delay
 		gameleveldestroydelay = config.getInt("gameleveldestroydelay", gameleveldestroydelay);
-		// load loselevel
 		loselevel.loadFromConfig(config);
-		// load spawnpoint
 		spawnpoint = config.getVector("spawnpoint", null);
-		// load spectators spawn
 		spectatorspawn = config.getVector("spectatorspawn", null);
-		// load maxplayers
 		maxPlayers = config.getInt("maxPlayers", maxPlayers);
-		// load minplayers
 		minPlayers = config.getInt("minPlayers", minPlayers);
-		// load vote percent
 		votesPercent = config.getDouble("votePercent", votesPercent);
-		// load timelimit
 		timelimit = config.getInt("timelimit", timelimit);
-		// load countdown
 		countdown = config.getInt("countdown", countdown);
-		// load teleport destination
 		teleportDest = TeleportDestination.valueOf(config.getString("teleportto", TeleportDestination.PREVIOUS.toString()));
-		// load damage enabled
 		damageEnabled = DamageEnabled.valueOf(config.getString("damageenabled", DamageEnabled.NO.toString()));
-		// load rewards
 		rewards.loadFromConfig(config);
-		// kits enabled
 		kitsEnabled = config.getBoolean("enableKits");
+		testmode = config.getBoolean("testmode");
 		regenerationdelay = config.getInt("regenerationdelay", regenerationdelay);
 		fee = config.getDouble("joinfee", fee);
 		currency = config.getString("currency", null);

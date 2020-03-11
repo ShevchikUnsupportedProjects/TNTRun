@@ -133,6 +133,9 @@ public class GameCommands implements CommandExecutor {
 					}
 				}
 
+				if (arena.getStructureManager().isTestMode()) {
+					player.sendMessage(ChatColor.GOLD + "Test Mode " + ChatColor.WHITE + "- " + ChatColor.RED + "Enabled");
+				}
 				return true;
 			}
 			StringBuilder message = new StringBuilder(200);

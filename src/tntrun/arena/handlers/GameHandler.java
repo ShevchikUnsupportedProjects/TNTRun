@@ -230,15 +230,19 @@ public class GameHandler {
 		// remove block under player feet
 		arena.getStructureManager().getGameZone().destroyBlock(plufloc);
 		// check for win
-		if (arena.getPlayersManager().getPlayersCount() == 1) {
+		if (arena.getPlayersManager().getPlayersCount() == 1  && !arena.getStructureManager().isTestMode()) {
 			// last player wins
 			startEnding(player);
 			return;
 		}
 		// check for lose
 		if (arena.getStructureManager().getLoseLevel().isLooseLocation(plloc)) {
+			if (arena.getPlayersManager().getPlayersCount() == 1) {
+				// must be test mode
+				startEnding(player);
+				return;
+			}
 			arena.getPlayerHandler().dispatchPlayer(player);
-			return;
 		}
 	}
 
