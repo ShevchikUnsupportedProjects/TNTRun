@@ -111,6 +111,7 @@ MySQL:
   name: tntrun
   user: root
   pass: password
+  useSSL: false
 signs:
   prefix: '&6&lTNTRun'
   join: '[Join]'
