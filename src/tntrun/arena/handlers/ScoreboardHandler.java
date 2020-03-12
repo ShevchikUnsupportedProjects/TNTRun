@@ -140,7 +140,7 @@ public class ScoreboardHandler {
 			s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
 			s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
 			s = s.replace("{LOST}", arena.getGameHandler().lostPlayers + "");
-			s = s.replace("{LIMIT}", arena.getGameHandler().getTimeLimit()/20 + "");
+			s = s.replace("{LIMIT}", arena.getGameHandler().getTimeRemaining()/20 + "");
 			s = s.replace("{DJ}", arena.getPlayerHandler().getDoubleJumps(player) + "");
 			o.getScore(s).setScore(size);
 			size--;

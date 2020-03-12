@@ -150,7 +150,7 @@ public class GameHandler {
 	}
 
 	// main arena handler
-	private int timelimit;
+	private int timeremaining;
 	private int arenahandler;
 	private boolean forceStartByCmd;
 
@@ -178,7 +178,7 @@ public class GameHandler {
 			arena.getPlayerHandler().allocateKits();
 		}
 		arena.getScoreboardHandler().createPlayingScoreBoard();
-		timelimit = arena.getStructureManager().getTimeLimit() * 20;
+		timeremaining = arena.getStructureManager().getTimeLimit() * 20;
 		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			@Override
 			public void run() {
@@ -188,21 +188,21 @@ public class GameHandler {
 					return;
 				}
 				// kick all players if time is out
-				if (timelimit < 0) {
+				if (timeremaining < 0) {
 					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 						arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
 					}
 					return;
 				}
 				// handle players
-				double progress = (double) timelimit / (arena.getStructureManager().getTimeLimit() * 20);
-				Bars.setBar(arena, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, progress, plugin);
+				double progress = (double) timeremaining / (arena.getStructureManager().getTimeLimit() * 20);
+				Bars.setBar(arena, Bars.playing, arena.getPlayersManager().getPlayersCount(), timeremaining / 20, progress, plugin);
 				for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 					// Xp level
-					player.setLevel(timelimit/20);
+					player.setLevel(timeremaining/20);
 					handlePlayer(player);
 				}
-				timelimit--;
+				timeremaining--;
 			}
 		}, 0, 1);
 	}
@@ -472,8 +472,8 @@ public class GameHandler {
 		return forceStartByCmd;
 	}
 
-	public int getTimeLimit() {
-		return timelimit;
+	public int getTimeRemaining() {
+		return timeremaining;
 	}
 
 }
