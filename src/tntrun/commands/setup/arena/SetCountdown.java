@@ -40,12 +40,12 @@ public class SetCountdown implements CommandHandlerInterface {
 				Messages.sendMessage(player, Messages.trprefix + Messages.arenanotdisabled.replace("{ARENA}", args[0]));
 				return true;
 			}
-			if (Utils.isNumber(args[1])) {
-				arena.getStructureManager().setCountdown(Integer.parseInt(args[1]));
-				Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 Countdown set to &6" + args[1] + "&7 seconds");
-			} else {
-				Messages.sendMessage(player, Messages.trprefix + "&c Countdown amount must be an integer");
+			if (!Utils.isNumber(args[1]) || Integer.parseInt(args[1]) <= 0) {
+				Messages.sendMessage(player, Messages.trprefix + "&c Countdown must be a positive integer");
+				return true;
 			}
+			arena.getStructureManager().setCountdown(Integer.parseInt(args[1]));
+			Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 Countdown set to &6" + args[1] + "&7 seconds");
 		} else {
 			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[0]));
 		}
