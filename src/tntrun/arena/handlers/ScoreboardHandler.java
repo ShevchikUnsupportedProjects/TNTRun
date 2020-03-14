@@ -19,6 +19,7 @@ package tntrun.arena.handlers;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,6 +28,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.utils.FormattingCodesParser;
@@ -87,6 +89,7 @@ public class ScoreboardHandler {
 				s = s.replace("{COUNT}", arena.getGameHandler().count + "");
 				s = s.replace("{VOTES}", getVotesRequired(arena) + "");
 				s = s.replace("{DJ}", arena.getPlayerHandler().getDoubleJumps(player) + "");
+				s = getPlaceholderString(s, player);
 				o.getScore(s).setScore(size);
 				size--;
 			}
@@ -95,6 +98,18 @@ public class ScoreboardHandler {
 		} catch (NullPointerException ex) {
 
 		}
+	}
+
+	private boolean isPlaceholderString(String s) {
+		return StringUtils.substringBetween(s, "%") != null && !StringUtils.substringBetween(s, "%").isEmpty();
+	}
+
+	private String getPlaceholderString(String s, Player player) {
+		if (!plugin.isPlaceholderAPI() || !isPlaceholderString(s)) {
+			return s;
+		}
+		String[] a = s.split("%");
+		return a[0] + PlaceholderAPI.setPlaceholders(player, "%" + a[1] + "%");
 	}
 
 	private void resetScoreboard(Player player) {
@@ -142,6 +157,7 @@ public class ScoreboardHandler {
 			s = s.replace("{LOST}", arena.getGameHandler().lostPlayers + "");
 			s = s.replace("{LIMIT}", arena.getGameHandler().getTimeRemaining()/20 + "");
 			s = s.replace("{DJ}", arena.getPlayerHandler().getDoubleJumps(player) + "");
+			s = getPlaceholderString(s, player);
 			o.getScore(s).setScore(size);
 			size--;
 		}
