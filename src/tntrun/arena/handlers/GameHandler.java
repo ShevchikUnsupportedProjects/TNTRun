@@ -153,11 +153,22 @@ public class GameHandler {
 	private int timeremaining;
 	private int arenahandler;
 	private boolean forceStartByCmd;
+	private boolean hasTimeLimit;
 
 	public void startArena() {
 		arena.getStatusManager().setRunning(true);
-		String message = Messages.trprefix + Messages.arenastarted;
-		message = message.replace("{TIMELIMIT}", String.valueOf(arena.getStructureManager().getTimeLimit()));
+
+		String message = Messages.trprefix;
+		int limit = arena.getStructureManager().getTimeLimit();
+		if (limit != 0) {
+			hasTimeLimit = true;
+			message = message + Messages.arenastarted;
+			message = message.replace("{TIMELIMIT}", String.valueOf(arena.getStructureManager().getTimeLimit()));
+		} else {
+			hasTimeLimit = false;
+			message = message + Messages.arenanolimit;
+		}
+
 		for (Player player : arena.getPlayersManager().getPlayers()) {
 			player.closeInventory();
 			if (plugin.useStats()) {
@@ -177,8 +188,8 @@ public class GameHandler {
 		if (arena.getStructureManager().isKitsEnabled()) {
 			arena.getPlayerHandler().allocateKits();
 		}
+		timeremaining = limit * 20;
 		arena.getScoreboardHandler().createPlayingScoreBoard();
-		timeremaining = arena.getStructureManager().getTimeLimit() * 20;
 		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
 			@Override
 			public void run() {
@@ -188,18 +199,24 @@ public class GameHandler {
 					return;
 				}
 				// kick all players if time is out
-				if (timeremaining < 0) {
+				if (hasTimeLimit && timeremaining < 0) {
 					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 						arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
 					}
 					return;
 				}
 				// handle players
-				double progress = (double) timeremaining / (arena.getStructureManager().getTimeLimit() * 20);
-				Bars.setBar(arena, Bars.playing, arena.getPlayersManager().getPlayersCount(), timeremaining / 20, progress, plugin);
+				double progress = 1.0;
+				int seconds = 0;
+				if (hasTimeLimit) {
+					progress = (double) timeremaining / (arena.getStructureManager().getTimeLimit() * 20);
+					seconds = timeremaining / 20;
+				}
+				//debug
+				plugin.getLogger().info("setting bar, seconds = " + seconds);
+				Bars.setBar(arena, Bars.playing, arena.getPlayersManager().getPlayersCount(), seconds, progress, plugin);
 				for (Player player : arena.getPlayersManager().getPlayersCopy()) {
-					// Xp level
-					player.setLevel(timeremaining/20);
+					player.setLevel(seconds);
 					handlePlayer(player);
 				}
 				timeremaining--;
@@ -473,7 +490,7 @@ public class GameHandler {
 	}
 
 	public int getTimeRemaining() {
-		return timeremaining;
+		return hasTimeLimit ? timeremaining : 0;
 	}
 
 }
