@@ -330,7 +330,7 @@ public class PlayerHandler {
 		plugin.pdata.restorePlayerArmor(player);
 		plugin.pdata.restorePlayerInventory(player);
 		plugin.pdata.restorePlayerLevel(player);
-		player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, 80, true), true);
+		player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, 80, true));
 
 		if (plugin.isBungeecord()) {
 			plugin.getBungeeHandler().connectToHub(player);
