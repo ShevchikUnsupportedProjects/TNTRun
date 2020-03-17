@@ -54,7 +54,7 @@ public class ConsoleCommands implements CommandExecutor {
 				arena.getStatusManager().disableArena();
 				sender.sendMessage("Arena disabled");
 			} else {
-				Messages.sendMessage(sender, Messages.trprefix + Messages.arenanotexist);
+				Messages.sendMessage(sender, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[1]));
 			}
 			return true;
 		}
@@ -72,7 +72,7 @@ public class ConsoleCommands implements CommandExecutor {
 					}
 				}
 			} else {
-				Messages.sendMessage(sender, Messages.trprefix + Messages.arenanotexist);
+				Messages.sendMessage(sender, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[1]));
 			}
 			return true;
 		}
@@ -122,6 +122,9 @@ public class ConsoleCommands implements CommandExecutor {
 					arena.getGameHandler().forceStartByCommand();
 					return true;
 				}
+			} else {
+				Messages.sendMessage(sender, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[1]));
+				return true;
 			}
 		}
 		// help
@@ -156,6 +159,7 @@ public class ConsoleCommands implements CommandExecutor {
 		Messages.sendMessage(sender, Messages.trprefix + "trconsole info");
 		Messages.sendMessage(sender, Messages.trprefix + "trconsole enable {arena}");
 		Messages.sendMessage(sender, Messages.trprefix + "trconsole disable {arena}");
+		Messages.sendMessage(sender, Messages.trprefix + "trconsole start {arena}");
 		Messages.sendMessage(sender, Messages.trprefix + "trconsole reloadconfig");
 		Messages.sendMessage(sender, Messages.trprefix + "trconsole reloadmessages");
 		Messages.sendMessage(sender, Messages.trprefix + "trconsole reloadbars");
