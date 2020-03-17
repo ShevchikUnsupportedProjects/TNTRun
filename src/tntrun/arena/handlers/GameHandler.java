@@ -205,15 +205,12 @@ public class GameHandler {
 					}
 					return;
 				}
-				// handle players
 				double progress = 1.0;
 				int seconds = 0;
 				if (hasTimeLimit) {
 					progress = (double) timeremaining / (arena.getStructureManager().getTimeLimit() * 20);
-					seconds = timeremaining / 20;
+					seconds = (int) Math.ceil((double)timeremaining / 20);
 				}
-				//debug
-				plugin.getLogger().info("setting bar, seconds = " + seconds);
 				Bars.setBar(arena, Bars.playing, arena.getPlayersManager().getPlayersCount(), seconds, progress, plugin);
 				for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 					player.setLevel(seconds);

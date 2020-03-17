@@ -140,8 +140,6 @@ public class ScoreboardHandler {
 			public void run() {
 				for (Player player : arena.getPlayersManager().getPlayers()) {
 					updatePlayingScoreboard(player);
-					//debug
-					plugin.getLogger().info("updating scoreboard, " + arena.getGameHandler().getTimeRemaining()/20);
 				}
 			}
 		}, 0, 20);
