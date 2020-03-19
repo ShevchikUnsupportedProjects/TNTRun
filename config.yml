@@ -63,25 +63,31 @@ items:
     use: true
     material: DIAMOND
     name: '&2&lVote'
+    slot: 0
   info:
     use: true
     material: EMERALD
     name: '&2&lInfo'
+    slot: 1
   shop:
     use: true
     material: NETHER_STAR
     name: '&2&lShop'
+    slot: 2
   stats:
     use: true
     material: REDSTONE
     name: '&2&lStats'
+    slot: 3
   leave:
     material: GREEN_BED
     name: '&2&lLeave'
+    slot: 8
   heads:
     use: true
     material: GLOWSTONE_DUST
     name: '&e&lHeadsPlus'
+    slot: 4
 scoreboard:
   header: '&6&lTNTRUN'
   displaydoublejumps: false

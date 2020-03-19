@@ -399,52 +399,52 @@ public class PlayerHandler {
 		return false;
 	}
 
-	private void addInfo(Player p) {
+	private void addInfo(Player player) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.info.material")));	     
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.info.name")));
 	    item.setItemMeta(meta);
 
-	    p.getInventory().addItem(item);
+	    player.getInventory().setItem(plugin.getConfig().getInt("items.info.slot", 1), item);
 	}
 
-	private void addVote(Player p) {
+	private void addVote(Player player) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.vote.material")));     
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.vote.name")));
 	    item.setItemMeta(meta);
 
-	    p.getInventory().addItem(item);
+	    player.getInventory().setItem(plugin.getConfig().getInt("items.vote.slot", 0), item);
 	}
 
-	private void addShop(Player p) {
+	private void addShop(Player player) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.shop.material"))); 
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.shop.name")));
 	    item.setItemMeta(meta);
 	    
-	    p.getInventory().addItem(item);
+	    player.getInventory().setItem(plugin.getConfig().getInt("items.shop.slot", 2), item);
 	}
 
-	private void addStats(Player p) {
+	private void addStats(Player player) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.stats.name")));
 	    item.setItemMeta(meta);
 
-	    p.getInventory().addItem(item);
+	    player.getInventory().setItem(plugin.getConfig().getInt("items.stats.slot", 3), item);
 	}
 
-	private void addHeads(Player p) {
+	private void addHeads(Player player) {
 		ItemStack item = new ItemStack(Material.getMaterial(plugin.getConfig().getString("items.heads.material")));
 	    ItemMeta meta = item.getItemMeta();
 	    meta.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.heads.name")));
 	    item.setItemMeta(meta);
 
-	    p.getInventory().addItem(item);
+	    player.getInventory().setItem(plugin.getConfig().getInt("items.heads.slot", 4), item);
 	}
 
-	private void addLeaveItem(Player p) {
+	private void addLeaveItem(Player player) {
 		// Old config files will have BED as leave item which is no longer valid on 1.13. Update any invalid material to valid one.
 		Material leaveItem = Material.getMaterial(plugin.getConfig().getString("items.leave.material"));
 		if (leaveItem == null) {
@@ -457,7 +457,7 @@ public class PlayerHandler {
 		im.setDisplayName(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("items.leave.name")));
 		item.setItemMeta(im);
 
-		p.getInventory().setItem(8, item);
+		player.getInventory().setItem(plugin.getConfig().getInt("items.leave.slot", 8), item);
 	}
 
 	public int getVotesCast() {
