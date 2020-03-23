@@ -23,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -50,8 +51,8 @@ public class Stats {
 	private String lbplaceholdername;
 	private String lbplaceholdervalue;
 
-	private static HashMap<String, Integer> pmap = new HashMap<String, Integer>();
-	private static HashMap<String, Integer> wmap = new HashMap<String, Integer>();
+	private static Map<String, Integer> pmap = new HashMap<String, Integer>();
+	private static Map<String, Integer> wmap = new HashMap<String, Integer>();
 
 	public Stats(TNTRun plugin) {
 		this.plugin = plugin;
@@ -247,7 +248,7 @@ public class Stats {
 		}
 	}
 
-	public HashMap<String, Integer> getWinMap() {
+	public Map<String, Integer> getWinMap() {
 		return wmap;
 	}
 
@@ -303,16 +304,35 @@ public class Stats {
 	}
 
 	/**
-	 * Returns the player (and wins) occupying the requested leaderboard position.
+	 * Returns the player name or score occupying the requested leader board position for the given type.
+	 * Type can be 'wins', 'played' or 'losses'.
 	 * @param rank
-	 * @return "[player] : [wins]"
+	 * @param type
+	 * @param item
+	 * @return
 	 */
-	public String getLeaderboardPosition(Integer rank) {
-		if (rank > wmap.size()) {
+	public String getLeaderboardPosition(Integer rank, String type, String item) {
+		Map<String, Integer> workingMap = new HashMap<String, Integer>();
+
+		switch(type.toLowerCase()) {
+		case "wins":
+			workingMap.putAll(wmap);
+			break;
+		case "played":
+			workingMap.putAll(pmap);
+			break;
+		case "losses":
+			workingMap.putAll(getLossMap());
+			break;
+		default:
+			return null;
+		}
+
+		if (rank > workingMap.size()) {
 			return null;
 		}
 		Optional<Entry<String, Integer>> opt = Streams.findLast(
-				wmap.entrySet().stream()
+				workingMap.entrySet().stream()
 				.sorted(Entry.comparingByValue(Comparator.reverseOrder()))
 				.limit(rank));
 		opt.ifPresent(x -> {
@@ -325,6 +345,23 @@ public class Stats {
 			}
 			lbplaceholdervalue = String.valueOf(opt.get().getValue());
 		});
-		return lbplaceholdername + " : " + lbplaceholdervalue;
+		return item.equalsIgnoreCase("player") ? lbplaceholdername : lbplaceholdervalue;
+	}
+
+	/**
+	 * Creates a map of player names and number of losses, calculated as the difference between
+	 * the number of games played and the number of wins.
+	 * @return
+	 */
+	private Map<String, Integer> getLossMap() {
+		Map<String, Integer> lmap = new HashMap<String, Integer>();
+		pmap.entrySet().forEach(e -> {
+			int wins = 0;
+			if (wmap.containsKey(e.getKey())) {
+				wins = wmap.get(e.getKey());
+			}
+			lmap.put(e.getKey(), e.getValue() - wins);
+		});
+		return lmap;
 	}
 }

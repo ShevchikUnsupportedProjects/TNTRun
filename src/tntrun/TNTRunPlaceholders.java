@@ -17,6 +17,8 @@
 
 package tntrun;
 
+import java.util.stream.Stream;
+
 import org.bukkit.entity.Player;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -90,20 +92,34 @@ public class TNTRunPlaceholders extends PlaceholderExpansion {
 			return arena.getStructureManager().isCurrencyEnabled() ? arena.getStructureManager().getCurrency().toString() : null;
 
 		} else if (identifier.startsWith("leaderboard")) {
+			if (!isValidIdentifier(identifier)) {
+				return null;
+			}
 			String[] temp = identifier.split("_");
-			if (temp.length != 2) {
-				return null;
-			}
-			if (!Utils.isNumber(temp[1])) {
-				return null;
-			}
-			int pos = Integer.parseInt(temp[1]);
-			if (pos < 1 || pos > 10) {
-				return null;
-			}
-			return plugin.stats.getLeaderboardPosition(pos);
+			String type = temp[1];
+			String entry = temp[2];
+			int pos = Integer.parseInt(temp[3]);
+
+			return entry.equalsIgnoreCase("player") ? plugin.stats.getLeaderboardPosition(pos, type, entry) : plugin.stats.getLeaderboardPosition(pos, type, entry);
+
 		}
 		return null;
 	}
 
+	private boolean isValidIdentifier(String identifier) {
+		String[] temp = identifier.split("_");
+		if (temp.length != 4) {
+			return false;
+		}
+		if (!Utils.isNumber(temp[3]) || Integer.parseInt(temp[3]) < 1) {
+			return false;
+		}
+		if (!temp[2].equalsIgnoreCase("player") && !temp[2].equalsIgnoreCase("score")) {
+			return false;
+		}
+		if (!Stream.of("wins", "played", "losses").anyMatch(temp[1]::equalsIgnoreCase)) {
+			return false;
+		}
+		return true;
+	}
 }
