@@ -113,6 +113,7 @@ public class TNTRun extends JavaPlugin {
 		sound = new SoundHandler(this);
 
 		if (isBungeecord()) {
+			log.info("Bungeecord is enabled");
 			bungeeHandler = new BungeeHandler(this);
 		}
 
@@ -319,6 +320,7 @@ public class TNTRun extends JavaPlugin {
 
 					if (isBungeecord()) {
 						bungeeArena = arena;
+						log.info("Bungeecord arena is: " + bungeeArena.getArenaName());
 						break;
 					}
 				}
