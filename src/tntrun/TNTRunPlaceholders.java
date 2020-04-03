@@ -31,11 +31,18 @@ public class TNTRunPlaceholders extends PlaceholderExpansion {
 	public TNTRunPlaceholders(TNTRun plugin) {
 		this.plugin = plugin;
 	}
+
 	@Override
 	public boolean canRegister() {
 		return true;
 	}
-    
+
+	@Override
+	public boolean persist(){
+		return true;
+	}
+
+	@Override
 	public String getAuthor() {
 		return plugin.getDescription().getAuthors().toString();
 	}
