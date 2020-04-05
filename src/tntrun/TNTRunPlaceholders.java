@@ -87,10 +87,7 @@ public class TNTRunPlaceholders extends PlaceholderExpansion {
 				return null;
 			}
 			Arena arena = plugin.amanager.getArenaByName(temp[2]);
-			if (arena == null) {
-				return null;
-			}
-			return String.valueOf(arena.getPlayersManager().getPlayersCount());
+			return arena != null ? String.valueOf(arena.getPlayersManager().getPlayersCount()) : null;
 
 		} else if (identifier.equals("doublejumps")) {
 			return String.valueOf(plugin.getConfig().getInt("doublejumps." + p.getName(), 0));
