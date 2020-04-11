@@ -186,12 +186,12 @@ public class Messages {
 		arenavehicle = config.getString("arenavehicle", arenavehicle);
 		arenajoined = config.getString("arenajoined", arenajoined);
 		arenadisabling = config.getString("arenadisabling", arenadisabling);
-		arenastarting = config.getString("arenastarting ", arenastarting);
+		arenastarting = config.getString("arenastarting", arenastarting);
 		signcreate = config.getString("signcreate", signcreate);
 		signremove = config.getString("signremove", signremove);
 		arenafee = config.getString("arenafee", arenafee);
 		arenanofee = config.getString("arenanofee", arenanofee);
-		arenawaiting = config.getString("arenawaiting ", arenawaiting);
+		arenawaiting = config.getString("arenawaiting", arenawaiting);
 		playerscountinarena = config.getString("playerscountinarena", playerscountinarena);
 		limitreached = config.getString("limitreached", limitreached);
 		playerjoinedtoplayer = config.getString("playerjoinedtoplayer", playerjoinedtoplayer);
