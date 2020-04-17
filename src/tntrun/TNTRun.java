@@ -119,7 +119,7 @@ public class TNTRun extends JavaPlugin {
 
 		if (getConfig().getBoolean("special.Metrics", true)) {
 			log.info("Attempting to start metrics (bStats)...");
-			new Metrics(this);
+			new Metrics(this, 2192);
 		}
 
 		setStorage();
