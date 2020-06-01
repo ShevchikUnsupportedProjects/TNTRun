@@ -95,6 +95,9 @@ public class JoinMenu {
 		}
 		for (int i = 0; i < size; i++) {
 			if (inv.getItem(i) == null) {
+				ItemMeta im = is.getItemMeta();
+				im.setDisplayName(ChatColor.RED + "");
+				is.setItemMeta(im);
 				inv.setItem(i, is);
 			}
 		}
