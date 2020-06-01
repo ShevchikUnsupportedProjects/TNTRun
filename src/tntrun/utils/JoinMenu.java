@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -31,6 +30,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.google.common.base.Enums;
 
+import net.md_5.bungee.api.ChatColor;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
@@ -66,7 +66,7 @@ public class JoinMenu {
 
 		for (Arena arena : arenas) {
 			lores = new ArrayList<String>();
-			im.setDisplayName(ChatColor.GREEN + arena.getArenaName());
+			im.setDisplayName(FormattingCodesParser.parseFormattingCodes(Messages.menuarenaname).replace("{ARENA}", arena.getArenaName()));
 
 			lores.add(FormattingCodesParser.parseFormattingCodes(Messages.menutext) + " " + getArenaCount(arena));
 			if (arena.getStructureManager().hasFee()) {

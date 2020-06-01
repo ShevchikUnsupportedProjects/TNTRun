@@ -32,6 +32,7 @@ public class Messages {
 
 	public static String trprefix = "&7[&6TNTRun_reloaded&7]";
 	public static String menutitle = "&1TNTRun_reloaded Arenas";
+	public static String menuarenaname = "&a{ARENA}";
 	public static String menutext = "&5Players:&6";
 	public static String menufee = "&5Join Fee: &6{FEE}";
 	public static String nopermission = "&c You don't have permission to do this";
@@ -167,6 +168,7 @@ public class Messages {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(messageconfig);
 		trprefix = config.getString("trprefix", trprefix);
 		menutitle = config.getString("menutitle", menutitle);
+		menuarenaname = config.getString("menuarenaname", menuarenaname);
 		menutext = config.getString("menutext", menutext);
 		menufee = config.getString("menufee", menufee);
 		nopermission = config.getString("nopermission", nopermission);
@@ -283,6 +285,7 @@ public class Messages {
 		
 		config.set("trprefix", trprefix);
 		config.set("menutitle",  menutitle);
+		config.set("menuarenaname", menuarenaname);
 		config.set("menutext",  menutext);
 		config.set("menufee",  menufee);
 		config.set("nopermission", nopermission);
