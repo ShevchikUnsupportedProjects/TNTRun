@@ -17,6 +17,7 @@
 
 package tntrun.eventhandler;
 
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -83,10 +84,17 @@ public class PlayerStatusHandler implements Listener {
 			Player player = (Player) e.getEntity();
 			Player damager = (Player) e.getDamager();
 			Arena arena = plugin.amanager.getPlayerArena(player.getName());
-			if (arena != null) {
-				if (arena.getPlayersManager().isSpectator(player.getName()) || arena.getPlayersManager().isSpectator(damager.getName())) {
+			if (arena == null) {
+				return;
+			}
+			if (!arena.getStructureManager().getDamageEnabled().toString().equals("NO")) {
+				if (damager.getInventory().getItemInMainHand().getType() == Material.AIR && !arena.getStructureManager().isPunchDamage()) {
 					e.setCancelled(true);
+					return;
 				}
+			}
+			if (arena.getPlayersManager().isSpectator(player.getName()) || arena.getPlayersManager().isSpectator(damager.getName())) {
+				e.setCancelled(true);
 			}
 		}
 	}

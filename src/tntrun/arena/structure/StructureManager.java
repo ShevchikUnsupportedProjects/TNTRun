@@ -55,6 +55,7 @@ public class StructureManager {
 	private Rewards rewards = new Rewards();
 	private TeleportDestination teleportDest = TeleportDestination.PREVIOUS;
 	private DamageEnabled damageEnabled = DamageEnabled.NO;
+	private boolean punchDamage = true;
 	private boolean kitsEnabled = false;
 	private boolean testmode = false;
 	private int regenerationdelay = 60;
@@ -152,6 +153,10 @@ public class StructureManager {
 
 	public boolean isKitsEnabled() {
 		return kitsEnabled;
+	}
+
+	public boolean isPunchDamage() {
+		return punchDamage;
 	}
 
 	public boolean isTestMode() {
@@ -339,6 +344,7 @@ public class StructureManager {
 		config.set("teleportto", teleportDest.toString());
 		config.set("damageenabled", damageEnabled.toString());
 		config.set("enableKits", kitsEnabled);
+		config.set("punchDamage", punchDamage);
 		config.set("testmode", testmode);
 		config.set("regenerationdelay", regenerationdelay);
 		config.set("joinfee", fee);
@@ -370,6 +376,7 @@ public class StructureManager {
 		damageEnabled = DamageEnabled.valueOf(config.getString("damageenabled", DamageEnabled.NO.toString()));
 		rewards.loadFromConfig(config);
 		kitsEnabled = config.getBoolean("enableKits");
+		punchDamage = config.getBoolean("punchDamage", true);
 		testmode = config.getBoolean("testmode");
 		regenerationdelay = config.getInt("regenerationdelay", regenerationdelay);
 		fee = config.getDouble("joinfee", fee);
