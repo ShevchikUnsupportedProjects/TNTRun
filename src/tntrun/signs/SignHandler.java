@@ -85,8 +85,8 @@ public class SignHandler implements Listener {
 		}
 		Sign sign = (Sign) e.getClickedBlock().getState();
 		if (sign.getLine(0).equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")))) {
-			String line = sign.getLine(1).toLowerCase();
-			if (line.equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.join")))) {
+			String line = ChatColor.stripColor(sign.getLine(1).toLowerCase());
+			if (line.equalsIgnoreCase(ChatColor.stripColor(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.join"))))) {
 				line = "[join]";
 			}
 			if (signs.containsKey(line)) {
