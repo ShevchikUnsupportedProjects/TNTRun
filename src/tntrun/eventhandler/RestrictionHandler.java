@@ -263,16 +263,17 @@ public class RestrictionHandler implements Listener {
 		if (plugin.isFile()) {
 			return;
 		}
+		final String table = plugin.getConfig().getString("MySQL.table", "stats");
 		new BukkitRunnable() {
 			@Override
 			public void run() {
 				if (Bukkit.getOnlineMode()) {
-					plugin.mysql.query("INSERT IGNORE INTO `stats` (`username`, `played`, "
+					plugin.mysql.query("INSERT IGNORE INTO `" + table + "` (`username`, `played`, "
 							+ "`wins`, `looses`) VALUES "
 							+ "('" + player.getUniqueId().toString()
 							+ "', '0', '0', '0');");
 				} else {
-					plugin.mysql.query("INSERT IGNORE INTO `stats` (`username`, `played`, "
+					plugin.mysql.query("INSERT IGNORE INTO `" + table + "` (`username`, `played`, "
 							+ "`wins`, `looses`) VALUES "
 							+ "('" + player.getName()
 							+ "', '0', '0', '0');");

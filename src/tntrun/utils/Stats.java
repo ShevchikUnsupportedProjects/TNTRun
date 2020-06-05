@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 import java.util.Map.Entry;
 import java.util.Optional;
 
@@ -75,17 +76,16 @@ public class Stats {
 			getStatsFromFile();
 			return;
 		}
+		final String table = plugin.getConfig().getString("MySQL.table");
 		if (plugin.mysql.isConnected()) {
-			getWinsFromDB();
-			getPlayedFromDB();
+			getStatsFromDB(table);
 			return;
 		}
 		new BukkitRunnable() {
 			@Override
 			public void run() {
 				if (plugin.mysql.isConnected()) {
-					getWinsFromDB();
-					getPlayedFromDB();
+					getStatsFromDB(table);
 				} else {
 					plugin.setUseStats(false);
 					plugin.getLogger().info("Failure connecting to MySQL database, disabling stats");
@@ -200,52 +200,35 @@ public class Stats {
 		}
 	}
 
-	private void getWinsFromDB() {
-		try {
-			ResultSet rs;
+	private void getStatsFromDB(String table) {
+		Stream.of("wins", "played").forEach(stat -> {
+			Map<String, Integer> workingMap = new HashMap<String, Integer>();
+			try {
+				ResultSet rs;
+				rs = plugin.mysql.query("SELECT * FROM `" + table + "` ORDER BY " + stat + " DESC LIMIT 99999").getResultSet();
 
-			rs = plugin.mysql.query("SELECT * FROM `stats` ORDER BY wins DESC LIMIT 99999").getResultSet();
+				while (rs.next()) {
+					String playerName = rs.getString("username");
 
-			while (rs.next()) {
-				String playerName = rs.getString("username");
-
-				// check if valid uuid
-				if (Bukkit.getOnlineMode()) {
-					if (!isValidUuid(playerName)) {
+					// check if valid uuid
+					if (Bukkit.getOnlineMode()) {
+						if (!isValidUuid(playerName)) {
+							continue;
+						}
+					} else if (isValidUuid(playerName)) {
 						continue;
 					}
-				} else if (isValidUuid(playerName)) {
-					continue;
+					workingMap.put(playerName, rs.getInt(stat));
 				}
-				wmap.put(playerName, rs.getInt("wins"));
-			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
-	}
-
-	private void getPlayedFromDB() {
-		try {
-			ResultSet rs;
-
-			rs = plugin.mysql.query("SELECT * FROM `stats` ORDER BY played DESC LIMIT 99999").getResultSet();
-
-			while (rs.next()) {
-				String playerName = rs.getString("username");
-
-				// check if valid uuid
-				if (Bukkit.getOnlineMode()) {
-					if (!isValidUuid(playerName)) {
-						continue;
-					}
-				} else if (isValidUuid(playerName)) {
-					continue;
+				if (stat.equalsIgnoreCase("wins")) {
+					wmap.putAll(workingMap);
+				} else {
+					pmap.putAll(workingMap);
 				}
-				pmap.put(playerName, rs.getInt("played"));
+			} catch (SQLException ex) {
+				ex.printStackTrace();
 			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
+		});
 	}
 
 	public Map<String, Integer> getWinMap() {
@@ -290,10 +273,11 @@ public class Stats {
 	}
 
 	private void updateDB(String statname, String player, Integer value) {
+		final String table = plugin.getConfig().getString("MySQL.table");
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				plugin.mysql.query("UPDATE `stats` SET `" + statname
+				plugin.mysql.query("UPDATE `" + table + "` SET `" + statname
 						+ "`='" + value + "' WHERE `username`='" + player + "';");
 			}
 		}.runTaskAsynchronously(plugin);

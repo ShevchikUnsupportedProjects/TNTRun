@@ -116,6 +116,7 @@ MySQL:
   host: host
   port: 12345
   name: tntrun
+  table: stats
   user: root
   pass: password
   useSSL: false
