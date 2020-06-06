@@ -41,22 +41,24 @@ public class JoinSign implements SignType {
 
 	@Override
 	public void handleCreation(SignChangeEvent e) {
-		final Arena arena = plugin.amanager.getArenaByName(ChatColor.stripColor(e.getLine(2)));
+		String arenaname = ChatColor.stripColor(FormattingCodesParser.parseFormattingCodes(e.getLine(2)));
+		final Arena arena = plugin.amanager.getArenaByName(arenaname);
 		if (arena != null) {
 			e.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
 			e.setLine(1, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.join")));
+			e.setLine(2, FormattingCodesParser.parseFormattingCodes(e.getLine(2)));
 			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signcreate);
-			plugin.signEditor.addSign(e.getBlock(), arena.getArenaName());
+			plugin.signEditor.addSign(e.getBlock(), arenaname);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
 				new Runnable() {
 					@Override
 					public void run() {
-						plugin.signEditor.modifySigns(arena.getArenaName());
+						plugin.signEditor.modifySigns(arenaname);
 					}
 				}
 			);
 		} else {
-			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.arenanotexist);
+			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", arenaname));
 			e.setCancelled(true);
 			e.getBlock().breakNaturally();
 		}
@@ -69,6 +71,8 @@ public class JoinSign implements SignType {
 		if (arena != null) {
 			if (arena.getPlayerHandler().checkJoin(player)) {
 				arena.getPlayerHandler().spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
+				//attempt to cache the sign location as a fix for lost signinfo
+				plugin.signEditor.addSign(e.getClickedBlock(), arena.getArenaName());
 			}
 			e.setCancelled(true);
 		} else {
