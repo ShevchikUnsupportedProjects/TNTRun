@@ -37,15 +37,15 @@ public class SetupTabCompleter implements TabCompleter {
 		if (!(sender instanceof Player)) {
 			return null;
 		}
-		
+
 		if (!sender.hasPermission("tntrun.setup")) {
 			return null;
 		}
-		
+
 		List<String> list = new ArrayList<String>();
 		List<String> auto = new ArrayList<String>();
 		List<String> arenacommands = new ArrayList<String>();
-		
+
 		arenacommands.add("setarena");
 		arenacommands.add("setloselevel");
 		arenacommands.add("setspawn");
@@ -70,7 +70,7 @@ public class SetupTabCompleter implements TabCompleter {
 		arenacommands.add("setdamage");
 		arenacommands.add("setfee");
 		arenacommands.add("setcurrency");
-		
+
 		if (args.length == 1) {
 			list.add("help");
 			list.add("create");  //because it doesn't take an existing arena name
@@ -83,9 +83,12 @@ public class SetupTabCompleter implements TabCompleter {
 			list.add("addkit");
 			list.add("deletekit");
 			list.add("deletelobby");
-			
+			list.add("setp1");
+			list.add("setp2");
+			list.add("clear");
+
 			list.addAll(arenacommands);
-			
+
 		} else if (args.length == 2) {
 			if (arenacommands.contains(args[0])) {
 				for (Arena arena : TNTRun.getInstance().amanager.getArenas()) {
@@ -99,7 +102,7 @@ public class SetupTabCompleter implements TabCompleter {
 			} else if (args[0].equalsIgnoreCase("deletekit")) {
 				list.addAll(TNTRun.getInstance().kitmanager.getKits());	
 			}
-			
+
 		} else if (args.length == 3) {
 			if (args[0].equalsIgnoreCase("setteleport")) {
 				list.add("lobby");
@@ -115,7 +118,7 @@ public class SetupTabCompleter implements TabCompleter {
 				auto.add(s);
 			}
 		}
-		
+
 		return auto.isEmpty() ? list : auto;
 	}
 
