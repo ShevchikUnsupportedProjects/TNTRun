@@ -53,17 +53,23 @@ public class PlayerSelection {
 	}
 
 	public void setSelectionPoint1(Player player) {
-		//ownlocations.putPlayerLoc1(player.getName(), player.getTargetBlock((HashSet<Byte>) null, 30).getLocation());
 		ownlocations.putPlayerLoc1(player.getName(), player.getTargetBlock((Set<Material>) null, 30).getLocation());
 	}
 
 	public void setSelectionPoint2(Player player) {
-		//ownlocations.putPlayerLoc2(player.getName(), player.getTargetBlock((HashSet<Byte>) null, 30).getLocation());
 		ownlocations.putPlayerLoc2(player.getName(), player.getTargetBlock((Set<Material>) null, 30).getLocation());
 	}
 
 	public void clearSelectionPoints(Player player) {
 		ownlocations.clearPoints(player.getName());
+	}
+
+	public Location getSelectionPoint1(Player player) {
+		return ownlocations.getPlayerLoc1(player.getName());
+	}
+
+	public Location getSelectionPoint2(Player player) {
+		return ownlocations.getPlayerLoc2(player.getName());
 	}
 
 }

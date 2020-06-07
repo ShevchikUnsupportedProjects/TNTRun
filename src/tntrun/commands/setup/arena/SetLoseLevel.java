@@ -58,7 +58,7 @@ public class SetLoseLevel implements CommandHandlerInterface {
 				Messages.sendMessage(player, Messages.trprefix + "&c Arena &6" + args[0] + "&c Error: Loselevel is not within the bounds of the arena");
 			}
 		} else {
-			Messages.sendMessage(player, Messages.trprefix + "&c Arena &6" + args[0] + "&c locations are wrong - use WorldEdit to select the loselevel bounds");
+			Messages.sendMessage(player, Messages.trprefix + "&c Arena &6" + args[0] + "&c locations are wrong - retry or use WorldEdit to select the loselevel bounds");
 		}
 		return true;
 	}

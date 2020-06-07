@@ -25,21 +25,18 @@ import tntrun.selectionget.PlayerSelection;
 
 public class SetP1 implements CommandHandlerInterface {
 
-	@SuppressWarnings("unused")
 	private PlayerSelection selection;
-	
+
 	public SetP1(PlayerSelection selection) {
 		this.selection = selection;
 	}
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Messages.sendMessage(player, Messages.trprefix + "&c This system is disabled, use WorldEdit to set the arena bounds");
-		/*
-	    selection.setSelectionPoint1(player);
-		
-		Messages.sendMessage(player, Messages.trprefix + "&7 Point &61 &7has been set to &6X: &7" + Math.round(player.getLocation().getX()) + " &6Y: &7" + Math.round(player.getLocation().getY()) + " &6Z: &7" + Math.round(player.getLocation().getZ()));
-		*/
+		selection.setSelectionPoint1(player);
+		Messages.sendMessage(player, Messages.trprefix + "&7 Point &61 &7has been set to &6X: &7" + Math.round(selection.getSelectionPoint1(player).getX()) +
+				" &6Y: &7" + Math.round(selection.getSelectionPoint1(player).getY()) + " &6Z: &7" + Math.round(selection.getSelectionPoint1(player).getZ()));
+
 		return true;
 	}
 
