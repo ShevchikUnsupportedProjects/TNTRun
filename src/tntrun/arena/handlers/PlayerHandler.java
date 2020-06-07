@@ -298,8 +298,6 @@ public class PlayerHandler {
 			arena.getScoreboardHandler().createWaitingScoreBoard();
 		}
 
-		Bars.removeBar(player, arena.getArenaName());
-
 		msgtoarenaplayers = msgtoarenaplayers.replace("{PLAYER}", player.getName()).replace("{RANK}", getDisplayName(player));
 		for (Player oplayer : arena.getPlayersManager().getAllParticipantsCopy()) {
 			Messages.sendMessage(oplayer, Messages.trprefix + msgtoarenaplayers);

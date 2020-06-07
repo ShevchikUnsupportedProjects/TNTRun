@@ -93,7 +93,9 @@ public class Bars {
 	}
 	
 	public static void removeAll(String arena) {
-		barmap.get(arena).removeAll();
+		if (barmap.containsKey(arena)) {
+			barmap.get(arena).removeAll();
+		}
 	}
 
 	public static void loadBars(TNTRun plugin) {
