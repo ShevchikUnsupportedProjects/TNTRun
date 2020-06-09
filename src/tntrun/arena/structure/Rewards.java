@@ -17,8 +17,8 @@
 
 package tntrun.arena.structure;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import net.milkbowl.vault.economy.Economy;
@@ -42,18 +42,13 @@ public class Rewards {
 		econ = TNTRun.getInstance().getVaultHandler().getEconomy();
 	}
 
-	private List<String> materialrewards = new ArrayList<String>();
-	private List<String> materialamounts = new ArrayList<String>();
+	private Map<String, Integer> materialrewards = new HashMap<String, Integer>();
 	private int moneyreward = 0;
 	private int xpreward = 0;
 	private String commandreward;
 
-	public List<String> getMaterialReward() {
+	public Map<String, Integer> getMaterialReward() {
 		return materialrewards;
-	}
-	
-	public List<String> getMaterialAmount() {
-		return materialamounts;
 	}
 
 	public int getMoneyReward() {
@@ -68,13 +63,11 @@ public class Rewards {
 		return xpreward;
 	}
 	
-	public void setMaterialReward(String block, String amount, Boolean isFirstItem) {
+	public void setMaterialReward(String item, String amount, Boolean isFirstItem) {
 		if (isFirstItem) {
 			materialrewards.clear();
-			materialamounts.clear();
 		}
-		materialrewards.add(block);
-		materialamounts.add(amount);
+		materialrewards.put(item, Integer.valueOf(amount));
 	}
 
 	public void setMoneyReward(int money) {
@@ -92,10 +85,10 @@ public class Rewards {
 	public void rewardPlayer(Player player) {
 		String rewardmessage = "";
 		final ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-		
-		for (int i=0; i < materialrewards.size(); i++) {
-			if (isValidReward(materialrewards.get(i), materialamounts.get(i))) {
-				ItemStack reward = new ItemStack(Material.getMaterial(materialrewards.get(i)), Integer.parseInt(materialamounts.get(i)));
+
+		for (Map.Entry<String, Integer> entry : materialrewards.entrySet()) {
+			if (isValidReward(entry.getKey(), entry.getValue())) {
+				ItemStack reward = new ItemStack(Material.getMaterial(entry.getKey()), entry.getValue());
 				if (player.getInventory().firstEmpty() != -1) {
 					player.getInventory().addItem(reward);
 					player.updateInventory();
@@ -142,9 +135,9 @@ public class Rewards {
 		config.set("reward.xp", xpreward);
 		
 		String path = "";
-		for (int i=0; i < materialrewards.size(); i++) {
-			path = "reward.material." + materialrewards.get(i) + ".amount";
-			config.set(path, Integer.parseInt(materialamounts.get(i)));
+		for (Map.Entry<String, Integer> entry : materialrewards.entrySet()) {
+			path = "reward.material." + entry.getKey() + ".amount";
+			config.set(path, entry.getValue());
 		}
 	}
 
@@ -153,18 +146,16 @@ public class Rewards {
 		xpreward = config.getInt("reward.xp", xpreward);
 		commandreward = config.getString("reward.command", commandreward);
 		
-		//check that path exists
 		if (config.getConfigurationSection("reward.material") != null) {
 			Set<String> materials = config.getConfigurationSection("reward.material").getKeys(false);
 			for (String material : materials) {
-				materialrewards.add(material);
-				materialamounts.add(String.valueOf(config.getInt("reward.material." + material  + ".amount")));
+				materialrewards.put(material, config.getInt("reward.material." + material  + ".amount"));
 			}
 		}
 	}
 
-	public boolean isValidReward(String materialreward, String materialamount) {		
-		if (Material.getMaterial(materialreward) != null && Integer.parseInt(materialamount) > 0) {
+	public boolean isValidReward(String materialreward, int materialamount) {
+		if (Material.getMaterial(materialreward) != null && materialamount > 0) {
 			return true;
 		}
 		return false;

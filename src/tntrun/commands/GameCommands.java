@@ -17,7 +17,7 @@
 
 package tntrun.commands;
 
-import java.util.List;
+import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -109,13 +109,11 @@ public class GameCommands implements CommandExecutor {
 				if (arena.getStructureManager().getRewards().getMoneyReward() != 0) {
 					player.sendMessage(ChatColor.GOLD + "Money Reward " + ChatColor.WHITE + "- " + ChatColor.RED + arena.getStructureManager().getRewards().getMoneyReward());
 				}
-				List<String> materialrewards = arena.getStructureManager().getRewards().getMaterialReward();
-				List<String> materialamounts = arena.getStructureManager().getRewards().getMaterialAmount();
 
 				String rewardmessage = "";
-				for (int i=0; i < materialrewards.size(); i++) {
-					if (arena.getStructureManager().getRewards().isValidReward(materialrewards.get(i), materialamounts.get(i))) {
-						rewardmessage += materialamounts.get(i) + ChatColor.GOLD + " x " + ChatColor.RED + materialrewards.get(i) + ", ";
+				for (Map.Entry<String, Integer> entry : arena.getStructureManager().getRewards().getMaterialReward().entrySet()) {
+					if (arena.getStructureManager().getRewards().isValidReward(entry.getKey(), entry.getValue())) {
+						rewardmessage += "" + entry.getValue() + ChatColor.GOLD + " x " + ChatColor.RED + entry.getKey() + ", ";
 					}
 				}
 				if (rewardmessage.length() > 0) {
