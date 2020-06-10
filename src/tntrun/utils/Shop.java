@@ -44,19 +44,19 @@ import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
 
-public class Shop implements Listener{
+public class Shop implements Listener {
 
 	private TNTRun plugin;
 	private String invname;
 	private int invsize;
 	private int knockback;
 
-	public Shop(TNTRun plugin){
+	public Shop(TNTRun plugin) {
 		this.plugin = plugin;
 		ShopFiles shopFiles = new ShopFiles(plugin);
 		shopFiles.setShopItems();
 
-		invsize = plugin.getConfig().getInt("shop.size");
+		invsize = getValidSize();
 		invname = FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("shop.name"));
 	}  
 
@@ -150,7 +150,7 @@ public class Shop implements Listener{
 		}
 	}
 
-	private ItemStack getItem(Material material, int amount, String displayname, List<String> lore, List<String> enchantments){
+	private ItemStack getItem(Material material, int amount, String displayname, List<String> lore, List<String> enchantments) {
 		ItemStack item = new ItemStack(material, amount);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(displayname);
@@ -291,7 +291,7 @@ public class Shop implements Listener{
 		return maxjumps >= (arena.getPlayerHandler().getDoubleJumps(p) + quantity);
 	}
 
-	public void setItems(Inventory inventory, Player player){
+	public void setItems(Inventory inventory, Player player) {
 		FileConfiguration cfg = ShopFiles.getShopConfiguration();
 		int slot = 0;
 		for (String kitCounter : cfg.getConfigurationSection("").getKeys(false)) {
@@ -323,7 +323,7 @@ public class Shop implements Listener{
 		return getShopItem(material, title, lore, 1);
 	}
 
-	private ItemStack getShopItem(Material material, String title, List<String> lore, int amount){
+	private ItemStack getShopItem(Material material, String title, List<String> lore, int amount) {
 		ItemStack item = new ItemStack(material, amount);
 		ItemMeta meta = item.getItemMeta();
 
@@ -387,4 +387,17 @@ public class Shop implements Listener{
 	public double getKnockback() {
 		return Math.min(Math.max(knockback, 0), 5) * 0.4;
 	}
+
+	private int getValidSize() {
+		int size = Math.max(plugin.getConfig().getInt("shop.size"), getShopFileEntries());
+		if (size < 9 || size > 54) {
+			return Math.min(Math.max(size, 9), 54);
+		}
+		return (int) (Math.ceil(size / 9.0) * 9);
+	}
+
+	private int getShopFileEntries() {
+		return ShopFiles.getShopConfiguration().getConfigurationSection("").getKeys(false).size();
+	}
+
 }
