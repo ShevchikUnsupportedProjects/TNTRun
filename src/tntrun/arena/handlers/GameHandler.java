@@ -414,7 +414,7 @@ public class GameHandler {
 	}
 
 	/**
-	 * Remove the hotbar items and give the player any items bought in the shop
+	 * Remove the inventory items and give the player any items bought in the shop
 	 * @param player
 	 */
 	private void setGameInventory(Player player) {
@@ -423,6 +423,7 @@ public class GameHandler {
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.info.material")));
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
 		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.heads.material")));
+		player.getInventory().setItemInOffHand(null);
 
 		if (plugin.shop.getPlayersItems().containsKey(player.getName())) {
 			ArrayList<ItemStack> items = plugin.shop.getPlayersItems().get(player.getName());
