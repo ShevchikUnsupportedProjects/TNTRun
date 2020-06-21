@@ -127,16 +127,32 @@ public class JoinMenu {
 			Messages.sendMessage(player, Messages.trprefix + Messages.arenajoined);
 			return;
 		}
-		if (plugin.amanager.getArenas().size() != 0) {
-			for (Arena arena : plugin.amanager.getArenas()) {
-				if (arena.getStatusManager().isArenaEnabled()) {
-					if (arena.getPlayerHandler().checkJoin(player)) {
-						arena.getPlayerHandler().spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
-						return;
-					}
+
+		Arena autoArena = getAutoArena(player);
+		if (autoArena == null) {
+			Messages.sendMessage(player, Messages.trprefix + Messages.noarenas);
+			return;
+		}
+
+		autoArena.getPlayerHandler().spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
+	}
+
+	/**
+	 * Select the arena to auto join. This will be the arena with the most players waiting to start.
+	 * @param player
+	 * @return arena
+	 */
+	private Arena getAutoArena(Player player) {
+		Arena autoarena = null;
+		int playercount = -1;
+		for (Arena arena : plugin.amanager.getArenas()) {
+			if (arena.getPlayerHandler().checkJoin(player, true)) {
+				if (arena.getPlayersManager().getPlayersCount() > playercount) {
+					autoarena = arena;
+					playercount = arena.getPlayersManager().getPlayersCount();
 				}
 			}
 		}
-		Messages.sendMessage(player, Messages.trprefix + Messages.noarenas);
+		return autoarena;
 	}
 }

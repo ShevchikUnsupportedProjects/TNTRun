@@ -63,47 +63,71 @@ public class PlayerHandler {
 	}
 
 	public boolean checkJoin(Player player) {
+		return checkJoin(player, false);
+	}
+
+	public boolean checkJoin(Player player, boolean silent) {
 		if (!arena.getStatusManager().isArenaEnabled()) {
-			Messages.sendMessage(player, Messages.trprefix + Messages.arenadisabled);
+			if (!silent) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenadisabled);
+			}
 			return false;
 		}
 		if (arena.getStructureManager().getWorld() == null) {
-			Messages.sendMessage(player, Messages.trprefix + Messages.arenawolrdna);
+			if (!silent) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenawolrdna);
+			}
 			return false;
 		}
 		if (arena.getStatusManager().isArenaRunning()) {
-			Messages.sendMessage(player, Messages.trprefix + Messages.arenarunning);
+			if (!silent) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenarunning);
+			}
 			return false;
 		}
 		if (arena.getStatusManager().isArenaRegenerating()) {
-			Messages.sendMessage(player, Messages.trprefix + Messages.arenaregenerating);
+			if (!silent) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenaregenerating);
+			}
 			return false;
 		}
 		if (!player.hasPermission("tntrun.join")) {
-			Messages.sendMessage(player, Messages.trprefix + Messages.nopermission);
+			if (!silent) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.nopermission);
+			}
 			return false;
 		}
 		if (player.isInsideVehicle()) {
-			Messages.sendMessage(player, Messages.trprefix + Messages.arenavehicle);
+			if (!silent) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenavehicle);
+			}
 			return false;
 		}
 		if (arena.getPlayersManager().getPlayersCount() == arena.getStructureManager().getMaxPlayers()) {
-			Messages.sendMessage(player, Messages.trprefix + Messages.limitreached);
+			if (!silent) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.limitreached);
+			}
 			return false;
 		}
 
 		if (plugin.amanager.getPlayerArena(player.getName()) != null) {
-			Messages.sendMessage(player, Messages.trprefix + Messages.arenajoined);
+			if (!silent) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenajoined);
+			}
 			return false;
 		}
 
 		if (arena.getStructureManager().hasFee()) {
 			double fee = arena.getStructureManager().getFee();
 			if (!arena.getArenaEconomy().hasFunds(player, fee)) {
-				Messages.sendMessage(player, Messages.trprefix + Messages.arenanofee.replace("{FEE}", arena.getStructureManager().getArenaCost(arena)));
+				if (!silent) {
+					Messages.sendMessage(player, Messages.trprefix + Messages.arenanofee.replace("{FEE}", arena.getStructureManager().getArenaCost(arena)));
+				}
 				return false;
 			}
-			Messages.sendMessage(player, Messages.trprefix + Messages.arenafee.replace("{FEE}", arena.getStructureManager().getArenaCost(arena)));
+			if (!silent) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenafee.replace("{FEE}", arena.getStructureManager().getArenaCost(arena)));
+			}
 		}
 		return true;
 	}
