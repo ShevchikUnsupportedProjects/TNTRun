@@ -23,19 +23,20 @@ import java.io.IOException;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import tntrun.TNTRun;
+import tntrun.messages.Messages;
 
 public class GlobalLobby {
 
 	private File lobbyFile;
+	private LobbyLocation lobbyLocation;
 
 	public GlobalLobby(TNTRun plugin) {
 		lobbyFile = new File(plugin.getDataFolder() + File.separator + "lobby.yml");
 	}
-
-	private LobbyLocation lobbyLocation;
 
 	public boolean isLobbyLocationWorldAvailable() {
 		if (isLobbyLocationSet()) {
@@ -48,21 +49,49 @@ public class GlobalLobby {
 		return lobbyLocation != null;
 	}
 
+	public void joinLobby(Player player) {
+		if (isLobbyLocationSet()) {
+			if (isLobbyLocationWorldAvailable()) {
+				player.teleport(getLobbyLocation());
+				Messages.sendMessage(player, Messages.trprefix + Messages.teleporttolobby);
+			} else {
+				Messages.sendMessage(player, Messages.trprefix + Messages.lobbyunloaded);
+			}
+		} else {
+			Messages.sendMessage(player, Messages.trprefix + Messages.nolobby);
+		}
+	}
+
 	public Location getLobbyLocation() {
 		return lobbyLocation.getLocation();
 	}
 
 	public void setLobbyLocation(Location location) {
-		lobbyLocation = new LobbyLocation(location.getWorld().getName(), location.toVector(), location.getYaw(), location.getPitch());
+		if (location != null) {
+			lobbyLocation = new LobbyLocation(location.getWorld().getName(), location.toVector(), location.getYaw(), location.getPitch());
+			return;
+		}
+
+		FileConfiguration config = new YamlConfiguration();
+		lobbyLocation = null;
+
+		config.set("lobby", null);
+		try {
+			config.save(lobbyFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void saveToConfig() {
 		FileConfiguration config = new YamlConfiguration();
+
 		if (isLobbyLocationSet()) {
 			config.set("lobby.world", lobbyLocation.getWorldName());
 			config.set("lobby.vector", lobbyLocation.getVector());
 			config.set("lobby.yaw", lobbyLocation.getYaw());
 			config.set("lobby.pitch", lobbyLocation.getPitch());
+
 			try {
 				config.save(lobbyFile);
 			} catch (IOException e) {
@@ -72,10 +101,12 @@ public class GlobalLobby {
 
 	public void loadFromConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(lobbyFile);
+
 		String worldname = config.getString("lobby.world", null);
 		Vector vector = config.getVector("lobby.vector", null);
 		float yaw = (float) config.getDouble("lobby.yaw", 0.0);
 		float pitch = (float) config.getDouble("lobby.pitch", 0.0);
+
 		if (worldname != null && vector != null) {
 			lobbyLocation = new LobbyLocation(worldname, vector, yaw, pitch);
 		}

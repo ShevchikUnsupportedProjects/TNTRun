@@ -20,24 +20,23 @@ package tntrun.commands.setup.selection;
 import org.bukkit.entity.Player;
 
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Messages;
 import tntrun.selectionget.PlayerSelection;
 
 public class SetP2 implements CommandHandlerInterface {
 
 	private PlayerSelection selection;
-	
+
 	public SetP2(PlayerSelection selection) {
 		this.selection = selection;
 	}
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		player.sendMessage("§7[§6TNTRun§7] §cThis system is disabled, use worldedit to create arena");
-		/*
 		selection.setSelectionPoint2(player);
-		
-		player.sendMessage("§7[§6TNTRun§7] §7Point §62 §7has been set to §6X: §7" + Math.round(player.getLocation().getX()) + " §6Y: §7" + Math.round(player.getLocation().getY()) + " §6Z: §7" + Math.round(player.getLocation().getZ()));
-		*/
+		Messages.sendMessage(player, Messages.trprefix + "&7 Point &62 &7has been set to &6X: &7" + Math.round(selection.getSelectionPoint2(player).getX()) +
+				" &6Y: &7" + Math.round(selection.getSelectionPoint2(player).getY()) + " &6Z: &7" + Math.round(selection.getSelectionPoint2(player).getZ()));
+
 		return true;
 	}
 

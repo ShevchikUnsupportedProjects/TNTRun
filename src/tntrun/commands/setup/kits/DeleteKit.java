@@ -15,40 +15,29 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup.kits;
 
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
-import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 
-public class AddKit implements CommandHandlerInterface {
+public class DeleteKit implements CommandHandlerInterface {
 
 	private TNTRun plugin;
-	public AddKit(TNTRun plugin) {
+	public DeleteKit(TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.amanager.getArenaByName(args[0]);
-		if (arena == null) {
-			player.sendMessage("Arena does not exist");
-			return true;
-		}
-		if (arena.getStatusManager().isArenaEnabled()) {
-			player.sendMessage("Disable arena first");
-			return true;
-		}
-		arena.getStructureManager().getKits().registerKit(args[1], player);
-		player.sendMessage("Kit added");
+		plugin.kitmanager.unregisterKit(args[0], player);
 		return true;
 	}
 
 	@Override
 	public int getMinArgsLength() {
-		return 2;
+		return 1;
 	}
 
 }

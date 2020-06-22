@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Messages;
 
 public class SetLobby implements CommandHandlerInterface {
 
@@ -32,7 +33,7 @@ public class SetLobby implements CommandHandlerInterface {
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
 		plugin.globallobby.setLobbyLocation(player.getLocation());
-		player.sendMessage("Lobby set");
+		Messages.sendMessage(player, Messages.trprefix + "&7 Lobby set");
 		return true;
 	}
 

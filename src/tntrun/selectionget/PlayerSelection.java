@@ -17,10 +17,11 @@
 
 package tntrun.selectionget;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class PlayerSelection {
@@ -40,8 +41,9 @@ public class PlayerSelection {
 		if (locs != null) {
 			return new PlayerCuboidSelection(locs[0], locs[1]);
 		}
+		
 		// now check worldedit selection
-		if (weintegration != null) {
+		if (weintegration != null) {			
 			locs = weintegration.getLocations(player);
 			if (locs != null) {
 				return new PlayerCuboidSelection(locs[0], locs[1]);
@@ -50,18 +52,24 @@ public class PlayerSelection {
 		return null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void setSelectionPoint1(Player player) {
-		ownlocations.putPlayerLoc1(player.getName(), player.getTargetBlock((HashSet<Byte>) null, 30).getLocation());
+		ownlocations.putPlayerLoc1(player.getName(), player.getTargetBlock((Set<Material>) null, 30).getLocation());
 	}
 
-	@SuppressWarnings("deprecation")
 	public void setSelectionPoint2(Player player) {
-		ownlocations.putPlayerLoc2(player.getName(), player.getTargetBlock((HashSet<Byte>) null, 30).getLocation());
+		ownlocations.putPlayerLoc2(player.getName(), player.getTargetBlock((Set<Material>) null, 30).getLocation());
 	}
 
 	public void clearSelectionPoints(Player player) {
 		ownlocations.clearPoints(player.getName());
+	}
+
+	public Location getSelectionPoint1(Player player) {
+		return ownlocations.getPlayerLoc1(player.getName());
+	}
+
+	public Location getSelectionPoint2(Player player) {
+		return ownlocations.getPlayerLoc2(player.getName());
 	}
 
 }

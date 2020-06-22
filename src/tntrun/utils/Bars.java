@@ -19,46 +19,82 @@ package tntrun.utils;
 
 import java.io.File;
 import java.io.IOException;
-
-import me.confuser.barapi.BarAPI;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import tntrun.FormattingCodesParser;
+import com.google.common.base.Enums;
+
 import tntrun.TNTRun;
+import tntrun.arena.Arena;
 
 public class Bars {
 
-	public static String waiting = "&6Waiting for more players, current players count:&r {COUNT}";
+	private static HashMap<String, BossBar> barmap = new HashMap<String, BossBar>();
+	
+	public static String waiting = "&6Minimum players:&r {MIN}&6, current player count:&r {COUNT}";
 	public static String starting = "&6Arena starts in:&r {SECONDS} seconds";
 	public static String playing = "&6Time left:&r {SECONDS} &6Players in game count:&r {COUNT}";
-
-	public static void setBar(Player player, String message, int count, int seconds, float percent, TNTRun plugin) {
-		try {
-			message = message.replace("{COUNT}", String.valueOf(count));
-			message = message.replace("{SECONDS}", String.valueOf(seconds));
-			message = FormattingCodesParser.parseFormattingCodes(message);
-			if(plugin.getConfig().getBoolean("special.UseBarApi") == false){
-				return;
-			}
-			if (Bukkit.getPluginManager().getPlugin("BarAPI") != null) {
-				if (!message.equals("")) {
-					BarAPI.setMessage(player, message, percent);
-				}
-			}
-		} catch (Throwable t) {
+	
+	public static void createBar(String arena) {
+		BossBar bar = Bukkit.createBossBar(null, getBarColor(), BarStyle.SOLID);
+		barmap.put(arena, bar);
+	}
+	
+	private static BarColor getBarColor() {
+		int index = 0;
+		String col = TNTRun.getInstance().getConfig().getString("special.BossBarColor");
+		
+		if (col == null || col.equalsIgnoreCase("RANDOM") || Enums.getIfPresent(BarColor.class, col).orNull() == null) {
+			Random random = ThreadLocalRandom.current();
+			index = random.nextInt(BarColor.values().length);
+		} else {
+			index = Arrays.asList(BarColor.values()).indexOf(BarColor.valueOf(col));
+		}
+		
+		return BarColor.values()[index];
+	}
+	
+	private static void setBarColor(String arena) {
+		barmap.get(arena).setColor(getBarColor());
+	}
+	
+	public static void addPlayerToBar(Player player, String arena) {
+		barmap.get(arena).addPlayer(player);
+		// if this is the first player to join, set bar colour
+		if (barmap.get(arena).getPlayers().size() == 1) {
+			setBarColor(arena);
 		}
 	}
-
-	public static void removeBar(Player player) {
-		try {
-			if (Bukkit.getPluginManager().getPlugin("BarAPI") != null) {
-				BarAPI.removeBar(player);
-			}
-		} catch (Throwable t) {
+	
+	public static void setBar(Arena arena, String message, int count, int seconds, double progress, TNTRun plugin) {
+		if (!plugin.getConfig().getBoolean("special.UseBossBar")) {
+			return;
+		}
+		message = message.replace("{COUNT}", String.valueOf(count));
+		message = message.replace("{MIN}", String.valueOf(arena.getStructureManager().getMinPlayers()));
+		message = message.replace("{SECONDS}", String.valueOf(seconds));
+		message = FormattingCodesParser.parseFormattingCodes(message);
+		barmap.get(arena.getArenaName()).setTitle(message);
+		barmap.get(arena.getArenaName()).setProgress(progress);
+	}
+	
+	public static void removeBar(Player player, String arena) {
+		barmap.get(arena).removePlayer(player);
+	}
+	
+	public static void removeAll(String arena) {
+		if (barmap.containsKey(arena)) {
+			barmap.get(arena).removeAll();
 		}
 	}
 

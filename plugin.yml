@@ -1,9 +1,9 @@
-name: TNTRun
+name: TNTRun_reloaded
 main: tntrun.TNTRun
-depend: [WorldEdit]
-softdepend: [Vault]
-version: 6.3.2
-author: [_Shevchik_, The_TadeSK]
+softdepend: [WorldEdit, Vault, HeadsPlus, mcMMO, PlaceholderAPI]
+version: 9.2-SNAPSHOT
+api-version: 1.13
+author: [steve4744]
 commands:
   tntrunsetup:
     description: TNTRun arena setup commands
@@ -14,3 +14,25 @@ commands:
   tntrunconsole:
     description: TNTRun console commands
     aliases: trconsole
+permissions:
+  tntrun.join:
+    description: used to control who can play TNTRun and where.
+    default: true
+  tntrun.setup:
+    description: used to create and modify arenas and gameplay
+    default: op
+  tntrun.version.check:
+    description: display new version message on player join
+    default: op
+  tntrun.heads:
+    description: control who can use HeadsPlus in-game
+    default: true
+  tntrun.shop:
+    description: allow players to buy any shop item (if they have money)
+    default: true
+  tntrun.joinmenu:
+    description: allow players to use the join menu
+    default: true
+  tntrun.start:
+    description: allow players to start an arena before the minimum players is reached
+    default: op

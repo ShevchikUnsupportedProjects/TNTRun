@@ -17,7 +17,11 @@
 
 package tntrun.eventhandler;
 
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -25,7 +29,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-
+import org.bukkit.event.entity.ProjectileHitEvent;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.arena.structure.StructureManager.DamageEnabled;
@@ -45,40 +49,52 @@ public class PlayerStatusHandler implements Listener {
 		if (e.getEntity() instanceof Player) {
 			Player player = (Player) e.getEntity();
 			Arena arena = plugin.amanager.getPlayerArena(player.getName());
-			if (arena != null) {
-				if (e.getCause() == DamageCause.FALL) {
-					e.setCancelled(true);
+			if (arena == null) {
+				return;
+			}
+			if (!arena.getStatusManager().isArenaRunning()) {
+				e.setCancelled(true);
+				return;
+			}
+			if (e.getCause() == DamageCause.FALL) {
+				e.setCancelled(true);
+				return;
+			}
+			DamageEnabled status = arena.getStructureManager().getDamageEnabled();
+			switch (status) {
+				case YES: {
 					return;
 				}
-				DamageEnabled status = arena.getStructureManager().getDamageEnabled();
-				switch (status) {
-					case YES: {
-						return;
-					}
-					case ZERO: {
-						e.setDamage(0);
-						return;
-					}
-					case NO: {
-						e.setCancelled(true);
-						return;
-					}
+				case ZERO: {
+					e.setDamage(0);
+					return;
+				}
+				case NO: {
+					e.setCancelled(true);
+					return;
 				}
 			}
 		}
 	}
 
-	// cancel all to damage to and from spectators
+	// cancel all damage to and from spectators
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onDamageByPlayer(EntityDamageByEntityEvent e) {
 		if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
 			Player player = (Player) e.getEntity();
 			Player damager = (Player) e.getDamager();
 			Arena arena = plugin.amanager.getPlayerArena(player.getName());
-			if (arena != null) {
-				if (arena.getPlayersManager().isSpectator(player.getName()) || arena.getPlayersManager().isSpectator(damager.getName())) {
+			if (arena == null) {
+				return;
+			}
+			if (!arena.getStructureManager().getDamageEnabled().toString().equals("NO")) {
+				if (damager.getInventory().getItemInMainHand().getType() == Material.AIR && !arena.getStructureManager().isPunchDamage()) {
 					e.setCancelled(true);
+					return;
 				}
+			}
+			if (arena.getPlayersManager().isSpectator(player.getName()) || arena.getPlayersManager().isSpectator(damager.getName())) {
+				e.setCancelled(true);
 			}
 		}
 	}
@@ -92,6 +108,28 @@ public class PlayerStatusHandler implements Listener {
 				e.setCancelled(true);
 			}
 		}
+	}
+
+	// give snowballs an impact effect
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onSnowballHit(ProjectileHitEvent e) {
+		Projectile projectile = e.getEntity();
+		if (!(projectile instanceof Snowball)) {
+			return;
+		}
+		if (e.getHitEntity() == null || e.getHitEntity().getType() != EntityType.PLAYER) {
+			return;
+		}
+		Player player = (Player) e.getHitEntity();
+		Arena arena = plugin.amanager.getPlayerArena(player.getName());
+		if (arena == null) {
+			return;
+		}
+		if (!arena.getStatusManager().isArenaRunning()) {
+			return;
+		}
+		player.damage(0.5, projectile);
+		player.setVelocity(projectile.getVelocity().multiply(plugin.shop.getKnockback()));
 	}
 
 }

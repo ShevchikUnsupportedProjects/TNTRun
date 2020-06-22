@@ -19,6 +19,7 @@ package tntrun.signs;
 
 import java.util.HashMap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,31 +32,38 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import tntrun.TNTRun;
 import tntrun.messages.Messages;
+import tntrun.signs.type.AutoJoinSign;
 import tntrun.signs.type.JoinSign;
+import tntrun.signs.type.LeaderboardSign;
 import tntrun.signs.type.LeaveSign;
+import tntrun.signs.type.LobbySign;
 import tntrun.signs.type.SignType;
 import tntrun.signs.type.VoteSign;
+import tntrun.utils.FormattingCodesParser;
 
 public class SignHandler implements Listener {
 
 	private HashMap<String, SignType> signs = new HashMap<String, SignType>();
-	
-	private TNTRun pl;
+
+	private TNTRun plugin;
 
 	public SignHandler(TNTRun plugin) {
 		signs.put("[join]", new JoinSign(plugin));
 		signs.put("[leave]", new LeaveSign(plugin));
 		signs.put("[vote]", new VoteSign(plugin));
-		
-		pl = plugin;
+		signs.put("[lobby]", new LobbySign(plugin));
+		signs.put("[autojoin]", new AutoJoinSign(plugin));
+		signs.put("[leaderboard]", new LeaderboardSign(plugin));
+
+		this.plugin = plugin;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onTNTRunSignCreate(SignChangeEvent e) {
 		Player player = e.getPlayer();
-		if (e.getLine(0).equalsIgnoreCase("[TNTRun]") || e.getLine(0).equalsIgnoreCase("§7[§6TNTRun§7]")) {
+		if (ChatColor.stripColor(e.getLine(0)).equalsIgnoreCase("[TNTRun]")) {
 			if (!player.hasPermission("tntrun.setup")) {
-				Messages.sendMessage(player, Messages.nopermission);
+				Messages.sendMessage(player, Messages.trprefix + Messages.nopermission);
 				e.setCancelled(true);
 				e.getBlock().breakNaturally();
 				return;
@@ -67,7 +75,7 @@ public class SignHandler implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onSignClick(PlayerInteractEvent e) {
 		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
@@ -76,8 +84,11 @@ public class SignHandler implements Listener {
 			return;
 		}
 		Sign sign = (Sign) e.getClickedBlock().getState();
-		if (sign.getLine(0).equalsIgnoreCase(pl.getConfig().getString("signs.prefix").replace("&", "§"))) {
-			String line = sign.getLine(1).toLowerCase();
+		if (sign.getLine(0).equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")))) {
+			String line = ChatColor.stripColor(sign.getLine(1).toLowerCase());
+			if (line.equalsIgnoreCase(ChatColor.stripColor(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.join"))))) {
+				line = "[join]";
+			}
 			if (signs.containsKey(line)) {
 				signs.get(line).handleClick(e);
 			}
@@ -91,15 +102,21 @@ public class SignHandler implements Listener {
 		}
 		Player player = e.getPlayer();
 		Sign sign = (Sign) e.getBlock().getState();
-		if (sign.getLine(0).equalsIgnoreCase(pl.getConfig().getString("signs.prefix").replace("&", "§"))) {
+		if (sign.getLine(0).equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")))) {
 			if (!player.hasPermission("tntrun.setup")) {
-				Messages.sendMessage(player, Messages.nopermission);
+				Messages.sendMessage(player, Messages.trprefix + Messages.nopermission);
 				e.setCancelled(true);
 				return;
 			}
 			String line = sign.getLine(1).toLowerCase();
+			if (line.equalsIgnoreCase(FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.join")))) {
+				line = "[join]";
+			}
 			if (signs.containsKey(line)) {
 				signs.get(line).handleDestroy(e);
+			} else {
+				// at this point it must be a TNTRun leaderboard sign
+				signs.get("[leaderboard]").handleDestroy(e);
 			}
 		}
 	}

@@ -21,16 +21,20 @@ import java.io.IOException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.util.Vector;
 
 import tntrun.arena.Arena;
+import tntrun.utils.Utils;
 
 public class StructureManager {
 
 	private Arena arena;
+	private GameZone gamezone;
+
 	public StructureManager(Arena arena) {
 		this.arena = arena;
 		gamezone = new GameZone(arena);
@@ -39,7 +43,6 @@ public class StructureManager {
 	private String world;
 	private Vector p1 = null;
 	private Vector p2 = null;
-	private GameZone gamezone;
 	private int gameleveldestroydelay = 8;
 	private LoseLevel loselevel = new LoseLevel();
 	private Vector spectatorspawn = null;
@@ -49,10 +52,16 @@ public class StructureManager {
 	private double votesPercent = 0.75;
 	private int timelimit = 300;
 	private int countdown = 10;
-	private Kits kits = new Kits();
 	private Rewards rewards = new Rewards();
 	private TeleportDestination teleportDest = TeleportDestination.PREVIOUS;
 	private DamageEnabled damageEnabled = DamageEnabled.NO;
+	private boolean punchDamage = true;
+	private boolean kitsEnabled = false;
+	private boolean testmode = false;
+	private int regenerationdelay = 60;
+	private String currency;
+	private double fee = 0;
+	private boolean finished = false;
 
 	public String getWorldName() {
 		return world;
@@ -122,10 +131,6 @@ public class StructureManager {
 		return countdown;
 	}
 
-	public Kits getKits() {
-		return kits;
-	}
-
 	public Rewards getRewards() {
 		return rewards;
 	}
@@ -146,11 +151,57 @@ public class StructureManager {
 		YES, ZERO, NO
 	}
 
+	public boolean isKitsEnabled() {
+		return kitsEnabled;
+	}
+
+	public boolean isPunchDamage() {
+		return punchDamage;
+	}
+
+	public boolean isTestMode() {
+		return testmode;
+	}
+
+	public int getRegenerationDelay() {
+		return regenerationdelay;
+	}
+
+	public double getFee() {
+		return fee;
+	}
+
+	public Material getCurrency() {
+		return Material.getMaterial(currency);
+	}
+
+	public boolean hasFee() {
+		return fee > 0;
+	}
+
+	public boolean isCurrencyEnabled() {
+		return Material.getMaterial(currency) != null && !Utils.isAir(Material.getMaterial(currency));
+	}
+
+	public String getArenaCost(Arena arena) {
+		if (!isCurrencyEnabled()) {
+			return String.valueOf(fee);
+		}
+		return new StringBuilder().append((int) fee).append(" x ").append(currency).toString();
+	}
+
 	public boolean isInArenaBounds(Location loc) {
 		if (loc.toVector().isInAABB(getP1(), getP2())) {
 			return true;
 		}
 		return false;
+	}
+
+	public boolean isArenaBoundsSet() {
+		if (getP1() == null || getP2() == null || world == null) {
+			return false;
+		}
+		return true;
 	}
 
 	public boolean isArenaConfigured() {
@@ -162,12 +213,20 @@ public class StructureManager {
 			return "Arena bounds not set";
 		}
 		if (!loselevel.isConfigured()) {
-			return "Arena looselevel not set";
+			return "Arena loselevel not set";
 		}
 		if (spawnpoint == null) {
 			return "Arena spawnpoint not set";
 		}
 		return "yes";
+	}
+
+	public boolean isArenaFinished() {
+		return finished;
+	}
+
+	public void setArenaFinished(boolean finished) {
+		this.finished = finished;
 	}
 
 	public void setArenaPoints(Location loc1, Location loc2) {
@@ -235,50 +294,62 @@ public class StructureManager {
 	public void setDamageEnabled(DamageEnabled damageEnabled) {
 		this.damageEnabled = damageEnabled;
 	}
+	
+	public void enableKits(boolean kitsEnabled) {
+		this.kitsEnabled = kitsEnabled;
+	}
+
+	public void setRegenerationDelay(int regendelay) {
+		this.regenerationdelay = regendelay;
+	}
+
+	public void setFee(double fee) {
+		this.fee = fee;
+	}
+
+	public void setCurrency(Material currency) {
+		if (Utils.isAir(currency)) {
+			this.currency = null;
+			return;
+		}
+		this.currency = currency.toString();
+	}
 
 	public void saveToConfig() {
 		FileConfiguration config = new YamlConfiguration();
-		// save arena bounds
 		try {
 			config.set("world", world);
 			config.set("p1", p1);
 			config.set("p2", p2);
 		} catch (Exception e) {
 		}
-		// save gamelevel destroy delay
 		config.set("gameleveldestroydelay", gameleveldestroydelay);
-		// save looselevel
 		try {
 			loselevel.saveToConfig(config);
 		} catch (Exception e) {
 		}
-		// save spawnpoint
 		try {
 			config.set("spawnpoint", spawnpoint);
 		} catch (Exception e) {
 		}
-		// save spectators spawn
 		try {
 			config.set("spectatorspawn", spectatorspawn);
 		} catch (Exception e) {
 		}
-		// save maxplayers
 		config.set("maxPlayers", maxPlayers);
-		// save minplayers
 		config.set("minPlayers", minPlayers);
-		// save vote percent
 		config.set("votePercent", votesPercent);
-		// save timelimit
 		config.set("timelimit", timelimit);
-		// save countdown
 		config.set("countdown", countdown);
-		// save teleport destination
 		config.set("teleportto", teleportDest.toString());
-		// save damage enabled
 		config.set("damageenabled", damageEnabled.toString());
-		// save kits
-		kits.saveToConfig(config);
-		// save rewards
+		config.set("enableKits", kitsEnabled);
+		config.set("punchDamage", punchDamage);
+		config.set("testmode", testmode);
+		config.set("regenerationdelay", regenerationdelay);
+		config.set("joinfee", fee);
+		config.set("currency", currency);
+		config.set("finished", finished);
 		rewards.saveToConfig(config);
 		try {
 			config.save(arena.getArenaFile());
@@ -289,37 +360,31 @@ public class StructureManager {
 
 	public void loadFromConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(arena.getArenaFile());
-		// load arena world location
 		world = config.getString("world", null);
-		// load arena bounds
 		p1 = config.getVector("p1", null);
 		p2 = config.getVector("p2", null);
-		// load gamelevel destroy delay
 		gameleveldestroydelay = config.getInt("gameleveldestroydelay", gameleveldestroydelay);
-		// load looselevel
 		loselevel.loadFromConfig(config);
-		// load spawnpoint
 		spawnpoint = config.getVector("spawnpoint", null);
-		// load spectators spawn
 		spectatorspawn = config.getVector("spectatorspawn", null);
-		// load maxplayers
 		maxPlayers = config.getInt("maxPlayers", maxPlayers);
-		// load minplayers
 		minPlayers = config.getInt("minPlayers", minPlayers);
-		// load vote percent
 		votesPercent = config.getDouble("votePercent", votesPercent);
-		// load timelimit
 		timelimit = config.getInt("timelimit", timelimit);
-		// load countdown
 		countdown = config.getInt("countdown", countdown);
-		// load teleport destination
 		teleportDest = TeleportDestination.valueOf(config.getString("teleportto", TeleportDestination.PREVIOUS.toString()));
-		// load damage enabled
 		damageEnabled = DamageEnabled.valueOf(config.getString("damageenabled", DamageEnabled.NO.toString()));
-		// load kits
-		kits.loadFromConfig(config);
-		// load rewards
 		rewards.loadFromConfig(config);
+		kitsEnabled = config.getBoolean("enableKits");
+		punchDamage = config.getBoolean("punchDamage", true);
+		testmode = config.getBoolean("testmode");
+		regenerationdelay = config.getInt("regenerationdelay", regenerationdelay);
+		fee = config.getDouble("joinfee", fee);
+		currency = config.getString("currency", null);
+		finished = config.getBoolean("finished");
+		if (!finished && arena.getStructureManager().isArenaConfigured()) {
+			finished = true;
+		}
 	}
 
 }

@@ -18,8 +18,10 @@
 package tntrun.signs.type;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -27,6 +29,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
+import tntrun.utils.FormattingCodesParser;
 
 public class JoinSign implements SignType {
 
@@ -38,21 +41,24 @@ public class JoinSign implements SignType {
 
 	@Override
 	public void handleCreation(SignChangeEvent e) {
-		final Arena arena = plugin.amanager.getArenaByName(e.getLine(2));
+		String arenaname = ChatColor.stripColor(FormattingCodesParser.parseFormattingCodes(e.getLine(2)));
+		final Arena arena = plugin.amanager.getArenaByName(arenaname);
 		if (arena != null) {
-			e.setLine(0, plugin.getConfig().getString("signs.prefix").replace("&", "§"));
-			e.getPlayer().sendMessage("Sign succesfully created");
-			plugin.signEditor.addSign(e.getBlock(), arena.getArenaName());
+			e.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
+			e.setLine(1, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.join")));
+			e.setLine(2, FormattingCodesParser.parseFormattingCodes(e.getLine(2)));
+			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signcreate);
+			plugin.signEditor.addSign(e.getBlock(), arenaname);
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
 				new Runnable() {
 					@Override
 					public void run() {
-						plugin.signEditor.modifySigns(arena.getArenaName());
+						plugin.signEditor.modifySigns(arenaname);
 					}
 				}
 			);
 		} else {
-			e.getPlayer().sendMessage("Arena does not exist");
+			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", arenaname));
 			e.setCancelled(true);
 			e.getBlock().breakNaturally();
 		}
@@ -60,15 +66,17 @@ public class JoinSign implements SignType {
 
 	@Override
 	public void handleClick(PlayerInteractEvent e) {
-		Arena arena = plugin.amanager.getArenaByName(((Sign) e.getClickedBlock().getState()).getLine(2));
+		Player player = e.getPlayer();
+		Arena arena = plugin.amanager.getArenaByName(ChatColor.stripColor(((Sign) e.getClickedBlock().getState()).getLine(2)));
 		if (arena != null) {
-			boolean canJoin = arena.getPlayerHandler().checkJoin(e.getPlayer());
-			if (canJoin) {
-				arena.getPlayerHandler().spawnPlayer(e.getPlayer(), Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
+			if (arena.getPlayerHandler().checkJoin(player)) {
+				arena.getPlayerHandler().spawnPlayer(player, Messages.playerjoinedtoplayer, Messages.playerjoinedtoothers);
+				//attempt to cache the sign location as a fix for lost signinfo
+				plugin.signEditor.addSign(e.getClickedBlock(), arena.getArenaName());
 			}
 			e.setCancelled(true);
 		} else {
-			e.getPlayer().sendMessage("Arena does not exist");
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist);
 			e.getClickedBlock().breakNaturally();
 		}
 	}
@@ -76,8 +84,8 @@ public class JoinSign implements SignType {
 	@Override
 	public void handleDestroy(BlockBreakEvent e) {
 		Block b = e.getBlock();
-		plugin.signEditor.removeSign(b, ((Sign) b.getState()).getLine(2));
-		e.getPlayer().sendMessage("Sign succesfully removed");
+		plugin.signEditor.removeSign(b, ChatColor.stripColor(((Sign) b.getState()).getLine(2)));
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signremove);
 	}
 
 }

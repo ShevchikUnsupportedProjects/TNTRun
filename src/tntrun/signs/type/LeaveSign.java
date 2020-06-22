@@ -24,6 +24,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
+import tntrun.utils.FormattingCodesParser;
 
 public class LeaveSign implements SignType {
 
@@ -35,8 +36,8 @@ public class LeaveSign implements SignType {
 
 	@Override
 	public void handleCreation(SignChangeEvent e) {
-		e.setLine(0, "§7[§6TNTRun§7]");
-		e.getPlayer().sendMessage("Sign succesfully created");
+		e.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signcreate);
 	}
 
 	@Override
@@ -46,12 +47,13 @@ public class LeaveSign implements SignType {
 			arena.getPlayerHandler().leavePlayer(e.getPlayer(), Messages.playerlefttoplayer, Messages.playerlefttoothers);
 			e.setCancelled(true);
 		} else {
-			e.getPlayer().sendMessage("You are not in arena");
+			Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.playernotinarena);
 		}
 	}
 
 	@Override
 	public void handleDestroy(BlockBreakEvent e) {
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signremove);
 	}
 
 }

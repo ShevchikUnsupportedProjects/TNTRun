@@ -19,6 +19,7 @@ package tntrun.selectionget;
 
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -28,13 +29,21 @@ public class OwnLocations {
 	private HashMap<String, Location> loc2 = new HashMap<String, Location>();
 
 	protected void putPlayerLoc1(String playername, Location loc) {
-		loc = loc.getBlock().getLocation();
+		Bukkit.getLogger().info("[TNTRun] Location P1 set to " + loc.toString());
 		loc1.put(playername, loc);
 	}
 
 	protected void putPlayerLoc2(String playername, Location loc) {
-		loc = loc.getBlock().getLocation();
+		Bukkit.getLogger().info("[TNTRun] Location P2 set to " + loc.toString());
 		loc2.put(playername, loc);
+	}
+
+	protected Location getPlayerLoc1(String playername) {
+		return loc1.get(playername);
+	}
+
+	protected Location getPlayerLoc2(String playername) {
+		return loc2.get(playername);
 	}
 
 	protected void clearPoints(String playername) {

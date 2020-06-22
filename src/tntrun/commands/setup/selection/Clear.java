@@ -20,6 +20,7 @@ package tntrun.commands.setup.selection;
 import org.bukkit.entity.Player;
 
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Messages;
 import tntrun.selectionget.PlayerSelection;
 
 public class Clear implements CommandHandlerInterface {
@@ -32,7 +33,7 @@ public class Clear implements CommandHandlerInterface {
 	@Override
 	public boolean handleCommand(Player player, String[] args) {
 		selection.clearSelectionPoints(player);
-		player.sendMessage("points cleared");
+		Messages.sendMessage(player, Messages.trprefix + "&7 Points cleared");
 		return true;
 	}
 

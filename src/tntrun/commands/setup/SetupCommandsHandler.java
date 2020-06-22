@@ -20,37 +20,41 @@ package tntrun.commands.setup;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
-import tntrun.commands.setup.arena.AddCommandsRewards;
-import tntrun.commands.setup.arena.AddKit;
-import tntrun.commands.setup.arena.ClearCommandsRewards;
 import tntrun.commands.setup.arena.CreateArena;
 import tntrun.commands.setup.arena.DeleteArena;
-import tntrun.commands.setup.arena.DeleteKit;
 import tntrun.commands.setup.arena.DeleteSpectatorSpawn;
 import tntrun.commands.setup.arena.DisableArena;
+import tntrun.commands.setup.arena.DisableKits;
 import tntrun.commands.setup.arena.EnableArena;
+import tntrun.commands.setup.arena.EnableKits;
 import tntrun.commands.setup.arena.FinishArena;
 import tntrun.commands.setup.arena.SetArena;
+import tntrun.commands.setup.arena.SetBarColor;
 import tntrun.commands.setup.arena.SetCountdown;
+import tntrun.commands.setup.arena.SetCurrency;
 import tntrun.commands.setup.arena.SetDamage;
+import tntrun.commands.setup.arena.SetFee;
 import tntrun.commands.setup.arena.SetGameLevelDestroyDelay;
-import tntrun.commands.setup.arena.SetItemsRewards;
 import tntrun.commands.setup.arena.SetLoseLevel;
 import tntrun.commands.setup.arena.SetMaxPlayers;
 import tntrun.commands.setup.arena.SetMinPlayers;
 import tntrun.commands.setup.arena.SetMoneyRewards;
+import tntrun.commands.setup.arena.SetRegenerationDelay;
+import tntrun.commands.setup.arena.SetReward;
 import tntrun.commands.setup.arena.SetSpawn;
 import tntrun.commands.setup.arena.SetSpectatorSpawn;
 import tntrun.commands.setup.arena.SetTeleport;
 import tntrun.commands.setup.arena.SetTimeLimit;
 import tntrun.commands.setup.arena.SetVotePercent;
+import tntrun.commands.setup.arena.SetupHelp;
+import tntrun.commands.setup.kits.AddKit;
+import tntrun.commands.setup.kits.DeleteKit;
 import tntrun.commands.setup.lobby.DeleteLobby;
 import tntrun.commands.setup.lobby.SetLobby;
 import tntrun.commands.setup.reload.ReloadBars;
@@ -83,6 +87,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("delete", new DeleteArena(plugin));
 		commandHandlers.put("setarena", new SetArena(plugin, plselection));
 		commandHandlers.put("setgameleveldestroydelay", new SetGameLevelDestroyDelay(plugin));
+		commandHandlers.put("setregenerationdelay", new SetRegenerationDelay(plugin));
 		commandHandlers.put("setloselevel", new SetLoseLevel(plugin, plselection));
 		commandHandlers.put("setspawn", new SetSpawn(plugin));
 		commandHandlers.put("setspectate", new SetSpectatorSpawn(plugin));
@@ -91,18 +96,23 @@ public class SetupCommandsHandler implements CommandExecutor {
 		commandHandlers.put("setminplayers", new SetMinPlayers(plugin));
 		commandHandlers.put("setvotepercent", new SetVotePercent(plugin));
 		commandHandlers.put("setcountdown", new SetCountdown(plugin));
-		commandHandlers.put("setitemsrewards", new SetItemsRewards(plugin));
-		commandHandlers.put("setmoneyrewards", new SetMoneyRewards(plugin));
-		commandHandlers.put("addcommandrewards", new AddCommandsRewards(plugin));
-		commandHandlers.put("clearcommandrewards", new ClearCommandsRewards(plugin));
-		commandHandlers.put("addkit", new AddKit(plugin));
-		commandHandlers.put("deleteKit", new DeleteKit(plugin));
+		commandHandlers.put("setmoneyreward", new SetMoneyRewards(plugin));
 		commandHandlers.put("settimelimit", new SetTimeLimit(plugin));
 		commandHandlers.put("setteleport", new SetTeleport(plugin));
 		commandHandlers.put("setdamage", new SetDamage(plugin));
 		commandHandlers.put("finish", new FinishArena(plugin));
 		commandHandlers.put("disable", new DisableArena(plugin));
 		commandHandlers.put("enable", new EnableArena(plugin));
+		commandHandlers.put("enablekits", new EnableKits(plugin));
+		commandHandlers.put("disablekits", new DisableKits(plugin));
+		commandHandlers.put("addkit", new AddKit(plugin));
+		commandHandlers.put("deletekit", new DeleteKit(plugin));
+		commandHandlers.put("setbarcolor", new SetBarColor(plugin));
+		commandHandlers.put("setbarcolour", new SetBarColor(plugin));
+		commandHandlers.put("setreward", new SetReward(plugin));
+		commandHandlers.put("setfee", new SetFee(plugin));
+		commandHandlers.put("setcurrency", new SetCurrency(plugin));
+		commandHandlers.put("help", new SetupHelp(plugin));
 	}
 
 	@Override
@@ -114,7 +124,7 @@ public class SetupCommandsHandler implements CommandExecutor {
 		Player player = (Player) sender;
 		// check permissions
 		if (!player.hasPermission("tntrun.setup")) {
-			Messages.sendMessage(player, Messages.nopermission);
+			Messages.sendMessage(player, Messages.trprefix + Messages.nopermission);
 			return true;
 		}
 		// get command
@@ -122,14 +132,14 @@ public class SetupCommandsHandler implements CommandExecutor {
 			CommandHandlerInterface commandh = commandHandlers.get(args[0]);
 			//check args length
 			if (args.length - 1 < commandh.getMinArgsLength()) {
-				Messages.sendMessage(player,"§7[§6TNTRun§7] §cERROR: Please use /tr cmds to view all commands for game");
+				Messages.sendMessage(player, Messages.trprefix + "&c ERROR: Please use &6/tr cmds&c to view required arguments for all game commands");
 				return false;
 			}
 			//execute command
 			boolean result = commandh.handleCommand(player, Arrays.copyOfRange(args, 1, args.length));
 			return result;
-		}
+		} 
+		Messages.sendMessage(player, Messages.trprefix + "&c ERROR: Please use &6/tr cmds&c to view all valid game commands");
 		return false;
 	}
-
 }

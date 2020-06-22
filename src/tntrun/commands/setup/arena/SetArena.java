@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
+import tntrun.messages.Messages;
 import tntrun.selectionget.PlayerCuboidSelection;
 import tntrun.selectionget.PlayerSelection;
 
@@ -39,18 +40,18 @@ public class SetArena implements CommandHandlerInterface {
 		Arena arena = plugin.amanager.getArenaByName(args[0]);
 		if (arena != null) {
 			if (arena.getStatusManager().isArenaEnabled()) {
-				player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
+				Messages.sendMessage(player, Messages.trprefix + Messages.arenanotdisabled.replace("{ARENA}", args[0]));
 				return true;
 			}
 			PlayerCuboidSelection sel = selection.getPlayerSelection(player);
 			if (sel != null) {
 				arena.getStructureManager().setArenaPoints(sel.getMinimumLocation(), sel.getMaximumLocation());
-				player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 set");
+				Messages.sendMessage(player, Messages.trprefix + "&7 Arena &6" + args[0] + "&7 set");
 			} else {
-				player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c locations are wrong, use WorldEdit to make locations");
+				Messages.sendMessage(player, Messages.trprefix + "&c Arena &6" + args[0] + "&c locations are wrong - retry or use WorldEdit to select the arena bounds");
 			}
 		} else {
-			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
+			Messages.sendMessage(player, Messages.trprefix + Messages.arenanotexist.replace("{ARENA}", args[0]));
 		}
 		return true;
 	}

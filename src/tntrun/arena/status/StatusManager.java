@@ -52,21 +52,16 @@ public class StatusManager {
 		enabled = false;
 		// drop players
 		for (Player player : arena.getPlayersManager().getPlayersCopy()) {
-			arena.getPlayerHandler().leavePlayer(player, Messages.arenadisabling, "");
+			arena.getPlayerHandler().leavePlayer(player, Messages.trprefix + Messages.arenadisabling, "");
 		}
-		// stop arena
 		if (arena.getStatusManager().isArenaRunning()) {
 			arena.getGameHandler().stopArena();
 		}
-		// stop countdown
 		if (arena.getStatusManager().isArenaStarting()) {
 			arena.getGameHandler().stopArenaCountdown();
 		}
-		// stop antileave handler
 		arena.getGameHandler().stopArenaAntiLeaveHandler();
-		// regen gamezone
 		arena.getStructureManager().getGameZone().regenNow();
-		// modify signs
 		arena.plugin.signEditor.modifySigns(arena.getArenaName());
 	}
 
@@ -94,4 +89,16 @@ public class StatusManager {
 		this.regenerating = regenerating;
 	}
 
+	public String getArenaStatus() {
+		if (isArenaRunning()) {
+			return Messages.arenarunning;
+		} else if (isArenaRegenerating()) {
+			return Messages.arenaregenerating;
+		} else if (isArenaStarting()) {
+			return Messages.arenastarting;
+		} else if(!isArenaEnabled()) {
+			return Messages.arenadisabled;
+		}
+		return Messages.arenawaiting;
+	}
 }

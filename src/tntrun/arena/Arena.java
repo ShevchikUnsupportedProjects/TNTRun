@@ -20,8 +20,10 @@ package tntrun.arena;
 import java.io.File;
 
 import tntrun.TNTRun;
+import tntrun.arena.handlers.ArenaEconomy;
 import tntrun.arena.handlers.GameHandler;
 import tntrun.arena.handlers.PlayerHandler;
+import tntrun.arena.handlers.ScoreboardHandler;
 import tntrun.arena.status.PlayersManager;
 import tntrun.arena.status.StatusManager;
 import tntrun.arena.structure.StructureManager;
@@ -29,6 +31,8 @@ import tntrun.arena.structure.StructureManager;
 public class Arena {
 
 	public TNTRun plugin;
+	private String arenaname;
+	private ArenaEconomy arenaeco;
 
 	public Arena(String name, TNTRun plugin) {
 		arenaname = name;
@@ -36,9 +40,10 @@ public class Arena {
 		arenagh = new GameHandler(plugin, this);
 		arenaph = new PlayerHandler(plugin, this);
 		arenafile = new File(plugin.getDataFolder() + File.separator + "arenas" + File.separator + arenaname + ".yml");
+		arenasb = new ScoreboardHandler(plugin, this);
+		arenaeco = new ArenaEconomy(plugin, this);
 	}
 
-	private String arenaname;
 	public String getArenaName() {
 		return arenaname;
 	}
@@ -58,6 +63,11 @@ public class Arena {
 		return arenaph;
 	}
 
+	private ScoreboardHandler arenasb;
+	public ScoreboardHandler getScoreboardHandler() {
+		return arenasb;
+	}
+
 	private StatusManager statusManager = new StatusManager(this);
 	public StatusManager getStatusManager() {
 		return statusManager;
@@ -73,4 +83,7 @@ public class Arena {
 		return playersManager;
 	}
 
+	public ArenaEconomy getArenaEconomy() {
+		return arenaeco;
+	}
 }

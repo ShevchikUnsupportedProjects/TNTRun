@@ -17,32 +17,24 @@
 
 package tntrun.arena.handlers;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
-import tntrun.arena.structure.Kits;
-import tntrun.utils.ActionBar;
+import tntrun.events.PlayerWinArenaEvent;
 import tntrun.utils.Bars;
-import tntrun.utils.Shop;
-import tntrun.utils.Stats;
 import tntrun.utils.TitleMsg;
 import tntrun.messages.Messages;
 
@@ -58,8 +50,6 @@ public class GameHandler {
 		count = arena.getStructureManager().getCountdown();
 	}
 
-	private Scoreboard scoreboard = buildScoreboard();
-
 	// arena leave handler
 	private int leavetaskid;
 
@@ -71,12 +61,17 @@ public class GameHandler {
 				public void run() {
 					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
 						if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
-							arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+							//remove player during countdown, otherwise spectate
+							if (arena.getStatusManager().isArenaStarting()) {
+								arena.getPlayerHandler().leavePlayer(player, Messages.playerlefttoplayer, Messages.playerlefttoothers);
+							} else {
+								arena.getPlayerHandler().dispatchPlayer(player);
+							}
 						}
 					}
 					for (Player player : arena.getPlayersManager().getSpectatorsCopy()) {
 						if (!arena.getStructureManager().isInArenaBounds(player.getLocation())) {
-							arena.getPlayerHandler().leavePlayer(player, "", "");
+							arena.getPlayerHandler().spectatePlayer(player, "", "");
 						}
 					}
 				}
@@ -91,72 +86,61 @@ public class GameHandler {
 
 	// arena start handler (running status updater)
 	int runtaskid;
-	public static int count;
+	public int count;
 
 	public void runArenaCountdown() {
 		count = arena.getStructureManager().getCountdown();
 		arena.getStatusManager().setStarting(true);
-		runtaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(
-			plugin,
-			new Runnable() {
-				@Override
-				public void run() {
-					// check if countdown should be stopped for some various reasons
-					if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers()) {
-						for (Player player : arena.getPlayersManager().getPlayers()) {
-							Bars.setBar(player, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, arena.getPlayersManager().getPlayersCount() * 100 / arena.getStructureManager().getMinPlayers(), plugin);
-							createWaitingScoreBoard();
-						}
-						stopArenaCountdown();
-					} else
-					// start arena if countdown is 0
-					if (count == 0) {
-						stopArenaCountdown();
-						startArena();
-					} else if(count == 5) {
-						String message = Messages.arenacountdown;
-						message = message.replace("{COUNTDOWN}", String.valueOf(count));
-						for (Player player : arena.getPlayersManager().getPlayers()) {
-							player.teleport(arena.getStructureManager().getSpawnPoint());
-							TNTRun.getInstance().sound.NOTE_PLING(player, 1, 999);
-							Messages.sendMessage(player, message);
-							TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
-						}
-					} else if (count < 11) {
-						String message = Messages.arenacountdown;
-						message = message.replace("{COUNTDOWN}", String.valueOf(count));
-						for (Player player : arena.getPlayersManager().getPlayers()) {
-							Messages.sendMessage(player, message);
-							TNTRun.getInstance().sound.NOTE_PLING(player, 1, 999);
-							TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
-						}
-					} else if (count % 10 == 0) {
-						String message = Messages.arenacountdown;
-						message = message.replace("{COUNTDOWN}", String.valueOf(count));
-				          for (Player all : arena.getPlayersManager().getPlayers()) {
-				        	  Messages.sendMessage(all, message);
-				        	  TNTRun.getInstance().sound.NOTE_PLING(all, 1, 999);
-								TitleMsg.sendFullTitle(all, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
-				          }
-				        }
-					if(count == 5) {
-						for (Player player : arena.getPlayersManager().getPlayers()) {
-							player.teleport(arena.getStructureManager().getSpawnPoint());
-							TNTRun.getInstance().sound.NOTE_PLING(player, 1, 999);
-						}
-					}
-					// scoreboard
-					createWaitingScoreBoard();
-					// sending bars
+		runtaskid = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+			@Override
+			public void run() {
+				// check if countdown should be stopped for some various reasons
+				if (arena.getPlayersManager().getPlayersCount() < arena.getStructureManager().getMinPlayers() && !arena.getPlayerHandler().forceStart()) {
+					double progress = (double) arena.getPlayersManager().getPlayersCount() / arena.getStructureManager().getMinPlayers();
+					Bars.setBar(arena, Bars.waiting, arena.getPlayersManager().getPlayersCount(), 0, progress, plugin);
+					arena.getScoreboardHandler().createWaitingScoreBoard();
+					stopArenaCountdown();
+				} else
+				// start arena if countdown is 0
+				if (count == 0) {
+					stopArenaCountdown();
+					startArena();
+
+				} else if(count == 5) {
+					String message = Messages.arenacountdown;
+					message = message.replace("{COUNTDOWN}", String.valueOf(count));
+
 					for (Player player : arena.getPlayersManager().getPlayers()) {
-						player.setLevel(count);
-						Bars.setBar(player, Bars.starting, 0, count, count * 100 / arena.getStructureManager().getCountdown(), plugin);
-				    }
-					count--;
+						if (isAntiCamping()) {
+							player.teleport(arena.getStructureManager().getSpawnPoint());
+						}
+						displayCountdown(player, count, message);
+					}
+
+				} else if (count < 11) {
+					String message = Messages.arenacountdown;
+					message = message.replace("{COUNTDOWN}", String.valueOf(count));
+					for (Player player : arena.getPlayersManager().getPlayers()) {
+						displayCountdown(player, count, message);
+					}
+
+				} else if (count % 10 == 0) {
+					String message = Messages.arenacountdown;
+					message = message.replace("{COUNTDOWN}", String.valueOf(count));
+					for (Player all : arena.getPlayersManager().getPlayers()) {
+						displayCountdown(all, count, message);
+					}
 				}
-			},
-			0, 20
-		);
+				arena.getScoreboardHandler().createWaitingScoreBoard();
+				double progressbar = (double) count / arena.getStructureManager().getCountdown();
+				Bars.setBar(arena, Bars.starting, 0, count, progressbar, plugin);
+
+				for (Player player : arena.getPlayersManager().getPlayers()) {
+					player.setLevel(count);
+				}
+				count--;
+			}
+		}, 0, 20);
 	}
 
 	public void stopArenaCountdown() {
@@ -166,105 +150,87 @@ public class GameHandler {
 	}
 
 	// main arena handler
-	private int timelimit;
+	private int timeremaining;
 	private int arenahandler;
-	private int playingtask;
+	private boolean forceStartByCmd;
+	private boolean hasTimeLimit;
 
-	Random rnd = new Random();
-	@SuppressWarnings("deprecation")
 	public void startArena() {
 		arena.getStatusManager().setRunning(true);
-		String message = Messages.arenastarted;
-		message = message.replace("{TIMELIMIT}", String.valueOf(arena.getStructureManager().getTimeLimit()));
+
+		String message = Messages.trprefix;
+		int limit = arena.getStructureManager().getTimeLimit();
+		if (limit != 0) {
+			hasTimeLimit = true;
+			message = message + Messages.arenastarted;
+			message = message.replace("{TIMELIMIT}", String.valueOf(arena.getStructureManager().getTimeLimit()));
+		} else {
+			hasTimeLimit = false;
+			message = message + Messages.arenanolimit;
+		}
+
 		for (Player player : arena.getPlayersManager().getPlayers()) {
 			player.closeInventory();
-			Stats.addPlayedGames(player, 1);
+			if (plugin.useStats()) {
+				plugin.stats.addPlayedGames(player, 1);
+			}
 			player.setAllowFlight(true);
+
 			Messages.sendMessage(player, message);
-			TNTRun.getInstance().sound.ENDER_DRAGON(player, 1, 999);
-			String[] ids1 = plugin.getConfig().getString("items.shop.ID").split(":");
-			String[] ids2 = plugin.getConfig().getString("items.vote.ID").split(":");
-			String[] ids3 = plugin.getConfig().getString("items.info.ID").split(":");
-			String[] ids4 = plugin.getConfig().getString("items.stats.ID").split(":");
+			plugin.sound.ARENA_START(player);
 			
-			player.getInventory().remove(Integer.parseInt(ids1[0]));
-			player.getInventory().remove(Integer.parseInt(ids2[0]));
-			player.getInventory().remove(Integer.parseInt(ids3[0]));
-			player.getInventory().remove(Integer.parseInt(ids4[0]));
-			
-            if (Shop.pitems.containsKey(player)) {
-            	ArrayList<ItemStack> items = Shop.pitems.get(player);
-                Shop.pitems.remove(player);
-                Shop.bought.remove(player);
- 
-                if(items != null){
-                    for (ItemStack item : items) {
-                        player.getInventory().addItem(item);
-                    }	
-                }
-                player.updateInventory();
-            }
+			setGameInventory(player);
 			TitleMsg.sendFullTitle(player, TitleMsg.start, TitleMsg.substart, 20, 20, 20, plugin);
 		}
 		plugin.signEditor.modifySigns(arena.getArenaName());
-		Kits kits = arena.getStructureManager().getKits();
-		if (kits.getKits().size() > 0) {
-			String[] kitnames = kits.getKits().toArray(new String[kits.getKits().size()]);
-			for (Player player : arena.getPlayersManager().getPlayers()) {
-				kits.giveKit(kitnames[rnd.nextInt(kitnames.length)], player);
-			}
+		
+		//if kits are enabled on the arena, give each player a random kit
+		if (arena.getStructureManager().isKitsEnabled()) {
+			arena.getPlayerHandler().allocateKits();
 		}
-		resetScoreboard();
-		createPlayingScoreBoard();
-		timelimit = arena.getStructureManager().getTimeLimit() * 20; // timelimit is in ticks
-		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(
-			plugin,
-			new Runnable() {
-				@Override
-				public void run() {
-					// stop arena if player count is 0
-					if (arena.getPlayersManager().getPlayersCount() == 0) {
-						// stop arena
-						stopArena();
-						return;
-					}
-					// kick all players if time is out
-					if (timelimit < 0) {
-						for (Player player : arena.getPlayersManager().getPlayersCopy()) {
-							arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
-						}
-						return;
-					}
-					// handle players
-					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
-						// Xp level
-						player.setLevel(timelimit/20);
-						// update bar
-						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit(), plugin);
-						// handle player
-						handlePlayer(player);
-					}
-					// update bars for spectators too
-					for (Player player : arena.getPlayersManager().getSpectators()) {
-						Bars.setBar(player, Bars.playing, arena.getPlayersManager().getPlayersCount(), timelimit / 20, timelimit * 5 / arena.getStructureManager().getTimeLimit(), plugin);
-					}
-					// decrease timelimit
-					timelimit--;
+		timeremaining = limit * 20;
+		arena.getScoreboardHandler().createPlayingScoreBoard();
+		arenahandler = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+			@Override
+			public void run() {
+				// stop arena if player count is 0
+				if (arena.getPlayersManager().getPlayersCount() == 0) {
+					stopArena();
+					return;
 				}
-			},
-			0, 1
-		);
+				// kick all players if time is out
+				if (hasTimeLimit && timeremaining < 0) {
+					for (Player player : arena.getPlayersManager().getPlayersCopy()) {
+						arena.getPlayerHandler().leavePlayer(player,Messages.arenatimeout, "");
+					}
+					return;
+				}
+				double progress = 1.0;
+				int seconds = 0;
+				if (hasTimeLimit) {
+					progress = (double) timeremaining / (arena.getStructureManager().getTimeLimit() * 20);
+					seconds = (int) Math.ceil((double)timeremaining / 20);
+				}
+				Bars.setBar(arena, Bars.playing, arena.getPlayersManager().getPlayersCount(), seconds, progress, plugin);
+				for (Player player : arena.getPlayersManager().getPlayersCopy()) {
+					player.setLevel(seconds);
+					handlePlayer(player);
+				}
+				timeremaining--;
+			}
+		}, 0, 1);
 	}
 
 	public void stopArena() {
-		resetScoreboard();
 		for (Player player : arena.getPlayersManager().getAllParticipantsCopy()) {
+			arena.getScoreboardHandler().removeScoreboard(player);
 			arena.getPlayerHandler().leavePlayer(player, "", "");
 		}
 		lostPlayers = 0;
+		forceStartByCmd = false;
 		arena.getStatusManager().setRunning(false);
 		Bukkit.getScheduler().cancelTask(arenahandler);
-		Bukkit.getScheduler().cancelTask(playingtask);
+		Bukkit.getScheduler().cancelTask(arena.getScoreboardHandler().getPlayingTask());
 		plugin.signEditor.modifySigns(arena.getArenaName());
 		if (arena.getStatusManager().isArenaEnabled()) {
 			startArenaRegen();
@@ -278,186 +244,251 @@ public class GameHandler {
 		// remove block under player feet
 		arena.getStructureManager().getGameZone().destroyBlock(plufloc);
 		// check for win
-		if (arena.getPlayersManager().getPlayersCount() == 1) {
-			// last player won
+		if (arena.getPlayersManager().getPlayersCount() == 1  && !arena.getStructureManager().isTestMode()) {
+			// last player wins
 			startEnding(player);
 			return;
 		}
 		// check for lose
 		if (arena.getStructureManager().getLoseLevel().isLooseLocation(plloc)) {
-			// if we have the spectate spawn than we will move player to spectators, otherwise we will remove him from arena
-			if (arena.getStructureManager().getSpectatorSpawnVector() != null) {
-				arena.getPlayerHandler().spectatePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
-			} else {
-				arena.getPlayerHandler().leavePlayer(player, Messages.playerlosttoplayer, Messages.playerlosttoothers);
+			if (arena.getPlayersManager().getPlayersCount() == 1) {
+				// must be test mode
+				startEnding(player);
+				return;
 			}
-			return;
+			arena.getPlayerHandler().dispatchPlayer(player);
 		}
 	}
 
-	public Scoreboard buildScoreboard() {
-		
-		Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-
-		Objective o = scoreboard.registerNewObjective("TNTRun", "waiting");
-		o.setDisplaySlot(DisplaySlot.SIDEBAR);
-		o.setDisplayName("§6§lTNTRUN");
-		return scoreboard;
-	}
-	
-	public void createWaitingScoreBoard() {
-		if(!plugin.getConfig().getBoolean("special.UseScoreboard")){
-			return;
-		}
-		resetScoreboard();
-		Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
-		try{
-		int size = plugin.getConfig().getStringList("scoreboard.waiting").size();
-		for(String s : plugin.getConfig().getStringList("scoreboard.waiting")){
-			s = s.replace("&", "§");
-			s = s.replace("{ARENA}", arena.getArenaName());
-			s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");
-			s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
-			s = s.replace("{COUNT}", count + "");
-			o.getScore(s).setScore(size);
-			size--;
-		}
-		for (Player p : arena.getPlayersManager().getPlayers()) {
-			p.setScoreboard(scoreboard);
-		}
-		}catch (NullPointerException ex){
-			
-		}
-	}
-
-	public void resetScoreboard() {
-		for (String entry : new ArrayList<String>(scoreboard.getEntries())) {
-			scoreboard.resetScores(entry);
-		}
-	}
-
-	public void createPlayingScoreBoard() {
-		if(!plugin.getConfig().getBoolean("special.UseScoreboard")){
-			return;	
-		}
-		playingtask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-			public void run() {
-				resetScoreboard();
-				Objective o = scoreboard.getObjective(DisplaySlot.SIDEBAR);
-				
-				int size = plugin.getConfig().getStringList("scoreboard.playing").size();
-				for(String s : plugin.getConfig().getStringList("scoreboard.playing")){
-					s = s.replace("&", "§");
-					s = s.replace("{ARENA}", arena.getArenaName());
-					s = s.replace("{PS}", arena.getPlayersManager().getAllParticipantsCopy().size() + "");		
-					s = s.replace("{MPS}", arena.getStructureManager().getMaxPlayers() + "");
-					s = s.replace("{LOST}", lostPlayers + "");
-					s = s.replace("{LIMIT}", timelimit/20 + "");
-					o.getScore(s).setScore(size);
-					size--;
-				}
-				for(Player p : arena.getPlayersManager().getPlayers()){
-			    	if(!plugin.getConfig().getBoolean("special.UseActionBar")){
-			    		return;
-			    	}
-			    	
-			    	if (ActionBar.getVersion().contains("1_7")) {
-			    		Bukkit.getLogger().info("[TNTRun] Action bar for " + ActionBar.getVersion() + " is not supported, disabling Action Bar");
-			    		plugin.getConfig().set("special.UseActionBar", false);
-			    		plugin.saveConfig();
-			    		return;
-			    	}
-			    	
-					ActionBar bar = new ActionBar();
-					bar.sendActionBar(p, Messages.getdoublejumpsaction.replace("&", "§").replace("{DB}", plugin.getConfig().getInt("doublejumps." + p.getName()) + ""));
-				}
-			}
-		}, 0, 20);
-	}
-
+	/**
+	 * Regenerate the arena at the end of a game.
+	 */
 	private void startArenaRegen() {
-		if(arena.getStatusManager().isArenaRegenerating()){
+		if (arena.getStatusManager().isArenaRegenerating()) {
 			return;
 		}
-		// set arena is regenerating status
 		arena.getStatusManager().setRegenerating(true);
-		// modify signs
 		plugin.signEditor.modifySigns(arena.getArenaName());
-		// schedule gamezone regen
+
 		int delay = arena.getStructureManager().getGameZone().regen();
-		// regen finished
-		Bukkit.getScheduler().scheduleSyncDelayedTask(
-			arena.plugin,
-			new Runnable() {
+
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				arena.getStatusManager().setRegenerating(false);
+				plugin.signEditor.modifySigns(arena.getArenaName());
+
+				if (plugin.isBungeecord() && plugin.getConfig().getBoolean("bungeecord.stopserver")) {
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							Bukkit.shutdown();
+						}
+					}.runTaskLater(plugin, 20);
+				}
+			}
+		}.runTaskLater(plugin, delay);
+	}
+
+	/**
+	 * Called when there is only 1 player left, to update winner stats and
+	 * teleport winner and spectators to the arena spawn point. It then
+	 * stops the arena.
+	 * @param player
+	 */
+	public void startEnding(final Player player) {
+		if (plugin.useStats()) {
+			plugin.stats.addWins(player, 1);
+		}
+		TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
+		arena.getPlayerHandler().clearPotionEffects(player);
+
+		String message = Messages.trprefix + Messages.playerwonbroadcast;
+		message = message.replace("{PLAYER}", player.getName());
+		message = message.replace("{ARENA}", arena.getArenaName());
+		message = message.replace("{RANK}", arena.getPlayerHandler().getDisplayName(player));
+
+		/* Determine who should receive notification of win (0 suppresses broadcast) */
+		if (plugin.getConfig().getInt("broadcastwinlevel") == 1) {
+			for (Player all : arena.getPlayersManager().getAllParticipantsCopy()) {
+				Messages.sendMessage(all, message);
+			}
+		} else if (plugin.getConfig().getInt("broadcastwinlevel") >= 2) {
+			for (Player all : Bukkit.getOnlinePlayers()) {
+				Messages.sendMessage(all, message);
+			}
+		}
+		// allow winner to fly at arena spawn
+		player.setAllowFlight(true);
+		player.setFlying(true);
+		// teleport winner and spectators to arena spawn
+		for(Player p : arena.getPlayersManager().getAllParticipantsCopy()) {
+			plugin.sound.ARENA_START(p);
+			p.teleport(arena.getStructureManager().getSpawnPoint());
+			p.getInventory().clear();
+		}
+
+		Bukkit.getScheduler().cancelTask(arenahandler);
+		Bukkit.getScheduler().cancelTask(arena.getScoreboardHandler().getPlayingTask());
+
+		plugin.getServer().getPluginManager().callEvent(new PlayerWinArenaEvent(player, arena.getArenaName()));
+
+		if (plugin.getConfig().getBoolean("fireworksonwin.enabled")) {
+	
+			new BukkitRunnable() {
+				int i = 0;
 				@Override
 				public void run() {
-					// set not regenerating status
-					arena.getStatusManager().setRegenerating(false);
-					// modify signs
-					plugin.signEditor.modifySigns(arena.getArenaName());
-				}
-			},
-			delay
-		);
-	}
-	
-		public void startEnding(final Player player){
-			Stats.addWins(player, 1);
-			for(Player all : Bukkit.getOnlinePlayers()){
-				TitleMsg.sendFullTitle(player, TitleMsg.win, TitleMsg.subwin, 20, 60, 20, plugin);
-				String message = Messages.playerwonbroadcast;
-				message = message.replace("{PLAYER}", player.getName());
-				message = message.replace("{ARENA}", arena.getArenaName());
-				all.sendMessage(message.replace("&", "§"));
-			}
-				for(Player p : arena.getPlayersManager().getAllParticipantsCopy()){
-					TNTRun.getInstance().sound.ENDER_DRAGON(p, 5, 999);
-					p.setAllowFlight(true);
-					p.setFlying(true);
-					p.teleport(arena.getStructureManager().getSpawnPoint());
-					p.getInventory().clear();
-				}
-				
-				Bukkit.getScheduler().cancelTask(arenahandler);
-				Bukkit.getScheduler().cancelTask(playingtask);
-				
-				final int endtask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
-					@Override
-					public void run() {
-						Firework f = player.getWorld().spawn(arena.getStructureManager().getSpawnPoint(), Firework.class);
-						FireworkMeta fm = f.getFireworkMeta();
-						fm.addEffect(FireworkEffect.builder()
+					//cancel on duration-1 to avoid firework overrun
+					if (i >= (getFireworkDuration() - 1)) {
+						this.cancel();
+					}
+					Firework f = player.getWorld().spawn(arena.getStructureManager().getSpawnPoint(), Firework.class);
+					FireworkMeta fm = f.getFireworkMeta();
+					fm.addEffect(FireworkEffect.builder()
 								.withColor(Color.GREEN).withColor(Color.RED)
 								.withColor(Color.PURPLE)
 								.with(Type.BALL_LARGE)
 								.withFlicker()
 								.build());
-						fm.setPower(1);
-						f.setFireworkMeta(fm);
-					}
-					
-				}, 0, 10);
-				
-				Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
-					public void run(){
-						try{
-						Bukkit.getScheduler().cancelTask(endtask);
-						arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
-						stopArena();
+					fm.setPower(1);
+					f.setFireworkMeta(fm);
+					i++;
+				}	
+			}.runTaskTimer(plugin, 0, 10);
+		}
+
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				try {
+					arena.getPlayerHandler().leaveWinner(player, Messages.playerwontoplayer);
+					stopArena();
 						
-						final ConsoleCommandSender console = Bukkit.getConsoleSender();
+					final ConsoleCommandSender console = Bukkit.getConsoleSender();
 						
-						if(plugin.getConfig().getStringList("commandsonwin") == null){
-							return;
-						}
-						for(String commands : plugin.getConfig().getStringList("commandsonwin")){
-							Bukkit.dispatchCommand(console, commands.replace("{PLAYER}", player.getName()));
-						}
-						}catch (NullPointerException ex){
-							
-						}
+					if(plugin.getConfig().getStringList("commandsonwin") == null) {
+						return;
 					}
-				}, 160);
+					for(String commands : plugin.getConfig().getStringList("commandsonwin")) {
+						Bukkit.dispatchCommand(console, commands.replace("{PLAYER}", player.getName()));
+					}
+				} catch (NullPointerException ex) {
+		
+				}
 			}
+		}.runTaskLater(plugin, 120);
+	}
+
+	/**
+	 * Get the number of seconds to run the fireworks for from config.
+	 * The fireworks task repeats every 10 ticks so return double this number.
+	 * Default is 4 seconds.
+	 * @return number of half seconds
+	 */
+	private int getFireworkDuration() {
+		int duration = plugin.getConfig().getInt("fireworksonwin.duration", 4);
+		return (duration > 0 && duration < 5) ? duration * 2 : 8;
+	}
+
+	/**
+	 * Is anti-camping enabled. If true players are teleported to arena spawn when
+	 * countdown hits 5 seconds.
+	 * @return anti-camping
+	 */
+	private boolean isAntiCamping() {
+		return plugin.getConfig().getBoolean("anticamping.enabled", true);
+	}
+	/**
+	 * Displays the current value of countdown on the screeen.
+	 * @param player
+	 * @param count
+	 * @param message
+	 */
+	private void displayCountdown(Player player, int count, String message) {
+		plugin.sound.NOTE_PLING(player, 1, 999);
+		if (!plugin.getConfig().getBoolean("special.UseTitle")) {
+			Messages.sendMessage(player, Messages.trprefix + message);
+		} 
+		TitleMsg.sendFullTitle(player, TitleMsg.starting.replace("{COUNT}", count + ""), TitleMsg.substarting.replace("{COUNT}", count + ""), 0, 40, 20, plugin);
+	}
+
+	/**
+	 * Remove the inventory items and give the player any items bought in the shop
+	 * @param player
+	 */
+	private void setGameInventory(Player player) {
+		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.shop.material")));
+		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.vote.material")));
+		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.info.material")));
+		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.stats.material")));
+		player.getInventory().remove(Material.getMaterial(plugin.getConfig().getString("items.heads.material")));
+		player.getInventory().setItemInOffHand(null);
+
+		if (plugin.shop.getPlayersItems().containsKey(player.getName())) {
+			ArrayList<ItemStack> items = plugin.shop.getPlayersItems().get(player.getName());
+			if (items != null) {
+				for (ItemStack item : items) {
+					if (isArmor(item)) {
+						setArmorItem(player,item);
+					} else {
+						player.getInventory().addItem(item);
+					}
+				}
+			}
+			player.updateInventory();
+		}
+		if (plugin.shop.getPotionEffects(player) != null) {
+			for (PotionEffect pe : plugin.shop.getPotionEffects(player)) {
+				player.addPotionEffect(pe);
+			}
+		}
+		arena.getPlayerHandler().removePurchase(player);
+	}
+
+	/**
+	 * Validate itemstack is an item of armour
+	 * @param item
+	 * @return
+	 */
+	private boolean isArmor(ItemStack item) {
+		String[] armor = new String[] {"HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS"};
+		for (String s : armor) {
+			if (item.toString().contains(s)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Equip the armour item
+	 * @param player
+	 * @param item
+	 */
+	private void setArmorItem(Player player, ItemStack item) {
+		if (item.toString().contains("BOOTS")) {
+			player.getInventory().setBoots(item);
+		} else if (item.toString().contains("LEGGINGS")) {
+			player.getInventory().setLeggings(item);
+		} else if (item.toString().contains("CHESTPLATE")) {
+			player.getInventory().setChestplate(item);
+		} else if (item.toString().contains("HELMET")) {
+			player.getInventory().setHelmet(item);
+		}
+	}
+
+	public void forceStartByCommand() {
+		forceStartByCmd = true;
+		runArenaCountdown();
+	}
+
+	public boolean isForceStartByCommand() {
+		return forceStartByCmd;
+	}
+
+	public int getTimeRemaining() {
+		return hasTimeLimit ? timeremaining : 0;
+	}
 
 }

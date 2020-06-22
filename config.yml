@@ -1,77 +1,136 @@
-#Titles only works for spigot/craftbukkit 1.8 or higher + protocol hack working
+# TNTRun_reloaded configuration file     #
+#                                        #
+# The TNTRun_reloaded plugin             #
+# Based on TNTRun by Shevchikden         #
+#                                        #
+# TNTRun_reloaded author steve4744       #
+#                                        #
 special:
-   FancyBlockBreak: true
-   UseBarApi: true
-   UseTitle: true
-   UseScoreboard: true
-   UseActionBar: true
-   CheckForNewVersion: true
-info:
-   list:
-   - '&6&lThe TNTRun plugin by The_TadeSK'
-   - '&6 '
-   - '&6&lNow try and play'
+  UseBossBar: true
+  BossBarColor: RANDOM
+  UseTitle: true
+  UseScoreboard: true
+  UseDoubleJumpPermissions: false
+  CheckForNewVersion: true
+  Metrics: true
+UseRankInChat:
+  enabled: false
+  usegroup: true
+  useprefix: false
 shop:
-   name: '&6&lTNTRun &f&lSHOP'
-   size: 27
-   doublejump:
-      maxdoublejumps: 50
+  name: '&6&lTNTRun &f&lSHOP'
+  size: 27
+  doublejump:
+    maxdoublejumps: 10
+  logpurchases: false
+  onleave:
+    removepurchase: false
+  showmoneyitem: GOLD_INGOT
+freedoublejumps:
+  enabled: false
+  amount: 10
 commandsonwin:
-- say {PLAYER} won tntrun
+- say {PLAYER} won TNTRun
 - say Congratulations...
+fireworksonwin:
+  enabled: true
+  duration: 4
+broadcastwinlevel: 2
+menu:
+  item: TNT
+  panecolor: LIGHT_BLUE
+  includedisabled: false
+sounds:
+  arenastart:
+    enabled: true
+    sound: ENTITY_PLAYER_LEVELUP
+    volume: 10
+    pitch: 1.0
+  itemselect:
+    enabled: true
+    sound: UI_BUTTON_CLICK
+    volume: 1
+    pitch: 1.0
+  blockbreak:
+    enabled: true
+    sound: BLOCK_SAND_BREAK
+    volume: 5
+    pitch: 1.0
+anticamping:
+  enabled: true
+leaderboard:
+  maxentries: 10
 items:
-   vote:
-      use: true
-      ID: '264:0'
-      name: '&cVOTE'
-   info:
-      use: true
-      ID: '388:0'
-      name: '&cINFO'
-   shop:
-      use: true
-      ID: '399:0'
-      name: '&cSHOP'
-   stats:
-      use: true
-      ID: '331:0'
-      name: '&cSTATS'
-   leave:
-      ID: '355:0'
-      name: '&cLEAVE'
-   effects:
-      use: true
-      ID: '348:0'
-      name: '&cEFFECTS'
+  vote:
+    use: true
+    material: DIAMOND
+    name: '&2&lVote'
+    slot: 0
+  info:
+    use: true
+    material: EMERALD
+    name: '&2&lInfo'
+    slot: 1
+  shop:
+    use: true
+    material: NETHER_STAR
+    name: '&2&lShop'
+    slot: 2
+  stats:
+    use: true
+    material: REDSTONE
+    name: '&2&lStats'
+    slot: 3
+  leave:
+    material: GREEN_BED
+    name: '&2&lLeave'
+    slot: 8
+  heads:
+    use: true
+    material: GLOWSTONE_DUST
+    name: '&e&lHeadsPlus'
+    slot: 4
 scoreboard:
-   waiting:
-   - '&fWelcome to TNTRun'
-   - '&a '
-   - '&fArena: &6&l{ARENA}'
-   - '&b '
-   - '&fPlayers: &a&l{PS}&7&l/&c&l{MPS}'
-   - '&c '
-   - '&fStarting in: &6&l{COUNT}'
-   playing:
-   - '&fPlaying TNTRun'
-   - '&fon arena: &6&l{ARENA}'
-   - '&b '
-   - '&fPlayers: &a&l{PS}&7&l/&c&l{MPS}'
-   - '&c '
-   - '&fLost Players: &a&l{LOST}'
-   - '&2 '
-   - '&fEnd in: &c&l{LIMIT}'
+  header: '&6&lTNTRUN'
+  displaydoublejumps: false
+  waiting:
+  - '&fWelcome to TNTRun'
+  - '&a '
+  - '&fArena: &6&l{ARENA}'
+  - '&b '
+  - '&fPlayers: &a&l{PS}&7&l/&c&l{MPS}'
+  - '&c '
+  - '&fVotes needed: &6&l{VOTES}'
+  - '&d '
+  - '&fStarting in: &6&l{COUNT}'
+  playing:
+  - '&fPlaying TNTRun'
+  - '&fon arena: &6&l{ARENA}'
+  - '&b '
+  - '&fPlayers: &a&l{PS}&7&l/&c&l{MPS}'
+  - '&c '
+  - '&fLost Players: &a&l{LOST}'
+  - '&d '
+  - '&fEnd in: &c&l{LIMIT}'
 database: file
 MySQL:
-   host: host
-   port: 12345
-   name: tntrun
-   user: root
-   pass: password
+  host: host
+  port: 12345
+  name: tntrun
+  table: stats
+  user: root
+  pass: password
+  useSSL: false
 signs:
-   prefix: '&6&lTNTRun'
-   status:
-      disabled: '&cDisabled'
-      ingame: '&c&l{PS}&7/&c&l{MPS}'
-      regenerating: '&6&lRegen...'
-      waiting: '&a&l{PS}&7/&a&l{MPS}'
+  prefix: '&6&lTNTRun'
+  join: '[Join]'
+  status:
+    disabled: '&cDisabled'
+    ingame: '&c&l{PS}&8/&c&l{MPS}'
+    regenerating: '&6&lRegen...'
+    waiting: '&a&l{PS}&8/&a&l{MPS}'
+bungeecord:
+  enabled: false
+  hub: lobby
+  useMOTD: true
+  stopserver: false

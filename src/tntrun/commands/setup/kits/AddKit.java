@@ -15,34 +15,23 @@
  *
  */
 
-package tntrun.commands.setup.arena;
+package tntrun.commands.setup.kits;
 
 import org.bukkit.entity.Player;
 
 import tntrun.TNTRun;
-import tntrun.arena.Arena;
 import tntrun.commands.setup.CommandHandlerInterface;
 
-public class SetItemsRewards implements CommandHandlerInterface {
+public class AddKit implements CommandHandlerInterface {
 
 	private TNTRun plugin;
-	public SetItemsRewards(TNTRun plugin) {
+	public AddKit(TNTRun plugin) {
 		this.plugin = plugin;
 	}
 
 	@Override
-	public boolean handleCommand(Player player, String[] args) {
-		Arena arena = plugin.amanager.getArenaByName(args[0]);
-		if (arena != null) {
-			if (arena.getStatusManager().isArenaEnabled()) {
-				player.sendMessage("§7[§6TNTRun§7] §cPlease disable arena §6/trsetup disable " + args[0]);
-				return true;
-			}
-			arena.getStructureManager().getRewards().setItemsReward(player.getInventory().getContents());
-			player.sendMessage("§7[§6TNTRun§7] §7Arena §6" + args[0] + "§7 set reward");
-		} else {
-			player.sendMessage("§7[§6TNTRun§7] §cArena §6" + args[0] + "§c doesn't exist");
-		}
+	public boolean handleCommand(Player player, String[] args) {		
+		plugin.kitmanager.registerKit(args[0], player);
 		return true;
 	}
 

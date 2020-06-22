@@ -17,6 +17,7 @@
 
 package tntrun.signs.type;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -24,6 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import tntrun.TNTRun;
 import tntrun.arena.Arena;
 import tntrun.messages.Messages;
+import tntrun.utils.FormattingCodesParser;
 
 public class VoteSign implements SignType {
 
@@ -35,27 +37,29 @@ public class VoteSign implements SignType {
 
 	@Override
 	public void handleCreation(SignChangeEvent e) {
-		e.setLine(0, "§7[§6TNTRun§7]");
-		e.getPlayer().sendMessage("Sign succesfully created");
+		e.setLine(0, FormattingCodesParser.parseFormattingCodes(plugin.getConfig().getString("signs.prefix")));
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signcreate);
 	}
 
 	@Override
 	public void handleClick(PlayerInteractEvent e) {
-		Arena arena = plugin.amanager.getPlayerArena(e.getPlayer().getName());
+		Player player = e.getPlayer();
+		Arena arena = plugin.amanager.getPlayerArena(player.getName());
 		if (arena != null) {
-			if (arena.getPlayerHandler().vote(e.getPlayer())) {
-				Messages.sendMessage(e.getPlayer(), Messages.playervotedforstart);
+			if (arena.getPlayerHandler().vote(player)) {
+				Messages.sendMessage(player, Messages.trprefix + Messages.playervotedforstart);
 			} else {
-				Messages.sendMessage(e.getPlayer(), Messages.playeralreadyvotedforstart);
+				Messages.sendMessage(player, Messages.trprefix + Messages.playeralreadyvotedforstart);
 			}
 			e.setCancelled(true);
 		} else {
-			e.getPlayer().sendMessage("You are not in arena");
+			Messages.sendMessage(player, Messages.trprefix + Messages.playernotinarena);
 		}
 	}
 
 	@Override
 	public void handleDestroy(BlockBreakEvent e) {
+		Messages.sendMessage(e.getPlayer(), Messages.trprefix + Messages.signremove);
 	}
 
 }

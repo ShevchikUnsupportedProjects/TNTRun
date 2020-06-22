@@ -41,7 +41,6 @@ public class PlayerLeaveArenaChecker implements Listener {
 	public void onPlayerQuitEvent(PlayerQuitEvent e) {
 		Player player = e.getPlayer();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
-		// ignore if player is not in arena
 		if (arena == null) {
 			return;
 		}
@@ -52,16 +51,15 @@ public class PlayerLeaveArenaChecker implements Listener {
 		}
 	}
 
-	// remove player from arena if he died (/kill command sux)
+	// remove player from arena if he died
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerDeathEvent(PlayerDeathEvent e) {
 		Player player = e.getEntity();
 		Arena arena = plugin.amanager.getPlayerArena(player.getName());
-		// ignore if player is not in arena
 		if (arena == null) {
 			return;
 		}
-		arena.getPlayerHandler().leavePlayer(player, "", Messages.playerlefttoothers);
+		arena.getPlayerHandler().dispatchPlayer(player);
 	}
 
 }

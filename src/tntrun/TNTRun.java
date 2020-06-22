@@ -18,34 +18,41 @@
 package tntrun;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import tntrun.arena.Arena;
+import tntrun.arena.handlers.BungeeHandler;
+import tntrun.arena.handlers.SoundHandler;
+import tntrun.arena.handlers.VaultHandler;
 import tntrun.utils.Bars;
+import tntrun.utils.JoinMenu;
 import tntrun.utils.Shop;
 import tntrun.utils.Sounds;
-import tntrun.utils.Sounds_1_8;
-import tntrun.utils.Sounds_1_9;
 import tntrun.utils.Stats;
 import tntrun.utils.TitleMsg;
+import tntrun.utils.Utils;
+import tntrun.commands.AutoTabCompleter;
 import tntrun.commands.ConsoleCommands;
 import tntrun.commands.GameCommands;
 import tntrun.commands.setup.SetupCommandsHandler;
+import tntrun.commands.setup.SetupTabCompleter;
 import tntrun.datahandler.ArenasManager;
 import tntrun.datahandler.PlayerDataStore;
+import tntrun.eventhandler.HeadsPlusHandler;
+import tntrun.eventhandler.MenuHandler;
 import tntrun.eventhandler.PlayerLeaveArenaChecker;
 import tntrun.eventhandler.PlayerStatusHandler;
 import tntrun.eventhandler.RestrictionHandler;
+import tntrun.kits.Kits;
 import tntrun.lobby.GlobalLobby;
 import tntrun.messages.Messages;
 import tntrun.signs.SignHandler;
@@ -54,18 +61,29 @@ import tntrun.signs.editor.SignEditor;
 public class TNTRun extends JavaPlugin {
 
 	private Logger log;
+	private boolean mcMMO = false;
+	private boolean headsplus = false;
+	private boolean usestats = false;
+	private boolean needupdate = false;
+	private boolean placeholderapi = false;
+	private boolean file = false;
+	private VaultHandler vaultHandler;
+	private BungeeHandler bungeeHandler;
+	private Arena bungeeArena;
+	private JoinMenu joinMenu;
 
 	public PlayerDataStore pdata;
 	public ArenasManager amanager;
 	public GlobalLobby globallobby;
 	public SignEditor signEditor;
-	public boolean file = false;
-	public boolean usestats = false;
-	public boolean needUpdate = false;
-	public String[] ver = {"Nothing", "Nothing"};
+	public Kits kitmanager;
+	public String[] version = {"Nothing", "Nothing"};
 	public Sounds sound;
-	
-	public static TNTRun instance;
+	public MySQL mysql;
+	public Stats stats;
+	public Shop shop;
+
+	private static TNTRun instance;
 
 	@Override
 	public void onEnable() {
@@ -73,185 +91,284 @@ public class TNTRun extends JavaPlugin {
 		log = getLogger();
 		signEditor = new SignEditor(this);
 		globallobby = new GlobalLobby(this);
+		kitmanager = new Kits();
 		Messages.loadMessages(this);
 		Bars.loadBars(this);
 		TitleMsg.loadTitles(this);
 		pdata = new PlayerDataStore();
 		amanager = new ArenasManager();
-		getCommand("tntrunsetup").setExecutor(new SetupCommandsHandler(this));
-		getCommand("tntrun").setExecutor(new GameCommands(this));
-		getCommand("tntrunconsole").setExecutor(new ConsoleCommands(this));
-		getServer().getPluginManager().registerEvents(new PlayerStatusHandler(this), this);
-		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
-		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
-		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
-		getServer().getPluginManager().registerEvents(new Shop(this), this);
-	    // config
-	    saveDefaultConfig();
-	    getConfig().options().copyDefaults(true);
-	    saveConfig();
-		// load arenas
-		final File arenasfolder = new File(getDataFolder() + File.separator + "arenas");
-		arenasfolder.mkdirs();
-		getServer().getScheduler().scheduleSyncDelayedTask(
-			this,
-			new Runnable() {
-				@Override
-				public void run() {
-					// load globallobyy
-					globallobby.loadFromConfig();
-					// load arenas
-					for (String file : arenasfolder.list()) {
-						Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
-						arena.getStructureManager().loadFromConfig();
-						arena.getStatusManager().enableArena();
-						amanager.registerArena(arena);
-					}
-					// load signs
-					signEditor.loadConfiguration();
-				}
-			},
-			20
-		);
-		
-		checkUpdate(true);
-		
-		String version = Bukkit.getBukkitVersion().split("-")[0];
-		if(version.contains("1.9") || version.contains("1.10")){
-			sound = new Sounds_1_9();
-		}else{
-			sound = new Sounds_1_8();
+		shop = new Shop(this);
+		joinMenu = new JoinMenu(this);
+
+		//register commands and events
+		setupPlugin();
+
+		saveDefaultConfig();
+		getConfig().options().copyDefaults(true);
+		saveConfig();
+
+		updateScoreboardList();
+		loadArenas();
+		checkUpdate();
+		sound = new SoundHandler(this);
+
+		if (isBungeecord()) {
+			log.info("Bungeecord is enabled");
+			bungeeHandler = new BungeeHandler(this);
 		}
-		
-	     try {
-	    	 Bukkit.getLogger().info("[TNTRun] Starting Metrics...");
-	         Metrics metrics = new Metrics(this);
-	         metrics.start();
-	         Bukkit.getLogger().info("[TNTRun] Metrics started!");
-	     } catch (IOException e) {
-	    	 e.printStackTrace();
-	        Bukkit.getLogger().info("[TNTRun] Error, can't start metrics, please report this! http://www.spigotmc.org/resources/tntrun.7320/");
-	     }
-	     
-	     if(this.getConfig().getString("database").equals("file")){
-	    	 file = true;
-	    	 usestats = true;
-	     }else if(this.getConfig().getString("database").equals("sql")){
-	    	 this.connectToMySQL();
-	    	 usestats = true;
-	    	 file = false;
-	     }else{
-	    	 Bukkit.getLogger().info("[TNTRun] This database is not supported, supported database: sql, file");
-	    	 usestats = false;
-	    	 file = false;
-	    	 Bukkit.getLogger().info("[TNTRun] Disabling stats...");
-	     }
-	     new Stats(this);
+
+		if (getConfig().getBoolean("special.Metrics", true)) {
+			log.info("Attempting to start metrics (bStats)...");
+			new Metrics(this, 2192);
+		}
+
+		setStorage();
+		if (usestats) {
+			stats = new Stats(this);
+		}
 	}
-	
-	public static TNTRun getInstance(){
+
+	public static TNTRun getInstance() {
 		return instance;
 	}
 
 	@Override
 	public void onDisable() {
-		//Close mysql connection
-		if(!file){
+		if (!file) {
 			mysql.close();
 		}
-		// save arenas
+		saveArenas();
+		globallobby.saveToConfig();
+		globallobby = null;
+
+		kitmanager.saveToConfig();
+		kitmanager = null;
+
+		signEditor.saveConfiguration();
+		signEditor = null;
+
+		amanager = null;
+		pdata = null;
+		stats = null;
+		log = null;
+	}
+
+	private void saveArenas() {
 		for (Arena arena : amanager.getArenas()) {
 			arena.getStructureManager().getGameZone().regenNow();
 			arena.getStatusManager().disableArena();
 			arena.getStructureManager().saveToConfig();
+			Bars.removeAll(arena.getArenaName());
 		}
-		// save lobby
-		globallobby.saveToConfig();
-		globallobby = null;
-		// save signs
-		signEditor.saveConfiguration();
-		signEditor = null;
-		// unload other things
-		pdata = null;
-		amanager = null;
-		log = null;
 	}
 
 	public void logSevere(String message) {
 		log.severe(message);
 	}
-	
-	private void checkUpdate(final boolean runUpdateTask){
-		if(!getConfig().getBoolean("special.CheckForNewVersion", true)){
+
+	public boolean isHeadsPlus() {
+		return headsplus;
+	}
+
+	public boolean isMCMMO() {
+		return mcMMO;
+	}
+
+	public boolean isPlaceholderAPI() {
+		return placeholderapi;
+	}
+	public boolean useStats() {
+		return usestats;
+	}
+
+	public void setUseStats(boolean usestats) {
+		this.usestats = usestats;
+	}
+
+	public boolean needUpdate() {
+		return needupdate;
+	}
+
+	public boolean isFile() {
+		return file;
+	}
+
+	public boolean isBungeecord() {
+		return getConfig().getBoolean("bungeecord.enabled");
+	}
+
+	private void checkUpdate() {
+		if (!getConfig().getBoolean("special.CheckForNewVersion", true)) {
 			return;
 		}
-		Bukkit.getScheduler().runTaskLaterAsynchronously(getInstance(), new Runnable(){
-			public void run(){
-				getLogger().info(" ");
-				getLogger().info(" ");
-				getLogger().info(" ");
-				getLogger().info("Checking plugin version...");
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				String thisVersion = getDescription().getVersion();
+				log.info("Checking plugin version...");
 				new VersionChecker();
-				String[] version = VersionChecker.get().getVersion().split(";");
-				ver = version;
-				if(version[0].equalsIgnoreCase("error")){
-					throw new NullPointerException("An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun.67418/");
-				}else{
-					ver = version;
-					if(version[0].equalsIgnoreCase(getDescription().getVersion())){
-						needUpdate = false;
-					}else{
-						getLogger().info("Your version: " + getDescription().getVersion());
-						getLogger().info("New version: " + version[0]);
-						getLogger().info("What is a new? " + version[1]);
-						getLogger().info("New version is avaiable! Download now: https://www.spigotmc.org/resources/tntrun.7320/");
-						needUpdate = true;
-						for(Player p : Bukkit.getOnlinePlayers()){
-							if(p.hasPermission("tntrun.version.check")){
-								p.sendMessage(" ");
-								p.sendMessage(" ");
-								p.sendMessage(" ");
-								p.sendMessage("§7[§6TNTRun§7] §6New Update is avaiable!");
-								p.sendMessage("§7[§6TNTRun§7] §7Your version: §6" + getDescription().getVersion());
-								p.sendMessage("§7[§6TNTRun§7] §7New version: §6" + version[0]);
-								p.sendMessage("§7[§6TNTRun§7] §7What is a new? §6" + version[1]);
-								p.sendMessage("§7[§6TNTRun§7] §7New version is avaiable! Download now: §6https://www.spigotmc.org/resources/tntrun.7320/");
-							}
-						}
+				version = VersionChecker.get().getVersion().split(";");
+				if (version[0].equalsIgnoreCase("error")) {
+					throw new NullPointerException("An error was occured while checking version! Please report this here: https://www.spigotmc.org/threads/tntrun_reloaded.303586/");
+				} else if (version[0].equalsIgnoreCase(thisVersion)) {
+					log.info("You are running the most recent version");
+					needupdate = false;
+				} else if (thisVersion.toLowerCase().contains("beta") || thisVersion.toLowerCase().contains("snapshot")) {
+					log.info("You are running a dev release");
+					needupdate = false;
+				} else {
+					log.info("Your version: " + getDescription().getVersion());
+					log.info("New version : " + version[0]);
+					log.info("New version available! Download now: https://www.spigotmc.org/resources/tntrun_reloaded.53359/");
+					needupdate = true;
+					for (Player p : Bukkit.getOnlinePlayers()) {
+						Utils.displayUpdate(p);
 					}
 				}
-				getLogger().info(" ");
-				if(runUpdateTask){
-					runUpdateTask();
-				}
 			}
-		}, 30L);
+		}.runTaskLaterAsynchronously(this, 30L);
 	}
-	
-	private void runUpdateTask(){
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(getInstance(), new Runnable(){
-			public void run(){
-				checkUpdate(false);	
-			}
-		}, 20L, (20 * 60) * 60);
-	}
-	
-	public MySQL mysql;
-	
-	private void connectToMySQL(){
-		Bukkit.getLogger().info("[TNTRun] Connecting to MySQL database...");
-		String host = this.getConfig().getString("MySQL.host");
-        Integer port = this.getConfig().getInt("MySQL.port");
-        String name = this.getConfig().getString("MySQL.name");
-        String user = this.getConfig().getString("MySQL.user");
-        String pass = this.getConfig().getString("MySQL.pass");
-        mysql = new MySQL(host, port, name, user, pass, this);
 
-        mysql.query("CREATE TABLE IF NOT EXISTS `stats` ( `username` varchar(50) NOT NULL, "
-                + "`looses` int(16) NOT NULL, `wins` int(16) NOT NULL, "
-                + "`played` int(16) NOT NULL, "
-                + "UNIQUE KEY `username` (`username`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
-        
-        Bukkit.getLogger().info("[TNTRun] Connected to MySQL database!");
+	private void connectToMySQL() {
+		log.info("Connecting to MySQL database...");
+		String host = this.getConfig().getString("MySQL.host");
+		Integer port = this.getConfig().getInt("MySQL.port");
+		String name = this.getConfig().getString("MySQL.name");
+		String table = this.getConfig().getString("MySQL.table");
+		String user = this.getConfig().getString("MySQL.user");
+		String pass = this.getConfig().getString("MySQL.pass");
+		String useSSL = this.getConfig().getString("MySQL.useSSL");
+		mysql = new MySQL(host, port, name, user, pass, useSSL, this);
+
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+
+				mysql.query("CREATE TABLE IF NOT EXISTS `" + table + "` ( `username` varchar(50) NOT NULL, "
+						+ "`looses` int(16) NOT NULL, `wins` int(16) NOT NULL, "
+						+ "`played` int(16) NOT NULL, "
+						+ "UNIQUE KEY `username` (`username`) ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+
+				log.info("Connected to MySQL database!");
+			}
+		}.runTaskAsynchronously(this);
+	}
+
+	private void setupPlugin() {
+		getCommand("tntrun").setExecutor(new GameCommands(this));
+		getCommand("tntrunsetup").setExecutor(new SetupCommandsHandler(this));
+		getCommand("tntrunconsole").setExecutor(new ConsoleCommands(this));
+		getCommand("tntrun").setTabCompleter(new AutoTabCompleter());
+		getCommand("tntrunsetup").setTabCompleter(new SetupTabCompleter());
+
+		getServer().getPluginManager().registerEvents(new PlayerStatusHandler(this), this);
+		getServer().getPluginManager().registerEvents(new RestrictionHandler(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerLeaveArenaChecker(this), this);
+		getServer().getPluginManager().registerEvents(new SignHandler(this), this);
+		getServer().getPluginManager().registerEvents(new MenuHandler(this), this);
+		getServer().getPluginManager().registerEvents(this.shop, this);
+
+		Plugin HeadsPlus = getServer().getPluginManager().getPlugin("HeadsPlus");
+		if (HeadsPlus != null && HeadsPlus.isEnabled()) {
+			getServer().getPluginManager().registerEvents(new HeadsPlusHandler(this), this);
+			headsplus = true;
+			log.info("Successfully linked with HeadsPlus, version " + HeadsPlus.getDescription().getVersion());
+		}
+		Plugin MCMMO = getServer().getPluginManager().getPlugin("mcMMO");
+		if (MCMMO != null && MCMMO.isEnabled()) {
+			mcMMO = true;
+			log.info("Successfully linked with mcMMO, version " + MCMMO.getDescription().getVersion());
+		}
+		Plugin PlaceholderAPI = getServer().getPluginManager().getPlugin("PlaceholderAPI");
+		if (PlaceholderAPI != null && PlaceholderAPI.isEnabled()) {
+			placeholderapi = true;
+			log.info("Successfully linked with PlaceholderAPI, version " + PlaceholderAPI.getDescription().getVersion());
+			new TNTRunPlaceholders(this).register();
+		}
+
+		vaultHandler = new VaultHandler(this);
+	}
+
+	public VaultHandler getVaultHandler() {
+		return vaultHandler;
+	}
+
+	public BungeeHandler getBungeeHandler() {
+		return bungeeHandler;
+	}
+
+	private void loadArenas() {
+		final File arenasfolder = new File(getDataFolder() + File.separator + "arenas");
+		arenasfolder.mkdirs();
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				globallobby.loadFromConfig();
+				kitmanager.loadFromConfig();
+
+				List<String> arenaList = Arrays.asList(arenasfolder.list());
+				Collections.shuffle(arenaList);
+				for (String file : arenaList) {
+					Arena arena = new Arena(file.substring(0, file.length() - 4), instance);
+					arena.getStructureManager().loadFromConfig();
+					arena.getStatusManager().enableArena();
+					amanager.registerArena(arena);
+					Bars.createBar(arena.getArenaName());
+
+					if (isBungeecord()) {
+						bungeeArena = arena;
+						log.info("Bungeecord arena is: " + bungeeArena.getArenaName());
+						break;
+					}
+				}
+
+				signEditor.loadConfiguration();
+			}
+		}.runTaskLater(this, 20L);
+	}
+
+	private void setStorage() {
+		if (this.getConfig().getString("database").equals("file")) {
+			usestats = true;
+			file = true;
+		} else if (this.getConfig().getString("database").equals("sql")) {
+			this.connectToMySQL();
+			usestats = true;
+			file = false;
+		} else {
+			log.info("This database is not supported, supported database types: sql, file");
+			usestats = false;
+			file = false;
+			log.info("Disabling stats...");
+		}
+	}
+
+	public JoinMenu getJoinMenu() {
+		return joinMenu;
+	}
+
+	public Arena getBungeeArena() {
+		return bungeeArena;
+	}
+
+	public void updateScoreboardList() {
+		if (!getConfig().getBoolean("scoreboard.displaydoublejumps")) {
+			return;
+		}
+		List<String> ps = getConfig().getStringList("scoreboard.playing");
+		if (ps.stream().noneMatch(s -> s.contains("{DJ}"))) {
+			ps.add("&e ");
+			ps.add("&fDouble Jumps: &6&l{DJ}");
+			getConfig().set("scoreboard.playing", ps);
+			saveConfig();
+		}
+		List<String> ws = getConfig().getStringList("scoreboard.waiting");
+		if (ws.stream().noneMatch(s -> s.contains("{DJ}"))) {
+			ws.add("&e ");
+			ws.add("&fDouble Jumps: &6&l{DJ}");
+			getConfig().set("scoreboard.waiting", ws);
+			saveConfig();
+		}
 	}
 }
