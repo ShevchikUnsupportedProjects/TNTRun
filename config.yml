@@ -39,6 +39,7 @@ broadcastwinlevel: 2
 menu:
   item: TNT
   panecolor: LIGHT_BLUE
+  includedisabled: false
 sounds:
   arenastart:
     enabled: true

@@ -18,7 +18,6 @@
 package tntrun.utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -45,23 +44,14 @@ public class JoinMenu {
 
 	public void buildMenu(Player player) {
 		List<String> lores = new ArrayList<String>();
-		int size = 0; 
 		int keyPos = 9;
 
 		ItemStack is = new ItemStack(getMenuItem());
 		ItemMeta im = is.getItemMeta();	
 
-		Collection<Arena> arenas = plugin.amanager.getArenas();
-		if (arenas.size() < 8){
-			size = 27;
-		} else if (arenas.size() < 15){
-			size = 36;
-		} else if (arenas.size() < 22){
-			size = 45;
-		} else if (arenas.size() < 29){
-			size = 54;
-		}
+		List<Arena> arenas = getDisplayArenas();
 
+		int size = getInventorySize(arenas.size());
 		Inventory inv = Bukkit.createInventory(player, size, FormattingCodesParser.parseFormattingCodes(Messages.menutitle));
 
 		for (Arena arena : arenas) {
@@ -154,5 +144,30 @@ public class JoinMenu {
 			}
 		}
 		return autoarena;
+	}
+
+	private List<Arena> getDisplayArenas() {
+		List<Arena> arenas = new ArrayList<Arena>();
+		for (Arena arena : plugin.amanager.getArenas()) {
+			if (!arena.getStatusManager().isArenaEnabled() && !plugin.getConfig().getBoolean("menu.includedisabled")) {
+				continue;
+			}
+			arenas.add(arena);
+		}
+		return arenas;
+	}
+
+	private int getInventorySize(int size) {
+		int invsize = 0;
+		if (size < 8) {
+			invsize = 27;
+		} else if (size < 15) {
+			invsize = 36;
+		} else if (size < 22) {
+			invsize = 45;
+		} else if (size < 29) {
+			invsize = 54;
+		}
+		return invsize;
 	}
 }
